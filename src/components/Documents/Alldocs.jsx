@@ -85,7 +85,7 @@ const Alldocs = ({setActiveField,activeField}) => {
     <div className='w-[100%] h-[10%] flex flex-row space-x-3'>
         <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className='text-gray-300 hover:text-gray-600'>Dashboard</p></Link>
         <p>/</p>
-        <p>Users</p>
+        <p>Document</p>
     </div>
     <div className='flex flex-row w-[100%] h-[10%]'>
         <div className='flex flex-row w-[50%]'>

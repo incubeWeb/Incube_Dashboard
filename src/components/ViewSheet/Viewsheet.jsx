@@ -7,7 +7,7 @@ import { BsFileEarmarkExcelFill } from 'react-icons/bs';
 import { TiTick } from 'react-icons/ti';
 import { RxCross2 } from 'react-icons/rx';
 import { ImCross } from 'react-icons/im';
-
+import { HyperFormula } from 'hyperformula';
 const Viewsheet = ({viewdDoc, jsonData,id,setclickedview,clickedview}) => {
   const hotRef = useRef(null);
   const [hotInstance, setHotInstance] = useState(null);
@@ -17,20 +17,27 @@ const Viewsheet = ({viewdDoc, jsonData,id,setclickedview,clickedview}) => {
     const parentWidth = hotRef.current ? hotRef.current.clientWidth-50 : 400; // Default to 800px if not available
     const numberOfColumns = Object.keys(jsonData[0] || {}).length;
     const columnWidth = parentWidth / numberOfColumns;
+   /* const hyperformulaInstance = HyperFormula.buildEmpty({
+      licenseKey: 'agpl-v3', // Make sure to use the appropriate license for your use case
+    });
+    */
 
     const hot = new Handsontable(hotRef.current, {
       data: jsonData,
       rowHeaders: true,
       colHeaders: Object.keys(jsonData[0] || {}),
       contextMenu: true,
-      formulas: true,
+      formulas: {
+        engine: HyperFormula,
+      },
       licenseKey: 'non-commercial-and-evaluation', // This license key is required for non-commercial use
       manualColumnResize: true,
       colWidths: columnWidth,
       rowHeights:10,
       height:'auto',
       //minSpareRows: 5, // Add 5 empty rows at the bottom
-      className:'font-roboto text-[14px]'
+      className:'font-roboto text-[14px]',
+      
       
     });
 
