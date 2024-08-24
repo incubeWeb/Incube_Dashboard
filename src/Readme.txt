@@ -1,0 +1,1 @@
+FirstCol-------> Component consistes Deal PipeLine All Connected element
