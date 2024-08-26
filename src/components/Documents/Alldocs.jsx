@@ -45,7 +45,7 @@ const Alldocs = ({setActiveField,activeField}) => {
     }
     useEffect(()=>{
         const handle=async()=>{
-            if(search=='')
+            if(search.length<=0)
                 {
                     const response=await axios.post('http://localhost:8999/alluploadedFiles')
                     setAllDocs(response.data.data)

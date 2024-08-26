@@ -836,9 +836,24 @@ const ChartPopup = ({
             </div>
           </div>
           <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
-            
+           
+            <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+                <div><p className="text-[14px]">Name field:</p></div>
+                <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
+                  {
+                    
+                    dbSheetIntRows.map(val=>
+                      <option key={val.id}>{val}</option>
+                    )
+                  }
+                </select>
+                <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+                  <option>string</option>
+                  <option >integer</option>
+                </select>
+              </div>
               <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
-                <div><p className="text-[14px]">Axis field:</p></div>
+                <div><p className="text-[14px]">Value field:</p></div>
                 <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
                   {
                     dbSheetIntRows.map(val=>
@@ -929,9 +944,24 @@ const ChartPopup = ({
                                   </div>
                                 </div>
                                 <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
-                                  
+                                    
                                     <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
-                                      <div><p className="text-[14px]">Axis field:</p></div>
+                                      <div><p className="text-[14px]">X-axis field:</p></div>
+                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
+                                        {
+                                          
+                                          dbSheetIntRows.map(val=>
+                                            <option key={val.id}>{val}</option>
+                                          )
+                                        }
+                                      </select>
+                                      <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+                                        <option>string</option>
+                                        <option >integer</option>
+                                      </select>
+                                    </div>
+                                    <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+                                      <div><p className="text-[14px]">Value field:</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
                                         {
                                           dbSheetIntRows.map(val=>

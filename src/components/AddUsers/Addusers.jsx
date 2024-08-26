@@ -25,7 +25,7 @@ const Addusers = ({setActiveField}) => {
 
     useEffect(()=>{
         const setUsers=async()=>{
-            if(searchUser.length==0)
+            if(searchUser.length<=0)
             {
                 const response=await axios.get('http://localhost:8999/fetchallusers')
                 setAllusers(response.data.data)

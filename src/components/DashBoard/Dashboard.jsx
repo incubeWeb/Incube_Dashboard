@@ -138,13 +138,14 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
         )
         setBoxes(val)
         setFromApi(true)
-        setTimeout(()=>{  
-          setloading(false)
-        },1000)
+        
       }
       
     }
     checkBoxValues()
+    setTimeout(()=>{  
+      setloading(false)
+    },1000)
     
   },[])
 
@@ -253,6 +254,7 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
                         chartDatatypeFromApiY={chartDatatypeFromApiY[[box.id]-1]['chartDatatypeY']}
                         isSheetchart={isSheetchart}
                         investmentchange={investmentchange}
+                        
                       />
                     );
                   } else {
@@ -275,6 +277,7 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
                         chartDatatypeFromApiY={chartDatatypeFromApiY[[box.id]-1]['chartDatatypeY']}
                         isSheetchart={isSheetchart}
                         investmentchange={investmentchange}
+                        
                         
                       />
                     );
