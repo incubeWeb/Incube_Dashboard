@@ -122,7 +122,7 @@ const Alldocs = ({setActiveField,activeField}) => {
         <div className='w-[100%] bg-white h-[1px] mt-2 '> </div>
         {
             !loading?
-            <div className='flex flex-row w-[100%] h-[10%] font-noto'>
+            <div className='flex flex-col w-[100%] h-[10%] font-noto'>
                 {
                     allDocs.map(doc=>
                     <div key={doc._id} className='flex flex-row w-[100%] h-[100%] font-noto'>

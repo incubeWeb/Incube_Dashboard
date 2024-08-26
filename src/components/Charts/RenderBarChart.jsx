@@ -64,6 +64,9 @@ const fieldConversionsApi={
         let selectedYaxis=''
         let selectedXaxis=''
         let isSheetchart=''
+        let clickedsheetname=''
+        let chartdatatypex=''
+        let chartdatatypey=''
         console.log("id",id)
         entireData.map((m,index)=>{
           if(index==id)
@@ -71,6 +74,9 @@ const fieldConversionsApi={
             selectedYaxis=m.selectedYAxis
             selectedXaxis=m.selectedXAxis
             isSheetchart=m.isSheetChart
+            clickedsheetname=m.clickedsheetname
+            chartdatatypex=m.chartDatatypeX
+            chartdatatypey=m.chartDatatypeY
           }
           }
         )
@@ -78,7 +84,7 @@ const fieldConversionsApi={
        
       if(fromApi&&!isSheetchart)
         { 
-          console.log("chartdatatye",chartDatatypeFromApiX,chartDatatypeFromApiY)
+          console.log('b1')
             const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
             console.log("data01",convertedData)
             
@@ -86,12 +92,13 @@ const fieldConversionsApi={
             setFromApi(false)
     
         }
-        else if(fromApi&&isSheetchart)
+        else if(fromApi&&isSheetchart&&clickedsheetname=='Database Companies')
           {
+            console.log('b2')
            let dt=JSON.parse(Sheet_response.data.data) 
            let filteredDt=[]
            dt.map(d=>
-            filteredDt.push({name:d[selectedXaxis],value:d[selectedYaxis]})
+            filteredDt.push({name:d[selectedXaxis],uv:d[selectedYaxis]})
            )
           
             const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
@@ -99,21 +106,15 @@ const fieldConversionsApi={
               setmydata(convertedData)
               setFromApi(false)
           }
-        if(isSheetchart)
+        else if(isSheetchart&&clickedsheetname!='Database Companies')
           {
-            let dt=JSON.parse(Sheet_response.data.data) 
-           let filteredDt=[]
-           dt.map(d=>
-            filteredDt.push({name:d[selectedXaxis],uv:d[selectedYaxis]})
-           )
-          console.log(filteredDt)
-            const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
-           
-              setmydata(convertedData)
-              setFromApi(false)
+            console.log('b3')
+            const convertedData = convertDataTypes(data01[0], {name:chartdatatypex,uv:chartdatatypey});
+            console.log("bar",convertedData)
+            setmydata(convertedData);
           }
         else{
-          console.log("barhi",data01)
+          console.log('b4')
           const convertedData = convertDataTypes(data01[0], fieldConversionsNormal);
             console.log("data01N",convertedData)
             console.log('daat tyep',chartDatatypeX,chartDatatypeY)
@@ -131,6 +132,9 @@ useEffect(() => {
       let selectedYaxis=''
       let selectedXaxis=''
       let isSheetchart=''
+      let clickedsheetname=''
+        let chartdatatypex=''
+        let chartdatatypey=''
       console.log("id",id)
       entireData.map((m,index)=>{
         if(index==id)
@@ -138,6 +142,10 @@ useEffect(() => {
           selectedYaxis=m.selectedYAxis
           selectedXaxis=m.selectedXAxis
           isSheetchart=m.isSheetChart
+          
+          clickedsheetname=m.clickedsheetname
+          chartdatatypex=m.chartDatatypeX
+          chartdatatypey=m.chartDatatypeY
         }
         }
       )
@@ -145,7 +153,7 @@ useEffect(() => {
      
     if(fromApi&&!isSheetchart)
       { 
-        console.log("chartdatatye",chartDatatypeFromApiX,chartDatatypeFromApiY)
+        console.log('b5')
           const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
           console.log("data01",convertedData)
           
@@ -153,12 +161,13 @@ useEffect(() => {
           setFromApi(false)
   
       }
-      else if(fromApi&&isSheetchart)
+      else if(fromApi&&isSheetchart&&clickedsheetname=='Database Companies')
         {
+          console.log('b6')
          let dt=JSON.parse(Sheet_response.data.data) 
          let filteredDt=[]
          dt.map(d=>
-          filteredDt.push({name:d[selectedXaxis],value:d[selectedYaxis]})
+          filteredDt.push({name:d[selectedXaxis],uv:d[selectedYaxis]})
          )
         
           const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
@@ -166,20 +175,15 @@ useEffect(() => {
             setmydata(convertedData)
             setFromApi(false)
         }
-      if(isSheetchart)
+      else if(isSheetchart&&clickedsheetname!='Database Companies')
         {
-          let dt=JSON.parse(Sheet_response.data.data) 
-         let filteredDt=[]
-         dt.map(d=>
-          filteredDt.push({name:d[selectedXaxis],uv:d[selectedYaxis]})
-         )
-        console.log(filteredDt)
-          const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
-         
-            setmydata(convertedData)
-            setFromApi(false)
+          console.log('b7')
+          const convertedData = convertDataTypes(data01[0], {name:chartdatatypex,uv:chartdatatypey});
+          console.log("bar",convertedData)
+          setmydata(convertedData);
         }
       else{
+        console.log('b8')
         console.log("barhi",data01)
         const convertedData = convertDataTypes(data01[0], fieldConversionsNormal);
           console.log("data01N",convertedData)

@@ -74,6 +74,7 @@ const ChartPopup = ({
   const [SelectedFile,setSelectedFile]=useState(null)
   const [upload,setupload]=useState(false)
   const [showDbSheetRows,setdbsheetrows]=useState(false)
+  const [clickedSheetName,setclickedSheetname]=useState('')
 
   
   const [dbSheetIntRows,setDbSheetIntRows]=useState([])
@@ -114,6 +115,7 @@ const ChartPopup = ({
             const response=await axios.post('http://localhost:8999/uploadsheetFile', formData);
             console.log('File uploaded successfully',response.data.data);
             const data=JSON.parse(response.data.data)
+            
             setdbsheetdata(data)
             setDbSheetIntRows(Object.keys(data[0]))
             console.log(sheetdbdata)
@@ -140,6 +142,8 @@ const ChartPopup = ({
     console.log('selectedhseeetfromdat',selectedsheetfromdbname)
     const response=await axios.post('http://localhost:8999/sheetfromdb',{id:selectedsheetfromdbname});
     const data=JSON.parse(response.data.data)
+    const name=response.data.fileName
+    setclickedSheetname(name)
     console.log("hi",data)
     setdbsheetdata(data)
     setDbSheetIntRows(Object.keys(data[0]))
@@ -287,7 +291,7 @@ const ChartPopup = ({
         x: 10,
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
-      setBoxes([...boxes, { ...newBox, type : "Piechart" , piechartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis }]);
+      setBoxes([...boxes, { ...newBox, type : "Piechart" , piechartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName }]);
       setShowPopup(false);
       setdata01([])
      // setdata01(da) 
@@ -313,7 +317,7 @@ const ChartPopup = ({
         x: 10,
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
-      setBoxes([...boxes, { ...newBox, type : "Piechart" , piechartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetchart:false }]);
+      setBoxes([...boxes, { ...newBox, type : "Piechart" , piechartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetchart:false,clickedsheetname:clickedSheetName }]);
       setShowPopup(false);
       setdata01([])
      // setdata01(da) 
@@ -339,7 +343,7 @@ const ChartPopup = ({
         x: 10,
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
-      setBoxes([...boxes, { ...newBox, type : "Areachart" , areachartCount:data01 ,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis}]);
+      setBoxes([...boxes, { ...newBox, type : "Areachart" , areachartCount:data01 ,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName}]);
       setShowPopup(false);
       setdata01([])
      // setdata01(da) 
@@ -367,7 +371,7 @@ const ChartPopup = ({
         x: 10,
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
-      setBoxes([...boxes, { ...newBox, type : "Areachart" , areachartCount:data01 ,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:false,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis}]);
+      setBoxes([...boxes, { ...newBox, type : "Areachart" , areachartCount:data01 ,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:false,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName}]);
       setShowPopup(false);
       setdata01([])
      // setdata01(da) 
@@ -395,7 +399,7 @@ const ChartPopup = ({
       x: 10,
       y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
     };
-    setBoxes([...boxes, { ...newBox, type : "BarChart" , barchartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis }]);
+    setBoxes([...boxes, { ...newBox, type : "BarChart" , barchartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName }]);
     setShowPopup(false);
     setdata01([])
    // setdata01(da) 
@@ -423,7 +427,7 @@ const ChartPopup = ({
       x: 10,
       y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
     };
-    setBoxes([...boxes, { ...newBox, type : "BarChart" , barchartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:false,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis }]);
+    setBoxes([...boxes, { ...newBox, type : "BarChart" , barchartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:false,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName }]);
     setShowPopup(false);
     setdata01([])
    // setdata01(da) 

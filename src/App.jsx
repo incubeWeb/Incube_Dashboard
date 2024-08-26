@@ -23,8 +23,12 @@ function App() {
   const dispatch=useDispatch()
   const [investmentchange,setinvestmentchange]=useState([])
   
+  const [orgval,setorgval]=useState([])
+  
   const socket=io('http://localhost:8999')
   
+  
+
   useEffect(()=>{
       const fun=async()=>{
         if(localStorage.getItem('email')!='')
@@ -42,6 +46,7 @@ function App() {
             dispatch(addTimeline(item))
           )
         }
+        
         socket.on('databaseChange',(change)=>{
             console.log('datachanf',change.ns.coll)
             const key=changes.length-1
@@ -52,9 +57,15 @@ function App() {
           console.log('this is chat',chat)
           setrealtimeChat(chat)
         })
+
         socket.on('investments',(data)=>{
           setinvestmentchange(data)
         })
+
+        socket.on('organizations',(val)=>{
+            setorgval(val)
+        })
+
       }
       fun()
       return ()=>{
@@ -109,7 +120,7 @@ function App() {
         <>
           {pathname !== '/' && <Navigation activeField={activeField} setActiveField={setActiveField} />}
           <Routes>
-            <Route path="/" element={<Login setLoginIn={setLoginIn}/>} />
+            <Route path="/" element={<Login setLoginIn={setLoginIn} orgval={orgval}/>} />
             <Route path="/dashboard" element={<Dashboard realtimeChat={realtimeChat} investmentchange={investmentchange}/>} />
             <Route path="/dealpipeline" element={<FirstCol setActiveField={setActiveField}/>} />
             <Route path="/dealsourcing" element={<Dealsourcing />} />

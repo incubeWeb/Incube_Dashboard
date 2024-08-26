@@ -46,11 +46,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       return newObj;
     });
   }
-
   const fieldConversionsNormal = {
     name: chartDatatypeX,
     value: chartDatatypeY
   };
+  
 
   const fieldConversionsApi = {
     name: chartDatatypeFromApiX,
@@ -66,21 +66,31 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       let selectedYaxis = '';
       let isSheetchart = '';
       let selectedXaxis='';
+      let clickedsheetname=''
+      let chartdatatypex=''
+      let chartdatatypey=''
 
       entireData.map((m, index) => {
         if (index === id) {
           selectedYaxis = m.selectedYAxis;
           selectedXaxis = m.selectedXAxis
           isSheetchart = m.isSheetChart;
+          clickedsheetname=m.clickedsheetname
+          chartdatatypex=m.chartDatatypeX
+          chartdatatypey=m.chartDatatypeY
         }
       });
       setselectedvalueaxis(selectedYaxis)
 
-      if (fromApi && !isSheetchart) {
+      if (fromApi && !isSheetchart) 
+      {
+        console.log("1")
         const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
-      } else if (fromApi && isSheetchart) {
+      } else if (fromApi && isSheetchart &&clickedsheetname=='Database Companies') 
+        {
+          console.log("2")
         let dt = JSON.parse(Sheet_response.data.data);
         let filteredDt = [];
         dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
@@ -88,7 +98,9 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
-      } else if (isSheetchart) {
+      }
+       else if (isSheetchart&&clickedsheetname=='Database Companies') {
+        console.log("3")
         let dt = JSON.parse(Sheet_response.data.data);
         let filteredDt = [];
         dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
@@ -96,16 +108,24 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
-      } else {
-        console.log(data01);
-        console.log('hi');
+      }
+      else if (isSheetchart&&clickedsheetname!='Database Companies') 
+        {
+
+          console.log("4")
+          const convertedData = convertDataTypes(data01[0], {name:chartdatatypex,value:chartdatatypey});
+          console.log(convertedData)
+          setmydata(convertedData);
+      }
+        
+      else {
+        console.log("5")
         const convertedData = convertDataTypes(data01[0], fieldConversionsNormal);
         setmydata(convertedData);
       }
       setLoading(false);
     };
     fun();
-    console.log("-->",selectedValueAxis)
   }, []);
 
   useEffect(() => {
@@ -113,24 +133,31 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       const Sheet_response = await axios.post('http://localhost:8999/investmentsheetfromdb');
       const dashboard_response = await axios.post('http://localhost:8999/getDashboardData', { email: localStorage.getItem('email') });
       const entireData = JSON.parse(dashboard_response.data.data.positions);
-      console.log("gd", id);
       let selectedYaxis = '';
       let isSheetchart = '';
       let selectedXaxis='';
-
+      let clickedsheetname=''
+      let chartdatatypex=''
+      let chartdatatypey=''
+      console.log(entireData)
       entireData.map((m, index) => {
         if (index === id) {
           selectedYaxis = m.selectedYAxis;
           isSheetchart = m.isSheetChart;
-          selectedXaxis=m.selectedXAxis
+          selectedXaxis=m.selectedXAxis;
+          clickedsheetname=m.clickedsheetname
+          chartdatatypex=m.chartDatatypeX
+          chartdatatypey=m.chartDatatypeY
         }
       });
       setselectedvalueaxis(selectedYaxis)
       if (fromApi && !isSheetchart) {
+        console.log("6")
         const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
-      } else if (fromApi && isSheetchart) {
+      } else if (fromApi && isSheetchart&&clickedsheetname=='Database Companies') {
+        console.log("7")
         let dt = JSON.parse(Sheet_response.data.data);
         let filteredDt = [];
         dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
@@ -138,7 +165,9 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
-      } else if (isSheetchart) {
+      } else if (isSheetchart&&clickedsheetname=='Database Companies') 
+        {
+          console.log("8")
         let dt = JSON.parse(Sheet_response.data.data);
         let filteredDt = [];
         dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
@@ -146,9 +175,17 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
-      } else {
-        console.log(data01);
-        console.log('hi');
+      }
+      else if (isSheetchart&&clickedsheetname!='Database Companies') 
+        {
+
+          console.log("9")
+        const convertedData = convertDataTypes(data01[0], {name:chartdatatypex,value:chartdatatypey});
+        console.log(convertedData)
+        setmydata(convertedData);
+      }
+      else {
+        console.log("10")
         const convertedData = convertDataTypes(data01, fieldConversionsNormal);
         setmydata(convertedData);
       }

@@ -64,6 +64,9 @@ const fieldConversionsApi={
         let selectedYaxis=''
         let selectedXaxis=''
         let isSheetchart=''
+        let clickedsheetname=''
+        let chartdatatypex=''
+        let chartdatatypey=''
         entireData.map((m,index)=>
         {
           if(index==id)
@@ -71,6 +74,9 @@ const fieldConversionsApi={
             selectedYaxis=m.selectedYAxis
             selectedXaxis=m.selectedXAxis
             isSheetchart=m.isSheetChart
+            clickedsheetname=m.clickedsheetname
+            chartdatatypex=m.chartDatatypeX
+            chartdatatypey=m.chartDatatypeY
           }
         }
         )
@@ -86,12 +92,12 @@ const fieldConversionsApi={
         setFromApi(false)
 
     }
-    else if(fromApi&&isSheetchart)
+    else if(fromApi&&isSheetchart&&clickedsheetname=='Database Companies')
       {
        let dt=JSON.parse(Sheet_response.data.data) 
        let filteredDt=[]
        dt.map(d=>
-        filteredDt.push({name:d[selectedXaxis],value:d[selectedYaxis]})
+        filteredDt.push({pv:d[selectedXaxis],uv:d[selectedYaxis]})
        )
       
         const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
@@ -99,18 +105,11 @@ const fieldConversionsApi={
           setmydata(convertedData)
           setFromApi(false)
       }
-      if(isSheetchart)
+      else if(isSheetchart&&clickedsheetname!='Database Companies')
         {
-          let dt=JSON.parse(Sheet_response.data.data) 
-           let filteredDt=[]
-           dt.map(d=>
-            filteredDt.push({pv:d[selectedXaxis],uv:d[selectedYaxis]})
-           )
-          
-            const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
-           
-              setmydata(convertedData)
-              setFromApi(false)
+          const convertedData = convertDataTypes(data01[0], {pv:chartdatatypex,uv:chartdatatypey});
+          console.log(convertedData)
+          setmydata(convertedData);
         }
         else
         {
@@ -130,6 +129,9 @@ useEffect(() => {
       let selectedYaxis=''
       let selectedXaxis=''
       let isSheetchart=''
+      let clickedsheetname=''
+        let chartdatatypex=''
+        let chartdatatypey=''
       entireData.map((m,index)=>
       {
         if(index==id)
@@ -137,6 +139,9 @@ useEffect(() => {
           selectedYaxis=m.selectedYAxis
           selectedXaxis=m.selectedXAxis
           isSheetchart=m.isSheetChart
+          clickedsheetname=m.clickedsheetname
+            chartdatatypex=m.chartDatatypeX
+            chartdatatypey=m.chartDatatypeY
         }
       }
       )
@@ -152,12 +157,12 @@ useEffect(() => {
       setFromApi(false)
 
   }
-  else if(fromApi&&isSheetchart)
+  else if(fromApi&&isSheetchart&&clickedsheetname=='Database Companies')
     {
      let dt=JSON.parse(Sheet_response.data.data) 
      let filteredDt=[]
      dt.map(d=>
-      filteredDt.push({name:d[selectedXaxis],value:d[selectedYaxis]})
+      filteredDt.push({pv:d[selectedXaxis],uv:d[selectedYaxis]})
      )
     
       const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
@@ -165,25 +170,17 @@ useEffect(() => {
         setmydata(convertedData)
         setFromApi(false)
     }
-    if(isSheetchart)
-      {
-        let dt=JSON.parse(Sheet_response.data.data) 
-         let filteredDt=[]
-         dt.map(d=>
-          filteredDt.push({pv:d[selectedXaxis],uv:d[selectedYaxis]})
-         )
-        
-          const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
-         
-            setmydata(convertedData)
-            setFromApi(false)
-      }
-      else
-      {
-        const convertedData = convertDataTypes(data01, fieldConversionsNormal);
-      
-        setmydata(convertedData)
-      }
+    else if(isSheetchart&&clickedsheetname!='Database Companies')
+    {
+      const convertedData = convertDataTypes(data01[0], {pv:chartdatatypex,uv:chartdatatypey});
+      console.log(convertedData)
+      setmydata(convertedData);
+    }
+    else
+    {
+      const convertedData = convertDataTypes(data01, fieldConversionsNormal);
+      setmydata(convertedData)
+    }
   }
   fun()
 }, [investmentchange]);
