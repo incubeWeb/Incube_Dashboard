@@ -11,11 +11,13 @@ const DashBoardSingleUserChat = ({receiver,clickUserField,openChatbar}) => {
       {
         const response1=await axios.post('http://localhost:8999/readChat',{
           sender:localStorage.getItem('email'),
-          receiver:receiver
+          receiver:receiver,
+          organization:localStorage.getItem('organization')
         })
         const response2=await axios.post('http://localhost:8999/readChat',{
           sender:receiver,
-          receiver:localStorage.getItem('email')
+          receiver:localStorage.getItem('email'),
+          organization:localStorage.getItem('organization')
         })
         let object1=response1.data.data
         let object2=response2.data.data
@@ -35,11 +37,13 @@ const DashBoardSingleUserChat = ({receiver,clickUserField,openChatbar}) => {
       const setMsg=async()=>{
         const response1=await axios.post('http://localhost:8999/readChat',{
           sender:localStorage.getItem('email'),
-          receiver:receiver
+          receiver:receiver,
+          organization:localStorage.getItem('organization')
         })
         const response2=await axios.post('http://localhost:8999/readChat',{
           sender:receiver,
-          receiver:localStorage.getItem('email')
+          receiver:localStorage.getItem('email'),
+          organization:localStorage.getItem('organization')
         })
         let object1=response1.data.data
         let object2=response2.data.data
@@ -72,7 +76,8 @@ const DashBoardSingleUserChat = ({receiver,clickUserField,openChatbar}) => {
             sender:localStorage.getItem('email'),
             receiver:receiver,
             message:msg,
-            time:Date.now()
+            time:Date.now(),
+            organization:localStorage.getItem('organization')
           })
           if(response.data.status==200)
             {

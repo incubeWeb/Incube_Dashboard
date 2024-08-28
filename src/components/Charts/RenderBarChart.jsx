@@ -7,6 +7,7 @@ import axios from 'axios';
 const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY}) => {
 
   const [mydata,setmydata]=useState([])
+  const [itsfromDatabase,setitsfromdatabase]=useState(false)
   function extractValue(input) {
     // Regex to match a string with continuous digits
     const continuousDigitsPattern = /^\D*(\d+)\D*$/;
@@ -58,8 +59,8 @@ const fieldConversionsApi={
 
   useEffect(() => {
     const fun=async()=>{
-      const Sheet_response=await axios.post('http://localhost:8999/investmentsheetfromdb')
-        const dashboard_response=await axios.post('http://localhost:8999/getDashboardData',{email:localStorage.getItem('email')})
+      
+        const dashboard_response=await axios.post('http://localhost:8999/getDashboardData',{email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
         const entireData=JSON.parse(dashboard_response.data.data.positions)
         let selectedYaxis=''
         let selectedXaxis=''
@@ -67,6 +68,8 @@ const fieldConversionsApi={
         let clickedsheetname=''
         let chartdatatypex=''
         let chartdatatypey=''
+         let dbCompanyName=''
+        
         console.log("id",id)
         entireData.map((m,index)=>{
           if(index==id)
@@ -77,11 +80,13 @@ const fieldConversionsApi={
             clickedsheetname=m.clickedsheetname
             chartdatatypex=m.chartDatatypeX
             chartdatatypey=m.chartDatatypeY
+            dbCompanyName=m.dbCompanyName
           }
           }
         )
+        console.log(dbCompanyName)
         console.log(isSheetchart)
-       
+        const Sheet_response=await axios.post('http://localhost:8999/investmentsheetfromdb',{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName})
       if(fromApi&&!isSheetchart)
         { 
           console.log('b1')
@@ -92,8 +97,9 @@ const fieldConversionsApi={
             setFromApi(false)
     
         }
-        else if(fromApi&&isSheetchart&&clickedsheetname=='Database Companies')
+        else if(fromApi&&isSheetchart&&clickedsheetname.length>0)
           {
+            setitsfromdatabase(true)
             console.log('b2')
            let dt=JSON.parse(Sheet_response.data.data) 
            let filteredDt=[]
@@ -106,7 +112,19 @@ const fieldConversionsApi={
               setmydata(convertedData)
               setFromApi(false)
           }
-        else if(isSheetchart&&clickedsheetname!='Database Companies')
+          else if (isSheetchart&&clickedsheetname.length>0) 
+            {
+              console.log("8")
+              setitsfromdatabase(true)
+            let dt = JSON.parse(Sheet_response.data.data);
+            let filteredDt = [];
+            dt.map(d => filteredDt.push({ name: d[selectedXaxis], uv: d[selectedYaxis] }));
+    
+            const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+            setmydata(convertedData);
+            setFromApi(false);
+          }
+        else if(isSheetchart&&clickedsheetname.length<=0)
           {
             console.log('b3')
             const convertedData = convertDataTypes(data01[0], {name:chartdatatypex,uv:chartdatatypey});
@@ -126,8 +144,8 @@ const fieldConversionsApi={
 }, []);
 useEffect(() => {
   const fun=async()=>{
-    const Sheet_response=await axios.post('http://localhost:8999/investmentsheetfromdb')
-      const dashboard_response=await axios.post('http://localhost:8999/getDashboardData',{email:localStorage.getItem('email')})
+    
+      const dashboard_response=await axios.post('http://localhost:8999/getDashboardData',{email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
       const entireData=JSON.parse(dashboard_response.data.data.positions)
       let selectedYaxis=''
       let selectedXaxis=''
@@ -135,6 +153,7 @@ useEffect(() => {
       let clickedsheetname=''
         let chartdatatypex=''
         let chartdatatypey=''
+        let dbCompanyName=''
       console.log("id",id)
       entireData.map((m,index)=>{
         if(index==id)
@@ -146,11 +165,14 @@ useEffect(() => {
           clickedsheetname=m.clickedsheetname
           chartdatatypex=m.chartDatatypeX
           chartdatatypey=m.chartDatatypeY
+
+          dbCompanyName=m.dbCompanyName
         }
         }
       )
+      console.log(dbCompanyName)
       console.log(isSheetchart)
-     
+      const Sheet_response=await axios.post('http://localhost:8999/investmentsheetfromdb',{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName})
     if(fromApi&&!isSheetchart)
       { 
         console.log('b5')
@@ -161,9 +183,10 @@ useEffect(() => {
           setFromApi(false)
   
       }
-      else if(fromApi&&isSheetchart&&clickedsheetname=='Database Companies')
+      else if(fromApi&&isSheetchart&&clickedsheetname.length>0)
         {
           console.log('b6')
+          setitsfromdatabase(true)
          let dt=JSON.parse(Sheet_response.data.data) 
          let filteredDt=[]
          dt.map(d=>
@@ -175,7 +198,19 @@ useEffect(() => {
             setmydata(convertedData)
             setFromApi(false)
         }
-      else if(isSheetchart&&clickedsheetname!='Database Companies')
+        else if (isSheetchart&&clickedsheetname.length>0) 
+          {
+            console.log("8")
+            setitsfromdatabase(true)
+          let dt = JSON.parse(Sheet_response.data.data);
+          let filteredDt = [];
+          dt.map(d => filteredDt.push({ name: d[selectedXaxis], uv: d[selectedYaxis] }));
+  
+          const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+          setmydata(convertedData);
+          setFromApi(false);
+        }
+      else if(isSheetchart&&clickedsheetname.length<=0)
         {
           console.log('b7')
           const convertedData = convertDataTypes(data01[0], {name:chartdatatypex,uv:chartdatatypey});
@@ -220,7 +255,15 @@ useEffect(() => {
             </BarChart>
           </ResponsiveContainer>
         </div>
-      
+        {
+              itsfromDatabase?
+                <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
+                  <div className='w-[10px] h-[10px] bg-green-600 rounded-[50%] mt-[2px]'></div> 
+                  <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Database</p>
+
+                </div>:
+                <></>
+            }
     </div>
   );
 };

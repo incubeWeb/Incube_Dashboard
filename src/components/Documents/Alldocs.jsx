@@ -22,17 +22,17 @@ const Alldocs = ({setActiveField,activeField}) => {
 
     const handleDelete=async (id)=>{
         console.log(id)
-        const response=await axios.post('http://localhost:8999/deleteUploadedfile',{id:id,doneBy:localStorage.getItem('email')})
+        const response=await axios.post('http://localhost:8999/deleteUploadedfile',{id:id,doneBy:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
         if(response.data.status==200)
         {
-            const response=await axios.post('http://localhost:8999/alluploadedFiles')
+            const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
             setAllDocs(response.data.data)
         }
     }
     const handleView=async (id,name)=>{
         console.log(id)
         setid(id)
-        const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id})
+        const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
         const data=JSON.parse(response.data.data)
         setjsonData(data)
         setclickedview(!clickedView)
@@ -47,12 +47,13 @@ const Alldocs = ({setActiveField,activeField}) => {
         const handle=async()=>{
             if(search.length<=0)
                 {
-                    const response=await axios.post('http://localhost:8999/alluploadedFiles')
+                    const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
                     setAllDocs(response.data.data)
                 }
                 else{
                     const response=await axios.post('http://localhost:8999/searchFile',{
-                        search:search
+                        search:search,
+                        organization:localStorage.getItem('organization')
                     })
                     setAllDocs(response.data.data)
                 }
@@ -68,7 +69,7 @@ const Alldocs = ({setActiveField,activeField}) => {
         const checkIfSelected=async()=>{
             if(activeField=='documents')
             {
-                const response=await axios.post('http://localhost:8999/alluploadedFiles')
+                const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
                 setAllDocs(response.data.data)
             }
         }

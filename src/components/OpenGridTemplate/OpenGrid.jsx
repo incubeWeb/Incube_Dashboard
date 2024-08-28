@@ -33,7 +33,7 @@ function OpenGrid({setActiveField,companyName,description,handleOpenGrid}) {
 
     useEffect(()=>{
         const fun=async()=>{
-           const data= await axios.get('http://localhost:8999/getOpenedTabs')
+           const data= await axios.post('http://localhost:8999/getOpenedTabs',{organization:localStorage.getItem('organization')})
            data.data.data.map(tabVal=>{
              let tabs=JSON.parse(tabVal.tabs)
              setTabCount(parseInt(tabVal.TabsCount))
@@ -47,7 +47,8 @@ function OpenGrid({setActiveField,companyName,description,handleOpenGrid}) {
         const InitialVal=async()=>{
             const doc=await axios.post('http://localhost:8999/getNewDetails',{
                 CompanyName:companyName,
-                Tab:`Tab${currentTab}`
+                Tab:`Tab${currentTab}`,
+                organization:localStorage.getItem('organization')
               })
             setTotalCards(doc.data.data)
         }
@@ -57,7 +58,7 @@ function OpenGrid({setActiveField,companyName,description,handleOpenGrid}) {
     useEffect(()=>{
         const fun=async()=>{
             console.log(Tabs)
-            await axios.post('http://localhost:8999/setopenedTabs',{count:"uniqueIdentifier",tabs:JSON.stringify(Tabs),TabsCount:TabCount})
+            await axios.post('http://localhost:8999/setopenedTabs',{count:"uniqueIdentifier",tabs:JSON.stringify(Tabs),TabsCount:TabCount,organization:localStorage.getItem('organization')})
         }
         fun()
     },[TabCount])
@@ -75,7 +76,8 @@ function OpenGrid({setActiveField,companyName,description,handleOpenGrid}) {
         const response=await axios.post('http://localhost:8999/updateCompanyCompleteStatus',{
             completed:'completed',
             title:companyName,
-            pushedby:localStorage.getItem('email')
+            pushedby:localStorage.getItem('email'),
+            organization:localStorage.getItem('organization')
         })
         if(response.data.status==200)
         {

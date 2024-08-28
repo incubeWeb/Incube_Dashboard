@@ -39,16 +39,19 @@ function AddNewDetails({ openAddNewWindow ,CompanyName, handleTotalCards,openedT
         CompanyName:CompanyName,
         Title: section.title,
         Description: section.description,
-        Tab:`Tab${openedTab}`
+        Tab:`Tab${openedTab}`,
+        organization:localStorage.getItem('organization')
       }));
     console.log(JSON.stringify(data_, null, 2));
     const output=JSON.stringify(data_, null, 2)
     await axios.post('http://localhost:8999/addNewDetail',{
-      data:output
+      data:output,
+      organization:localStorage.getItem('organization')
     }).then(async()=>{
       const doc=await axios.post('http://localhost:8999/getNewDetails',{
         CompanyName:CompanyName,
-        Tab:"Tab1"
+        Tab:"Tab1",
+        organization:localStorage.getItem('organization')
       })
       handleTotalCards(doc.data.data)
     })

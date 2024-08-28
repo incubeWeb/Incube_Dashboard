@@ -33,7 +33,8 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
   useEffect(()=>{
     const fun=async()=>{
       const response=await axios.post('http://localhost:8999/findUsers',{
-        user:searchUser
+        user:searchUser,
+        organization:localStorage.getItem('organization')
       })
       const users=response.data.data
       //console.log(users)
@@ -51,12 +52,13 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
 
   useEffect(()=>{
     const fetchall=async()=>{
-      const response=await axios.get('http://localhost:8999/fetchallusers')
+      const response=await axios.post('http://localhost:8999/fetchallusers',{organization:localStorage.getItem('organization')})
       const users=response.data.data
       console.log("total users",users)
       setUsers(users)
       const UserChatpositionRes=await axios.post('http://localhost:8999/chatwidgituserpositionvalues',{
-        email:localStorage.getItem('email')+`${id}`
+        email:localStorage.getItem('email')+`${id}`,
+        organization:localStorage.getItem('organization')
       })
       if(UserChatpositionRes.data.status==200)
       {
@@ -81,11 +83,13 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
 
         let response1=await axios.post('http://localhost:8999/readChat',{
           sender:localStorage.getItem('email'),
-          receiver:openuser
+          receiver:openuser,
+          organization:localStorage.getItem('organization')
         })
         let response2=await axios.post('http://localhost:8999/readChat',{
           receiver:localStorage.getItem('email'),
-          sender:openuser
+          sender:openuser,
+          organization:localStorage.getItem('organization')
         })
         let dataS=[]
         let dataR=[]
@@ -164,7 +168,8 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
       const response=await axios.post('http://localhost:8999/sendChat',{
         sender:localStorage.getItem('email'),
         receiver:openuser,
-        message:msg
+        message:msg,
+        organization:localStorage.getItem('organization')
       })
       if(response.data.status==200)
       {

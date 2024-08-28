@@ -28,6 +28,7 @@ const FilesDoc = ({ currentTab,CompanyName }) => {
             formData.append('tab', `Tab${currentTab}`);
             formData.append('CompanyName',CompanyName);
             formData.append('uploadedBy',localStorage.getItem('email'))
+            formData.append('organization',localStorage.getItem('organization'))
             try {
                 const response = await axios.post('http://localhost:8999/uploadFile', formData);
                 console.log('File uploaded successfully', response.data);
@@ -42,7 +43,7 @@ const FilesDoc = ({ currentTab,CompanyName }) => {
 
     const fetchUploadedFiles = async () => {
         try {
-            const response = await axios.post('http://localhost:8999/getfiles', { CompanyName:CompanyName,tab: `Tab${currentTab}` });
+            const response = await axios.post('http://localhost:8999/getfiles', { CompanyName:CompanyName,tab: `Tab${currentTab}`,organization:localStorage.getItem('organization') });
             setUploadedFiles(response.data.data);
         } catch (error) {
             console.error('Error fetching uploaded files', error);

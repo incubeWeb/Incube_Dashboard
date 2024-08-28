@@ -33,7 +33,7 @@ function OpenUnassignedGrid({ setSelectedTab, setActiveField, companyName, descr
 
     useEffect(() => {
         const setUsers = async () => {
-            const response = await axios.get('http://localhost:8999/fetchallusers');
+            const response = await axios.post('http://localhost:8999/fetchallusers',{organization:localStorage.getItem('organization')});
             const usersData = response.data.data;
             setAllUsers(usersData);
 
@@ -62,23 +62,27 @@ function OpenUnassignedGrid({ setSelectedTab, setActiveField, companyName, descr
                     email: user.email,
                     password: user.password,
                     role: roles[user._id],
+                    organization:localStorage.getItem('organization')
                 });
                 
                     const response = await axios.post('http://localhost:8999/addTeam', {
                         organization: companyName,
                         member:  user.email,
                         position:roles[user._id],
-                        assignedBy:localStorage.getItem('email')
+                        assignedBy:localStorage.getItem('email'),
+                        mainorganization:localStorage.getItem('organization')
                     });
                     await axios.post('http://localhost:8999/updateCompanystatus', {
                         company: companyName,
                         status: 'In Progress',
+                        organization:localStorage.getItem('organization')
                     });
                     if(localStorage.getItem('role')=='team lead')
                     {
                         await axios.post('http://localhost:8999/updateCompanyTeamLeadstatus', {
                             company: companyName,
                             TeamLead_status: 'In Progress',
+                            organization:localStorage.getItem('organization')
                         });
                     }
                     if(response.data.status==200)
@@ -93,7 +97,8 @@ function OpenUnassignedGrid({ setSelectedTab, setActiveField, companyName, descr
                         organization: companyName,
                         member:  user.email,
                         position:roles[user._id],
-                        assignedBy:localStorage.getItem('email')
+                        assignedBy:localStorage.getItem('email'),
+                        mainorganization:localStorage.getItem('organization')
                     });
                     
                     if(response.data.status==200)

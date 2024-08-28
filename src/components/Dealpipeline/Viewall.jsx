@@ -14,7 +14,7 @@ function Viewall({filter, selectedTab,setActiveField }) {
   const [loading,setloading]=useState(true)
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      const response = await axios.get('http://localhost:8999/getDealpipelineCompany');
+      const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
       setcompData(response.data.data)
     }
     fetchcompanydata()

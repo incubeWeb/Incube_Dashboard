@@ -21,8 +21,10 @@ function AddNewInvestment({ openAddNewWindow ,CompanyName, handleTotalCards}) {
 
   useEffect(()=>{
     const settingSuggested=async()=>{
+      let organization=localStorage.getItem('organization')
         const response=await axios.post('http://localhost:8999/suggestedInvestment',{
-            company:CompanyName
+            company:CompanyName,
+            organization:organization
         })
         setsuggested(response.data.data)
     }
@@ -48,6 +50,7 @@ function AddNewInvestment({ openAddNewWindow ,CompanyName, handleTotalCards}) {
   }
 
   const handleSave = async() => {
+    let organization=localStorage.getItem('organization')
     const data_ = sections
       .filter(section => section.title.trim() !== '')
       .map(section => ({
@@ -55,15 +58,18 @@ function AddNewInvestment({ openAddNewWindow ,CompanyName, handleTotalCards}) {
         company:CompanyName,
         field: section.title,
         value: section.description,
+        organization:organization
       }));
     
      
     const output=JSON.stringify(data_, null, 2)
     await axios.post('http://localhost:8999/addNewInvestment',{
-      data:output
+      data:output,
+      organization:organization
     }).then(async()=>{
       const doc=await axios.post('http://localhost:8999/getnewInvestment',{
-        company:CompanyName,  
+        company:CompanyName, 
+        organization:organization 
       })
       handleTotalCards(doc.data.data)
     })

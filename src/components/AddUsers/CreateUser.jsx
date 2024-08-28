@@ -8,7 +8,8 @@ function CreateUser({ handleAddUser,setAllusers }) {
  const [company,setCompany]=useState('none')
  useEffect(()=>{
   const getCompanies=async()=>{
-    const response=await axios.get('http://localhost:8999/getDealpipelineCompany')
+    let organization=localStorage.getItem('organization')
+    const response=await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:organization})
     setallcompanies(response.data.data)
   }
   getCompanies()
@@ -19,17 +20,20 @@ function CreateUser({ handleAddUser,setAllusers }) {
   const password=document.getElementById('password').value
   const role=option
   const team=company
+  let organization=localStorage.getItem('organization')
   const response=await axios.post('http://localhost:8999/registerUser',{
     email:email,
     password:password,
-    role:role
+    role:role,
+    organization:organization
   })
   if(team!='none')
   {
     await axios.post('http://localhost:8999/addTeam',{
       organization:team,
       member:email,
-      position:role
+      position:role,
+      mainorganization:organization
     })
   }
   

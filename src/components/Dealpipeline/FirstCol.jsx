@@ -33,7 +33,8 @@ function FirstCol({setActiveField}) {
 
   const showCompanies = async () => {
     const response = await axios.post('http://localhost:8999/getUserfromTeam', {
-      member: localStorage.getItem('email')
+      member: localStorage.getItem('email'),
+      mainorganization:localStorage.getItem('organization')
     });
     const data = response.data.data;
     const uniqueOrganizations = [];
@@ -55,7 +56,7 @@ function FirstCol({setActiveField}) {
 
   const fetchCompanyData = async () => {
     try {
-      const response = await axios.get('http://localhost:8999/getDealpipelineCompany');
+      const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
       setCompanyData(response.data.data);
     } catch (error) {
       console.error('Error fetching company data:', error);

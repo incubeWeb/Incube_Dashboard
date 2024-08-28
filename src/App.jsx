@@ -23,7 +23,7 @@ function App() {
   const dispatch=useDispatch()
   const [investmentchange,setinvestmentchange]=useState([])
   
-  const [orgval,setorgval]=useState([])
+  
   
   const socket=io('http://localhost:8999')
   
@@ -37,7 +37,7 @@ function App() {
         }
         console.log('connecting to socket')
         console.log('connecting to databaseChange')
-        const response=await axios.get('http://localhost:8999/gettimeline')
+        const response=await axios.post('http://localhost:8999/gettimeline',{organization:localStorage.getItem('organization')})
         console.log(response)
         if(response.data.data.length>0)
         {
@@ -61,17 +61,14 @@ function App() {
         socket.on('investments',(data)=>{
           setinvestmentchange(data)
         })
-
-        socket.on('organizations',(val)=>{
-            setorgval(val)
-        })
-
+      
       }
       fun()
       return ()=>{
           socket.disconnect()
       }
   },[])
+
 
 
   useEffect(() => {
@@ -120,7 +117,7 @@ function App() {
         <>
           {pathname !== '/' && <Navigation activeField={activeField} setActiveField={setActiveField} />}
           <Routes>
-            <Route path="/" element={<Login setLoginIn={setLoginIn} orgval={orgval}/>} />
+            <Route path="/" element={<Login setLoginIn={setLoginIn}/>} />
             <Route path="/dashboard" element={<Dashboard realtimeChat={realtimeChat} investmentchange={investmentchange}/>} />
             <Route path="/dealpipeline" element={<FirstCol setActiveField={setActiveField}/>} />
             <Route path="/dealsourcing" element={<Dealsourcing />} />

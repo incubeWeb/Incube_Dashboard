@@ -50,9 +50,11 @@ function GridOpen({companyName,description,handleOpenGrid}) {
 
     useEffect(()=>{
         const fun=async()=>{
+            let organization=localStorage.getItem('organization')
             const data=await axios.post('http://localhost:8999/findInvestmentDetail',{
                 company:companyName,
-                search:search
+                search:search,
+                organization:organization
             })
             console.log("bha",data.data.data)
             if(data.data.data.length!=0)
@@ -61,6 +63,7 @@ function GridOpen({companyName,description,handleOpenGrid}) {
             }else{
                 const doc=await axios.post('http://localhost:8999/getNewInvestment',{
                     company:companyName,
+                    organization:organization
                   })
                 setTotalCards(doc.data.data)
             }

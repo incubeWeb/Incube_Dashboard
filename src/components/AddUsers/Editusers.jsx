@@ -19,15 +19,17 @@ function EditUser({ handleEdit,email,password,role,edit,setAllusers}) {
     const email=document.getElementById('email').value
     const password=document.getElementById('password').value
     const role=option
+    let organization=localStorage.getItem('organization')
     const response=await axios.post('http://localhost:8999/updateuser',{
         email:email,
         password:password,
         role:role,
-        doneBy:localStorage.getItem('email')
+        doneBy:localStorage.getItem('email'),
+        organization:organization
     })
     if(response.data.status==200)
     {
-        const response=await axios.get('http://localhost:8999/fetchallusers')
+        const response=await axios.post('http://localhost:8999/fetchallusers',{organization:organization})
         setAllusers(response.data.data)
         handleEdit()
     }

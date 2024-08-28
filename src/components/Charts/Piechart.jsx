@@ -7,6 +7,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
   const [loading, setLoading] = useState(true);
   const [mydata, setmydata] = useState([]);
   const [selectedValueAxis,setselectedvalueaxis]=useState('')
+  const [itsfromDatabase,setitsfromdatabase]=useState(false)
 
   function extractValue(input) {
     const continuousDigitsPattern = /^\D*(\d+)\D*$/;
@@ -59,8 +60,8 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
 
   useEffect(() => {
     const fun = async () => {
-      const Sheet_response = await axios.post('http://localhost:8999/investmentsheetfromdb');
-      const dashboard_response = await axios.post('http://localhost:8999/getDashboardData', { email: localStorage.getItem('email') });
+      
+      const dashboard_response = await axios.post('http://localhost:8999/getDashboardData', { email: localStorage.getItem('email'),organization:localStorage.getItem('organization') });
       const entireData = JSON.parse(dashboard_response.data.data.positions);
       console.log("gd", id);
       let selectedYaxis = '';
@@ -69,6 +70,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       let clickedsheetname=''
       let chartdatatypex=''
       let chartdatatypey=''
+      let dbCompanyName=''
 
       entireData.map((m, index) => {
         if (index === id) {
@@ -78,18 +80,21 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
           clickedsheetname=m.clickedsheetname
           chartdatatypex=m.chartDatatypeX
           chartdatatypey=m.chartDatatypeY
+          dbCompanyName=m.dbCompanyName
         }
       });
+      console.log(dbCompanyName)
       setselectedvalueaxis(selectedYaxis)
-
+      const Sheet_response = await axios.post('http://localhost:8999/investmentsheetfromdb',{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
       if (fromApi && !isSheetchart) 
       {
         console.log("1")
         const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
-      } else if (fromApi && isSheetchart &&clickedsheetname=='Database Companies') 
+      } else if (fromApi && isSheetchart &&clickedsheetname.length>0) 
         {
+          setitsfromdatabase(true)
           console.log("2")
         let dt = JSON.parse(Sheet_response.data.data);
         let filteredDt = [];
@@ -99,8 +104,9 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         setmydata(convertedData);
         setFromApi(false);
       }
-       else if (isSheetchart&&clickedsheetname=='Database Companies') {
+       else if (isSheetchart&&clickedsheetname.length>0) {
         console.log("3")
+        setitsfromdatabase(true)
         let dt = JSON.parse(Sheet_response.data.data);
         let filteredDt = [];
         dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
@@ -109,9 +115,9 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         setmydata(convertedData);
         setFromApi(false);
       }
-      else if (isSheetchart&&clickedsheetname!='Database Companies') 
+      else if (isSheetchart&&clickedsheetname.length<=0) 
         {
-
+          setitsfromdatabase(false)
           console.log("4")
           const convertedData = convertDataTypes(data01[0], {name:chartdatatypex,value:chartdatatypey});
           console.log(convertedData)
@@ -130,8 +136,8 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
 
   useEffect(() => {
     const fun = async () => {
-      const Sheet_response = await axios.post('http://localhost:8999/investmentsheetfromdb');
-      const dashboard_response = await axios.post('http://localhost:8999/getDashboardData', { email: localStorage.getItem('email') });
+      
+      const dashboard_response = await axios.post('http://localhost:8999/getDashboardData', { email: localStorage.getItem('email') ,organization:localStorage.getItem('organization')});
       const entireData = JSON.parse(dashboard_response.data.data.positions);
       let selectedYaxis = '';
       let isSheetchart = '';
@@ -139,6 +145,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       let clickedsheetname=''
       let chartdatatypex=''
       let chartdatatypey=''
+      let dbCompanyName=''
       console.log(entireData)
       entireData.map((m, index) => {
         if (index === id) {
@@ -148,16 +155,20 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
           clickedsheetname=m.clickedsheetname
           chartdatatypex=m.chartDatatypeX
           chartdatatypey=m.chartDatatypeY
+          dbCompanyName=m.dbCompanyName
         }
       });
+      console.log("fs",dbCompanyName)
       setselectedvalueaxis(selectedYaxis)
+      const Sheet_response = await axios.post('http://localhost:8999/investmentsheetfromdb',{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
       if (fromApi && !isSheetchart) {
         console.log("6")
         const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
-      } else if (fromApi && isSheetchart&&clickedsheetname=='Database Companies') {
+      } else if (fromApi && isSheetchart&&clickedsheetname.length>0) {
         console.log("7")
+        setitsfromdatabase(true)
         let dt = JSON.parse(Sheet_response.data.data);
         let filteredDt = [];
         dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
@@ -165,9 +176,10 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
-      } else if (isSheetchart&&clickedsheetname=='Database Companies') 
+      } else if (isSheetchart&&clickedsheetname.length>0) 
         {
           console.log("8")
+          setitsfromdatabase(true)
         let dt = JSON.parse(Sheet_response.data.data);
         let filteredDt = [];
         dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
@@ -176,7 +188,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         setmydata(convertedData);
         setFromApi(false);
       }
-      else if (isSheetchart&&clickedsheetname!='Database Companies') 
+      else if (isSheetchart&&clickedsheetname.length<=0) 
         {
 
           console.log("9")
@@ -221,6 +233,15 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
             <div className='w-[10px] h-[10px] bg-violet-600 mt-1'></div> 
             <p className='text-[13px] text-gray-07 font-noto text-gray-700'>{selectedValueAxis}</p>
           </div>
+          {
+              itsfromDatabase?
+                <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
+                  <div className='w-[10px] h-[10px] bg-green-600 rounded-[50%] mt-[2px]'></div> 
+                  <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Database</p>
+
+                </div>:
+                <></>
+            }
         </ResponsiveContainer>
       )}
     </div>

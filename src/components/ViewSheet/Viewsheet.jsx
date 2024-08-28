@@ -69,7 +69,7 @@ const Viewsheet = ({viewdDoc, jsonData,id,setclickedview,clickedview}) => {
 
       //console.log('Updated JSON:', updatedJson);
       await axios.post('http://localhost:8999/updateSheetFromJson',{
-        id:id, updatedJson:updatedJson
+        id:id, updatedJson:updatedJson,organization:localStorage.getItem('organization')
       })
       //alert(JSON.stringify(updatedJson, null, 2)); // Display the updated JSON in an alert
       setclickedview(!clickedview)

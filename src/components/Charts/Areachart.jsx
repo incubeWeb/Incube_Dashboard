@@ -6,7 +6,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 const Areachart = ({investmentchange,id,data01,clickedArea,setClickedArea,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY}) => {
   const [mydata,setmydata]=useState([])
-
+  const [itsfromDatabase,setitsfromdatabase]=useState(false)
   function extractValue(input) {
     // Regex to match a string with continuous digits
     const continuousDigitsPattern = /^\D*(\d+)\D*$/;
@@ -58,8 +58,9 @@ const fieldConversionsApi={
 
   useEffect(() => {
     const fun=async()=>{
-      const Sheet_response=await axios.post('http://localhost:8999/investmentsheetfromdb')
-        const dashboard_response=await axios.post('http://localhost:8999/getDashboardData',{email:localStorage.getItem('email')})
+      let organization=localStorage.getItem('organization')
+      
+        const dashboard_response=await axios.post('http://localhost:8999/getDashboardData',{email:localStorage.getItem('email'),organization:organization})
         const entireData=JSON.parse(dashboard_response.data.data.positions)
         let selectedYaxis=''
         let selectedXaxis=''
@@ -67,6 +68,7 @@ const fieldConversionsApi={
         let clickedsheetname=''
         let chartdatatypex=''
         let chartdatatypey=''
+         let dbCompanyName=''
         entireData.map((m,index)=>
         {
           if(index==id)
@@ -77,10 +79,11 @@ const fieldConversionsApi={
             clickedsheetname=m.clickedsheetname
             chartdatatypex=m.chartDatatypeX
             chartdatatypey=m.chartDatatypeY
+            dbCompanyName=m.dbCompanyName
           }
         }
         )
-        
+    const Sheet_response=await axios.post('http://localhost:8999/investmentsheetfromdb',{organization:organization,CompanyName:dbCompanyName})  
     if(fromApi&&!isSheetchart)
     { 
       console.log("chartdatatye",chartDatatypeFromApiX,chartDatatypeFromApiY)
@@ -92,8 +95,9 @@ const fieldConversionsApi={
         setFromApi(false)
 
     }
-    else if(fromApi&&isSheetchart&&clickedsheetname=='Database Companies')
+    else if(fromApi&&isSheetchart&&clickedsheetname.length>0)
       {
+        setitsfromdatabase(true)
        let dt=JSON.parse(Sheet_response.data.data) 
        let filteredDt=[]
        dt.map(d=>
@@ -105,7 +109,19 @@ const fieldConversionsApi={
           setmydata(convertedData)
           setFromApi(false)
       }
-      else if(isSheetchart&&clickedsheetname!='Database Companies')
+      else if (isSheetchart&&clickedsheetname.length>0) 
+        {
+          console.log("8")
+          setitsfromdatabase(true)
+        let dt = JSON.parse(Sheet_response.data.data);
+        let filteredDt = [];
+        dt.map(d => filteredDt.push({ pv: d[selectedXaxis], uv: d[selectedYaxis] }));
+  
+        const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+        setmydata(convertedData);
+        setFromApi(false);
+      }
+      else if(isSheetchart&&clickedsheetname.length<=0)
         {
           const convertedData = convertDataTypes(data01[0], {pv:chartdatatypex,uv:chartdatatypey});
           console.log(convertedData)
@@ -123,8 +139,9 @@ const fieldConversionsApi={
 
 useEffect(() => {
   const fun=async()=>{
-    const Sheet_response=await axios.post('http://localhost:8999/investmentsheetfromdb')
-      const dashboard_response=await axios.post('http://localhost:8999/getDashboardData',{email:localStorage.getItem('email')})
+    let organization=localStorage.getItem('organization')
+    
+      const dashboard_response=await axios.post('http://localhost:8999/getDashboardData',{email:localStorage.getItem('email'),organization:organization})
       const entireData=JSON.parse(dashboard_response.data.data.positions)
       let selectedYaxis=''
       let selectedXaxis=''
@@ -132,6 +149,7 @@ useEffect(() => {
       let clickedsheetname=''
         let chartdatatypex=''
         let chartdatatypey=''
+         let dbCompanyName=''
       entireData.map((m,index)=>
       {
         if(index==id)
@@ -142,10 +160,11 @@ useEffect(() => {
           clickedsheetname=m.clickedsheetname
             chartdatatypex=m.chartDatatypeX
             chartdatatypey=m.chartDatatypeY
+            dbCompanyName=m.dbCompanyName
         }
       }
       )
-      
+      const Sheet_response=await axios.post('http://localhost:8999/investmentsheetfromdb',{organization:organization,CompanyName:dbCompanyName})
   if(fromApi&&!isSheetchart)
   { 
     console.log("chartdatatye",chartDatatypeFromApiX,chartDatatypeFromApiY)
@@ -157,8 +176,9 @@ useEffect(() => {
       setFromApi(false)
 
   }
-  else if(fromApi&&isSheetchart&&clickedsheetname=='Database Companies')
+  else if(fromApi&&isSheetchart&&clickedsheetname.length>0)
     {
+      setitsfromdatabase(true)
      let dt=JSON.parse(Sheet_response.data.data) 
      let filteredDt=[]
      dt.map(d=>
@@ -170,7 +190,19 @@ useEffect(() => {
         setmydata(convertedData)
         setFromApi(false)
     }
-    else if(isSheetchart&&clickedsheetname!='Database Companies')
+    else if (isSheetchart&&clickedsheetname.length>0) 
+      {
+        console.log("8")
+        setitsfromdatabase(true)
+      let dt = JSON.parse(Sheet_response.data.data);
+      let filteredDt = [];
+      dt.map(d => filteredDt.push({ pv: d[selectedXaxis], uv: d[selectedYaxis] }));
+
+      const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+      setmydata(convertedData);
+      setFromApi(false);
+    }
+    else if(isSheetchart&&clickedsheetname.length<=0)
     {
       const convertedData = convertDataTypes(data01[0], {pv:chartdatatypex,uv:chartdatatypey});
       console.log(convertedData)
@@ -187,6 +219,7 @@ useEffect(() => {
 
 
   return (
+    <div style={{ width: '100%', height: '100%' }} className='mt-8 pr-10'>
     <div className='w-[100%] h-[100%] mt-3 pr-14'>
       <ResponsiveContainer width="100%" height="100%">
       <AreaChart
@@ -209,7 +242,19 @@ useEffect(() => {
         <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
       </AreaChart>
     </ResponsiveContainer>
+    
     </div>
+    {
+              itsfromDatabase?
+                <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
+                  <div className='w-[10px] h-[10px] bg-green-600 rounded-[50%] mt-[2px]'></div> 
+                  <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Database</p>
+
+                </div>:
+                <></>
+            }
+    </div>
+    
   );
 }
 

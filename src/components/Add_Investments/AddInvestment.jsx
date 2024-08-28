@@ -31,7 +31,8 @@ const AddInvestment = () => {
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      const response = await axios.get('http://localhost:8999/getDealpipelineCompany');
+      let organization=localStorage.getItem('organization')
+      const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:organization});
       setcompanyData(response.data.data)
     }
     fetchcompanydata()
@@ -39,7 +40,8 @@ const AddInvestment = () => {
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      const response = await axios.get('http://localhost:8999/getDealpipelineCompany');
+      let organization=localStorage.getItem('organization')
+      const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:organization});
       console.log(response.data.data)
       setcompanyData(response.data.data)
     }

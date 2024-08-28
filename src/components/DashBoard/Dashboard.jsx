@@ -113,7 +113,8 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
     const checkBoxValues=async()=>{
       
       let email=localStorage.getItem('email')
-      let checkDb=await axios.post('http://localhost:8999/getDashboardData',{email:email})
+      const organization=localStorage.getItem('organization')
+      let checkDb=await axios.post('http://localhost:8999/getDashboardData',{email:email,organization:organization})
      // console.log(checkDb)
       
       if(checkDb.data.status==200)
@@ -153,11 +154,13 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
   useEffect(() => {
     const setBoxValues=async ()=>{
         const email=localStorage.getItem('email')
+        const organization=localStorage.getItem('organization')
         localStorage.setItem(email,JSON.stringify(boxes))
         let position=JSON.stringify(boxes)
+        
         if(boxes.length!=0)
         {
-         await axios.post('http://localhost:8999/addDashboardData',{email:email,positions:position})
+         await axios.post('http://localhost:8999/addDashboardData',{email:email,positions:position,organization:organization})
         }
     }
     setBoxValues()

@@ -25,9 +25,12 @@ const Addusers = ({setActiveField}) => {
 
     useEffect(()=>{
         const setUsers=async()=>{
+            let organization=localStorage.getItem('organization')
             if(searchUser.length<=0)
             {
-                const response=await axios.get('http://localhost:8999/fetchallusers')
+                const response=await axios.post('http://localhost:8999/fetchallusers',{
+                    organization:organization
+                })
                 setAllusers(response.data.data)
                 
             }
@@ -38,7 +41,8 @@ const Addusers = ({setActiveField}) => {
             }
             else{
                 const response=await axios.post('http://localhost:8999/findUsers',{
-                    user:searchUser
+                    user:searchUser,
+                    organization:organization
                 })
                 setAllusers(response.data.data)
                 
@@ -56,14 +60,17 @@ const Addusers = ({setActiveField}) => {
     
 
     const handleDelete=async(email)=>{
+        let organization=localStorage.getItem('organization')
         const response=await axios.post('http://localhost:8999/deleteUser',{
             doneBy:localStorage.getItem('email'),
-            email:email
+            email:email,
+            organization:organization
         })
         if(response.data.status==200)
         {
             const response=await axios.post('http://localhost:8999/findUsers',{
-                user:searchUser
+                user:searchUser,
+                organization:organization
             })
             setAllusers(response.data.data)
         }
@@ -84,7 +91,8 @@ const Addusers = ({setActiveField}) => {
     }
     useEffect(()=>{
         const getUser=async()=>{
-            const response=await axios.get('http://localhost:8999/fetchallusers')
+            let organization=localStorage.getItem('organization')
+            const response=await axios.post('http://localhost:8999/fetchallusers',{organization:organization})
             setAllusers(response.data.data)
             
         }

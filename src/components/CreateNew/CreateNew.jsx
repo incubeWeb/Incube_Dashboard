@@ -11,7 +11,8 @@ function CreateNew({ setCreateNew, fetchCompanyData }) {
     const res = await axios.post('http://localhost:8999/dealpipeline', {
       title: title,
       piclink: profilelink,
-      Description: description
+      Description: description,
+      organization:localStorage.getItem('organization')
     });
    
 

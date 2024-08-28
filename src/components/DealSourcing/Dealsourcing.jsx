@@ -25,7 +25,7 @@ const Dealsourcing = () => {
 
   useEffect(()=>{
    const setCompany=async()=>{
-    const res=await axios.get('http://localhost:8999/getdealsourcingFiles')
+    const res=await axios.post('http://localhost:8999/getdealsourcingFiles',{organization:localStorage.getItem('organization')})
     const data=res.data.data
     setCompanies(data)
    }
@@ -43,7 +43,7 @@ const Dealsourcing = () => {
 
   const handleSearch=async()=>{
     const search=document.getElementById('search').value
-    const res=await axios.post('http://localhost:8999/searchdealsourcingfiles',{search:search})
+    const res=await axios.post('http://localhost:8999/searchdealsourcingfiles',{search:search,organization:localStorage.getItem('organization')})
     const data=res.data.data
     setCompanies(data)
   }
