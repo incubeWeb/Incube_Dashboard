@@ -1,15 +1,31 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { MdDonutLarge } from 'react-icons/md'
+import { RxCross2 } from 'react-icons/rx'
 import { useSelector } from 'react-redux'
 
 
-const Timeline = () => {
+const Timeline = ({id,boxes,setBoxes}) => {
     const changes=useSelector((state)=>state.timelinestate)
-    const [userUpdates,setuserUpdates]=useState([])
-    useEffect(()=>{
-        console.log("here change",changes)
-    },[changes])  
+
+    const deleteWidgit=async()=>{
+        const email=localStorage.getItem('email')
+        const organization=localStorage.getItem('organization')
+        const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
+        console.log(boxes)
+        console.log("id",id)
+        if(boxes.length===0)
+        {
+          await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization})
+          setBoxes([])
+        }
+        else{const response=await axios.post('http://localhost:8999/updatedashboard',{email:email,position:position,organization:organization})
+        if(response.data.status==200)
+        {
+          setBoxes(boxes.filter((box,index)=>index!=id))
+        }
+      }
+      }
 
     function convertTimestampToReadableTime(timestamp) {
         const date = new Date(timestamp);
@@ -249,7 +265,10 @@ const Timeline = () => {
                 
                 
             )
-        }    
+        } 
+         <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px] bg-red-500 fixed right-[-10px] top-[-15px]' onClick={deleteWidgit}>
+              <RxCross2 size={14} className='text-white'/>
+        </div>   
     </div>
   )}catch(e){
     console.log("erroe",e)

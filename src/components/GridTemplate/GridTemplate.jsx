@@ -3,7 +3,7 @@ import OpenGrid from '../OpenGridTemplate/OpenGrid'
 import OpenUnassignedGrid from '../OpenGridTemplate/OpenUnassignedGrid'
 import OpenCompleteGrid from '../OpenGridTemplate/OpenCompleteGrid'
 
-function GridTemplate({setSelectedTab,selectedTab,setActiveField,Title,description,logo,status,TeamLead_status,pushedby,completed}) {
+function GridTemplate({hidenavbar,setSelectedTab,selectedTab,setActiveField,Title,description,logo,status,TeamLead_status,pushedby,completed}) {
     const [openGrid,setOpenGrid]=useState(false)
     const [openUnassignedGrid,setopenUnassignedGrid]=useState(false)
     const [openCompleteGrid,setOpenCompleteGrid]=useState(false)
@@ -115,15 +115,15 @@ function GridTemplate({setSelectedTab,selectedTab,setActiveField,Title,descripti
         }
 
         {openGrid?
-        <OpenGrid setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+        <OpenGrid hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :<></>}
 
         {openUnassignedGrid?
-            <OpenUnassignedGrid setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+            <OpenUnassignedGrid hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :<></>}
 
         {openCompleteGrid?
-            <OpenCompleteGrid setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+            <OpenCompleteGrid hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :<></>}
 
     </div>

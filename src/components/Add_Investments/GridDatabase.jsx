@@ -4,7 +4,7 @@ import OpenUnassignedGrid from '../OpenGridTemplate/OpenUnassignedGrid'
 import OpenCompleteGrid from '../OpenGridTemplate/OpenCompleteGrid'
 import GridOpen from './GridOpen'
 
-function GridDatabase({setSelectedTab,selectedTab,setActiveField,Title,description,logo,status,TeamLead_status,pushedby,completed}) {
+function GridDatabase({hidenavbar,setSelectedTab,selectedTab,setActiveField,Title,description,logo,status,TeamLead_status,pushedby,completed}) {
     const [openGrid,setOpenGrid]=useState(false)
     const [openUnassignedGrid,setopenUnassignedGrid]=useState(false)
     const [openCompleteGrid,setOpenCompleteGrid]=useState(false)
@@ -39,7 +39,7 @@ function GridDatabase({setSelectedTab,selectedTab,setActiveField,Title,descripti
             }
         </div>
         {openGrid?
-        <GridOpen companyName={Title} description={description} handleOpenGrid={handleOpen}/>:<></>
+        <GridOpen hidenavbar={hidenavbar} companyName={Title} description={description} handleOpenGrid={handleOpen}/>:<></>
         }
     </div>
   )

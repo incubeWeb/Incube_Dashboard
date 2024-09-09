@@ -5,7 +5,7 @@ import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import axios from 'axios';
 
-function AddNewInvestment({ openAddNewWindow ,CompanyName, handleTotalCards}) {
+function AddNewInvestment({hidenavbar, openAddNewWindow ,CompanyName, handleTotalCards}) {
   const [sections, setSections] = useState([{ id: Date.now(), title: '', description: '' }]);
   const MainDiv = useRef(null);
   const [suggested,setsuggested]=useState([])
@@ -37,7 +37,7 @@ function AddNewInvestment({ openAddNewWindow ,CompanyName, handleTotalCards}) {
 
   const handleChange = (id, field, value) => {
     setSections(
-      sections.map(section =>
+      (sections||[]).map(section =>
         section.id === id ? { ...section, [field]: value } : section
       )
     );
@@ -104,7 +104,7 @@ function AddNewInvestment({ openAddNewWindow ,CompanyName, handleTotalCards}) {
   }
 
   return (
-    <div className="flex flex-col fixed top-0 left-[20%]  bg-white w-[80%] h-screen z-[51] p-[34px]">
+    <div className={`${hidenavbar?' w-[100%] pr-[90px]':'w-[80%] pr-[125px]'}  flex flex-col fixed top-0 bg-white h-screen z-[51] p-[34px]`}>
       <div ref={MainDiv} className="bg-white w-[100%] h-screen opacity-100 top-0 right-0 fixed"></div>
       <div
         className=" rounded-md mb-[60px] space-y-4 w-[100%] h-[100%] p-[23px] flex flex-col overflow-auto"
@@ -114,7 +114,7 @@ function AddNewInvestment({ openAddNewWindow ,CompanyName, handleTotalCards}) {
           <RxCross2 size={23} className="cursor-pointer" onClick={handleClose} />
         </div>
 
-        {sections.map(section => (
+        {(sections||[]).map(section => (
           <div
             key={section.id}
             className="w-[100%] h-[220px] border-gray-200 shadow-md border-[1px] p-[20px] rounded-md"
@@ -124,7 +124,7 @@ function AddNewInvestment({ openAddNewWindow ,CompanyName, handleTotalCards}) {
                 <p className="text-[14px] select-none">Field</p>
                 <div className='flex flex-row space-x-2 w-[100%] overflow-y-auto'>
                     {
-                        [...new Map(suggested.map(suggestion => [suggestion.field, suggestion])).values()].map((suggestion)=>
+                        [...new Map((suggested||[]).map(suggestion => [suggestion.field, suggestion])).values()].map((suggestion)=>
                             <div key={suggestion._id} className={`${checkusedsuggestion(suggestion.field)?'bg-red-400':'bg-gray-300'} cursor-pointer pl-4 pr-4 rounded-md bg-opacity-40 font-roboto h-[20px]`} onClick={()=>setSuggestionInField(suggestion.field,section.id)}>
                                 <p className='text-[12px]'>{suggestion.field}</p>
                             </div>

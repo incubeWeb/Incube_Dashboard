@@ -5,7 +5,7 @@ import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import axios from 'axios';
 
-function AddNewDetails({ openAddNewWindow ,CompanyName, handleTotalCards,openedTab}) {
+function AddNewDetails({hidenavbar, openAddNewWindow ,CompanyName, handleTotalCards,openedTab}) {
   const [sections, setSections] = useState([{ id: Date.now(), title: '', description: '' }]);
   const MainDiv = useRef(null);
 
@@ -72,7 +72,7 @@ function AddNewDetails({ openAddNewWindow ,CompanyName, handleTotalCards,openedT
   };
 
   return (
-    <div className="flex flex-col fixed top-0 left-[20%]  bg-white w-[80%] h-screen z-[51] p-[34px]">
+    <div className={`${hidenavbar?'w-[100%]':' w-[80%]'} flex flex-col fixed top-0   bg-white h-screen z-[51] p-[34px]`}>
       <div ref={MainDiv} className="bg-white w-[100%] h-screen opacity-100 top-0 right-0 fixed"></div>
       <div
         className=" rounded-md mb-[60px] space-y-4 w-[100%] h-[100%] p-[23px] flex flex-col overflow-auto"

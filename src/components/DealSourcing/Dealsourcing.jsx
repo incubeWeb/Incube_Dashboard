@@ -11,7 +11,7 @@ import CompanyTemplate from './CompanyTemplate';
 import { RxCross2 } from "react-icons/rx";
 import axios from 'axios';
 
-const Dealsourcing = () => {
+const Dealsourcing = ({hidenavbar}) => {
   const [value, onChange] = useState([new Date()]);
   const [showCalendar,setShowCalendar]=useState(false)
   const [fundingRounds,setFundingRounds]=useState(false)
@@ -63,7 +63,7 @@ const Dealsourcing = () => {
     setMoreFilters(!moreFilters)
   }
   return (
-    <div className='select-none text-gray-800 ml-[20%] w-[80%] flex flex-col p-[63px] pt-[30px] h-screen font-roboto'>
+    <div className={`${hidenavbar?'ml-[0%] w-[100%]':'ml-[20%] w-[80%]'}select-none text-gray-800 flex flex-col p-[63px] pt-[30px] h-screen font-roboto`}>
       <div className='flex flex-col w-[100%] h-[20%] justify-center'>
         <div className='w-[100%] h-[30%] flex flex-row items-center'>
           <p className='basis-1/2 text-[17px]'>232 Startups in Gurugram</p>

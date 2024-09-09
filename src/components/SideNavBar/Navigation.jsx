@@ -1,28 +1,69 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { LuHome } from "react-icons/lu";
 import { VscGraph } from "react-icons/vsc";
 import { BsStack } from "react-icons/bs";
 import { HiMiniSquare2Stack } from "react-icons/hi2";
 import { Link, useLocation } from 'react-router-dom';
 import { IoLogOut } from "react-icons/io5";
-import { MdOutlineTrendingUp } from 'react-icons/md';
+import { MdOutlineSort, MdOutlineTrendingUp } from 'react-icons/md';
 import { FaUserPlus } from 'react-icons/fa';
 import { IoIosDocument } from 'react-icons/io';
+import { RiSettings4Fill, RiSettings6Fill } from 'react-icons/ri';
+import {gsap} from 'gsap'
 
-const Navigation = ({activeField,setActiveField}) => {
+const Navigation = ({activeField,setActiveField,hidenavbar,sethidenavbar}) => {
   
     const location=useLocation()
     const handleLogout=()=>{
           localStorage.clear() 
     }
+    const NavbarRef=useRef(null)
+    const settingBtnRef=useRef(null)
+
+    const hideNav=()=>{
+        if(!hidenavbar)
+        {
+            gsap.to(NavbarRef.current,{
+                x:"-100%",
+                duration:0.4,
+                
+            })
+            gsap.to(settingBtnRef.current,{
+                x:'-1400%',
+                rotation:'360',
+                duration:0.4,
+                onComplete:()=>{
+                    sethidenavbar(true)
+                }
+            })
+        }
+        else{
+            gsap.to(NavbarRef.current,{
+                x:"0%",
+                duration:0.4
+            })
+            gsap.to(settingBtnRef.current,{
+                x:'0%',
+                rotation:'-360',
+                duration:0.4,
+                onComplete:()=>{
+                    sethidenavbar(false)
+                }
+            })
+        }
+        
+    }
+
     useEffect(()=>{
         setActiveField(location.pathname)
     },[activeField])
   return (
-    <div className='text-gray-700 select-none font-roboto w-[20%] shadow-lg z-[60] fixed h-[100%] bg-white p-[40px] pt-[30px] flex flex-col'>
+        <div className='w-[100%] '>
+        <div ref={NavbarRef} className=' text-gray-700 select-none font-roboto w-[20%] shadow-lg z-[60] fixed h-[100%] bg-white p-[40px] pt-[30px] flex flex-col'>
        <div className='flex flex-col items-start justify-start h-[100%] w-[100%]'>
             <div className='w-[100%] h-[13%] flex justify-start items-center'>
                 <p className='text-[21px] font-roboto'>Incube Web</p>
+                
             </div>
             <div className='flex flex-col space-y-2 w-[100%] h-[80%] pt-2'>
 
@@ -86,7 +127,16 @@ const Navigation = ({activeField,setActiveField}) => {
                     </a>
             </div>
        </div>
+       
     </div>
+
+        <div className='ml-20  cursor-pointer left-[-10px] z-[90] fixed w-[16%] top-[50px]  flex justify-end items-start '>
+                <div ref={settingBtnRef}>
+                    <RiSettings4Fill className='text-gray-500' size={20} onClick={hideNav}/>
+                </div>
+        </div>
+    </div>
+
   )
 }
 

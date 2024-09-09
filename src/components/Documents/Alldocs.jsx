@@ -4,14 +4,17 @@ import { FiPlus, FiSearch } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import Viewsheet from '../ViewSheet/Viewsheet'
 import { Bars } from 'react-loader-spinner'
+import { FaFileExcel } from 'react-icons/fa'
+import Createsheet from '../ViewSheet/Createsheet'
 
-const Alldocs = ({setActiveField,activeField}) => {
+const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar}) => {
 
     const [allDocs,setAllDocs]=useState([])
     const [search,setSearch]=useState('')
     const [clickedView,setclickedview]=useState(false)
     const [id,setid]=useState('')
     const [viewdDoc,setviewedDoc]=useState('')
+    const [createSheet,setcreateSheet]=useState(false)
     /*const jsonData = [
         { name: 'alick', age: 49, city: 'new york' },
         { name: 'bob', age: 35, city: 'los angeles' },
@@ -20,6 +23,18 @@ const Alldocs = ({setActiveField,activeField}) => {
     const [loading,setloading]=useState(true)
     const [jsonData,setjsonData]=useState([])
 
+    useEffect(()=>{
+        if(allDocs=='undefined')
+        {
+            window.location.reload()
+        }
+    },[])
+    useEffect(()=>{
+        if(allDocs=='undefined')
+        {
+            window.location.reload()
+        }
+    },[allDocs])
     const handleDelete=async (id)=>{
         console.log(id)
         const response=await axios.post('http://localhost:8999/deleteUploadedfile',{id:id,doneBy:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
@@ -62,7 +77,7 @@ const Alldocs = ({setActiveField,activeField}) => {
                   },1000)
         }
         handle()
-    },[search])
+    },[search,filesadded])
         
 
     useEffect(()=>{
@@ -82,7 +97,7 @@ const Alldocs = ({setActiveField,activeField}) => {
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
   return (
-    <div className='flex flex-col pt-[5%] items-center justify-start pr-[5%] pl-[23%] w-[100%] h-screen font-roboto'>
+    <div className={`${hidenavbar?'ml-[2%] w-[90%] h-screen':'ml-[20%] w-[80%] h-screen'} pt-[5%] flex flex-col p-4 items-center justify-start font-roboto`}>
     <div className='w-[100%] h-[10%] flex flex-row space-x-3'>
         <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className='text-gray-300 hover:text-gray-600'>Dashboard</p></Link>
         <p>/</p>
@@ -93,10 +108,15 @@ const Alldocs = ({setActiveField,activeField}) => {
             <p className='text-[23px]'>Customers</p>
         </div>
         <div className='flex flex-row w-[50%] h-[60%] space-x-3 justify-end'>
+                <div className='ease-linear duration-150 cursor-pointer hover:w-[160px] h-[100%] flex flex-row items-center space-x-2 p-2 rounded-md bg-gradient-to-r from-green-500 to-green-700' onClick={()=>setcreateSheet(true)}>
+                    <div className='text-white flex items-center'><FaFileExcel/></div>
+                    <p className='text-[14px] text-white font-roboto'>create sheet</p>
+                </div>
             <div className='flex flex-row w-[180px] h-[100%] items-center md:flex md:flex-row md:items-center md:w-[210px] md:h-[38px] rounded-md border-gray-400 border-2 border-solid space-x-3 hover:shadow-md hover:duration-150'>
                 <FiSearch className='font-thin ml-3 text-gray-400' size={20} />
                 <input onChange={handleSearch} type='text' placeholder='Search' className=' w-full text-[13px] h-full outline-none rounded-md border-l-0 md:text-[15px] text-gray-600' />
             </div>
+            
         </div>
     </div>
     <div className='w-[100%] h-[80%] rounded-md border-gray-200 shadow-md shadow-gray-300 bg-gray-100 flex flex-col p-4'>
@@ -125,7 +145,7 @@ const Alldocs = ({setActiveField,activeField}) => {
             !loading?
             <div className='flex flex-col w-[100%] h-[10%] font-noto'>
                 {
-                    allDocs.map(doc=>
+                    (allDocs||[]).map(doc=>
                     <div key={doc._id} className='flex flex-row w-[100%] h-[100%] font-noto'>
                         <div className='w-[15%] h-[100%] flex items-end justify-start'>
                             <p className='text-[14px] pl-2'>{doc.uploadedBy}</p>
@@ -163,7 +183,15 @@ const Alldocs = ({setActiveField,activeField}) => {
     {
         clickedView?
         <div className='fixed left-0 w-[100%] h-[100%] bg-white'>
-            <Viewsheet viewdDoc={viewdDoc} jsonData={jsonData} id={id} clickedview={clickedView} setclickedview={setclickedview}/>
+            <Viewsheet hidenavbar={hidenavbar} viewdDoc={viewdDoc} jsonData={jsonData} id={id} clickedview={clickedView} setclickedview={setclickedview}/>
+        </div>
+        :
+        <></>
+    }
+    {
+        createSheet?
+        <div className='fixed left-0 w-[100%] h-[100%] bg-white'>
+            <Createsheet createSheet={createSheet} setcreateSheet={setcreateSheet} hidenavbar={hidenavbar}/>
         </div>
         :
         <></>

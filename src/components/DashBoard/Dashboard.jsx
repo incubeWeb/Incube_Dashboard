@@ -17,9 +17,10 @@ import Timeline from '../Timeline/Timeline';
 import { io } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 import { Bars } from 'react-loader-spinner';
+import Portfoliocard from '../Charts/Portfoliocard';
 
 
-const Dashboard = ({realtimeChat,investmentchange}) => {
+const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
   const [boxes, setBoxes] = useState([]);
   const [openChatbar,setopenChatbar]=useState(false)
   const [showPopup, setShowPopup] = useState(false);
@@ -51,7 +52,8 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
   const [timelinewidget,settimelinewidgit]=useState(false)
   const [timelinewidgitcount,settimelinewidgitcount]=useState([])
   
-
+  const [portfoliocardwidgit,setportfoliocardwidgit]=useState(false)
+  const [portfoliocardwidgitcount,setportfoliocardwidgitcount]=useState([])
   
   const [xAxis,setXaxis]=useState(0)
   const [yAxis,setYaxis]=useState(0)
@@ -62,11 +64,11 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
   const [typeofChart,settypeofchart]=useState('')
   const [fromApi,setFromApi]=useState(false)
   const [isSheetchart,setisSheetChart]=useState(false)
+  const [capturingPortfoliowidgitvalues,setcapturingPortfoliowidgitvalues]=useState([])
 
-
+  const [retry,setretry]=useState(false)
   const [loading,setloading]=useState(true)
   
-
   const drawerRef=useRef(null)
 
   const chatRef=useRef(null)
@@ -90,6 +92,7 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
   },[openChatbar])
 
   
+  
 
   const handleSeeUsers=()=>{
     gsap.to(drawerRef.current,{
@@ -103,6 +106,9 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
       }
     })  
   }
+  const handleretry=()=>{
+    setretry(!retry)
+  }
 
   useEffect(()=>{
     const email=localStorage.getItem('email')
@@ -115,7 +121,8 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
       let email=localStorage.getItem('email')
       const organization=localStorage.getItem('organization')
       let checkDb=await axios.post('http://localhost:8999/getDashboardData',{email:email,organization:organization})
-     // console.log(checkDb)
+      
+
       
       if(checkDb.data.status==200)
       {
@@ -127,14 +134,15 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
           const chartXdatatype=d.chartDatatypeX
           const chartYdatatype=d.chartDatatypeY
           const isSheetChart=d.isSheetChart
-          
-          console.log(pievalue)
+          const portfoliowidgit=d.portfoliowidgitcount
           setisSheetChart(isSheetChart)
           setchartDatatypeFromApiX(prev=>[...prev,{chartDatatypeX:chartXdatatype}])
           setchartDatatypeFromApiY(prev=>[...prev,{chartDatatypeY:chartYdatatype}])
           setpiechartcount(prev=>[...prev,{values:[pievalue]}])
           setareachartcount(prev=>[...prev,{values:[areavalue]}])
           setbarchartcount(prev=>[...prev,{values:[barvalue]}])
+          setcapturingPortfoliowidgitvalues(prev=>[...prev,{portfoliowidgit}])
+          
           }
         )
         setBoxes(val)
@@ -150,23 +158,86 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
     
   },[])
 
+  useEffect(()=>{
+    const checkBoxValues=async()=>{
+      
+      let email=localStorage.getItem('email')
+      const organization=localStorage.getItem('organization')
+      let checkDb=await axios.post('http://localhost:8999/getDashboardData',{email:email,organization:organization})
+      
+
+      
+      if(checkDb.data.status==200)
+      {
+        let val=JSON.parse(checkDb.data.data.positions)
+        val.map((d)=>{
+          const pievalue=d.piechartCount
+          const areavalue=d.areachartCount
+          const barvalue=d.barchartCount
+          const chartXdatatype=d.chartDatatypeX
+          const chartYdatatype=d.chartDatatypeY
+          const isSheetChart=d.isSheetChart
+          const portfoliowidgit=d.portfoliowidgitcount
+          setisSheetChart(isSheetChart)
+          setchartDatatypeFromApiX(prev=>[...prev,{chartDatatypeX:chartXdatatype}])
+          setchartDatatypeFromApiY(prev=>[...prev,{chartDatatypeY:chartYdatatype}])
+          setpiechartcount(prev=>[...prev,{values:[pievalue]}])
+          setareachartcount(prev=>[...prev,{values:[areavalue]}])
+          setbarchartcount(prev=>[...prev,{values:[barvalue]}])
+          setcapturingPortfoliowidgitvalues(prev=>[...prev,{portfoliowidgit}])
+          
+          }
+        )
+        setBoxes(val)
+        setFromApi(true)
+        
+      }
+      
+    }
+    checkBoxValues()
+    setTimeout(()=>{  
+      setloading(false)
+    },1000)
+    
+  },[retry])
+  
+
+
 
   useEffect(() => {
     const setBoxValues=async ()=>{
         const email=localStorage.getItem('email')
         const organization=localStorage.getItem('organization')
-        localStorage.setItem(email,JSON.stringify(boxes))
-        let position=JSON.stringify(boxes)
         
-        if(boxes.length!=0)
+        let position=JSON.stringify(boxes)
+        console.log("my boxes",boxes.length)
+
+        if(boxes.length>0)
         {
-         await axios.post('http://localhost:8999/addDashboardData',{email:email,positions:position,organization:organization})
+         await axios.post('http://localhost:8999/addDashboardData',{email:email,positions:position,organization:organization}) 
         }
+       
+        
     }
+   
     setBoxValues()
+    
+   
     
   }, [boxes]);
 
+  useEffect(()=>{
+    console.log(portfoliocardwidgitcount)
+    
+      setBoxes(prev=>
+      prev.map(b=>
+        b.id===portfoliocardwidgitcount.id
+        ? { ...b, portfoliowidgitcount: {id:portfoliocardwidgitcount.id,labelname:portfoliocardwidgitcount.labelname,showValue:portfoliocardwidgitcount.showValue} } 
+        : b
+      )
+      )
+    
+  },[portfoliocardwidgitcount])
   
 
   const addBox = (chartType) => {
@@ -175,6 +246,8 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
       
     
   };
+  
+
 
   const setPosition = (id, direction) => {
     setBoxes(boxes.map(box =>
@@ -199,7 +272,7 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
 
   return (
     
-    <div className='w-[80%] ml-[20%] space-x-4 flex flex-row h-screen p-[44px] pr-0 pt-0 pb-0 font-roboto'>
+    <div className={`${hidenavbar?'w-[100%] ml-[0%]':'w-[80%] ml-[20%]'} space-x-4 flex flex-row h-screen p-[44px] pr-0 pt-0 pb-0 font-roboto`}>
     {
       loading ? (
         <div className='w-[100%]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -208,7 +281,7 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
         </div>
       ):
     <div className='w-[100%] h-[100%] flex flex-col'>
-      <div className='flex flex-col w-[100%] h-[10%] items-start mt-[44px]'>
+      <div className='flex flex-col pt-[30px] w-[100%] h-[10%] items-start mt-[44px]'>
         <div
           className='flex flex-row w-[120px] h-[33px] rounded-md bg-gradient-to-r from-blue-600 to-blue-300 text-[14px] items-center justify-center text-white cursor-pointer'
           onClick={handleShowPopup}
@@ -217,7 +290,7 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
         </div>
       </div>
       <div className='w-[100%] flex flex-col items-center'>
-        {boxes.map((box,index) => (
+        {(boxes||[]).map((box,index) => (
           <Rnd
             
             key={box.id}
@@ -234,11 +307,35 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
               switch (box.type) {
                 case 'timeline':
                   return (
-                    <Timeline/>
+                    <Timeline
+                    id={index}
+                    setBoxes={setBoxes}
+                    boxes={boxes}
+                    />
+                  )
+                case 'portfoliocard':
+                  return (
+                    <Portfoliocard 
+                    id={index}
+                     setBoxes={setBoxes} 
+                     boxes={boxes}
+                     setportfoliocardwidgitcount={setportfoliocardwidgitcount}
+                     portfoliocardwidgitcount={portfoliocardwidgitcount}
+                     capturingPortfoliowidgitvalues={capturingPortfoliowidgitvalues}
+                     setcapturingPortfoliowidgitvalues={setcapturingPortfoliowidgitvalues}
+                     />
+
                   )
                 case 'chat':
                   return (
-                    <ChatWidgit id={box.id} realtimeChat={realtimeChat} Useremail={Useremail} handleSeeUsers={handleSeeUsers} setclickeduseremail={setclickeduseremail}/>
+                    <ChatWidgit 
+                    id={index} 
+                    setBoxes={setBoxes}
+                    boxes={boxes} 
+                    realtimeChat={realtimeChat} 
+                    Useremail={Useremail} 
+                    handleSeeUsers={handleSeeUsers} 
+                    setclickeduseremail={setclickeduseremail}/>
                   )
                 case 'Areachart':
                   if (areachartCount.length > 0) {
@@ -257,7 +354,8 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
                         chartDatatypeFromApiY={chartDatatypeFromApiY[[box.id]-1]['chartDatatypeY']}
                         isSheetchart={isSheetchart}
                         investmentchange={investmentchange}
-                        
+                        setBoxes={setBoxes}
+                        boxes={boxes}
                       />
                     );
                   } else {
@@ -280,7 +378,8 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
                         chartDatatypeFromApiY={chartDatatypeFromApiY[[box.id]-1]['chartDatatypeY']}
                         isSheetchart={isSheetchart}
                         investmentchange={investmentchange}
-                        
+                        setBoxes={setBoxes}
+                        boxes={boxes}
                         
                       />
                     );
@@ -304,6 +403,8 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
                         chartDatatypeFromApiY={chartDatatypeFromApiY[[box.id]-1]['chartDatatypeY']}
                         isSheetchart={isSheetchart}
                         investmentchange={investmentchange}
+                        setBoxes={setBoxes}
+                        boxes={boxes}
                       />
                     );
                   } else {
@@ -314,7 +415,11 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
               }
             } catch (error) 
             {
-              {window.location.reload()}
+              
+              console.log(error)
+              setTimeout(()=>{
+                handleretry()
+              },1000)
               return <div></div>;
             }
           })()}
@@ -365,6 +470,10 @@ const Dashboard = ({realtimeChat,investmentchange}) => {
           setchartDatatypeX={setchartDatatypeX}
           isSheetchart={isSheetchart}
           setisSheetChart={setisSheetChart}
+          portfoliocardwidgit={portfoliocardwidgit}
+          setportfoliocardwidgit={setportfoliocardwidgit}
+          portfoliocardwidgitcount={portfoliocardwidgitcount}
+          setportfoliocardwidgitcount={setportfoliocardwidgitcount}
         />
       )}
       </div>

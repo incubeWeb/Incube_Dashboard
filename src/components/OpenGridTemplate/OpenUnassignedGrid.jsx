@@ -5,7 +5,7 @@ import { useGSAP } from '@gsap/react';
 import { RiExchangeFundsFill } from "react-icons/ri";
 import axios from 'axios';
 
-function OpenUnassignedGrid({ setSelectedTab, setActiveField, companyName, description, handleOpenGrid }) {
+function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, companyName, description, handleOpenGrid }) {
     const [users, setAllUsers] = useState([]);
     const [roles, setRoles] = useState({});
     const [rolesAndComp, setRolesAndComp] = useState([]);
@@ -134,22 +134,22 @@ function OpenUnassignedGrid({ setSelectedTab, setActiveField, companyName, descr
     }, [selects]);
 
     return (
-        <div className='w-[80%] h-screen z-50 space-y-7 bg-white absolute top-0 right-0 left-[20%] overflow-hidden p-[23px] md:flex md:flex-col cursor-default' onClick={handleBubbling}>
+        <div className={`${hidenavbar?' w-[100%] pl-[54px]':'ml-[20%] w-[80%]'} pt-[50px] h-screen z-50 space-y-7 bg-white absolute top-0 right-0 overflow-hidden p-[23px] flex flex-col cursor-default`} onClick={handleBubbling}>
             <div ref={MainDiv} className='bg-white w-[100%] h-screen fixed'></div>
             <div className='flex flex-row h-[40px] w-[100%] mt-[20px]'>
                 <div className='flex flex-row items-center justify-center'>
-                    <p className='text-gray-500 text-[14px] cursor-pointer hover:text-gray-600 hover:underline hover:underline-offset-2' onClick={handleOpenGrid}>Deal Pipeline</p>
+                    <p className='text-gray-500 text-[16px] cursor-pointer hover:text-gray-600 hover:underline hover:underline-offset-2' onClick={handleOpenGrid}>Deal Pipeline</p>
                     <CgFormatSlash className='text-gray-300' size={30} />
-                    <p className='text-gray-600 text-[14px]'>{companyName}</p>
+                    <p className='text-gray-600 text-[16px]'>{companyName}</p>
                 </div>
             </div>
             <div className='w-[100%] flex flex-col items-center'>
                 <div className='w-[100%] md:h-[45px] flex flex-col'>
-                    <div><p className='md:text-[31px] text-[25px]'>{companyName}</p></div>
+                    <div><p className='md:text-[31px] text-[20px]'>{companyName}</p></div>
                 </div>
             </div>
             <div className='w-[100%] h-[100%] flex space-x-2 md:flex-row '>
-                <div className='md:w-[80%] font-noto border-[1px] border-gray-300 p-6 rounded-md shadow-md shadow-gray-300 flex flex-col h-[95%] overflow-y-auto md:space-y-7'>
+                <div className='w-[100%] font-noto border-[1px] border-gray-300 p-6 rounded-md shadow-md shadow-gray-300 flex flex-col h-[95%] overflow-y-auto space-y-7'>
                     <div className='flex flex-row space-x-2 w-[100%] h-[34px] items-center'>
                         <div className='flex flex-row w-[10%] pl-4'>
                             <input type='checkbox' checked={true} />
@@ -179,7 +179,7 @@ function OpenUnassignedGrid({ setSelectedTab, setActiveField, companyName, descr
                         ))}
                     </div>
                     <div className='w-[100%] h-[8%] flex justify-end'>
-                        <button className='w-[14%] rounded-md h-[100%] bg-blue-600 text-white text-[14px]' onClick={handleApplyChanges}>Apply Changes</button>
+                        <button className='w-[14%] rounded-md h-[40px] bg-blue-600 text-white text-[14px]' onClick={handleApplyChanges}>Apply Changes</button>
                     </div>
                 </div>
             </div>

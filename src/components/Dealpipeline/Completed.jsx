@@ -6,7 +6,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import axios from 'axios';
 import { Bars } from 'react-loader-spinner';
 
-function Completed({filter, selectedTab, fetchCompanyData, setActiveField, }) {
+function Completed({hidenavbar,filter, selectedTab, fetchCompanyData, setActiveField, }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [loading,setloading]=useState(true)
@@ -67,6 +67,7 @@ function Completed({filter, selectedTab, fetchCompanyData, setActiveField, }) {
                 status={company.status}
                 TeamLead_status={company.TeamLead_status}
                 pushedby={company.pushedby}
+                hidenavbar={hidenavbar}
               /> : <></>
           )
           

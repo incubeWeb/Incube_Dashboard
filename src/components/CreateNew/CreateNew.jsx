@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { RxCross2 } from "react-icons/rx";
 
-function CreateNew({ setCreateNew, fetchCompanyData }) {
+function CreateNew({ setCreateNew, fetchCompanyData,hidenavbar }) {
   const saveDetails = async () => {
     let title = document.getElementById('title').value;
     let description = document.getElementById('description').value;
@@ -24,7 +24,7 @@ function CreateNew({ setCreateNew, fetchCompanyData }) {
   };
 
   return (
-    <div className='flex flex-col fixed top-0 left-[20%] right-0 bg-white w-[80%] h-[100%] z-40 p-[34px]'>
+    <div className={`${hidenavbar?'pl-[52px] w-[100%]':'ml-[20%] w-[80%]'} flex flex-col fixed top-0  right-0 bg-white h-[100%] z-40 p-[34px]`}>
       <div className=' rounded-md space-y-4 w-[100%] h-[500px] p-[13px] md:p-[23px] flex flex-col' style={{ boxShadow: '0px 1px 6px rgba(0, 0, 0, 0.3)' }}>
         <div className='w-[100%] flex justify-end'>
           <RxCross2 onClick={() => setCreateNew(false)} size={23} className='cursor-pointer' />

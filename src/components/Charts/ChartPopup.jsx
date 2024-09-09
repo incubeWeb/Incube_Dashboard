@@ -51,6 +51,10 @@ const ChartPopup = ({
   setchartDatatypeX,
   isSheetchart,
   setisSheetChart,
+  portfoliocardwidgit,
+  setportfoliocardwidgit,
+  portfoliocardwidgitcount,
+  setportfoliocardwidgitcount
   
 }) => {
   const containerStyle = {
@@ -508,6 +512,24 @@ const ChartPopup = ({
       };
     setBoxes([...boxes, { ...newBox, type : "timeline" }]);
     setShowPopup(false); 
+  }
+
+
+  const handlePortfoliocardwidgit=(e)=>{
+    e.stopPropagation()
+    settypeofchart('portfoliocard')
+    setportfoliocardwidgit(!portfoliocardwidgit)
+
+    const lastBox = boxes[boxes.length - 1];
+      const newBox = {
+        id: lastBox ? lastBox.id + 1 : 1,
+        width: '20%',
+        height: '230px',
+        x: 10,
+        y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
+      };
+      setBoxes([...boxes, { ...newBox, type : "portfoliocard" , portfoliowidgitcount:{id:boxes.length +1,labelname:"Enter Label",showValue:"$0"}}]);
+      setShowPopup(false);
   }
 
   const handleClickedPie = (e) => {
@@ -1584,7 +1606,7 @@ const ChartPopup = ({
           <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
         </div>
         <ul className="mt-10 space-y-3 p-4 overflow-y-auto">
-        <div
+          <div
               onClick={handletimelinewidgit}
               className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-2"
             >
@@ -1592,7 +1614,16 @@ const ChartPopup = ({
               <div className="w-[30%] flex justify-end">
                 <FaChevronRight />
               </div>
-            </div>
+          </div>
+          <div
+              onClick={handlePortfoliocardwidgit}
+              className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-2"
+            >
+              <p className="w-[70%]">Portfolio Card</p>
+              <div className="w-[30%] flex justify-end">
+                <FaChevronRight />
+              </div>
+          </div>
           <div
               onClick={handlechatwidgit}
               className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-2"

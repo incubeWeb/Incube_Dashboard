@@ -6,7 +6,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import axios from 'axios';
 import { Bars } from 'react-loader-spinner';
 
-function Unassigned({filter,setSelectedTab, selectedTab,fetchCompanyData,setActiveField }) {
+function Unassigned({hidenavbar,filter,setSelectedTab, selectedTab,fetchCompanyData,setActiveField }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [compData,setcompData]=useState([])
@@ -64,7 +64,7 @@ function Unassigned({filter,setSelectedTab, selectedTab,fetchCompanyData,setActi
           currentData.map(company => ( 
 
             company.TeamLead_status === 'Unassigned' && check(company) && company.completed!='completed' ?
-            <GridTemplate setSelectedTab={setSelectedTab} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
+            <GridTemplate hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
             :
             <></>
           ))
@@ -72,7 +72,7 @@ function Unassigned({filter,setSelectedTab, selectedTab,fetchCompanyData,setActi
           currentData.map(company => ( 
 
             company.status === 'Unassigned' && check(company) && company.completed!='completed'?
-            <GridTemplate setSelectedTab={setSelectedTab} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
+            <GridTemplate hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
             :
             <></>
           ))

@@ -14,7 +14,7 @@ import { BiSolidSend } from "react-icons/bi";
 import { Link } from 'react-router-dom';
 
 
-function OpenCompleteGrid({setActiveField,companyName,description,handleOpenGrid}) {
+function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,handleOpenGrid}) {
     const [AddNewWindow,setAddnewWindow]=useState(false)
     const [TotalCards,setTotalCards]=useState([])
     const [Tabs,setTabs]=useState([{id:1,Tab:"Tab1"}])
@@ -95,7 +95,7 @@ function OpenCompleteGrid({setActiveField,companyName,description,handleOpenGrid
 
 
   return (
-    <div className=' w-[80%] h-screen z-50 space-y-7 bg-white absolute top-0 right-0 left-[20%] overflow-hidden p-[23px] md:flex md:flex-col cursor-default' onClick={handleBubbling}>
+    <div className={`${hidenavbar?'ml-[2%] w-[100%]':'ml-[20%] w-[80%]'} pt-[45px] h-screen z-50 space-y-7 bg-white absolute top-0 right-0 overflow-hidden p-[23px] flex flex-col cursor-default`} onClick={handleBubbling}>
         <div ref={MainDiv} className='bg-white w-[100%] h-screen  fixed'></div>
         <div className='flex flex-row h-[40px] w-[100%] mt-[20px]'>
             <div className='flex flex-row items-center justify-center'>
@@ -112,9 +112,9 @@ function OpenCompleteGrid({setActiveField,companyName,description,handleOpenGrid
                     <div><p className='md:text-[14px] text-[13px]'>{description}</p></div>
             </div>
             <div className='flex flex-row w-[100%] h-[40px] space-x-2'>
-                    <div className='w-[92%] h-[100%] bg-gray-300 rounded-md flex flex-row items-center pl-2 space-x-5'>
+                    <div className='w-[100%] h-[100%] bg-gray-300 rounded-md flex flex-row items-center pl-2 space-x-5'>
                         <div className='w-[100%] h-[75%] rounded-md flex items-center justify-start flex-row space-x-2'>
-                            {Tabs.map((Tab)=>
+                            {(Tabs||[]).map((Tab)=>
                                 {
                                 <div key={Tab.Tab} className={` md:w-[55px] w-[55px] h-[75%] rounded-md ${currentTab==Tab.id?'bg-gray-300':'bg-white shadow-md'} flex items-center justify-center `}>
                                     <div onClick={()=>setCurrentTab(Tab.id)} className='w-[100%] h-[100%] flex items-center justify-center'>
@@ -140,7 +140,7 @@ function OpenCompleteGrid({setActiveField,companyName,description,handleOpenGrid
            
             <div className='md:w-[60%] h-[420px] overflow-y-auto md:space-y-7'>
                 {
-                    TotalCards.map((item)=>
+                    (TotalCards||[]).map((item)=>
                     {
                     <Card key={item._id} id={item._id} CompanyName={item.CompanyName} Title={item.Title} Description={item.Description} Tab={item.Tab}/>
                     }

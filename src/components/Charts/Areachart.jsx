@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { RxCross2 } from 'react-icons/rx';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 
 
-const Areachart = ({investmentchange,id,data01,clickedArea,setClickedArea,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY}) => {
+const Areachart = ({investmentchange,id,data01,clickedArea,setClickedArea,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [mydata,setmydata]=useState([])
   const [itsfromDatabase,setitsfromdatabase]=useState(false)
   function extractValue(input) {
@@ -22,6 +23,24 @@ const Areachart = ({investmentchange,id,data01,clickedArea,setClickedArea,fromAp
     }
   }
 
+  const deleteWidgit=async()=>{
+    const email=localStorage.getItem('email')
+    const organization=localStorage.getItem('organization')
+    const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
+    console.log(boxes)
+    console.log("id",id)
+    if(boxes.length===0)
+    {
+      await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization})
+      setBoxes([])
+    }
+    else{const response=await axios.post('http://localhost:8999/updatedashboard',{email:email,position:position,organization:organization})
+    if(response.data.status==200)
+    {
+      setBoxes(boxes.filter((box,index)=>index!=id))
+    }
+  }
+  }
   function convertDataTypes(array, fieldConversions) {
     return array.map(obj => {
         let newObj = { ...obj };
@@ -253,6 +272,9 @@ useEffect(() => {
                 </div>:
                 <></>
             }
+             <div className='z-[10] cursor-pointer flex pl-[1px] items-center justify-center w-[20px] rounded-xl h-[20px] bg-red-500 fixed right-[-10px] top-[-15px]' onClick={deleteWidgit}>
+              <RxCross2 size={14} className='text-white'/>
+            </div>
     </div>
     
   );

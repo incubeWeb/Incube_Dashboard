@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { PieChart, Pie, ResponsiveContainer } from 'recharts';
 import { Bars } from 'react-loader-spinner';
 import axios from 'axios';
+import { RxCross2 } from 'react-icons/rx';
 
-const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setClickedPie, fromApi, setFromApi, chartDatatypeX, chartDatatypeY, chartDatatypeFromApiX, chartDatatypeFromApiY}) => {
+const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setClickedPie, fromApi, setFromApi, chartDatatypeX, chartDatatypeY, chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [loading, setLoading] = useState(true);
   const [mydata, setmydata] = useState([]);
   const [selectedValueAxis,setselectedvalueaxis]=useState('')
@@ -19,6 +20,24 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
     } else {
       return 0;
     }
+  }
+  const deleteWidgit=async()=>{
+    const email=localStorage.getItem('email')
+    const organization=localStorage.getItem('organization')
+    const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
+    console.log(boxes)
+    console.log("id",id)
+    if(boxes.length===0)
+    {
+      await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization})
+      setBoxes([])
+    }
+    else{const response=await axios.post('http://localhost:8999/updatedashboard',{email:email,position:position,organization:organization})
+    if(response.data.status==200)
+    {
+      setBoxes(boxes.filter((box,index)=>index!=id))
+    }
+  }
   }
 
   function convertDataTypes(array, fieldConversions) {
@@ -63,6 +82,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       
       const dashboard_response = await axios.post('http://localhost:8999/getDashboardData', { email: localStorage.getItem('email'),organization:localStorage.getItem('organization') });
       const entireData = JSON.parse(dashboard_response.data.data.positions);
+      console.log(dashboard_response,"fsdf")
       console.log("gd", id);
       let selectedYaxis = '';
       let isSheetchart = '';
@@ -132,6 +152,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       setLoading(false);
     };
     fun();
+    
   }, []);
 
   useEffect(() => {
@@ -139,6 +160,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       
       const dashboard_response = await axios.post('http://localhost:8999/getDashboardData', { email: localStorage.getItem('email') ,organization:localStorage.getItem('organization')});
       const entireData = JSON.parse(dashboard_response.data.data.positions);
+      console.log(dashboard_response)
       let selectedYaxis = '';
       let isSheetchart = '';
       let selectedXaxis='';
@@ -204,6 +226,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       setLoading(false);
     };
     fun();
+    
   }, [investmentchange]);
 
   // Custom label function to display name and value
@@ -242,6 +265,9 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
                 </div>:
                 <></>
             }
+            <div className='z-[10] cursor-pointer flex pl-[1px] items-center justify-center w-[20px] rounded-xl h-[20px] bg-red-500 fixed right-[-10px] top-[-15px]' onClick={deleteWidgit}>
+              <RxCross2 size={14} className='text-white z-[10]' onClick={deleteWidgit}/>
+            </div>
         </ResponsiveContainer>
       )}
     </div>

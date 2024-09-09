@@ -16,7 +16,7 @@ import AddNewInvestment from './AddNewInvestment';
 import InvestmentCard from './InvestmentCard';
 
 
-function GridOpen({companyName,description,handleOpenGrid}) {
+function GridOpen({hidenavbar,companyName,description,handleOpenGrid}) {
     const [AddNewWindow,setAddnewWindow]=useState(false)
     const [TotalCards,setTotalCards]=useState([])
     const [currentTab,setCurrentTab]=useState(` add Investment`)
@@ -73,7 +73,7 @@ function GridOpen({companyName,description,handleOpenGrid}) {
 
 
   return (
-    <div className=' w-[80%] h-screen z-50 space-y-7 bg-white absolute top-0 right-0 left-[20%] overflow-hidden p-[23px] md:flex md:flex-col cursor-default' onClick={handleBubbling}>
+    <div className={`${hidenavbar?'ml-[2%] w-[100%]':'ml-[20%] w-[80%]'} h-screen z-50 space-y-7 bg-white absolute top-0 right-0 pt-[45px] overflow-hidden p-[23px] md:flex md:flex-col cursor-default`} onClick={handleBubbling}>
         <div ref={MainDiv} className='bg-white w-[100%] h-screen  fixed'></div>
         <div className='flex flex-row h-[40px] w-[100%] mt-[20px]'>
             <div className='flex flex-row items-center justify-center'>
@@ -98,14 +98,14 @@ function GridOpen({companyName,description,handleOpenGrid}) {
                     </div>   
             </div>
         </div>
-        {AddNewWindow?<AddNewInvestment openAddNewWindow={openAddNewWindow} CompanyName={companyName} handleTotalCards={handleTotalCards}/>:<></>}
+        {AddNewWindow?<AddNewInvestment hidenavbar={hidenavbar} openAddNewWindow={openAddNewWindow} CompanyName={companyName} handleTotalCards={handleTotalCards}/>:<></>}
         <div className='w-[100%] h-[100%] flex space-x-4 md:flex-row '>
            
            
             <div className='md:w-[70%] h-[420px] overflow-y-auto space-y-1'>
                 {
-                    TotalCards.map(item=>
-                    <InvestmentCard key={item._id} id={item._id} CompanyName={item.company} Title={item.field} Description={item.value} />
+                    (TotalCards||[]).map(item=>
+                    <InvestmentCard hidenavbar={hidenavbar} key={item._id} id={item._id} CompanyName={item.company} Title={item.field} Description={item.value} />
                 )
                 }
                 

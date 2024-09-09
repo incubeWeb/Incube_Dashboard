@@ -12,7 +12,7 @@ import { MdEmail } from 'react-icons/md'
 import { GrUserAdmin } from 'react-icons/gr'
 import { Bars } from 'react-loader-spinner'
 
-const Addusers = ({setActiveField}) => {
+const Addusers = ({setActiveField,hidenavbar}) => {
     const [adduser,setAdduser]=useState(false)
     const [allUsers,setAllusers]=useState([])
     const [edit,setEdit]=useState(false)
@@ -99,7 +99,7 @@ const Addusers = ({setActiveField}) => {
         getUser()
     },[])
   return (
-    <div className='bg-white flex flex-col pt-[5%] items-center justify-start pr-[5%] pl-[23%] w-[100%] h-screen font-roboto'>
+    <div className={`${hidenavbar?' ml-[2%] w-[97%] ':'ml-[20%] w-[80%]'} pt-[5%] pl-[25px] bg-white flex flex-col items-center justify-start space-y-4  w-[100%] p-[20px] font-roboto`}>
         <div className='w-[100%] h-[10%] flex flex-row space-x-3'>
             <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className=' text-gray-300 hover:text-gray-500'>Dashboard</p></Link>
             <p className='text-gray-500'>/</p>

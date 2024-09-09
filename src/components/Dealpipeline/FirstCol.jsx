@@ -8,7 +8,7 @@ import Inprogrss from './Inprogrss';
 import Unassigned from './Unassigned';
 import Completed from './Completed';
 
-function FirstCol({setActiveField}) {
+function FirstCol({setActiveField,hidenavbar}) {
   const [selectedTab, setSelectedTab] = useState("View All");
   const [companyData, setCompanyData] = useState([]);
   const [filter, setFilter] = useState([]);
@@ -93,7 +93,7 @@ function FirstCol({setActiveField}) {
   };
 
   return (
-    <div className='flex flex-col ml-[20%] md:flex md:flex-col font-roboto md:w-[80%] md:h-screen space-y-3 text-gray-700 md:pr-[47px]'>
+    <div className={`${hidenavbar?'ml-[2%] w-[100%]':'ml-[20%] w-[80%]'}flex flex-col  font-roboto space-y-3 text-gray-700 pr-[47px]`}>
       
       <div className='w-[100%] h-[100%]'>
         
@@ -154,19 +154,19 @@ function FirstCol({setActiveField}) {
       </div>
 
       {
-        selectedTab === 'View All' ? <Viewall filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
+        selectedTab === 'View All' ? <Viewall hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
       {
-        selectedTab === 'In Progress' ? <Inprogrss filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
+        selectedTab === 'In Progress' ? <Inprogrss hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
       {
-        selectedTab === 'Unassigned' ? <Unassigned filter={filter} setSelectedTab={setSelectedTab} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
+        selectedTab === 'Unassigned' ? <Unassigned hidenavbar={hidenavbar} filter={filter} setSelectedTab={setSelectedTab} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
       {
-        selectedTab === 'Completed' ? <Completed filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
+        selectedTab === 'Completed' ? <Completed hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
       {
-        createNew ? <CreateNew setCreateNew={setCreateNew} fetchCompanyData={fetchCompanyData} /> : null
+        createNew ? <CreateNew  setCreateNew={setCreateNew} hidenavbar={hidenavbar} fetchCompanyData={fetchCompanyData} /> : null
       }
       
       </div>

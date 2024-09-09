@@ -6,7 +6,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import axios from 'axios';
 import { Bars } from 'react-loader-spinner';
 
-function Inprogrss({ filter, selectedTab, fetchCompanyData, setActiveField }) {
+function Inprogrss({hidenavbar, filter, selectedTab, fetchCompanyData, setActiveField }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [compData,setcompData]=useState([])
@@ -72,7 +72,7 @@ function Inprogrss({ filter, selectedTab, fetchCompanyData, setActiveField }) {
                 logo={company.photolink}
                 status={company.status}
                 TeamLead_status={company.TeamLead_status}
-                
+                hidenavbar={hidenavbar}
               /> : null
           ))
           :
@@ -87,6 +87,7 @@ function Inprogrss({ filter, selectedTab, fetchCompanyData, setActiveField }) {
                 logo={company.photolink}
                 status={company.status}
                 TeamLead_status={company.TeamLead_status}
+                hidenavbar={hidenavbar}
               /> : null
           ))
         }
