@@ -10,6 +10,7 @@ import PortfolioPieChart from './PortfolioPieChart'
 import PortfolioLineChart from './PortfolioLineChart'
 import { HiOutlineDotsVertical } from 'react-icons/hi'
 import PortfolioMeter from './PortfolioMeter'
+import { Bars } from 'react-loader-spinner'
 
 const PortfolioTopGraph = ({hidenavbar}) => {
     const [chartselectpopup,setchartselectpopup]=useState(false)
@@ -32,6 +33,7 @@ const PortfolioTopGraph = ({hidenavbar}) => {
     const [showLinechart,setshowLinechart]=useState(false)
 
     const [changeChart,setchangeChart]=useState(false)
+    const [loading,setloading]=useState(true)
 
     useEffect(()=>{
         const storevalues=async()=>{
@@ -66,7 +68,9 @@ const PortfolioTopGraph = ({hidenavbar}) => {
             setsheetJson(stateValues.sheetJson)
             setsheetfieldselectedX(stateValues.sheetfieldselectedX)
             setsheetfieldselectedY(stateValues.sheetfieldselectedY)
-
+            setTimeout(()=>{
+                setloading(false)
+            },1000)
         }
         setGraphValues()
         
@@ -174,6 +178,7 @@ const PortfolioTopGraph = ({hidenavbar}) => {
     
   return (
     <div className=' font-roboto h-[300px]  flex flex-col'>
+        
         <div className='flex flex-row h-[100%] space-x-6'>
             {
                 chartselectpopup?
@@ -484,14 +489,19 @@ const PortfolioTopGraph = ({hidenavbar}) => {
                 
 
                 {
-                    showBarchart?
-                         <PortfolioBarChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY}/>
-                        
+                     
+                    loading?
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                        <Bars color="#8884d8" height={80} width={80} />
+                    </div>
+                    :  
+                    showBarchart &&!loading?
+                        <PortfolioBarChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY}/>   
                     :
-                    showPiechart?
+                    showPiechart &&!loading?
                     <PortfolioPieChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY}/>
                     :
-                    showLinechart?
+                    showLinechart &&!loading?
                     <PortfolioLineChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY}/>
                     :
                     <div onClick={handleChartSelectPopup} className='w-[150px] h-[40px] bg-gradient-to-r from-blue-500 to-blue-800 rounded-xl text-white'>

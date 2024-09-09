@@ -9,6 +9,7 @@ import { FaCaretRight, FaDatabase, FaPlus } from 'react-icons/fa'
 import { IoMdArrowBack } from 'react-icons/io'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import PortfolioTop from './PortfolioTop'
+import { Bars } from 'react-loader-spinner'
 
 const Portfolio = ({hidenavbar,sheetedited}) => {
     const [sheetmethod,setsheetmethod]=useState('')
@@ -21,6 +22,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
     const [showimagepopup,setshowimagePopup]=useState('')
     const [sheetname,setsheetname]=useState('')
     const [selectfield,setselectfield]=useState(false)
+    const [loading,setloading]=useState(true)
 
     useEffect(()=>{
         const setStateValues=async()=>{
@@ -43,6 +45,9 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                 setshowimagePopup(val.showimagepopup)
                 setsheetname(val.sheetname)
                 setselectfield(val.selectfield)
+                setTimeout(()=>{
+                    setloading(false)
+                },1000)
                 })
             }
         }
@@ -276,7 +281,13 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                 </div>
             </div>  
             {
-            (showHistory &&!selectfield)||(!clickedDots&&sheetmethod.length>0)?
+             loading?
+             
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <Bars color="#8884d8" height={80} width={80} />
+            </div>
+                : 
+            ((showHistory &&!selectfield)||(!clickedDots&&sheetmethod.length>0)) && !loading?
             <div>
                 <PortfolioHistory selectedImageFiled={selectedImageFiled} setportfolioHistory={setshowHistory} sheetKeys={sheetKeys} sheetJson={sheetJson}/>
             </div>

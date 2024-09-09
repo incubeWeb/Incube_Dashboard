@@ -7,6 +7,7 @@ import { IoAddSharp } from 'react-icons/io5'
 import { LuPencil } from 'react-icons/lu'
 import { RiFundsLine } from 'react-icons/ri'
 import { RxCross2 } from 'react-icons/rx'
+import { Bars } from 'react-loader-spinner'
 
 const PortfolioCards = ({id,style,hidenavbar,valueid,setvalueid,changevalue,setchangevalue}) => {
     const [editLabel,seteditLabel]=useState(false)
@@ -16,7 +17,8 @@ const PortfolioCards = ({id,style,hidenavbar,valueid,setvalueid,changevalue,setc
     const [sheetKeys,setsheetKeys]=useState([])
     const [showValue,setshowvalue]=useState('$0')
     const inputRef=useRef(null)
-    
+    const [loading,setloading]=useState(true)
+
     const handleEdit=()=>{
         seteditLabel(true)
         setTimeout(()=>{
@@ -66,6 +68,9 @@ const PortfolioCards = ({id,style,hidenavbar,valueid,setvalueid,changevalue,setc
                 {
                     setlablename(val.labelname)
                     setshowvalue(val.showValue)
+                    setTimeout(()=>{
+                        setloading(false)
+                    },1000)
                 }
             })
         }
@@ -136,7 +141,17 @@ const PortfolioCards = ({id,style,hidenavbar,valueid,setvalueid,changevalue,setc
     },[clickedSheetId])
 
   return (
+   
     <div className='flex flex-col space-y-4 bg-white p-3 w-[100%] h-[160px] rounded-xl '>
+                 {
+        loading?
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+          <Bars color="#8884d8" height={80} width={80} />
+        </div>
+        :
+        
+    
+                <div>
                 <div className={style}>
                     <RiFundsLine size={28} className='text-white'/>
                 </div>
@@ -233,6 +248,8 @@ const PortfolioCards = ({id,style,hidenavbar,valueid,setvalueid,changevalue,setc
                         </div>
                     </div>
                 </div>
+                </div>
+            }
             </div>
   )
 }

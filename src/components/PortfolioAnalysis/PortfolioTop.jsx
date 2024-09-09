@@ -6,10 +6,11 @@ import { RiFundsLine } from 'react-icons/ri'
 import PortfolioCards from './PortfolioCards'
 import axios from 'axios'
 import PortfolioTopGraph from './PortfolioTopGraph'
+import { Bars } from 'react-loader-spinner'
 
 const PortfolioTop = ({hidenavbar,sheetedited}) => {
     const [valueid,setvalueid]=useState([{id:1,labelname:'Total fund',showValue:'$0'},{id:2,labelname:'Fund utilized',showValue:'$0'},{id:3,labelname:'Funds remaining',showValue:'$0'},{id:4,labelname:'ROI',showValue:'$0'}])
-    
+
     const [changevalue,setchangevalue]=useState(false)
     
   useEffect(()=>{
@@ -56,14 +57,18 @@ const PortfolioTop = ({hidenavbar,sheetedited}) => {
                 <p className='text-[16px] tracking-wider'>Portfolio</p>
             </div>
         </div>
-        <div className='grid grid-cols-4 gap-6'>    
-            <PortfolioCards sheetedited={sheetedited} id={1} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-green-300 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
-            <PortfolioCards sheetedited={sheetedited} id={2} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-violet-400 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
-            <PortfolioCards sheetedited={sheetedited} id={3} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-pink-300 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
-            <PortfolioCards sheetedited={sheetedited} id={4} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-sky-400 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
+        
+        
+        <div className='grid grid-cols-4 gap-6'> 
+           
+            <PortfolioCards  sheetedited={sheetedited} id={1} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-green-300 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
+            <PortfolioCards  sheetedited={sheetedited} id={2} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-violet-400 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
+            <PortfolioCards  sheetedited={sheetedited} id={3} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-pink-300 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
+            <PortfolioCards  sheetedited={sheetedited} id={4} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-sky-400 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
                 
             
         </div>
+        
         <div>
             <PortfolioTopGraph hidenavbar={hidenavbar}/>
         </div>
