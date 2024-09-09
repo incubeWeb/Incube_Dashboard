@@ -12,11 +12,13 @@ import { HiOutlineDotsVertical } from 'react-icons/hi'
 import PortfolioMeter from './PortfolioMeter'
 import { Bars } from 'react-loader-spinner'
 
-const PortfolioTopGraph = ({hidenavbar}) => {
+const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
     const [chartselectpopup,setchartselectpopup]=useState(false)
     const [clickedBar,setclickedBar]=useState(false)
     const [clickedPie,setclickedPie]=useState(false)
     const [clickedLine,setclickedLine]=useState(false)
+
+    const [sheetclicked,setsheetClicked]=useState('')
 
     const [sheetJson,setsheetJson]=useState([])
     const [sheetrowsSelect,setsheetrowsselect]=useState(false)
@@ -35,11 +37,45 @@ const PortfolioTopGraph = ({hidenavbar}) => {
     const [changeChart,setchangeChart]=useState(false)
     const [loading,setloading]=useState(true)
 
+
+    useEffect(()=>
+    {
+        const updateRealtimevalue=async()=>{
+            const organization=`${localStorage.getItem('organization')}_ShownGraph`
+            const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
+            const data=response.data.data
+            const stateValues=JSON.parse(data)||{}
+            const sheetid=stateValues.sheetclicked
+            const response1=await axios.post('http://localhost:8999/sheetfromdb',{id:sheetid,organization:localStorage.getItem('organization')})
+            const sheetdata=JSON.parse(response1.data.data)
+            const stateJson={showBarchart:stateValues.showBarchart,showPiechart:stateValues.showPiechart,showLinechart:stateValues.showLinechart,chartDatatypeX:stateValues.chartDatatypeX,chartDatatypeY:stateValues.chartDatatypeY,sheetJson:sheetdata,sheetfieldselectedX:stateValues.sheetfieldselectedX,sheetfieldselectedY:stateValues.sheetfieldselectedY,sheetclicked:stateValues.sheetclicked}
+            if((stateValues.showBarchart || stateValues.showPiechart || stateValues.showLinechart)&&sheetdata!=[])
+            {
+                await axios.post('http://localhost:8999/setportfoliostate',{
+                    organization:organization,
+                    portfolioState:JSON.stringify(stateJson)
+                })
+            }
+            setshowBarchart(stateValues.showBarchart)
+            setshowPiechart(stateValues.showPiechart)
+            setshowLinechart(stateValues.showLinechart)
+            setchartDatatypeX(stateValues.chartDatatypeX)
+            setchartDatatypeY(stateValues.chartDatatypeY)
+            setsheetJson(sheetdata)
+            setsheetfieldselectedX(stateValues.sheetfieldselectedX)
+            setsheetfieldselectedY(stateValues.sheetfieldselectedY)
+            setsheetClicked(stateValues.sheetclicked)
+
+
+        }
+        updateRealtimevalue()
+    },[sheetedited])
+
     useEffect(()=>{
         const storevalues=async()=>{
 
                 const organization=`${localStorage.getItem('organization')}_ShownGraph`
-                const stateJson={showBarchart:showBarchart,showPiechart:showPiechart,showLinechart:showLinechart,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY}
+                const stateJson={showBarchart:showBarchart,showPiechart:showPiechart,showLinechart:showLinechart,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
                 await axios.post('http://localhost:8999/setportfoliostate',{
                     organization:organization,
                     portfolioState:JSON.stringify(stateJson)
@@ -57,9 +93,13 @@ const PortfolioTopGraph = ({hidenavbar}) => {
         const setGraphValues=async()=>{
             const organization=`${localStorage.getItem('organization')}_ShownGraph`
             const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
-            const data=response.data.data
+            console.log(response,"bhavesh singh")
+            const data=response.data.data || response.data.status
+            
             const stateValues=JSON.parse(data)||{}
-            console.log(stateValues,"))")
+            
+            if(data!=-200)
+            {
             setshowBarchart(stateValues.showBarchart)
             setshowPiechart(stateValues.showPiechart)
             setshowLinechart(stateValues.showLinechart)
@@ -68,12 +108,18 @@ const PortfolioTopGraph = ({hidenavbar}) => {
             setsheetJson(stateValues.sheetJson)
             setsheetfieldselectedX(stateValues.sheetfieldselectedX)
             setsheetfieldselectedY(stateValues.sheetfieldselectedY)
+            setsheetClicked(stateValues.sheetclicked)
             setTimeout(()=>{
                 setloading(false)
             },1000)
+            }
+            else{
+                setTimeout(()=>{
+                    setloading(false)
+                },1000)
+            }
         }
         setGraphValues()
-        
     },[])
 
 
@@ -85,6 +131,7 @@ const PortfolioTopGraph = ({hidenavbar}) => {
         setallSheets(response.data.data) 
     }
     const handlesheetclicked=async (id)=>{
+            setsheetClicked(id)
             const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
                 const data=JSON.parse(response.data.data)
                 setsheetJson(data)
@@ -490,7 +537,7 @@ const PortfolioTopGraph = ({hidenavbar}) => {
 
                 {
                      
-                    loading?
+                    (loading )?
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                         <Bars color="#8884d8" height={80} width={80} />
                     </div>

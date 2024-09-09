@@ -24,6 +24,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
     const [selectfield,setselectfield]=useState(false)
     const [loading,setloading]=useState(true)
 
+
     useEffect(()=>{
         const setStateValues=async()=>{
            const organization=localStorage.getItem('organization')
@@ -103,8 +104,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
     useEffect(()=>{
         const setavailableDatabaseSheets=async()=>{
             const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
-            setallSheets(response.data.data)
-            
+            setallSheets(response.data.data)  
             
         }
         if(sheetmethod=='Database')
@@ -120,7 +120,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
         const setJSon=async()=>{
             const response=await axios.post('http://localhost:8999/sheetfromdb',{id:selectedSheetId,organization:localStorage.getItem('organization')})
             const data=JSON.parse(response.data.data)
-            console.log(data)
+            console.log(selectedSheetId,"sheetis")
             setsheetJson(data)
             console.log("sheet",data)
             const key=Object.keys(data[0])
@@ -144,7 +144,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
   return (
     <div className={`${hidenavbar?'pl-[4%] w-[100%]':'pl-[21%] w-[100%]'} p-4 font-noto  flex flex-col space-y-4 bg-gray-100`}>
         <div className='w-[100%]  flex flex-col'>{/*Portfolio content */}
-            <PortfolioTop hidenavbar={hidenavbar} sheetedited={sheetedited}/>
+            <PortfolioTop selectedSheetId={selectedSheetId} hidenavbar={hidenavbar} sheetedited={sheetedited}/>
         </div>
 
         <div className='tracking-wider select-none mt-[20px] w-[100%]  bg-white rounded-xl p-4 flex flex-col space-y-2 font-noto'>

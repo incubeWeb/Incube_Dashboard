@@ -31,6 +31,7 @@ function App() {
   
   
 
+
   useEffect(()=>{
       const fun=async()=>{
         if(localStorage.getItem('email')!='')
@@ -69,7 +70,7 @@ function App() {
         })
 
         socket.on('sheetedited',(data)=>{
-         
+          console.log("this data sheet edt",data)
           setsheetedited(data)
         })
       
@@ -135,7 +136,7 @@ function App() {
             <Route path="/adduser" element={<Addusers setActiveField={setActiveField} hidenavbar={hidenavbar}/>}/>
             <Route path="/allDocs" element={<Alldocs filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar}/>} />
             <Route path="/investment" element={<AddInvestment hidenavbar={hidenavbar}/>}/>
-            <Route path='/portfolio' element={<Portfolio hidenavbar={hidenavbar} sheetedited={sheetedited}/>}/>
+            <Route path='/portfolio' element={<Portfolio sheetedited={sheetedited} hidenavbar={hidenavbar} />}/>
             
           </Routes>
         </>
