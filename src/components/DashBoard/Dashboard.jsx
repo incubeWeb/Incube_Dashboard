@@ -18,6 +18,7 @@ import { io } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 import { Bars } from 'react-loader-spinner';
 import Portfoliocard from '../Charts/Portfoliocard';
+import NewsWidgit from '../News_widgit/NewsWidgit';
 
 
 const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
@@ -308,6 +309,10 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
             {(() => {
             try {
               switch (box.type) {
+                case 'news':
+                  return (
+                    <NewsWidgit id={index} boxes={boxes} setBoxes={setBoxes}/>
+                  )
                 case 'timeline':
                   return (
                     <Timeline

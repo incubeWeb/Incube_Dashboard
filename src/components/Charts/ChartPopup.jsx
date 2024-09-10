@@ -54,7 +54,8 @@ const ChartPopup = ({
   portfoliocardwidgit,
   setportfoliocardwidgit,
   portfoliocardwidgitcount,
-  setportfoliocardwidgitcount
+  setportfoliocardwidgitcount,
+  
   
 }) => {
   const containerStyle = {
@@ -511,6 +512,22 @@ const ChartPopup = ({
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
     setBoxes([...boxes, { ...newBox, type : "timeline" }]);
+    setShowPopup(false); 
+  }
+
+  const handleNewsWidgit=(e)=>{
+    e.stopPropagation()
+    settypeofchart('news')
+
+    const lastBox = boxes[boxes.length - 1];
+      const newBox = {
+        id: lastBox ? lastBox.id + 1 : 1,
+        width: '420',
+        height: '400px',
+        x: 10,
+        y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
+      };
+    setBoxes([...boxes, { ...newBox, type : "news" }]);
     setShowPopup(false); 
   }
 
@@ -1643,7 +1660,7 @@ const ChartPopup = ({
             </div>
           </div>
           <div
-            onClick={() => addComponent("news")}
+            onClick={handleNewsWidgit}
             className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-2"
           >
             <p className="w-[70%]">News</p>
