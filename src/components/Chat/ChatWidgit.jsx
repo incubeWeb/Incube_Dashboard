@@ -257,7 +257,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
                         </div>
                         <div className='w-[100%] h-[30px] space-x-2 items-center justify-center flex flex-row'>
                             <div className='w-[95%] h-[100%] ml-2'>
-                              <input id={`text${id}`} className='w-[100%] text-[14px] pl-2 h-[100%]  px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 ' placeholder='Enter your message here....' onChange={(e)=>handleTypedMsg(e)}/>
+                              <input id={`text${id}`} className='w-[100%] text-[14px] pl-2 h-[100%]  px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 ' placeholder='Enter your message here....' onKeyPress={(e)=>e.key=='Enter'?handleSendChat(e):handleTypedMsg(e)} onChange={(e)=>handleTypedMsg(e)}/>
                             </div>
                             <div className='w-[5%] h-[100%] flex items-center justify-center'>
                               <IoSend size={18} className='cursor-pointer' onClick={(e)=>handleSendChat(e)}/>
