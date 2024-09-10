@@ -26,14 +26,15 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
         {
             (capturingPortfoliowidgitvalues||[]).map(val=>{
                     if(val.portfoliowidgit.id==id+1)
-                        {
-                            
-                            setlablename(val.portfoliowidgit.labelname)
-                            setshowvalue(val.portfoliowidgit.showValue)
-                        }
+                    {
+                        
+                        setlablename(val.portfoliowidgit.labelname)
+                        setshowvalue(val.portfoliowidgit.showValue)
+                    }
                 }
             )
         }
+
     },[])
 
     const handlePlusClick=async()=>{
@@ -197,7 +198,9 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                                 
                                 <select onChange={(e)=>setsheetfieldselected(e.target.value)} className='w-[220px] h-[30px] text-[14px] text-gray-700 rounded-md border-gray-300 border-[1px]'>
                                                 
-                                    {sheetKeys.map(k=>
+                                    {(sheetKeys||[]
+                                        
+                                    ).map(k=>
                                         <option key={k._id}>{k}</option>
                                         )
                                     }
