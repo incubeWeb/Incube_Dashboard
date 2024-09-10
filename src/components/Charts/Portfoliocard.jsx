@@ -22,6 +22,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     const [sheetJson,setsheetJson]=useState([])
 
     useEffect(()=>{
+        console.log(capturingPortfoliowidgitvalues+"abc"+id);
         if(capturingPortfoliowidgitvalues!=[])
         {
             (capturingPortfoliowidgitvalues||[]).map(val=>{
