@@ -24,7 +24,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     useEffect(()=>{
         if(capturingPortfoliowidgitvalues!=[])
         {
-            capturingPortfoliowidgitvalues.map(val=>{
+            (capturingPortfoliowidgitvalues||[]).map(val=>{
                     if(val.portfoliowidgit.id==id+1)
                         {
                             
