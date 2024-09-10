@@ -233,7 +233,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
                                         <div className={ ` ${[...sendedMsg,...receivedMsg].length>7?'':'justify-end'} w-[100%] h-[100%] flex flex-col space-y-2 `}>
                                           {
                                             
-                                            [...sendedMsg,...receivedMsg].sort((a,b)=>a.time-b.time).map(msg=>
+                                            ([...sendedMsg,...receivedMsg].sort((a,b)=>a.time-b.time)||[]).map(msg=>
                                               (msg.sender==localStorage.getItem('email'))
                                                 ?
                                                 <div key={msg._id} className=' flex  justify-end rounded-sm'>
@@ -282,7 +282,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
               <div className=' flex flex-col w-[100%] items-center justify-start text-gray-700 space-y-1 overflow-y-auto scrollbar-hide'>
                
               {
-                users.map(user=>
+                (users||[]).map(user=>
                
                 user.email!=localStorage.getItem('email')
                     ?
