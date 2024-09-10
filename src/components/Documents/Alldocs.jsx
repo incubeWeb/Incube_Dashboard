@@ -129,7 +129,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar}) => {
             <div className='w-[15%] h-[100%] flex items-center justify-start'>
                 <p className='text-[14px] pl-2 font-roboto'>File Type</p>
             </div>
-            <div className='w-[15%] items-center justify-start flex h-[100%]'>
+            <div className='w-[20%] items-center justify-start flex h-[100%]'>
                 <p className='text-[14px] pl-2 font-roboto'>File name</p>
             </div>
             <div className='w-[15%] flex pl-2 items-center justify-start h-[100%]'>
@@ -143,20 +143,20 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar}) => {
             </div>
         </div>
        
-        <div className='w-[100%] bg-white h-[1px] mt-3  border-t border-gray-300 pt-2'> </div>
+        <div className='w-[100%] bg-white h-[1px]  mt-3'> </div>
         {
             !loading?
-            <div className='flex flex-col w-[100%] h-[10%] font-roboto'>
+            <div className='flex flex-col w-[100%] h-[10%] font-roboto    mt-3'>
                 {
                     (allDocs||[]).map(doc=>
-                    <div key={doc._id} className='flex flex-row w-[100%] h-[100%] font-roboto mt-4' >
+                    <div key={doc._id} className='flex flex-row w-[100%] h-[100%] font-roboto   border-t border-gray-300 ' >
                         <div className='w-[15%] h-[100%] flex items-end justify-start '>
                             <p className='text-[14px] pl-2 '>{doc.uploadedBy}</p>
                         </div>
                         <div className='w-[15%] h-[100%] flex items-end justify-start'>
                             <p className='text-[14px] pl-2'>{doc.fileType}</p>
                         </div>
-                        <div className='w-[15%] items-end justify-start flex h-[100%]'>
+                        <div className='w-[20%] items-end justify-start flex h-[100%]'>
                             <p className='text-[14px] pl-2'>{doc.name}</p>
                         </div>
                         <div className='w-[15%] flex pl-2 items-end justify-start h-[100%]'>
@@ -168,7 +168,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar}) => {
                         <div className='w-[15%] flex pl-2 items-end justify-start h-[100%]'>
                             <p className='text-[14px]'>{doc.tab}</p>
                         </div>
-                        <div className='w-[5%] flex flex-col pl-2 items-center pt-6 justify-start h-[100%]'>
+                        <div className='w-[5%] flex flex-col pr-3 items-center pt-6 justify-start h-[100%]'>
                         <div className='basis-1/2 flex justify-end space-x-3'>
                         <p className='text-[14px] text-sky-600 cursor-pointer ' onClick={()=>handleView(doc._id,doc.name)}>View</p>
                             <p className='text-[14px] text-red-600 cursor-pointer' onClick={()=>handleDelete(doc._id)}>Remove</p>
