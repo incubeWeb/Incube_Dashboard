@@ -9,7 +9,7 @@ import { RiFundsLine } from 'react-icons/ri'
 import { RxCross2 } from 'react-icons/rx'
 import { Bars } from 'react-loader-spinner'
 
-const PortfolioCards = ({id,style,hidenavbar,valueid,setvalueid,changevalue,setchangevalue}) => {
+const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid,setvalueid,changevalue,setchangevalue}) => {
     const [editLabel,seteditLabel]=useState(false)
     const [labelname,setlablename]=useState('')
     const [hover,sethover]=useState(false)
@@ -35,29 +35,85 @@ const PortfolioCards = ({id,style,hidenavbar,valueid,setvalueid,changevalue,setc
     const [sheetname,setsheetname]=useState('')
     const [sheetfieldselected,setsheetfieldselected]=useState('')
     
-    
+
     useEffect(()=>
     {
-        console.log(editLabel)
-        if(!editLabel)
+        console.log(selectedSheetId,"ths")
+        if(!editLabel && clickedSheetId!="")
         {
             setvalueid(prev => {
                 const exists = prev.some(val => val.id === id); // Check if the id exists
                 if (exists) {
                   return prev.map(val =>
                     val.id === id
-                      ? { ...val, showValue: showValue, labelname: labelname } // Update the existing object
+                      ? { ...val, showValue: showValue, labelname: labelname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected } // Update the existing object
                       : val
                   );
                 } else {
                   // Insert new object if id is not found
-                  return [...prev, { id: id, showValue: showValue, labelname: labelname }];
+                  return [...prev, { id: id, showValue: showValue, labelname: labelname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected }];
                 }
               });
         }
         
         
     },[editLabel,showValue])
+
+    useEffect(()=>
+    {
+        const applyRealchanges=async()=>{
+            console.log("hi Bhavesh")
+            const organization=`${localStorage.getItem('organization')}_Topcards`
+            
+            const response1=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
+            const data1=JSON.parse(response1.data.data)
+            let key=''
+            let sheetid=''
+
+            data1.map(val=>{
+                if(val.id==id){
+                    key=val.sheetfieldselected
+                    sheetid=val.sheetId
+                }
+            })
+            
+            console.log(key,"thifsdfsdfsfss")
+            const response=await axios.post('http://localhost:8999/sheetfromdb',{id:sheetid,organization:localStorage.getItem('organization')})
+            const data=JSON.parse(response.data.data)
+            
+
+            let value=''
+            try{
+                value=parseInt(data[0][key]) 
+                
+                if(isNaN(data[0][key]))
+                {
+                    value='$0'
+                }
+            }
+            catch(e)
+            {
+                value='$0'
+            }
+            console.log(value,key,"card")
+            console.log("blye bhabesf")
+            
+            setvalueid(prev => {
+                const exists = prev.some(val => val.id === id); // Check if the id exists
+                if (exists) {
+                  return prev.map(val =>
+                    val.id === id
+                      ? { ...val, showValue: value, labelname: key,sheetId:sheetid } // Update the existing object
+                      : val
+                  );
+                } 
+              });
+
+    
+        }
+        applyRealchanges()
+
+    },[sheetedited])
 
     useEffect(()=>{
         const getTopCardsValues=async()=>{
@@ -116,6 +172,7 @@ const PortfolioCards = ({id,style,hidenavbar,valueid,setvalueid,changevalue,setc
         setsheetClicked(true)
         setsheetpopup(false)
     }
+
 
     useEffect(()=>{
         const setValues=async()=>{

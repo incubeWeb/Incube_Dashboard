@@ -5,6 +5,20 @@ const PortfolioLineChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfields
     const [data,setdata]=useState([])
 
     useEffect(()=>{
+      const settingValuesofData=async()=>{
+              const mydata=[]
+              sheetJson.map(val=>{
+                  mydata.push({pv:val[sheetfieldselectedX],uv:val[sheetfieldselectedY]})
+              })
+              console.log("final my data",mydata)
+              const converteddata=convertDataTypes(mydata, fieldConversions);
+              console.log("converteddata",converteddata)
+              setdata(converteddata)
+      }
+      settingValuesofData()
+  },[sheetJson])
+
+    useEffect(()=>{
         const settingValuesofData=async()=>{
                 const mydata=[]
                 sheetJson.map(val=>{
