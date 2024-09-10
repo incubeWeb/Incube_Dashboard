@@ -143,13 +143,13 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar}) => {
             </div>
         </div>
        
-        <div className='w-[100%] bg-white h-[1px]  mt-3'> </div>
+        <div className='w-[100%] bg-white h-[1px]  '> </div>
         {
             !loading?
             <div className='flex flex-col w-[100%] h-[10%] font-roboto    mt-3'>
                 {
                     (allDocs||[]).map(doc=>
-                    <div key={doc._id} className='flex flex-row w-[100%] h-[100%] font-roboto   border-t border-gray-300 ' >
+                    <div key={doc._id} className='flex flex-row w-[100%] h-[100%] font-roboto   border-t border-gray-300 mb-6' >
                         <div className='w-[15%] h-[100%] flex items-end justify-start '>
                             <p className='text-[14px] pl-2 '>{doc.uploadedBy}</p>
                         </div>
