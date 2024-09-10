@@ -9,6 +9,7 @@ import { MdOutlineSort, MdOutlineTrendingUp } from 'react-icons/md';
 import { FaUserPlus } from 'react-icons/fa';
 import { IoIosDocument } from 'react-icons/io';
 import { RiSettings4Fill, RiSettings6Fill } from 'react-icons/ri';
+import { FiAlignJustify } from "react-icons/fi";
 import {gsap} from 'gsap'
 
 const Navigation = ({activeField,setActiveField,hidenavbar,sethidenavbar}) => {
@@ -130,9 +131,9 @@ const Navigation = ({activeField,setActiveField,hidenavbar,sethidenavbar}) => {
        
     </div>
 
-        <div className='ml-20  cursor-pointer left-[-10px] z-[90] fixed w-[16%] top-[50px]  flex justify-end items-start '>
+        <div className='ml-20  cursor-pointer left-[-20px] z-[90] fixed w-[16%] top-[50px]  flex justify-end items-start '>
                 <div ref={settingBtnRef}>
-                    <RiSettings4Fill className='text-gray-500' size={20} onClick={hideNav}/>
+                    <FiAlignJustify  className='text-gray-500' size={20} onClick={hideNav}/>
                 </div>
         </div>
     </div>
