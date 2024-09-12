@@ -285,14 +285,15 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
         </div>
       ):
     <div className='w-[100%] h-[100%] flex flex-col'>
-      <div className='flex flex-col pt-[30px] w-[100%] h-[10%] items-start mt-[44px]'>
-        <div
-          className='ml-[20px] flex flex-row w-[120px] h-[33px] rounded-md bg-gradient-to-r from-blue-600 to-blue-300 text-[14px] items-center justify-center text-white cursor-pointer'
-          onClick={handleShowPopup}
-        >
-          <p>Widgets</p>
-        </div>
-      </div>
+    <div className='flex flex-col pt-[30px] w-[100%] h-[10%] items-end mt-[44px]'>
+  <div
+    className='absolute top-[20px] right-[20px] flex flex-row w-[120px] h-[33px] rounded-md bg-gradient-to-r from-blue-600 to-blue-300 text-[14px] items-center justify-center text-white cursor-pointer'
+    onClick={handleShowPopup}
+  >
+    <p>Widgets</p>
+  </div>
+</div>
+
       <div className='w-[100%] flex flex-col items-center'>
         {(boxes||[]).map((box,index) => (
           <Rnd

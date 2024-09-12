@@ -155,8 +155,8 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
   return (
   
     <div className='flex h-[100%] flex-col  bg-white cursor-default space-y-2'>
-        <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px]  bg-blue-500 h-[20px] fixed right-[-10px] mt-4 mr-3 top-[-15px]' onClick={deleteWidgit}>
-        <IoMdClose size={24}  />
+        <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px]  rounded-full bg-gray-100 h-[20px] fixed right-[-10px] mt-4 mr-3 top-[-15px]' onClick={deleteWidgit}>
+        <IoMdClose size={15} className='text-black' />
         </div> 
         
         {

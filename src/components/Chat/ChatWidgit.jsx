@@ -268,7 +268,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
                       <></>
         }
         <div className='w-[100%] h-[45px] '>
-          <input className='w-[100%] h-[45px] border-[1px] border-gray-500 rounded-md text-[14px] pl-2' placeholder='Search' onChange={handleSearchUser}/> 
+          <input className='w-[100%] h-[45px] border-[1px] border-gray-500    rounded-md text-[14px] pl-2' placeholder='Search' onChange={handleSearchUser}/> 
         </div>
           <div className=' flex w-[100%] h-[70%] flex-row  '>
             {
@@ -294,8 +294,8 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
                         <div className='h-[100%] w-[50%] flex items-center justify-start'>
                               <p className='text-[13px] lowercase'>{user.email}</p>
                         </div>
-                        <div className='w-[20%] flex items-center justify-center'>
-                          <IoChatboxEllipsesOutline />
+                        <div className='w-[20%] flex items-center ml-4 justify-center'>
+                          <IoChatboxEllipsesOutline  className='ml-4'/>
                         </div>
                     </div>
                    </div>
@@ -311,8 +311,8 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
               </div>:<></>
             }
           </div>
-          <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px] bg-red-500 fixed right-[-10px] top-[-15px]' onClick={deleteWidgit}>
-              <RxCross2 size={14} className='text-white'/>
+          <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px]  bg-gray-100 fixed right-[-10px] top-[-15px]' onClick={deleteWidgit}>
+              <RxCross2 size={14} className='text-black'/>
         </div> 
       </div>
   )

@@ -87,8 +87,8 @@ const NewsWidgit = ({id,boxes,setBoxes}) => {
             }
         </div>
         }
-        <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px]  h-[20px] bg-blue-500 fixed right-[-10px] top-[-15px] mt-4 mr-3' onClick={deleteWidgit}>
-        <IoMdClose size={24}  />
+        <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px]  h-[20px]  rounded-full bg-gray-100 fixed right-[-10px] top-[-15px] mt-4 mr-3' onClick={deleteWidgit}>
+        <IoMdClose size={15}  />
         </div> 
     </div>
     

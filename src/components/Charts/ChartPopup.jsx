@@ -891,7 +891,7 @@ const ChartPopup = ({
           </div>
           <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
            
-            <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+            <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                 <div><p className="text-[14px]">Name field:</p></div>
                 <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
                   {
@@ -906,7 +906,7 @@ const ChartPopup = ({
                   <option >integer</option>
                 </select>
               </div>
-              <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+              <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                 <div><p className="text-[14px]">Value field:</p></div>
                 <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
                   {
