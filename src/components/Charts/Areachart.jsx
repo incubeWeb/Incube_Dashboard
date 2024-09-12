@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { RxCross2 } from 'react-icons/rx';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {  Area,  Legend, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart }  from 'recharts';
+import { IoMdClose } from "react-icons/io";
 
 
 
@@ -238,27 +239,48 @@ useEffect(() => {
 
 
   return (
-    <div style={{ width: '100%', height: '100%' }} className='mt-8 pr-10'>
+    <div style={{ width: '100%', height: '100%' }} className='mt-8  pr-10'>
     <div className='w-[100%] h-[100%] mt-3 pr-14'>
       <ResponsiveContainer width="100%" height="100%">
       <AreaChart
         width={500}
         height={300}
         data={mydata}
+
+
+
+
         margin={{
           top: 5,
           right: 30,
           left: 20,
-          bottom: 5,
+          bottom: 10,
         }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis tick={false} />
+
+            <defs>
+          
+            <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="3%" stopColor="#007BFF" stopOpacity={0.4} />
+              <stop offset="37%" stopColor="#007BFF" stopOpacity={0.2} />
+              <stop offset="60%" stopColor="	#ffffff" stopOpacity={0.0} />
+            </linearGradient>
+          </defs>
+
+
+          <CartesianGrid strokeDasharray="3 3"  horizontal={true} vertical={false} />
+        <XAxis dataKey="pv" tick={true}     tickMargin={10} padding={{ left: 10, right: 10 }}  />
+        
+        <YAxis tick={true}   tickMargin={10} padding={{ top: 10, bottom: 10 }} />
         <Tooltip />
         <Legend />
-        <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
-        <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
+      
+       
+            
+
+    <Area type="monotone" dataKey="uv" stroke="#007BFF" fill="url(#blueGradient)" strokeWidth={3}/>
+
+        
       </AreaChart>
     </ResponsiveContainer>
     
@@ -272,8 +294,8 @@ useEffect(() => {
                 </div>:
                 <></>
             }
-             <div className='z-[10] cursor-pointer flex pl-[1px] items-center justify-center w-[20px] rounded-xl h-[20px] bg-red-500 fixed right-[-10px] top-[-15px]' onClick={deleteWidgit}>
-              <RxCross2 size={14} className='text-white'/>
+             <div className='z-[10] cursor-pointer flex pl-[1px] items-center justify-center w-[20px] rounded-xl h-[20px] bg-gray-100 fixed right-[-10px] top-[-15px]    mt-4 mr-3 '  onClick={deleteWidgit}>
+             <IoMdClose size={15}  />
             </div>
     </div>
     

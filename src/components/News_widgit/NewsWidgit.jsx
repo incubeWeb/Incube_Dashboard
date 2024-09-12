@@ -5,6 +5,10 @@ import { TbBrandDiscord } from 'react-icons/tb'
 import { PiNewspaperClippingBold } from 'react-icons/pi'
 import { RxCross2 } from 'react-icons/rx'
 import { Bars } from 'react-loader-spinner'
+import { IoMdClose } from "react-icons/io";
+import { IoNewspaperOutline } from "react-icons/io5";
+
+
 const NewsWidgit = ({id,boxes,setBoxes}) => {
     const [fetchedNews,setfetchedNews]=useState([])
     const [loading,setloading]=useState(true)
@@ -45,9 +49,9 @@ const NewsWidgit = ({id,boxes,setBoxes}) => {
       }
 
   return (
-    <div className='w-[100%] h-[100%] flex flex-col font-roboto'>
+    <div className='w-[100%] h-[100%] flex flex-col font-sans'>
         <div className='w-[100%] h-[40px] flex flex-row'>
-            <p className='text-[19px] tracking-wider'>News</p>
+            <p className='text-[19px] tracking-wider font-sans font-bold'>News</p>
         </div>
         {
             loading?<div className='w-[100%]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -59,18 +63,18 @@ const NewsWidgit = ({id,boxes,setBoxes}) => {
         <div className='flex flex-col space-y-2 h-[85%] overflow-y-auto '>
             {
                 (fetchedNews||[]).map(val=>
-                    <a target='_blank' href={val.Link} key={val._id} className='cursor-pointer flex flex-col space-y-2 rounded-md border-[1px] border-gray-400 p-2'>
+                    <a target='_blank' href={val.Link} key={val._id} className='cursor-pointer flex flex-col space-y-2  border-t border-gray-400 p-2'>
                         <div className='flex flex-row space-x-2'>
-                            <div className='w-[50%] space-x-2 flex flex-row items-center '>
+                            <div className='w-[60%] space-x-2 flex flex-row items-center '>
                                 <div>
-                                    <PiNewspaperClippingBold size={20} className='text-gray-600'/>
+                                    <IoNewspaperOutline  size={20} className='text-gray-600'/>
                                 </div>
                                 <div>
-                                    <p className='text-[15px] tracking-wide'>{val.Publisher}</p>
+                                    <p className='text-[15px] tracking-wide font-semibold'>{val.Publisher}</p>
                                 </div>
                             </div>
                             <div className='w-[50%] flex justify-end'>
-                                <p className='text-[14px]'>{val.PublishedAt}</p>
+                                <p className='text-[13px]'>{val.PublishedAt}</p>
                             </div>
                         </div>
                         <div>
@@ -83,8 +87,8 @@ const NewsWidgit = ({id,boxes,setBoxes}) => {
             }
         </div>
         }
-        <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px] bg-red-500 fixed right-[-10px] top-[-15px]' onClick={deleteWidgit}>
-              <RxCross2 size={14} className='text-white'/>
+        <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px]  h-[20px] bg-blue-500 fixed right-[-10px] top-[-15px] mt-4 mr-3' onClick={deleteWidgit}>
+        <IoMdClose size={24}  />
         </div> 
     </div>
     
