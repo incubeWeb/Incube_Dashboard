@@ -14,6 +14,7 @@ import { BiSolidSend } from "react-icons/bi";
 import { Link, useNavigate } from 'react-router-dom';
 
 
+
 function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenGrid}) {
     const [AddNewWindow,setAddnewWindow]=useState(false)
     const [TotalCards,setTotalCards]=useState([])
@@ -114,7 +115,7 @@ function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenG
             
             <div className='w-[100%] md:h-[85px] flex flex-col'>
                     <div className='flex flex-row w-[100%]'>
-                        <p className='md:text-[31px] text-[25px] w-[50%]'>{companyName}</p>
+                        <p className='md:text-[31px] text-[25px] w-[50%] font-sans font-semibold'>{companyName}</p>
                         <div className='flex flex-row h-[100%] justify-end w-[48%] pl-4 pt-2'>
                             <div className='cursor-pointer flex flex-row space-x-3 bg-gradient-to-r from-blue-600 to-blue-800 w-[30%] h-[100%] rounded-md items-center justify-center text-white border-blue-600 border-[1px] shadow-gray-300 shadow-md' onClick={handlePushComplete}>
                                 <p className='text-[13px]'>Push to complete</p>
@@ -124,12 +125,12 @@ function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenG
                     </div>
                     <div><p className='md:text-[14px] text-[13px]'>{description}</p></div>
             </div>
-            <div className='flex flex-row w-[100%] h-[40px] space-x-2'>
-                    <div className='w-[85%] h-[100%] bg-gray-300 rounded-md flex flex-row items-center pl-2 space-x-5'>
+            <div className='flex flex-row w-[100%] h-[50px] space-x-2'>
+                    <div className='w-[85%] h-[100%] bg-gray-100 rounded-md flex flex-row items-center pl-2 space-x-5'>
                         <div className='w-[100%] h-[75%] rounded-md flex items-center justify-start flex-row space-x-2'>
                             {(Tabs||[]).map(Tab=>
                                 
-                                <div key={Tab.Tab} className={` md:w-[55px] w-[55px] h-[75%] rounded-md ${currentTab==Tab.id?'bg-gray-300':'bg-white shadow-md'} flex items-center justify-center `}>
+                                <div key={Tab.Tab} className={` md:w-[55px] w-[55px] h-[80%] rounded-md ${currentTab==Tab.id?'bg-white':'bg-white shadow-lg'} flex items-center justify-center `}>
                                     <div onClick={()=>setCurrentTab(Tab.id)} className='w-[100%] h-[100%] flex items-center justify-center'>
                                         <p className='text-[12px] font-semibold'>Tab {Tab.id}</p>
                                     </div>
@@ -139,7 +140,7 @@ function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenG
                                 
                             )}
                             
-                            <div className='md:w-[75px] w-[60px] h-[75%] text-blue-600 rounded-md bg-white flex items-center justify-center shadow-md' onClick={addTabs} >
+                            <div className='md:w-[75px] w-[60px] h-[80%] text-blue-600 rounded-md bg-white flex items-center justify-center shadow-lg' onClick={addTabs} >
                                 <p className='text-[12px] font-semibold'>Add new</p>
                             </div>
                             
@@ -147,7 +148,7 @@ function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenG
                         
                     </div> 
                     <div className='flex flex-row h-[100%] justify-end w-[12%] md:space-x-2' onClick={openAddNewWindow}>
-                        <div className='w-[130px] border-sky-600 border-[1px] h-[80%] flex items-center justify-center rounded-md cursor-pointer'><p className='md:text-[13px] text-[9px] font-bold text-blue-600'>Add new details</p></div>
+                        <div className='w-[130px] border-sky-600 border-[1px] h-[80%] flex items-center justify-center rounded-md cursor-pointer'><p className='md:text-[13px] text-[9px] font-bold text-blue-600'>Add details</p></div>
                     </div>   
             </div>
         </div>

@@ -6,6 +6,10 @@ import { IoMdArrowBack } from 'react-icons/io'
 import { LuPencil } from 'react-icons/lu'
 import { RiFundsLine } from 'react-icons/ri'
 import { RxCross2 } from 'react-icons/rx'
+import { IoMdClose } from "react-icons/io";
+
+
+
 
 const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfoliocardwidgitcount,capturingPortfoliowidgitvalues,setcapturingPortfoliowidgitvalues}) => {
     const [editLabel,seteditLabel]=useState(false)
@@ -22,18 +26,20 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     const [sheetJson,setsheetJson]=useState([])
 
     useEffect(()=>{
+        console.log(capturingPortfoliowidgitvalues+"abc"+id);
         if(capturingPortfoliowidgitvalues!=[])
         {
-            capturingPortfoliowidgitvalues.map(val=>{
+            (capturingPortfoliowidgitvalues||[]).map(val=>{
                     if(val.portfoliowidgit.id==id+1)
-                        {
-                            
-                            setlablename(val.portfoliowidgit.labelname)
-                            setshowvalue(val.portfoliowidgit.showValue)
-                        }
+                    {
+                        
+                        setlablename(val.portfoliowidgit.labelname)
+                        setshowvalue(val.portfoliowidgit.showValue)
+                    }
                 }
             )
         }
+
     },[])
 
     const handlePlusClick=async()=>{
@@ -147,9 +153,10 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     },[clickedSheetId])
 
   return (
-    <div className='flex h-[100%] flex-col bg-white cursor-default space-y-2'>
-        <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px] bg-red-500 fixed right-[-10px] top-[-15px]' onClick={deleteWidgit}>
-              <RxCross2 size={14} className='text-white'/>
+  
+    <div className='flex h-[100%] flex-col  bg-white cursor-default space-y-2'>
+        <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px]  rounded-full bg-gray-100 h-[20px] fixed right-[-10px] mt-4 mr-3 top-[-15px]' onClick={deleteWidgit}>
+        <IoMdClose size={15} className='text-black' />
         </div> 
         
         {
@@ -165,9 +172,9 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                             
                             <div  className={`p-1 flex h-[100%]  items-center rounded-md text-[14px] flex-col font-roboto`}>
                             {(sheets||[]).map(doc=>
-                                    <div key={doc._id}  className='w-[100%] flex flex-col space-y-2'>
+                                    <div key={doc._id}  className='w-[100%] flex flex-col space-y-2 mt-2 '>
                                             <div  onClick={()=>handlesheetclick(doc._id,doc.name)} className='w-[100%] h-[45px] hover:bg-blue-500 p-2 rounded-md select-none cursor-pointer hover:text-white flex flex-row items-center justify-start'>
-                                                <div>
+                                                <div >
                                                     <FaRegFileExcel className={` text-green-500`} size={19}/>
                                                 </div>
                                                 <p className={` text-[14px] px-5 tracking-wider`}>{doc.name.substring(doc.name.length-15,doc.name.length)}</p>
@@ -197,7 +204,9 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                                 
                                 <select onChange={(e)=>setsheetfieldselected(e.target.value)} className='w-[220px] h-[30px] text-[14px] text-gray-700 rounded-md border-gray-300 border-[1px]'>
                                                 
-                                    {sheetKeys.map(k=>
+                                    {(sheetKeys||[]
+                                        
+                                    ).map(k=>
                                         <option key={k._id}>{k}</option>
                                         )
                                     }
@@ -215,14 +224,14 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                     
                     :
                     <div className='w-[100%] h-[100%]'>
-                        <div className='bg-sky-500 w-[15%] h-[40px] flex items-center justify-center rounded-md'>
+                        <div className='bg-blue-500 w-[15%] h-[40px] flex items-center justify-center  -mt-5 rounded-md'>
                             <RiFundsLine size={28} className='text-white'/>
                         </div>
                         
-                        <div className='w-[100%] h-[30%] flex flex-row items-center justify-start space-x-2'>
+                        <div className='w-[100%] h-[30%] flex flex-row items-center justify-start space-x-2 mt-4 '>
                                     {
                                         !editLabel?
-                                        <p className='text-[15px] text-gray-700 flex items-center h-[30px] tracking-wider'>{labelname}</p>
+                                        <p className='text-[16px] font-sans font-semibold text-gray-700 flex items-center h-[30px]  tracking-wider'>{labelname}</p>
                                         :
                                         <input ref={inputRef}  onChange={(e)=>{setlablename(e.target.value) }} onKeyPress={(e)=>e.key=='Enter'?seteditLabel(false):seteditLabel(true)} className='w-[90px] h-[30px] text-[13px] pl-1 outline-none border-[1px] border-gray-300 rounded-md'/>
                                     }
@@ -234,12 +243,12 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                         <div className='w-[100%] h-[40%]  flex flex-row'>
                             <div className='w-[70%] '>
                                 <div className='flex h-[100%] items-center justify-start'>
-                                    <p className='text-[20px] text-gray-500'>{showValue}</p>
+                                    <p className='text-[20px] text-gray-500 mt-3'>{showValue}</p>
                                 </div>
                             </div>
                             <div className='w-[100%] h-[100%] flex items-center justify-end'>
-                                <div className='h-[80%] flex items-center cursor-pointer'  onClick={handlePlusClick}>
-                                    <FaCirclePlus className='text-gray-500' size={24} />
+                                <div className='h-[80%] flex items-center cursor-pointer mt-14'  onClick={handlePlusClick}>
+                                <FaCirclePlus className='text-gray-500' size={24} />
                                 </div>
                             </div>
                         </div>
@@ -251,6 +260,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
         
         
     </div>
+  
   )
 }
 

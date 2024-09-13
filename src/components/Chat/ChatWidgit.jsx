@@ -214,7 +214,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     <div className=' bg-white space-y-2 font-noto shadow-gray-400 w-[100%]  h-[100%] flex flex-col'>
         {
                       clickedUser&&openChat!=''?
-                      <div className='flex flex-col space-y-4 font-noto p-[20px] fixed bg-white w-[100%] h-[100%] top-0 left-0 rounded-md ' onClick={(e)=>e.stopPropagation()}>
+                      <div className='flex flex-col space-y-4 font-noto p-[20px] fixed  w-[100%] h-[100%] top-0 left-0 rounded-md  bg-white  shadow-lg overflow-y-auto mb-4 ' onClick={(e)=>e.stopPropagation()}>
                         <div className='flex flex-row items-center h-[40px]'>
                           <div className='flex w-[30%] text-gray-400'>
                             <IoArrowBack size={18} className='cursor-pointer' onClick={()=>handleBackButton()} />
@@ -233,11 +233,11 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
                                         <div className={ ` ${[...sendedMsg,...receivedMsg].length>7?'':'justify-end'} w-[100%] h-[100%] flex flex-col space-y-2 `}>
                                           {
                                             
-                                            [...sendedMsg,...receivedMsg].sort((a,b)=>a.time-b.time).map(msg=>
+                                            ([...sendedMsg,...receivedMsg].sort((a,b)=>a.time-b.time)||[]).map(msg=>
                                               (msg.sender==localStorage.getItem('email'))
                                                 ?
-                                                <div key={msg._id} className=' flex w-[100%] justify-end rounded-sm'>
-                                                  <div className='flex bg-gray-300 pl-5 pb-2 pt-3 pr-1 rounded-sm flex-col'>
+                                                <div key={msg._id} className=' flex  justify-end rounded-sm'>
+                                                  <div className='flex bg-blue-400 pl-5 pb-2 pt-3 pr-1 rounded-sm flex-col max-w-xs'>
                                                     <p className='text-[14px] text-gray-800'>{msg.message}</p>
                                                   <div className='flex w-[60px] items-end justify-end text-[9px]'>
                                                     <p>{convertTime(msg.time)}</p>
@@ -245,7 +245,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
                                                   </div>
                                                 </div>
                                                 :
-                                                <div key={msg._id} className='flex w-[100%] items-start'><div className='flex flex-col'><p className='text-[14px] bg-gray-300 pl-6 pr-6 pb-2 pt-2 rounded-sm text-gray-800'>{msg.message}</p><div className='flex w-[60px] items-end justify-end text-[9px]'><p>{convertTime(msg.time)}</p></div></div></div>
+                                                <div key={msg._id} className='flex w-[100%] items-start'><div className='flex flex-col'><p className='text-[14px] bg-gray-300 pl-6 pr-6 pb-2 pt-2 rounded-md text-gray-800  '>{msg.message}</p><div className='flex w-[60px] items-end justify-end text-[9px]'><p>{convertTime(msg.time)}</p></div></div></div>
                                               
                                             )
                                           }
@@ -257,7 +257,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
                         </div>
                         <div className='w-[100%] h-[30px] space-x-2 items-center justify-center flex flex-row'>
                             <div className='w-[95%] h-[100%] ml-2'>
-                              <input id={`text${id}`} className='w-[100%] text-[14px] pl-2 h-[100%] border-[1px] border-gray-400' placeholder='Enter your message here....' onChange={(e)=>handleTypedMsg(e)}/>
+                              <input id={`text${id}`} className='w-[100%] text-[14px] pl-2 h-[100%]  px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 ' placeholder='Enter your message here....' onKeyPress={(e)=>e.key=='Enter'?handleSendChat(e):handleTypedMsg(e)} onChange={(e)=>handleTypedMsg(e)}/>
                             </div>
                             <div className='w-[5%] h-[100%] flex items-center justify-center'>
                               <IoSend size={18} className='cursor-pointer' onClick={(e)=>handleSendChat(e)}/>
@@ -268,7 +268,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
                       <></>
         }
         <div className='w-[100%] h-[45px] '>
-          <input className='w-[100%] h-[45px] border-[1px] border-gray-500 rounded-md text-[14px] pl-2' placeholder='Search' onChange={handleSearchUser}/> 
+          <input className='w-[100%] h-[45px] border-[1px] border-gray-500    rounded-md text-[14px] pl-2' placeholder='Search' onChange={handleSearchUser}/> 
         </div>
           <div className=' flex w-[100%] h-[70%] flex-row  '>
             {
@@ -282,7 +282,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
               <div className=' flex flex-col w-[100%] items-center justify-start text-gray-700 space-y-1 overflow-y-auto scrollbar-hide'>
                
               {
-                users.map(user=>
+                (users||[]).map(user=>
                
                 user.email!=localStorage.getItem('email')
                     ?
@@ -294,8 +294,8 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
                         <div className='h-[100%] w-[50%] flex items-center justify-start'>
                               <p className='text-[13px] lowercase'>{user.email}</p>
                         </div>
-                        <div className='w-[20%] flex items-center justify-center'>
-                          <IoChatboxEllipsesOutline />
+                        <div className='w-[20%] flex items-center ml-4 justify-center'>
+                          <IoChatboxEllipsesOutline  className='ml-4'/>
                         </div>
                     </div>
                    </div>
@@ -311,8 +311,8 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
               </div>:<></>
             }
           </div>
-          <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px] bg-red-500 fixed right-[-10px] top-[-15px]' onClick={deleteWidgit}>
-              <RxCross2 size={14} className='text-white'/>
+          <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px]  bg-gray-100 fixed right-[-10px] top-[-15px]' onClick={deleteWidgit}>
+              <RxCross2 size={14} className='text-black'/>
         </div> 
       </div>
   )

@@ -18,6 +18,7 @@ import { io } from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 import { Bars } from 'react-loader-spinner';
 import Portfoliocard from '../Charts/Portfoliocard';
+import NewsWidgit from '../News_widgit/NewsWidgit';
 
 
 const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
@@ -134,7 +135,7 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
           const chartXdatatype=d.chartDatatypeX
           const chartYdatatype=d.chartDatatypeY
           const isSheetChart=d.isSheetChart
-          const portfoliowidgit=d.portfoliowidgitcount
+          const portfoliowidgit=d.portfoliowidgitcount || []
           setisSheetChart(isSheetChart)
           setchartDatatypeFromApiX(prev=>[...prev,{chartDatatypeX:chartXdatatype}])
           setchartDatatypeFromApiY(prev=>[...prev,{chartDatatypeY:chartYdatatype}])
@@ -171,13 +172,16 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
       {
         let val=JSON.parse(checkDb.data.data.positions)
         val.map((d)=>{
+          
           const pievalue=d.piechartCount
           const areavalue=d.areachartCount
           const barvalue=d.barchartCount
           const chartXdatatype=d.chartDatatypeX
           const chartYdatatype=d.chartDatatypeY
           const isSheetChart=d.isSheetChart
-          const portfoliowidgit=d.portfoliowidgitcount
+          const portfoliowidgit=d.portfoliowidgitcount || []
+          console.log(portfoliowidgit,"nice")
+          console.log(isSheetChart,"bro")
           setisSheetChart(isSheetChart)
           setchartDatatypeFromApiX(prev=>[...prev,{chartDatatypeX:chartXdatatype}])
           setchartDatatypeFromApiY(prev=>[...prev,{chartDatatypeY:chartYdatatype}])
@@ -272,7 +276,7 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
 
   return (
     
-    <div className={`${hidenavbar?'w-[100%] ml-[0%]':'w-[80%] ml-[20%]'} space-x-4 flex flex-row h-screen p-[44px] pr-0 pt-0 pb-0 font-roboto`}>
+    <div className={`${hidenavbar?'w-[100%] ml-[0%]':'w-[100%] pl-[20%]'} space-x-4 flex flex-row h-screen p-[44px] pr-0 pt-0 pb-0 font-roboto`}>
     {
       loading ? (
         <div className='w-[100%]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -281,20 +285,21 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
         </div>
       ):
     <div className='w-[100%] h-[100%] flex flex-col'>
-      <div className='flex flex-col pt-[30px] w-[100%] h-[10%] items-start mt-[44px]'>
-        <div
-          className='flex flex-row w-[120px] h-[33px] rounded-md bg-gradient-to-r from-blue-600 to-blue-300 text-[14px] items-center justify-center text-white cursor-pointer'
-          onClick={handleShowPopup}
-        >
-          <p>Widgets</p>
-        </div>
-      </div>
+    <div className='flex flex-col pt-[30px] w-[100%] h-[10%] items-end mt-[44px]'>
+  <div
+    className='absolute top-[20px] right-[20px] flex flex-row w-[120px] h-[33px] rounded-md bg-gradient-to-r from-blue-600 to-blue-300 text-[14px] items-center justify-center text-white cursor-pointer'
+    onClick={handleShowPopup}
+  >
+    <p>Widgets</p>
+  </div>
+</div>
+
       <div className='w-[100%] flex flex-col items-center'>
         {(boxes||[]).map((box,index) => (
           <Rnd
             
             key={box.id}
-            className='border-gray-300  border-[1px] rounded-lg p-4 pt-7'
+            className='border-gray-300 bg-white border-[1px] rounded-lg p-4 pt-7'
             size={{ width: box.width, height: box.height }}
             position={{ x: box.x, y: box.y }}
             onDragStop={(e, direction) => setPosition(box.id, direction)}
@@ -305,6 +310,10 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
             {(() => {
             try {
               switch (box.type) {
+                case 'news':
+                  return (
+                    <NewsWidgit id={index} boxes={boxes} setBoxes={setBoxes}/>
+                  )
                 case 'timeline':
                   return (
                     <Timeline

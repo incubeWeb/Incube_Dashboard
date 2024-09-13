@@ -53,9 +53,7 @@ function Viewall({filter, selectedTab,setActiveField }) {
       {
       loading ? (
         <div className='w-[100%] h-[450px]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-          <Bars color="#8884d8" height={80} width={80} />
-          
-        </div>
+          <Bars color="#8884d8" height={80} width={80} /> </div>
       ):
       <div>
        <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>

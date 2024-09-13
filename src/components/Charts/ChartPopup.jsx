@@ -4,7 +4,7 @@ import { FaChevronRight, FaGoogle } from "react-icons/fa";
 import { FaArrowLeftLong, FaArrowRight } from "react-icons/fa6";
 import { FaChartPie } from "react-icons/fa";
 import { IoBarChart } from "react-icons/io5";
-import { BiLineChart } from "react-icons/bi";
+import { BiBorderAll, BiLineChart } from "react-icons/bi";
 import { SiGooglesheets } from "react-icons/si";
 import axios from "axios";
 const ChartPopup = ({
@@ -54,7 +54,8 @@ const ChartPopup = ({
   portfoliocardwidgit,
   setportfoliocardwidgit,
   portfoliocardwidgitcount,
-  setportfoliocardwidgitcount
+  setportfoliocardwidgitcount,
+  
   
 }) => {
   const containerStyle = {
@@ -67,7 +68,7 @@ const ChartPopup = ({
     zIndex: 50,
     backgroundColor: "rgba(128, 128, 128, 0.5)",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   };
   const [clickedManual, setClickedManual] = useState(false);
   const [clickedDatabase,setClickedDatabase]=useState(false)
@@ -514,6 +515,22 @@ const ChartPopup = ({
     setShowPopup(false); 
   }
 
+  const handleNewsWidgit=(e)=>{
+    e.stopPropagation()
+    settypeofchart('news')
+
+    const lastBox = boxes[boxes.length - 1];
+      const newBox = {
+        id: lastBox ? lastBox.id + 1 : 1,
+        width: '420',
+        height: '400px',
+        x: 10,
+        y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
+      };
+    setBoxes([...boxes, { ...newBox, type : "news" }]);
+    setShowPopup(false); 
+  }
+
 
   const handlePortfoliocardwidgit=(e)=>{
     e.stopPropagation()
@@ -580,39 +597,39 @@ const ChartPopup = ({
   }
 
   return (
-    <div
+    <div 
       style={containerStyle}
-      className="pr-[263px] font-noto"
+      className="pr-[273px] font-sans  font-semibold  "
       onClick={showlist}
     >
-      <div className="relative flex bg-white w-[40%] flex-col h-[80%] p-4" onClick={(e) => e.stopPropagation()}>
+      <div className="relative flex  bg-white    w-[40%] flex-col h-[80%] p-4" onClick={(e) => e.stopPropagation()}>
         {clickedPie && (
           <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white top-0 left-0">
             <div className="w-[100%] flex justify-end">
               <div className="flex w-[80%]">
-                <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedPie(!clickedPie)} />
+                <FaArrowLeftLong className="cursor-pointer mt-2" size={20} onClick={() => setClickedPie(!clickedPie)} />
               </div>
-              <div className="flex w-[20%] justify-end">
-                <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+              <div className="flex w-[20%] justify-end ">
+                <RxCross2 size={24} className="cursor-pointer mt-2 ml-15" onClick={showlist} />
               </div>
             </div>
-            <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[30%]">
+            <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[10%]">
               <div className="w-[100%] h-[17%] text-[14px] flex flex-row items-center justify-start">
-                <p className="w-[40%] text-[16px]">Select chart Type:</p>
-                <div className="w-[30%]">
-                  <FaChartPie size={20}/>
+                <p className="w-[40%] text-[16px] font-sans ">Select chart Type:</p>
+                <div className="w-[30%] mr-2">
+                  <FaChartPie size={24}/>
                 </div>
               </div>
               <div
                 onClick={(e)=>handleManualCreation(e)}
-                className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center border-[1px]"
+                className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-400 rounded-lg flex p-2 items-center border-[1px]"
               >
                 <p className="w-[70%]">Manual chart creation</p>
                 <div className="w-[30%] flex justify-end">
                   <FaChevronRight />
                 </div>
               </div>
-              <div onClick={(e)=>handleselectDatabase(e)} className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center border-[1px]">
+              <div onClick={(e)=>handleselectDatabase(e)} className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-400  rounded-lg flex p-2 items-center border-[1px]">
                 <p className="w-[70%]">Select Database</p>
                 <div className="w-[30%] flex justify-end">
                   <FaChevronRight />
@@ -620,14 +637,14 @@ const ChartPopup = ({
               </div>
               <div
               onClick={(e)=>handleSheetData(e)}
-              className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center border-[1px]"
+              className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-400 rounded-lg flex p-2 items-center border-[1px]"
             >
               <p className="w-[70%]">Upload Sheet data</p>
               <div className="w-[30%] flex justify-end text-green-500">
                 <SiGooglesheets size={20}/>
               </div>
             </div>
-            <div onClick={(e)=>handleGoogleFunctionality(e)} className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center border-[1px]">
+            <div onClick={(e)=>handleGoogleFunctionality(e)} className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-400 rounded-lg flex p-2 items-center border-[1px]">
               <p className="w-[70%]">Connect Google</p>
               <div className="w-[30%] flex justify-end text-red-600">
                 <FaGoogle size={20}/>
@@ -640,29 +657,29 @@ const ChartPopup = ({
           <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white top-0 left-0">
             <div className="w-[100%] flex justify-end">
               <div className="flex w-[80%]">
-                <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedArea(!clickedArea)} />
+                <FaArrowLeftLong className="cursor-pointer mt-2" size={20} onClick={() => setClickedArea(!clickedArea)} />
               </div>
               <div className="flex w-[20%] justify-end">
-                <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+                <RxCross2 size={24} className="cursor-pointer mt-2" onClick={showlist} />
               </div>
             </div>
-            <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[30%]">
+            <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[10%]">
               <div className="w-[100%] h-[17%] text-[14px] flex items-center justify-start">
                 <p className="w-[40%] text-[16px]">Select chart Type:</p>
-                <div className="w-[30%]">
-                  <BiLineChart size={20}/>
+                <div className="w-[30%] ">
+                  <BiLineChart size={24} />
                 </div>
               </div>
               <div
                 onClick={(e)=>handleManualCreation(e)}
-                className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center border-[1px]"
+                className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-400 rounded-lg flex p-2 items-center border-[1px]"
               >
                 <p className="w-[70%]">Manual chart creation</p>
                 <div className="w-[30%] flex justify-end">
                   <FaChevronRight />
                 </div>
               </div>
-              <div onClick={(e)=>handleselectDatabase(e)} className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center border-[1px]">
+              <div onClick={(e)=>handleselectDatabase(e)} className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-400 rounded-lg flex p-2 items-center border-[1px]">
                 <p className="w-[70%]">Select Database</p>
                 <div className="w-[30%] flex justify-end">
                   <FaChevronRight />
@@ -670,14 +687,14 @@ const ChartPopup = ({
               </div>
               <div
               onClick={(e)=>handleSheetData(e)}
-              className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center border-[1px]"
+              className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-400 rounded-lg flex p-2 items-center border-[1px]"
             >
               <p className="w-[70%]">Upload Sheet data</p>
               <div className="w-[30%] flex justify-end text-green-500">
                 <SiGooglesheets size={20}/>
               </div>
             </div>
-            <div onClick={(e)=>handleGoogleFunctionality(e)} className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center border-[1px]">
+            <div onClick={(e)=>handleGoogleFunctionality(e)} className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-400 rounded-lg flex p-2 items-center border-[1px]">
               <p className="w-[70%]">Connect Google</p>
               <div className="w-[30%] flex justify-end text-red-600">
                 <FaGoogle size={20}/>
@@ -691,29 +708,29 @@ const ChartPopup = ({
           <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white top-0 left-0">
             <div className="w-[100%] flex justify-end">
               <div className="flex w-[80%]">
-                <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedBar(!clickedBar)} />
+                <FaArrowLeftLong className="cursor-pointer mt-2" size={20} onClick={() => setClickedBar(!clickedBar)} />
               </div>
               <div className="flex w-[20%] justify-end">
-                <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+                <RxCross2 size={24} className="cursor-pointer mt-2" onClick={showlist} />
               </div>
             </div>
-            <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[30%]">
+            <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[10%]">
               <div className="w-[100%] h-[17%] text-[14px] flex items-center justify-start">
                 <p className="w-[40%] text-[16px]">Select chart Type:</p>
                 <div className="w-[30%]">
-                   <IoBarChart size={20}/>
+                   <IoBarChart size={24}/>
                 </div>
               </div>
               <div
                 onClick={(e)=>handleManualCreation(e)}
-                className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center border-[1px]"
+                className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-400 rounded-lg flex p-2 items-center border-[1px]"
               >
                 <p className="w-[70%]">Manual chart creation</p>
                 <div className="w-[30%] flex justify-end">
                   <FaChevronRight />
                 </div>
               </div>
-              <div onClick={(e)=>handleselectDatabase(e)} className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center border-[1px]">
+              <div onClick={(e)=>handleselectDatabase(e)} className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-400 rounded flex p-2 items-center border-[1px]">
                 <p className="w-[70%]">Select Database</p>
                 <div className="w-[30%] flex justify-end">
                   <FaChevronRight />
@@ -721,14 +738,14 @@ const ChartPopup = ({
               </div>
               <div
               onClick={(e)=>handleSheetData(e)}
-              className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center border-[1px]"
+              className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-400 rounded-lg flex p-2 items-center border-[1px]"
             >
               <p className="w-[70%]">Upload Sheet data</p>
               <div className="w-[30%] flex justify-end text-green-500">
                 <SiGooglesheets size={20}/>
               </div>
             </div>
-            <div onClick={(e)=>handleGoogleFunctionality(e)} className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center border-[1px]">
+            <div onClick={(e)=>handleGoogleFunctionality(e)} className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-400 rounded-lg flex p-2 items-center border-[1px]">
               <p className="w-[70%]">Connect Google</p>
               <div className="w-[30%] flex justify-end text-red-600">
                 <FaGoogle size={20}/>
@@ -874,7 +891,7 @@ const ChartPopup = ({
           </div>
           <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
            
-            <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+            <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                 <div><p className="text-[14px]">Name field:</p></div>
                 <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
                   {
@@ -889,7 +906,7 @@ const ChartPopup = ({
                   <option >integer</option>
                 </select>
               </div>
-              <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+              <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                 <div><p className="text-[14px]">Value field:</p></div>
                 <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
                   {
@@ -982,7 +999,7 @@ const ChartPopup = ({
                                 </div>
                                 <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
                                     
-                                    <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+                                    <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">X-axis field:</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
                                         {
@@ -1065,7 +1082,7 @@ const ChartPopup = ({
            </div>
          </div>
          <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
-             <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+             <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                <div><p className="text-[14px]">X-axis field:</p></div>
                <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
                  {
@@ -1080,7 +1097,7 @@ const ChartPopup = ({
                  <option >integer</option>
                </select>
              </div>
-             <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+             <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                <div><p className="text-[14px]">Y-axis field:</p></div>
                <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
                  {
@@ -1172,7 +1189,7 @@ const ChartPopup = ({
                                   </div>
                                 </div>
                                 <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
-                                    <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+                                    <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">X-axis field:</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
                                         {
@@ -1187,7 +1204,7 @@ const ChartPopup = ({
                                         <option >integer</option>
                                       </select>
                                     </div>
-                                    <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+                                    <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Y-axis field:</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
                                         {
@@ -1229,7 +1246,7 @@ const ChartPopup = ({
                 
               </div>
               <div
-                className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center flex-col border-[1px]"
+                className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[10%] text-[14px] border-gray-300 flex p-2 items-center flex-col border-[1px]"
               >
                 <div className="w-[100%] h-[100%] flex flex-row">
                   <p className="w-[70%]">X-Axis</p>
@@ -1356,7 +1373,7 @@ const ChartPopup = ({
           </div>
         </div>
         <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
-            <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+            <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
               <div><p className="text-[14px]">X-axis field:</p></div>
               <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
                 {
@@ -1370,9 +1387,9 @@ const ChartPopup = ({
                 <option>string</option>
                 <option >integer</option>
               </select>
-              {chartDatatypeX}
+             
             </div>
-            <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+            <div className=" w-[100%] h-[%] items-center justify-center flex flex-row space-x-2">
               <div><p className="text-[14px]">Y-axis field:</p></div>
               <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
                 {
@@ -1385,7 +1402,7 @@ const ChartPopup = ({
                 <option>string</option>
                 <option >integer</option>
               </select>
-              {chartDatatypeY}
+              
             </div>
             <div onClick={(e)=>handleSheetCreateBarchartDB(e)} className="cursor-pointer select-none w-[100%] h-[30px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
                 <p className="text-[14px] text-white">Create the Bar chart</p>
@@ -1605,90 +1622,92 @@ const ChartPopup = ({
         <div className="w-[100%]  flex justify-end pr-3">
           <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
         </div>
-        <ul className="mt-10 space-y-3 p-4 overflow-y-auto">
+        <ul className="mt-10 space-y-3 p-4 overflow-y-auto ">
           <div
               onClick={handletimelinewidgit}
-              className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-2"
+              className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"
             >
               <p className="w-[70%]">Timeline</p>
               <div className="w-[30%] flex justify-end">
-                <FaChevronRight />
+                <FaChevronRight className="text-gray-500" />
               </div>
           </div>
           <div
               onClick={handlePortfoliocardwidgit}
-              className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-2"
+              className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"
             >
               <p className="w-[70%]">Portfolio Card</p>
               <div className="w-[30%] flex justify-end">
-                <FaChevronRight />
+                <FaChevronRight  className="text-gray-500" />
               </div>
           </div>
           <div
               onClick={handlechatwidgit}
-              className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-2"
+              className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"
             >
               <p className="w-[70%]">Chat</p>
               <div className="w-[30%] flex justify-end">
-                <FaChevronRight />
+                <FaChevronRight className="text-gray-500" />
               </div>
             </div>
           <div
             onClick={() => addComponent("calendar")}
-            className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-2"
+            className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"
           >
             <p className="w-[70%]">Calendar</p>
             <div className="w-[30%] flex justify-end">
-              <FaChevronRight />
+              <FaChevronRight className="text-gray-500" />
             </div>
           </div>
           <div
-            onClick={() => addComponent("news")}
-            className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-2"
+            onClick={handleNewsWidgit}
+            className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"
           >
             <p className="w-[70%]">News</p>
+            
             <div className="w-[30%] flex justify-end">
-              <FaChevronRight />
+            
+              <FaChevronRight  className="text-gray-500"/>
             </div>
           </div>
           <div
             onClick={() => addComponent("deals")}
-            className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-2"
+            className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"
           >
             <p className="w-[70%]">Assigned deals</p>
             <div className="w-[30%] flex justify-end">
-              <FaChevronRight />
+              <FaChevronRight className="text-gray-500" />
             </div>
           </div>
           <div
             onClick={handleClickedPie}
-            className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-2"
+            className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"
           >
             <p style={{ marginBottom: "10px" }} className="w-[70%] pt-2">
               Pie Chart
             </p>
             <div className="w-[30%] flex justify-end">
-              <FaChevronRight />
+              <FaChevronRight className="text-gray-500" />
             </div>
           </div>
           <div
             onClick={handleClickedBar}
-            className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-2"
+            className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"
           >
             <p style={{ marginBottom: "10px" }} className="w-[70%] pt-2">
               Bar Chart
             </p>
             <div className="w-[30%] flex justify-end">
-              <FaChevronRight />
+              <FaChevronRight className="text-gray-500" />
             </div>
           </div>
           <div
             onClick={handleClickedArea}
-            className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-2"
+            className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"
           >
             <p className="w-[70%]">Line Chart</p>
             <div className="w-[30%] flex justify-end">
-              <FaChevronRight />
+              <FaChevronRight className="text-gray-500" />
             </div>
           </div>
         </ul>

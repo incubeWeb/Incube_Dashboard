@@ -97,63 +97,66 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar}) => {
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
   return (
-    <div className={`${hidenavbar?'ml-[2%] w-[90%] h-screen':'ml-[20%] w-[80%] h-screen'} pt-[5%] flex flex-col p-4 items-center justify-start font-roboto`}>
+    <div className={`${hidenavbar?'ml-[2%] w-[90%] h-screen':'ml-[20%] w-[80%] h-screen'} pt-[5%] flex flex-col p-4 items-center justify-start font-sans bg-gray-100`}>
     <div className='w-[100%] h-[10%] flex flex-row space-x-3'>
-        <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className='text-gray-300 hover:text-gray-600'>Dashboard</p></Link>
+        <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className='text-gray-500 hover:text-gray-600 font-sans'>Dashboard</p></Link>
         <p>/</p>
-        <p>Document</p>
+        <p className='font-sans'>Document</p>
     </div>
     <div className='flex flex-row w-[100%] h-[10%]'>
         <div className='flex flex-row w-[50%]'>
-            <p className='text-[23px]'>Customers</p>
+            <p className='text-[23px] font-sans'>Document</p>
         </div>
         <div className='flex flex-row w-[50%] h-[60%] space-x-3 justify-end'>
                 <div className='ease-linear duration-150 cursor-pointer hover:w-[160px] h-[100%] flex flex-row items-center space-x-2 p-2 rounded-md bg-gradient-to-r from-green-500 to-green-700' onClick={()=>setcreateSheet(true)}>
                     <div className='text-white flex items-center'><FaFileExcel/></div>
-                    <p className='text-[14px] text-white font-roboto'>create sheet</p>
+                    <p className='text-[14px] text-white font-sans'>create sheet</p>
                 </div>
             <div className='flex flex-row w-[180px] h-[100%] items-center md:flex md:flex-row md:items-center md:w-[210px] md:h-[38px] rounded-md border-gray-400 border-2 border-solid space-x-3 hover:shadow-md hover:duration-150'>
-                <FiSearch className='font-thin ml-3 text-gray-400' size={20} />
-                <input onChange={handleSearch} type='text' placeholder='Search' className=' w-full text-[13px] h-full outline-none rounded-md border-l-0 md:text-[15px] text-gray-600' />
+                
+                <input onChange={handleSearch} type='text' placeholder='Search' className='pl-2 w-full text-[13px] h-full outline-none rounded-md border-l-0 md:text-[15px] text-gray-600' />
+                
             </div>
             
         </div>
     </div>
-    <div className='w-[100%] h-[80%] rounded-md border-gray-200 shadow-md shadow-gray-300 bg-gray-100 flex flex-col p-4'>
-        <div className='flex flex-row w-[100%] h-[5%] font-noto'>
+    <div className='w-[100%] h-[80%] rounded-md border-gray-200  bg-white flex flex-col p-4'>
+       
+        <div className='flex flex-row w-[100%] h-[10%]  font-sans font-bold'>
             <div className='w-[15%] h-[100%] flex items-center justify-start'>
-                <p className='text-[14px] pl-2'>Uploaded by</p>
+                <p className='text-[14px] pl-2 font-roboto'>Uploaded by</p>
             </div>
             <div className='w-[15%] h-[100%] flex items-center justify-start'>
-                <p className='text-[14px] pl-2'>File Type</p>
+                <p className='text-[14px] pl-2 font-roboto'>File Type</p>
             </div>
-            <div className='w-[15%] items-center justify-start flex h-[100%]'>
-                <p className='text-[14px] pl-2'>File name</p>
-            </div>
-            <div className='w-[15%] flex pl-2 items-center justify-start h-[100%]'>
-                <p className='text-[14px]'>time</p>
+            <div className='w-[20%] items-center justify-start flex h-[100%]'>
+                <p className='text-[14px] pl-2 font-roboto'>File name</p>
             </div>
             <div className='w-[15%] flex pl-2 items-center justify-start h-[100%]'>
-                <p className='text-[14px]'>Deal Name</p>
+                <p className='text-[14px] font-roboto'>Time</p>
             </div>
             <div className='w-[15%] flex pl-2 items-center justify-start h-[100%]'>
-                <p className='text-[14px]'>Tab</p>
+                <p className='text-[14px] font-roboto'>Deal Name</p>
+            </div>
+            <div className='w-[15%] flex pl-2 items-center justify-start h-[100%]'>
+                <p className='text-[14px] font-roboto '>Tab</p>
             </div>
         </div>
-        <div className='w-[100%] bg-white h-[1px] mt-2 '> </div>
+       
+        <div className='w-[100%] bg-white h-[1px]  '> </div>
         {
             !loading?
-            <div className='flex flex-col w-[100%] h-[10%] font-noto'>
+            <div className='flex flex-col w-[100%] h-[10%] font-roboto    mt-3'>
                 {
                     (allDocs||[]).map(doc=>
-                    <div key={doc._id} className='flex flex-row w-[100%] h-[100%] font-noto'>
-                        <div className='w-[15%] h-[100%] flex items-end justify-start'>
-                            <p className='text-[14px] pl-2'>{doc.uploadedBy}</p>
+                    <div key={doc._id} className='flex flex-row w-[100%] h-[100%] font-roboto   border-t border-gray-300 mb-6' >
+                        <div className='w-[15%] h-[100%] flex items-end justify-start '>
+                            <p className='text-[14px] pl-2 '>{doc.uploadedBy}</p>
                         </div>
                         <div className='w-[15%] h-[100%] flex items-end justify-start'>
                             <p className='text-[14px] pl-2'>{doc.fileType}</p>
                         </div>
-                        <div className='w-[15%] items-end justify-start flex h-[100%]'>
+                        <div className='w-[20%] items-end justify-start flex h-[100%]'>
                             <p className='text-[14px] pl-2'>{doc.name}</p>
                         </div>
                         <div className='w-[15%] flex pl-2 items-end justify-start h-[100%]'>
@@ -165,9 +168,9 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar}) => {
                         <div className='w-[15%] flex pl-2 items-end justify-start h-[100%]'>
                             <p className='text-[14px]'>{doc.tab}</p>
                         </div>
-                        <div className='w-[5%] flex flex-col pl-2 items-center pt-6 justify-start h-[100%]'>
+                        <div className='w-[5%] flex flex-col pr-3 items-center pt-6 justify-start h-[100%]'>
                         <div className='basis-1/2 flex justify-end space-x-3'>
-                        <p className='text-[14px] text-sky-600 cursor-pointer' onClick={()=>handleView(doc._id,doc.name)}>View</p>
+                        <p className='text-[14px] text-sky-600 cursor-pointer ' onClick={()=>handleView(doc._id,doc.name)}>View</p>
                             <p className='text-[14px] text-red-600 cursor-pointer' onClick={()=>handleDelete(doc._id)}>Remove</p>
                         </div>
                         </div>       
