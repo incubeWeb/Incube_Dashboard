@@ -137,7 +137,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
   }, [investmentchange]);
 
   return (
-    <div style={{ width: '100%', height: '100%' ,paddingBottom:'15px'}} className='mt-8  pr-10'>
+    <div style={{ width: '100%', height: '95%' ,paddingBottom:'15px'}} className='mt-8  pr-10'>
       
       <div style={{ width: '100%', height: '100%' }}>
         <ResponsiveContainer width="100%" height="100%">

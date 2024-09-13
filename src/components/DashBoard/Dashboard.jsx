@@ -299,7 +299,7 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
           <Rnd
             
             key={box.id}
-            className='border-gray-300  border-[1px] rounded-lg p-4 pt-7'
+            className='border-gray-300 bg-white border-[1px] rounded-lg p-4 pt-7'
             size={{ width: box.width, height: box.height }}
             position={{ x: box.x, y: box.y }}
             onDragStop={(e, direction) => setPosition(box.id, direction)}

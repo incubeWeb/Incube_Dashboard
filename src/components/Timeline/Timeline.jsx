@@ -232,21 +232,21 @@ const Timeline = ({id,boxes,setBoxes}) => {
   
 {   try{
     return (
-    <div className='flex z-0 overflow-y-hidden flex-col w-[100%] h-[100%]  justify-end '>
+    <div className='flex z-0  overflow-y-auto flex-col w-[100%] h-[100%]  justify-end '>
           
         {
              changes.map((item)=>
                 provideData(item)!='notshow'
                     ?
-                    <div key={item.key ||item._id} className=' flex w-[100%] h-[50px] flex-row space-x-2 items-center '>
+                    <div key={item.key ||item._id} className=' flex w-[100%] h-[50px] flex-row space-x-2 items-center  '>
                     {item.length}
                     
-                    <div className='w-[70px]  flex-col h-[100%]  flex bg-white items-center'>
+                    <div className='w-[100px]  flex-col h-[100%] flex-grid-1 flex bg-white items-center '>
                         <div className='w-[100%] space-x-2 h-[100%] flex flex-row'>
-                            <div className='  w-[100%] h-[100%] flex items-center justify-center'>
-                                <p className='w-[100%] h-[100%] flex items-center text-[14px] justify-end '>{DateData(item)}</p>
+                            <div className='  w-[100%] h-[100%] flex items-start justify-center'>
+                                <p className='w-[100%] h-[100%] flex items-center text-[12px] justify-start font-sans  '>{DateData(item)}</p>
                             </div>
-                            <div className='w-[20%] h-[100%] flex flex-col items-center'>
+                            <div className='w-[20%] h-[100%] flex flex-col pr-12 items-center'>
                             <div className='w-[2px] h-[100%] bg-gray-500'></div>
                                 <MdDonutLarge size={50} className='text-blue-600 '/>
                             <div className='w-[2px] h-[100%] bg-gray-500'></div>
@@ -254,9 +254,9 @@ const Timeline = ({id,boxes,setBoxes}) => {
                         </div>
                         
                     </div>
-                    <div className='w-[100%] h-[100%] flex flex-row items-center space-x-2'>
-                        <p className='text-[14px] w-[100%]'>{provideData(item)}</p>
-                        <p className='w-[20%] h-[100%] flex items-center text-[14px] justify-end '>{timeData(item)}</p>
+                    <div className='w-[100%] h-[100%] mt-10 mb-10 flex flex-row items-start  space-x-2'>
+                        <p className='text-[12px] font-sans w-[100%]  mt-3'>{provideData(item)}</p>
+                        <p className='w-[20%] h-[100%] flex items-center text-[12px] justify-end '>{timeData(item)}</p>
                         
                     </div>
                 </div>
@@ -266,8 +266,8 @@ const Timeline = ({id,boxes,setBoxes}) => {
                 
             )
         } 
-         <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px] bg-red-500 fixed right-[-10px] top-[-15px]' onClick={deleteWidgit}>
-              <RxCross2 size={14} className='text-white'/>
+         <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px] bg-gray-100 mt-4 mr-3 fixed right-[-10px] top-[-15px]' onClick={deleteWidgit}>
+              <RxCross2 size={14} className='text-black'/>
         </div>   
     </div>
   )}catch(e){

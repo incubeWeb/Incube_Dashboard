@@ -239,7 +239,7 @@ useEffect(() => {
 
 
   return (
-    <div style={{ width: '100%', height: '100%' }} className='mt-8  pr-10'>
+    <div style={{ width: '100%', height: '90%' }} className='mt-8  pr-10'>
     <div className='w-[100%] h-[100%] mt-3 pr-14'>
       <ResponsiveContainer width="100%" height="100%">
       <AreaChart
@@ -268,12 +268,12 @@ useEffect(() => {
           </defs>
 
 
-          <CartesianGrid strokeDasharray="3 3"  horizontal={true} vertical={false} />
+          <CartesianGrid stroke="#ccc"  horizontal={true} vertical={false} />
         <XAxis dataKey="pv" tick={true}     tickMargin={10} padding={{ left: 10, right: 10 }}  />
         
-        <YAxis tick={true}   tickMargin={10} padding={{ top: 10, bottom: 10 }} />
+        <YAxis tick={true}   tickCount={4} padding={{ top: 10, bottom: 10 }} />
         <Tooltip />
-        <Legend />
+       
       
        
             

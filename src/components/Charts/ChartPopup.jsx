@@ -999,7 +999,7 @@ const ChartPopup = ({
                                 </div>
                                 <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
                                     
-                                    <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+                                    <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">X-axis field:</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
                                         {
@@ -1082,7 +1082,7 @@ const ChartPopup = ({
            </div>
          </div>
          <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
-             <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+             <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                <div><p className="text-[14px]">X-axis field:</p></div>
                <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
                  {
@@ -1097,7 +1097,7 @@ const ChartPopup = ({
                  <option >integer</option>
                </select>
              </div>
-             <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+             <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                <div><p className="text-[14px]">Y-axis field:</p></div>
                <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
                  {
@@ -1189,7 +1189,7 @@ const ChartPopup = ({
                                   </div>
                                 </div>
                                 <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
-                                    <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+                                    <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">X-axis field:</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
                                         {
@@ -1204,7 +1204,7 @@ const ChartPopup = ({
                                         <option >integer</option>
                                       </select>
                                     </div>
-                                    <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+                                    <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Y-axis field:</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
                                         {
@@ -1246,7 +1246,7 @@ const ChartPopup = ({
                 
               </div>
               <div
-                className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center flex-col border-[1px]"
+                className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[10%] text-[14px] border-gray-300 flex p-2 items-center flex-col border-[1px]"
               >
                 <div className="w-[100%] h-[100%] flex flex-row">
                   <p className="w-[70%]">X-Axis</p>
@@ -1373,7 +1373,7 @@ const ChartPopup = ({
           </div>
         </div>
         <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
-            <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+            <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
               <div><p className="text-[14px]">X-axis field:</p></div>
               <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
                 {
@@ -1387,9 +1387,9 @@ const ChartPopup = ({
                 <option>string</option>
                 <option >integer</option>
               </select>
-              {chartDatatypeX}
+             
             </div>
-            <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
+            <div className=" w-[100%] h-[%] items-center justify-center flex flex-row space-x-2">
               <div><p className="text-[14px]">Y-axis field:</p></div>
               <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
                 {
@@ -1402,7 +1402,7 @@ const ChartPopup = ({
                 <option>string</option>
                 <option >integer</option>
               </select>
-              {chartDatatypeY}
+              
             </div>
             <div onClick={(e)=>handleSheetCreateBarchartDB(e)} className="cursor-pointer select-none w-[100%] h-[30px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
                 <p className="text-[14px] text-white">Create the Bar chart</p>
