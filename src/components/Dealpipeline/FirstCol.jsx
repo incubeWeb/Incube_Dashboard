@@ -134,7 +134,7 @@ function FirstCol({setActiveField,hidenavbar}) {
             :
             <div className='border-[1px] border-blue-600 w-[180px]  h-[100%] rounded-md md:flex md:items-center md:space-x-2 select-none cursor-pointer hover:bg-gray-300' onClick={() => { setCreateNew(!createNew) }}>
                 <div className='basis-3/12 md:flex md:justify-end md:items-center h-[100%]'><FiPlus size={16} className='text-blue-600' /></div>
-                <div className='md:flex md:items-center h-[100%]'><p className='md:h-[100%] md:flex md:items-center text-[14px] text-blue-600 font-bold' >Add new</p></div>
+                <div className='md:flex md:items-center h-[100%]'><p className='md:h-[100%] md:flex md:items-center text-[14px]  text-blue-600 font-bold' >Add new</p></div>
               </div>
             }
           </div>
