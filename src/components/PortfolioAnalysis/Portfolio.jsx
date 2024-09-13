@@ -28,7 +28,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
     useEffect(()=>{
         const setStateValues=async()=>{
            const organization=localStorage.getItem('organization')
-            const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
+            const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getportfoliostate',{organization:organization})
             const data=response.data.data
 
            // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
@@ -63,7 +63,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
            // localStorage.setItem('portfolioState',JSON.stringify(stateJson))
             if(sheetJson.length>0 && selectedImageFiled!="")
             {
-                await axios.post('http://localhost:8999/setportfoliostate',{
+                await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/setportfoliostate',{
                     organization:localStorage.getItem('organization'),
                     portfolioState:JSON.stringify(stateJson)
     
@@ -86,7 +86,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
 
     useEffect(()=>{
         const setavailableDatabaseSheets=async()=>{
-            const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+            const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
             setallSheets(response.data.data)
            // console.log("fff",response.data.data[0]._id)
             
@@ -103,7 +103,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
 
     useEffect(()=>{
         const setavailableDatabaseSheets=async()=>{
-            const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+            const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
             setallSheets(response.data.data)  
             
         }
@@ -118,7 +118,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
 
     useEffect(()=>{
         const setJSon=async()=>{
-            const response=await axios.post('http://localhost:8999/sheetfromdb',{id:selectedSheetId,organization:localStorage.getItem('organization')})
+            const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/sheetfromdb',{id:selectedSheetId,organization:localStorage.getItem('organization')})
             const data=JSON.parse(response.data.data)
             console.log(selectedSheetId,"sheetis")
             setsheetJson(data)

@@ -8,7 +8,7 @@ function CreateNew({ setCreateNew, fetchCompanyData,hidenavbar }) {
     let description = document.getElementById('description').value;
     let profilelink = document.getElementById('profilelink').value;
     console.log(title, description, profilelink);
-    const res = await axios.post('http://localhost:8999/dealpipeline', {
+    const res = await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/dealpipeline', {
       title: title,
       piclink: profilelink,
       Description: description,

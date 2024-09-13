@@ -37,17 +37,17 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar}) => {
     },[allDocs])
     const handleDelete=async (id)=>{
         console.log(id)
-        const response=await axios.post('http://localhost:8999/deleteUploadedfile',{id:id,doneBy:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+        const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/deleteUploadedfile',{id:id,doneBy:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
         if(response.data.status==200)
         {
-            const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+            const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
             setAllDocs(response.data.data)
         }
     }
     const handleView=async (id,name)=>{
         console.log(id)
         setid(id)
-        const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
+        const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
         const data=JSON.parse(response.data.data)
         setjsonData(data)
         setclickedview(!clickedView)
@@ -62,11 +62,11 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar}) => {
         const handle=async()=>{
             if(search.length<=0)
                 {
-                    const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+                    const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
                     setAllDocs(response.data.data)
                 }
                 else{
-                    const response=await axios.post('http://localhost:8999/searchFile',{
+                    const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/searchFile',{
                         search:search,
                         organization:localStorage.getItem('organization')
                     })
@@ -84,7 +84,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar}) => {
         const checkIfSelected=async()=>{
             if(activeField=='documents')
             {
-                const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+                const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
                 setAllDocs(response.data.data)
             }
         }
