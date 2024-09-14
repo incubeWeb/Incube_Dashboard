@@ -8,7 +8,7 @@ import { LuUserSquare2 } from "react-icons/lu";
 import axios from 'axios';
 const CompanyTemplate = ({name,description,photolink}) => {
   return (
-    <div className='font-roboto w-[100%] h-[65%] rounded-md space-x-3 shadow-md border-gray-300 border-[1px] flex flex-row p-[23px]'>
+    <div className='font-roboto w-[100%] h-[70%] rounded-md space-x-3 shadow-md border-gray-300 border-[1px] flex flex-row p-[23px]'>
         <div className=' w-[20%] h-[100%] rounded-md'>
             <img src={photolink}  className='object-cover w-[100%] h-[100%] rounded-md'/>
         </div>
@@ -24,7 +24,7 @@ const CompanyTemplate = ({name,description,photolink}) => {
                   </div>
             </div>
             <div className='w-[100%] h-[40%] flex flex-row'>
-                <div className='basis-3/4 flex flex-col space-y-3'>
+                <div className='basis-3/4 flex font-roboto flex-col space-y-3'>
                       <p className='text-[14px]'>Latest funding round - $50m - 21 Jan 24</p>
                       <div className='flex flex-row text-[15px] space-x-4'>
                         <div className='flex flex-row space-x-1 items-center'>
@@ -41,16 +41,16 @@ const CompanyTemplate = ({name,description,photolink}) => {
                         </div>
                       </div>
                 </div>
-                <div className='basis-1/4 flex flex-row items-end space-x-2'>
-                  <TiSocialLinkedin size={20}/>
+                <div className='basis-1/4 flex flex-row items-end  mt-10 ml-50 space-x-2'>
+                  <TiSocialLinkedin size={20} className=''/>
                   <FaGithub size={20}/>
                 </div>
             </div>
-            <div className='w-[100%] h-[40%] flex flex-row justify-end items-center space-x-2'>
-                <div className='border-[1px] border-gray-300 w-[120px] h-[50%] rounded-md flex items-center justify-center'>
+            <div className='w-[100%] h-[40%] flex flex-row justify-end items-center border-t border-gray-300  space-x-2'>
+                <div className='border-[1px] border-gray-300 w-[120px] h-[80%] mt-4  rounded-md flex items-center justify-center'>
                     <p className='text-[14px]'>Financials</p>
                 </div>
-                <div className='border-[1px] border-gray-300 w-[190px] h-[50%] rounded-md flex items-center justify-center'>
+                <div className='border-[1px] border-gray-300 w-[190px] h-[80%] mt-4 rounded-md flex items-center justify-center'>
                     <p className='text-[14px]'>Download company data</p>
                 </div>
             </div>

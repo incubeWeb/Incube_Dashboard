@@ -63,7 +63,7 @@ const ChatCard = ({currentTab,CompanyName}) => {
                     {
                         chat.map(c=>
                             <div key={c.id} className=' mb-2  rounded-md md:flex md:items-center md:justify-end pr-7 '>
-                                 <p className='text-[12px] text-white border-[1px] border-gray-300 bg-gray-400 p-2 rounded-md shadow-md'>{c.chat}</p>
+                                 <p className='text-[12px] text-white border-[1px] border-gray-300 bg-blue-500   p-2 rounded-md shadow-md'>{c.chat}</p>
                             </div>
                         )
                     }
@@ -80,8 +80,8 @@ const ChatCard = ({currentTab,CompanyName}) => {
                     <FiPlusSquare size={25}/>
                 </div>
                 <div className='w-[90%] md:space-x-3 h-[100%] md:flex md:flex-row pb-2 pt-1 pr-3'>
-                    <div className=' w-[95%] h-[100%]  border-[1px]  border-gray-300 flex flex-row'>
-                        <input id='chat' className='w-[100%] h-[100%] outline-none text-[14px] pl-2'/>
+                    <div className=' w-[95%] h-[100%]   border-[1px]   border-gray-300 rounded-md flex flex-row'>
+                        <input id='chat' className='w-[100%] h-[100%]  rounded-md outline-none text-[14px] pl-2'/>
                          
                     </div>
                     <div className='w-[5%] justify-end h-[100%] flex items-center'>

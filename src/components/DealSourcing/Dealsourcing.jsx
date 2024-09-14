@@ -66,7 +66,7 @@ const Dealsourcing = ({hidenavbar}) => {
     <div className={`${hidenavbar?'ml-[0%] w-[100%]':'ml-[20%] w-[80%]'}select-none text-gray-800 flex flex-col p-[63px] pt-[30px] h-screen font-roboto`}>
       <div className='flex flex-col w-[100%] h-[20%] justify-center'>
         <div className='w-[100%] h-[30%] flex flex-row items-center'>
-          <p className='basis-1/2 text-[17px]'>232 Startups in Gurugram</p>
+          <p className='basis-1/2 text-[20px] font-sans font-bold'>232 Startups in Gurugram</p>
           <div className='basis-1/2 flex justify-end w-[100%] h-[100%] space-x-2'>
             <div className='w-[80px] h-[100%] shadow-md border-gray-300 border-[1px] flex rounded-md items-center justify-center'>
               <p className='text-[14px]'>Share</p>
@@ -78,7 +78,7 @@ const Dealsourcing = ({hidenavbar}) => {
           </div>
         </div>
         <div>
-          <p className='text-[14px]'>Search or go through startups based on funding round, net worth and whole lot of other metrics</p>
+          <p className='text-[14px] mt-2 font-sans text-gray-500'>Search or go through startups based on funding round, net worth and whole lot of other metrics</p>
         </div>
       </div>
       <div className='w-[100%] h-[20%] flex flex-col'>
@@ -100,7 +100,7 @@ const Dealsourcing = ({hidenavbar}) => {
                       />
                 </div>
                 :
-                <div className='w-[100%] h-[100%] rounded-md flex flex-row items-center justify-center space-x-2' onClick={handleShowCalendar}>
+                <div className='w-[100%] h-[100%] rounded-md flex flex-row items-center justify-center space-x-2 font-semibold' onClick={handleShowCalendar}>
                         <div>
                             <CiCalendar size={16}/>
                         </div>
@@ -113,7 +113,7 @@ const Dealsourcing = ({hidenavbar}) => {
           <div className='w-[190px] cursor-pointer items-center justify-center space-x-4 rounded-md h-[60%] border-gray-300 border-[1px] flex flex-row' onClick={handleFundingRounds} >
                 <div className=' flex flex-row items-center justify-center space-x-1' >
                     <FiDollarSign size={15}/>
-                    <p className='text-[15px] pt-[2px] '>Funding Rounds</p>
+                    <p className='text-[15px] pt-[2px]  font-semibold'>Funding Rounds</p>
                 </div>
                 <div className='pt-[3px]'><FaChevronDown size={16}/></div>
           </div>
@@ -121,31 +121,31 @@ const Dealsourcing = ({hidenavbar}) => {
                       fundingRounds?
                       <div className='cursor-default w-[20%] top-[25%] h-[30%] left-[37%] overflow-y-auto bg-white absolute z-40 rounded-md flex flex-col shadow-md border-[1px] border-gray-300'>
                           <div className='flex flex-col w-[100%] h-[100%] p-4 space-y-4'>
-                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-gray-300 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
+                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-blue-400 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
                                   <p className='text-[14px] text-gray-500'>Pre seed</p>
                               </div>
-                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-gray-300 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
+                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-blue-400 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
                                   <p className='text-[14px] text-gray-500'>Seed</p>
                               </div>
-                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-gray-300 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
+                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-blue-400 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
                                   <p className='text-[14px] text-gray-500'>Pre series A</p>
                               </div>
-                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-gray-300 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
+                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-blue-400 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
                                   <p className='text-[14px] text-gray-500'>Pre series B</p>
                               </div>
-                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-gray-300 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
+                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-blue-400 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
                                   <p className='text-[14px] text-gray-500'>Pre series C</p>
                               </div>
-                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-gray-300 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
+                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-blue-400 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
                                   <p className='text-[14px] text-gray-500'>Pre series D</p>
                               </div>
-                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-gray-300 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
+                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-blue-400 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
                                   <p className='text-[14px] text-gray-500'>Pre series E</p>
                               </div>
-                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-gray-300 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
+                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-blue-400 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
                                   <p className='text-[14px] text-gray-500'>Pre series F</p>
                               </div>
-                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-gray-300 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
+                              <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-blue-400 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
                                   <p className='text-[14px] text-gray-500'>Pre series G</p>
                               </div>
 
@@ -188,10 +188,10 @@ const Dealsourcing = ({hidenavbar}) => {
       <div className='h-[65%] w-[100%] flex flex-col space-y-4 rounded-md'>
             <div className=' flex flex-row w-[190px] border-[1px] h-[10%] border-gray-400 rounded-md '>
                 <div className='basis-1/2 flex rounded-l-[5px] border-r-[1px] bg-gray-300 items-center justify-center border-gray-400 h-[100%]'>
-                    <p className='text-gray-800 text-[13px] '>Sort by Date</p>
+                    <p className='text-gray-800 text-[13px] font-sans font-semibold '>Sort by Date</p>
                 </div>
                 <div className='basis-1/2 flex items-center justify-center h-[100%]'>
-                    <p className='text-gray-800 text-[13px] '>Sort by Price</p>
+                    <p className='text-gray-800 text-[13px] font-sans font-semibold '>Sort by Price</p>
                 </div>
             </div>
             <div className='w-[100%] h-[90%] overflow-y-auto space-y-2 pr-6'>
