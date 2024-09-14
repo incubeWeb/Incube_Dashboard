@@ -33,7 +33,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
 
   useEffect(()=>{
     const fun=async()=>{
-      const response=await axios.post('http://localhost:8999/findUsers',{
+      const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/findUsers',{
         user:searchUser,
         organization:localStorage.getItem('organization')
       })
@@ -57,10 +57,10 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     console.log("id",id)
     if(boxes.length===0)
     {
-      await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization})
+      await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/deletedashboard',{email:email,organization:organization})
       setBoxes([])
     }
-    else{const response=await axios.post('http://localhost:8999/updatedashboard',{email:email,position:position,organization:organization})
+    else{const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/updatedashboard',{email:email,position:position,organization:organization})
     if(response.data.status==200)
     {
       setBoxes(boxes.filter((box,index)=>index!=id))
@@ -71,11 +71,11 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
 
   useEffect(()=>{
     const fetchall=async()=>{
-      const response=await axios.post('http://localhost:8999/fetchallusers',{organization:localStorage.getItem('organization')})
+      const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/fetchallusers',{organization:localStorage.getItem('organization')})
       const users=response.data.data
       console.log("total users",users)
       setUsers(users)
-      const UserChatpositionRes=await axios.post('http://localhost:8999/chatwidgituserpositionvalues',{
+      const UserChatpositionRes=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/chatwidgituserpositionvalues',{
         email:localStorage.getItem('email')+`${id}`,
         organization:localStorage.getItem('organization')
       })
@@ -100,12 +100,12 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     console.log('openuse',openuser)
     const setChats=async()=>{
 
-        let response1=await axios.post('http://localhost:8999/readChat',{
+        let response1=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/readChat',{
           sender:localStorage.getItem('email'),
           receiver:openuser,
           organization:localStorage.getItem('organization')
         })
-        let response2=await axios.post('http://localhost:8999/readChat',{
+        let response2=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/readChat',{
           receiver:localStorage.getItem('email'),
           sender:openuser,
           organization:localStorage.getItem('organization')
@@ -184,7 +184,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     { 
       console.log("tset",msg)
       e.stopPropagation()
-      const response=await axios.post('http://localhost:8999/sendChat',{
+      const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/sendChat',{
         sender:localStorage.getItem('email'),
         receiver:openuser,
         message:msg,

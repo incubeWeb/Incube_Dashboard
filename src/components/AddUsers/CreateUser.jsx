@@ -9,7 +9,7 @@ function CreateUser({ handleAddUser,setAllusers }) {
  useEffect(()=>{
   const getCompanies=async()=>{
     let organization=localStorage.getItem('organization')
-    const response=await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:organization})
+    const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/getDealpipelineCompany',{organization:organization})
     setallcompanies(response.data.data)
   }
   getCompanies()
@@ -21,7 +21,7 @@ function CreateUser({ handleAddUser,setAllusers }) {
   const role=option
   const team=company
   let organization=localStorage.getItem('organization')
-  const response=await axios.post('http://localhost:8999/registerUser',{
+  const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/registerUser',{
     email:email,
     password:password,
     role:role,
@@ -29,7 +29,7 @@ function CreateUser({ handleAddUser,setAllusers }) {
   })
   if(team!='none')
   {
-    await axios.post('http://localhost:8999/addTeam',{
+    await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/addTeam',{
       organization:team,
       member:email,
       position:role,
