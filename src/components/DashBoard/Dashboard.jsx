@@ -121,7 +121,7 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
       
       let email=localStorage.getItem('email')
       const organization=localStorage.getItem('organization')
-      let checkDb=await axios.post('http://localhost:8999/getDashboardData',{email:email,organization:organization})
+      let checkDb=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/getDashboardData',{email:email,organization:organization})
       
 
       
@@ -164,7 +164,7 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
       
       let email=localStorage.getItem('email')
       const organization=localStorage.getItem('organization')
-      let checkDb=await axios.post('http://localhost:8999/getDashboardData',{email:email,organization:organization})
+      let checkDb=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/getDashboardData',{email:email,organization:organization})
       
 
       
@@ -218,7 +218,7 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
 
         if(boxes.length>0)
         {
-         await axios.post('http://localhost:8999/addDashboardData',{email:email,positions:position,organization:organization}) 
+         await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/addDashboardData',{email:email,positions:position,organization:organization}) 
         }
        
         

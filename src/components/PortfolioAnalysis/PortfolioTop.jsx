@@ -22,7 +22,7 @@ const PortfolioTop = ({hidenavbar,sheetedited,selectedSheetId}) => {
             const organization=`${localStorage.getItem('organization')}_Topcards`
             if(!isEqual && (valueid[0]['labelname']!=''))
             {
-                await axios.post('http://localhost:8999/setportfoliostate',{
+                await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/setportfoliostate',{
                     organization:organization,
                     portfolioState:JSON.stringify(valueid)
                 })
@@ -38,7 +38,7 @@ const PortfolioTop = ({hidenavbar,sheetedited,selectedSheetId}) => {
         const getTopCardsValues=async()=>{
             
             const organization=`${localStorage.getItem('organization')}_Topcards`
-            const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
+            const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/getportfoliostate',{organization:organization})
             const data=response.data.data
     
            // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
@@ -53,7 +53,7 @@ const PortfolioTop = ({hidenavbar,sheetedited,selectedSheetId}) => {
   useEffect(()=>{
     const getTopCardsValues=async()=>{
         const organization=`${localStorage.getItem('organization')}_Topcards`
-        const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
+        const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/getportfoliostate',{organization:organization})
         const data=response.data.data
 
        // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]

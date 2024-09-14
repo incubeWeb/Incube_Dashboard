@@ -22,7 +22,7 @@ function AddNewInvestment({hidenavbar, openAddNewWindow ,CompanyName, handleTota
   useEffect(()=>{
     const settingSuggested=async()=>{
       let organization=localStorage.getItem('organization')
-        const response=await axios.post('http://localhost:8999/suggestedInvestment',{
+        const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/suggestedInvestment',{
             company:CompanyName,
             organization:organization
         })
@@ -63,11 +63,11 @@ function AddNewInvestment({hidenavbar, openAddNewWindow ,CompanyName, handleTota
     
      
     const output=JSON.stringify(data_, null, 2)
-    await axios.post('http://localhost:8999/addNewInvestment',{
+    await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/addNewInvestment',{
       data:output,
       organization:organization
     }).then(async()=>{
-      const doc=await axios.post('http://localhost:8999/getnewInvestment',{
+      const doc=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/getnewInvestment',{
         company:CompanyName, 
         organization:organization 
       })

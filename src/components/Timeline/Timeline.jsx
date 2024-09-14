@@ -16,10 +16,10 @@ const Timeline = ({id,boxes,setBoxes}) => {
         console.log("id",id)
         if(boxes.length===0)
         {
-          await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization})
+          await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/deletedashboard',{email:email,organization:organization})
           setBoxes([])
         }
-        else{const response=await axios.post('http://localhost:8999/updatedashboard',{email:email,position:position,organization:organization})
+        else{const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/updatedashboard',{email:email,position:position,organization:organization})
         if(response.data.status==200)
         {
           setBoxes(boxes.filter((box,index)=>index!=id))

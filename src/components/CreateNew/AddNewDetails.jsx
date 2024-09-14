@@ -44,11 +44,11 @@ function AddNewDetails({hidenavbar, openAddNewWindow ,CompanyName, handleTotalCa
       }));
     console.log(JSON.stringify(data_, null, 2));
     const output=JSON.stringify(data_, null, 2)
-    await axios.post('http://localhost:8999/addNewDetail',{
+    await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/addNewDetail',{
       data:output,
       organization:localStorage.getItem('organization')
     }).then(async()=>{
-      const doc=await axios.post('http://localhost:8999/getNewDetails',{
+      const doc=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/getNewDetails',{
         CompanyName:CompanyName,
         Tab:"Tab1",
         organization:localStorage.getItem('organization')

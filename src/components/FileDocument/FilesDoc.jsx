@@ -30,7 +30,7 @@ const FilesDoc = ({ currentTab,CompanyName }) => {
             formData.append('uploadedBy',localStorage.getItem('email'))
             formData.append('organization',localStorage.getItem('organization'))
             try {
-                const response = await axios.post('http://localhost:8999/uploadFile', formData);
+                const response = await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/uploadFile', formData);
                 console.log('File uploaded successfully', response.data);
                 setSelectedFile(null);
                 fetchUploadedFiles(); // Clear selected file after upload
@@ -43,7 +43,7 @@ const FilesDoc = ({ currentTab,CompanyName }) => {
 
     const fetchUploadedFiles = async () => {
         try {
-            const response = await axios.post('http://localhost:8999/getfiles', { CompanyName:CompanyName,tab: `Tab${currentTab}`,organization:localStorage.getItem('organization') });
+            const response = await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/getfiles', { CompanyName:CompanyName,tab: `Tab${currentTab}`,organization:localStorage.getItem('organization') });
             setUploadedFiles(response.data.data);
         } catch (error) {
             console.error('Error fetching uploaded files', error);
@@ -137,7 +137,7 @@ const FilesDoc = ({ currentTab,CompanyName }) => {
                                             
                                             <span className='text-[14px] capitalize'>{file.name}</span>
                                         </div>
-                                        <a href={`http://localhost:8999/uploads/${file.fileName}`} target="_blank" rel="noopener noreferrer" className='text-blue-600 text-[14px]'>
+                                        <a href={`http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/uploads/${file.fileName}`} target="_blank" rel="noopener noreferrer" className='text-blue-600 text-[14px]'>
                                             Open
                                         </a>
                                     </div>
