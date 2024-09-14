@@ -32,7 +32,7 @@ function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,han
 
     useEffect(()=>{
         const fun=async()=>{
-           const data= await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getOpenedTabs',{organization:localStorage.getItem('organization')})
+           const data= await axios.post('http://localhost:8999/getOpenedTabs',{organization:localStorage.getItem('organization')})
            data.data.data.map((tabVal)=>{
              let tabs=JSON.parse(tabVal.tabs)
              setTabCount(parseInt(tabVal.TabsCount))
@@ -50,7 +50,7 @@ function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,han
 
     useEffect(()=>{
         const InitialVal=async()=>{
-            const doc=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getNewDetails',{
+            const doc=await axios.post('http://localhost:8999/getNewDetails',{
                 CompanyName:companyName,
                 Tab:`Tab${currentTab}`,
                 organization:localStorage.getItem('organization')
@@ -63,7 +63,7 @@ function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,han
     useEffect(()=>{
         const fun=async()=>{
             console.log(Tabs)
-            await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/setopenedTabs',{count:"uniqueIdentifier",tabs:JSON.stringify(Tabs),TabsCount:TabCount,organization:localStorage.getItem('organization')})
+            await axios.post('http://localhost:8999/setopenedTabs',{count:"uniqueIdentifier",tabs:JSON.stringify(Tabs),TabsCount:TabCount,organization:localStorage.getItem('organization')})
         }
         fun()
     },[TabCount])
