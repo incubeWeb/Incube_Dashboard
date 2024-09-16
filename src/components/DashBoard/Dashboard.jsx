@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import { Bars } from 'react-loader-spinner';
 import Portfoliocard from '../Charts/Portfoliocard';
 import NewsWidgit from '../News_widgit/NewsWidgit';
+import { FaPlus } from "react-icons/fa6";
 
 
 const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
@@ -287,10 +288,10 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
     <div className='w-[100%] h-[100%] flex flex-col'>
     <div className='flex flex-col pt-[30px] w-[100%] h-[10%] items-end mt-[44px]'>
   <div
-    className='absolute top-[20px] right-[20px] flex flex-row w-[120px] h-[33px] rounded-md bg-gradient-to-r from-blue-600 to-blue-300 text-[14px] items-center justify-center text-white cursor-pointer'
+    className='absolute top-[20px] right-[20px] flex flex-row w-[130px] h-[33px] rounded-md bg-blue-600  text-[14px] items-center justify-center text-white cursor-pointer'
     onClick={handleShowPopup}
   >
-    <p>Widgets</p>
+    <p> <span className='text-[20px] font-bold'>+</span>  Add widgets</p>
   </div>
 </div>
 

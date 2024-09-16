@@ -99,8 +99,8 @@ function FirstCol({setActiveField,hidenavbar}) {
         
       <div className='flex flex-col space-y-2 md:space-y-0 md:flex md:flex-row md:w-[100%] md:h-[83px] md:items-center p-3 md:p-0'>
         <div className='flex flex-col md:flex md:flex-col md:pl-[20px] md:w-[721px] md:h-[38px] '>
-          <p className='md:text-[22px]  text-[17px]  text-sans text-semibold '>Deal Pipeline</p>
-          <p className='md:text-[13px] text-[12px]  text-sans text-semibold  text-gray-500'>Search or go through startups looking to raise fresh rounds.</p>
+          <p className='md:text-[28px]  text-[17px]  text-inter font-bold '>Deal pipeline</p>
+          <p className='md:text-[14px] text-[12px]  text-inter   text-[#475467]'>Search or go through startups looking to raise fresh rounds.</p>
         </div>
         <div className='md:w-[100%] md:h-[100%] md:flex md:items-center md:justify-end md:mr-[20px]'>
           <div className='flex flex-row w-[280px] h-[28px] items-center md:flex md:flex-row md:items-center md:w-[280px] md:h-[38px] rounded-md border-gray-400 border-2 border-solid space-x-3 hover:shadow-md hover:duration-150'>
@@ -111,11 +111,11 @@ function FirstCol({setActiveField,hidenavbar}) {
       </div>
 
       <div className='hidden md:flex md:flex-row md:p-[20px] md:pb-2'>
-        <div className='md:flex md:flex-row w-[100%] md:h-[50px] md:bg-gray-100 rounded-md md:p-3 md:space-x-2 relative'>
-          <div ref={bgRef} className="absolute bg-white shadow-md rounded-md flex items-center justify-center" style={{ pointerEvents: "none", zIndex: 1 }}>
+        <div className='md:flex md:flex-row w-[100%] md:h-[50px] md:bg-[#EAECF0] rounded-md md:p-3 md:space-x-2 relative'>
+          <div ref={bgRef} className="absolute  bg-white shadow-md rounded-md flex items-center justify-center" style={{ pointerEvents: "none", zIndex: 1 }}>
             <p className="text-[14px]"></p>
           </div>
-          <div ref={viewRef} className={`${selectedTab=='View All'?'text-gray-200':''}md:text-[14px] md:w-[110px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("View All"); }}>
+          <div ref={viewRef} className={`${selectedTab=='View All'?'text-gray-200':''}md:text-[14px] md:w-[120px]  rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("View All"); }}>
             <p className='md:flex md:items-center md:justify-center md:h-full md:text-[14px]'>View All</p>
           </div>
           <div ref={inProgressRef} className={`${selectedTab=='In Progress'?'text-gray-200':''} md:text-[14px] md:w-[120px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("In Progress"); }}>

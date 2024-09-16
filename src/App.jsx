@@ -15,6 +15,9 @@ import AddInvestment from "./components/Add_Investments/AddInvestment";
 import Portfolio from "./components/PortfolioAnalysis/Portfolio";
 import Viewsheet from "./components/ViewSheet/Viewsheet";
 
+
+
+
 function App() {
   const [activeField, setActiveField] = useState('/dashboard');
   const [login, setLoginIn] = useState(false);

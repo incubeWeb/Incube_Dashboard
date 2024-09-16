@@ -68,7 +68,7 @@ const ChartPopup = ({
     width: "100%",
     top: 0,
     zIndex: 50,
-    backgroundColor: "rgba(128, 128, 128, 0.5)",
+    backgroundColor: "rgba(247, 250, 252, 0.5)",
     alignItems: "center",
     justifyContent: "center"
   };
@@ -610,15 +610,15 @@ const ChartPopup = ({
       className="pr-[273px] font-sans  font-semibold  "
       onClick={showlist}
     >
-      <div className="relative flex  bg-white    w-[40%] flex-col h-[80%] p-4" onClick={(e) => e.stopPropagation()}>
+      <div className="relative flex  bg-white rounded-lg   w-[40%] flex-col h-[80%] p-4" onClick={(e) => e.stopPropagation()}>
         {clickedPie && (
-          <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white top-0 left-0">
+          <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] rounded-lg absolute bg-white top-0 left-0">
             <div className="w-[100%] flex justify-end">
               <div className="flex w-[80%]">
                 <FaArrowLeftLong className="cursor-pointer mt-2" size={20} onClick={() => setClickedPie(!clickedPie)} />
               </div>
               <div className="flex w-[20%] justify-end ">
-                <RxCross2 size={24} className="cursor-pointer mt-2 ml-15" onClick={showlist} />
+                <RxCross2 size={24} className="cursor-pointer  ml-15 bg-gray-100 rounded-full" onClick={showlist} />
               </div>
             </div>
             <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[10%]">
@@ -662,13 +662,13 @@ const ChartPopup = ({
           </div>
         )}
         {clickedArea && (
-          <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white top-0 left-0">
+          <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute rounded-xl bg-white top-0 left-0">
             <div className="w-[100%] flex justify-end">
               <div className="flex w-[80%]">
                 <FaArrowLeftLong className="cursor-pointer mt-2" size={20} onClick={() => setClickedArea(!clickedArea)} />
               </div>
               <div className="flex w-[20%] justify-end">
-                <RxCross2 size={24} className="cursor-pointer mt-2" onClick={showlist} />
+                <RxCross2 size={24} className="cursor-pointer mt-2 bg-gray-100 rounded-full" onClick={showlist} />
               </div>
             </div>
             <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[10%]">
@@ -713,13 +713,13 @@ const ChartPopup = ({
           </div>
         )}
         {clickedBar && (
-          <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white top-0 left-0">
+          <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute rounded-xl bg-white top-0 left-0">
             <div className="w-[100%] flex justify-end">
               <div className="flex w-[80%]">
                 <FaArrowLeftLong className="cursor-pointer mt-2" size={20} onClick={() => setClickedBar(!clickedBar)} />
               </div>
               <div className="flex w-[20%] justify-end">
-                <RxCross2 size={24} className="cursor-pointer mt-2" onClick={showlist} />
+                <RxCross2 size={24} className="cursor-pointer mt-2 bg-gray-100 rounded-full" onClick={showlist} />
               </div>
             </div>
             <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[10%]">
@@ -1710,12 +1710,12 @@ const ChartPopup = ({
         <div className="w-[100%]  flex justify-end pr-3">
           <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
         </div>
-        <ul className="mt-10 space-y-3 p-4 overflow-y-auto ">
+        <ul className="mt-10 font-inter space-y-3 p-4 overflow-y-auto ">
           <div
               onClick={handletimelinewidgit}
               className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"
             >
-              <p className="w-[70%]">Timeline</p>
+              <p className="w-[70%] ">Timeline</p>
               <div className="w-[30%] flex justify-end">
                 <FaChevronRight className="text-gray-500" />
               </div>
@@ -1742,7 +1742,7 @@ const ChartPopup = ({
             onClick={() => addComponent("calendar")}
             className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"
           >
-            <p className="w-[70%]">Calendar</p>
+            <p className="w-[70%]">Calendars</p>
             <div className="w-[30%] flex justify-end">
               <FaChevronRight className="text-gray-500" />
             </div>

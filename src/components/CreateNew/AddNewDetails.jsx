@@ -79,7 +79,7 @@ function AddNewDetails({hidenavbar, openAddNewWindow ,CompanyName, handleTotalCa
         style={{ boxShadow: '0px 1px 6px rgba(0, 0, 0, 0.3)' }}
       >
         <div className="w-[100%] flex justify-end">
-          <RxCross2 size={23} className="cursor-pointer" onClick={handleClose} />
+          <RxCross2 size={23} className="cursor-pointer bg-gray-100 rounded-full" onClick={handleClose} />
         </div>
 
         {sections.map(section => (
@@ -88,19 +88,19 @@ function AddNewDetails({hidenavbar, openAddNewWindow ,CompanyName, handleTotalCa
             className="w-[100%] h-[340px] border-gray-200 shadow-md border-[1px] p-[20px] rounded-md"
           >
             <div className="flex flex-col space-y-2">
-              <p className="text-[14px] select-none">Title</p>
+              <p className="text-[14px] select-none font-inter font-semibold">Title</p>
               <input
                 id={`title-${section.id}`}
-                className="outline-none p-2 text-[14px] text-gray-600 w-[100%] h-[40px] rounded-md border-gray-500 border-[1px] hover:border-blue-600 focus:border-blue-600"
+                className="outline-none p-2 text-[14px] text-gray-600 w-[100%] h-[40px] rounded-md border-gray-200 border-[1px] "
                 value={section.title}
                 onChange={e => handleChange(section.id, 'title', e.target.value)}
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <p className="text-[14px] select-none">Description</p>
+              <p className="text-[14px] select-none font-inter font-semibold mt-2">Description</p>
               <textarea
                 id={`description-${section.id}`}
-                className="outline-none p-2 text-[14px] text-gray-600 w-[100%] h-[140px] overflow-x-auto resize-none rounded-md border-gray-500 border-[1px] hover:border-blue-600 focus:border-blue-600"
+                className="outline-none p-2 text-[14px] text-gray-600 w-[100%] h-[140px] overflow-x-auto resize-none rounded-md border-gray-200 border-[1px] "
                 value={section.description}
                 onChange={e => handleChange(section.id, 'description', e.target.value)}
               />
