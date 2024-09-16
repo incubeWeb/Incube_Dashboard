@@ -21,7 +21,11 @@ function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,han
     const [currentTab,setCurrentTab]=useState(1)
     const [TabCount,setTabCount]=useState(1)
     const [OpenSubbar,setSubbar]=useState(false)
-    const [pushComplete,setpushComplete]=useState(false)
+
+
+    useEffect(()=>{
+        console.log(Tabs,"my tabs")
+    },[Tabs])
 
     const openAddNewWindow=()=>{
         setAddnewWindow(!AddNewWindow)
@@ -72,14 +76,6 @@ function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,han
         e.stopPropagation()
     }
 
-    const addTabs=async()=>{
-        setTabs(tabs=>[...tabs,{id:TabCount+1,Tab:`Tab${TabCount+1}`}])
-        setCurrentTab(currentTab)
-        setTabCount(TabCount+1)
-    }
-    const handlePushComplete=async()=>{
-        setpushComplete(!pushComplete)
-    }
     
 
     const MainDiv=useRef(null)
@@ -114,15 +110,15 @@ function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,han
             <div className='flex flex-row w-[100%] h-[40px] space-x-2'>
                     <div className='w-[100%] h-[100%] bg-gray-300 rounded-md flex flex-row items-center pl-2 space-x-5'>
                         <div className='w-[100%] h-[75%] rounded-md flex items-center justify-start flex-row space-x-2'>
-                            {(Tabs||[]).map((Tab)=>
-                                {
+                            {(Tabs||[]).map(Tab=>
+                                
                                 <div key={Tab.Tab} className={` md:w-[55px] w-[55px] h-[75%] rounded-md ${currentTab==Tab.id?'bg-gray-300':'bg-white shadow-md'} flex items-center justify-center `}>
                                     <div onClick={()=>setCurrentTab(Tab.id)} className='w-[100%] h-[100%] flex items-center justify-center'>
                                         <p className='text-[12px] font-semibold'>Tab {Tab.id}</p>
                                     </div>
                                     
                                 </div>
-                                }
+                                
                                 
                             )}
                             
@@ -141,9 +137,9 @@ function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,han
             <div className='md:w-[60%] h-[420px] overflow-y-auto md:space-y-7'>
                 {
                     (TotalCards||[]).map((item)=>
-                    {
+                    
                     <Card key={item._id} id={item._id} CompanyName={item.CompanyName} Title={item.Title} Description={item.Description} Tab={item.Tab}/>
-                    }
+                    
                 )
                 }
                 

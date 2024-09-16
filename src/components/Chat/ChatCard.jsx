@@ -9,7 +9,7 @@ const ChatCard = ({currentTab,CompanyName}) => {
     useEffect(()=>{
         const fun=async()=>{
             let organization=localStorage.getItem('organization')
-            const doc=await axios.post('http://localhost:8999/getTabChats',{CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization,mainorganization:localStorage.getItem('organization')})
+            const doc=await axios.post('http://localhost:8999/getTabChats',{CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization})
             console.log("heere",doc.data.data)
             doc.data.data.map(d=>
                 {let chat=JSON.parse(d.chats)
@@ -23,7 +23,6 @@ const ChatCard = ({currentTab,CompanyName}) => {
     },[currentTab])
 
     useEffect(()=>{
-        console.log(currentTab)
         const fun=async()=>{
             if(chat.length!=0)
             {
@@ -32,8 +31,7 @@ const ChatCard = ({currentTab,CompanyName}) => {
                     CompanyName:CompanyName,
                     tab:`Tab${currentTab}`,
                     chats:JSON.stringify(chat),
-                    organization:organization,
-                    mainorganization:localStorage.getItem('organization')
+                    organization:organization
                 })
             }
         }
@@ -47,10 +45,11 @@ const ChatCard = ({currentTab,CompanyName}) => {
 
     const handleChat=()=>{
 
+        let sender=localStorage.getItem('email')
         let capturedChat=document.getElementById('chat').value
         document.getElementById('chat').value=""
         setCountChat(countChat+1)
-        setChat(prevChat=>[...prevChat,{id:countChat,chat:capturedChat}])
+        setChat(prevChat=>[...prevChat,{id:countChat,chat:capturedChat,sender:sender,time:Date.now()}])
     }
 
   return (
