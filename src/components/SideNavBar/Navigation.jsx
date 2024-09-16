@@ -113,16 +113,7 @@ const Navigation = ({activeField,setActiveField,hidenavbar,sethidenavbar}) => {
 
             </div>
 
-            <div className='w-[100%] h-[30%] flex flex-col items-start justify-start'>
-            <Link to='/investment' className='w-[100%] h-[100%]'>
-                    <a className='w-[100%] h-[80%] flex items-start justify-center'> 
-                     <div onClick={()=>setActiveField('/investment')} className='flex flex-row w-[90%] cursor-pointer h-[30%] items-center justify-center space-x-2 rounded-md hover:text-white bg-gradient-to-t from-gray-900 to-gray-500 text-white '> 
-                         <div><MdOutlineTrendingUp size={20} /></div>
-                         <div><p className='text-[13px]'>add investiment</p></div>
-                    </div>
-                    </a>
-                </Link>
-            </div>
+           
 
             <div className='w-[100%] h-[20%] flex items-center justify-center'>
                     <a href='/' className='w-[70%] h-[100%] flex items-center justify-center'> 
