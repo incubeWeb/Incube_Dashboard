@@ -129,6 +129,7 @@ const ChartPopup = ({
             const data=JSON.parse(response.data.data)
             
             setdbsheetdata(data)
+            console.log("john"+data)
             setDbSheetIntRows(Object.keys(data[0]))
             console.log(sheetdbdata)
             console.log(dbSheetIntRows)
@@ -1800,6 +1801,7 @@ const ChartPopup = ({
         </ul>
       </div>
     </div>
+   
   );
 };
 
