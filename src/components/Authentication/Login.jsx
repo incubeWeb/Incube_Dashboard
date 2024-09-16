@@ -28,7 +28,7 @@ const Login = ({ setLoginIn }) => {
     const website=org_web
     const password=org_pass
 
-    const response=await axios.post('http://localhost:8999/createOrganization',{
+    const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/createOrganization',{
       name:name,
       location:location,
       entity:entity,
@@ -63,7 +63,7 @@ const Login = ({ setLoginIn }) => {
     const password = document.getElementById('password').value;
     const organization=document.getElementById('organization').value
     try {
-      const response = await axios.post('http://localhost:8999/login', {
+      const response = await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/login', {
         email: email,
         password: password,
         organization:organization

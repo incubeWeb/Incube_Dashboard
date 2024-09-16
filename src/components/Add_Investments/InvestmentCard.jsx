@@ -13,7 +13,7 @@ function InvestmentCard({id,CompanyName,Title,Description}) {
   const handleDelete=async()=>{
     console.log('ok')
     let organization=localStorage.getItem('organization')
-    await axios.post('http://localhost:8999/deleteNewInvestment',{id:id,organization:organization})
+    await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/deleteNewInvestment',{id:id,organization:organization})
   }
   return (
     <div ref={mycard} className='flex space-y-4 flex-col p-[24px] border-[1px] border-gray-300 h-[90px] rounded-md '>

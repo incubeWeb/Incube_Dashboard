@@ -10,7 +10,7 @@ function EditCard({handleClose,id}) {
   useEffect(()=>{
     const FillField=async()=>{
       let organization=localStorage.getItem('organization')
-        const RawData=await axios.post('http://localhost:8999/getSingleDetail',{id:id,organization:organization})
+        const RawData=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getSingleDetail',{id:id,organization:organization})
         const data=RawData.data.data
         data.map((d)=>
             {document.getElementById('titleText').value=d.Title
@@ -24,7 +24,7 @@ function EditCard({handleClose,id}) {
     const title=document.getElementById('titleText').value
     const des=document.getElementById('descriptionText').value
     let organization=localStorage.getItem('organization')
-    const res=await axios.post('http://localhost:8999/UpdateSingleDetail',{id:id,title:title,description:des,organization:organization})
+    const res=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/UpdateSingleDetail',{id:id,title:title,description:des,organization:organization})
     if(res.data.status=='200')
     {
         alert("Updated Successfully")

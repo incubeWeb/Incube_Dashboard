@@ -42,16 +42,28 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
     {
         const updateRealtimevalue=async()=>{
             const organization=`${localStorage.getItem('organization')}_ShownGraph`
+<<<<<<< HEAD
             const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
             const data=response.data.data
             const stateValues=JSON.parse(data)||{}
             const sheetid=stateValues.sheetclicked
             const response1=await axios.post('http://localhost:8999/sheetfromdb',{id:sheetid,organization:localStorage.getItem('organization')})
+=======
+            const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/getportfoliostate',{organization:organization})
+            const data=response.data.data
+            const stateValues=JSON.parse(data)||{}
+            const sheetid=stateValues.sheetclicked
+            const response1=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/sheetfromdb',{id:sheetid,organization:localStorage.getItem('organization')})
+>>>>>>> 8b9f5e84a4b7bb290d5d33ec9efe6aed592172bd
             const sheetdata=JSON.parse(response1.data.data)
             const stateJson={showBarchart:stateValues.showBarchart,showPiechart:stateValues.showPiechart,showLinechart:stateValues.showLinechart,chartDatatypeX:stateValues.chartDatatypeX,chartDatatypeY:stateValues.chartDatatypeY,sheetJson:sheetdata,sheetfieldselectedX:stateValues.sheetfieldselectedX,sheetfieldselectedY:stateValues.sheetfieldselectedY,sheetclicked:stateValues.sheetclicked}
             if((stateValues.showBarchart || stateValues.showPiechart || stateValues.showLinechart)&&sheetdata!=[])
             {
+<<<<<<< HEAD
                 await axios.post('http://localhost:8999/setportfoliostate',{
+=======
+                await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/setportfoliostate',{
+>>>>>>> 8b9f5e84a4b7bb290d5d33ec9efe6aed592172bd
                     organization:organization,
                     portfolioState:JSON.stringify(stateJson)
                 })
@@ -76,7 +88,11 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
 
                 const organization=`${localStorage.getItem('organization')}_ShownGraph`
                 const stateJson={showBarchart:showBarchart,showPiechart:showPiechart,showLinechart:showLinechart,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
+<<<<<<< HEAD
                 await axios.post('http://localhost:8999/setportfoliostate',{
+=======
+                await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/setportfoliostate',{
+>>>>>>> 8b9f5e84a4b7bb290d5d33ec9efe6aed592172bd
                     organization:organization,
                     portfolioState:JSON.stringify(stateJson)
                 })
@@ -92,7 +108,11 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
     useEffect(()=>{
         const setGraphValues=async()=>{
             const organization=`${localStorage.getItem('organization')}_ShownGraph`
+<<<<<<< HEAD
             const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
+=======
+            const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/getportfoliostate',{organization:organization})
+>>>>>>> 8b9f5e84a4b7bb290d5d33ec9efe6aed592172bd
             console.log(response,"bhavesh singh")
             const data=response.data.data || response.data.status
             
@@ -127,12 +147,20 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
         setchartselectpopup(true)
     }
     const setavailableDatabaseSheets=async()=>{
+<<<<<<< HEAD
         const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+=======
+        const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+>>>>>>> 8b9f5e84a4b7bb290d5d33ec9efe6aed592172bd
         setallSheets(response.data.data) 
     }
     const handlesheetclicked=async (id)=>{
             setsheetClicked(id)
+<<<<<<< HEAD
             const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
+=======
+            const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
+>>>>>>> 8b9f5e84a4b7bb290d5d33ec9efe6aed592172bd
                 const data=JSON.parse(response.data.data)
                 setsheetJson(data)
                 const key=Object.keys(data[0])
@@ -152,7 +180,11 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
 
     }
     const handlesheetclickedPie=async (id)=>{
+<<<<<<< HEAD
         const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
+=======
+        const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
+>>>>>>> 8b9f5e84a4b7bb290d5d33ec9efe6aed592172bd
             const data=JSON.parse(response.data.data)
             setsheetJson(data)
             const key=Object.keys(data[0])
@@ -172,7 +204,11 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
 
     }
     const handlesheetclickedLine=async (id)=>{
+<<<<<<< HEAD
         const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
+=======
+        const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
+>>>>>>> 8b9f5e84a4b7bb290d5d33ec9efe6aed592172bd
             const data=JSON.parse(response.data.data)
             setsheetJson(data)
             const key=Object.keys(data[0])

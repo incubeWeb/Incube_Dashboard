@@ -25,7 +25,7 @@ const Dealsourcing = ({hidenavbar}) => {
 
   useEffect(()=>{
    const setCompany=async()=>{
-    const res=await axios.post('http://localhost:8999/getdealsourcingFiles',{organization:localStorage.getItem('organization')})
+    const res=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getdealsourcingFiles',{organization:localStorage.getItem('organization')})
     const data=res.data.data
     setCompanies(data)
    }
@@ -43,7 +43,7 @@ const Dealsourcing = ({hidenavbar}) => {
 
   const handleSearch=async()=>{
     const search=document.getElementById('search').value
-    const res=await axios.post('http://localhost:8999/searchdealsourcingfiles',{search:search,organization:localStorage.getItem('organization')})
+    const res=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/searchdealsourcingfiles',{search:search,organization:localStorage.getItem('organization')})
     const data=res.data.data
     setCompanies(data)
   }

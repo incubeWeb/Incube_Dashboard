@@ -9,7 +9,7 @@ const ChatCard = ({currentTab,CompanyName}) => {
     useEffect(()=>{
         const fun=async()=>{
             let organization=localStorage.getItem('organization')
-            const doc=await axios.post('http://localhost:8999/getTabChats',{CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization,mainorganization:localStorage.getItem('organization')})
+            const doc=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getTabChats',{CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization,mainorganization:localStorage.getItem('organization')})
             console.log("heere",doc.data.data)
             doc.data.data.map(d=>
                 {let chat=JSON.parse(d.chats)
@@ -28,7 +28,7 @@ const ChatCard = ({currentTab,CompanyName}) => {
             if(chat.length!=0)
             {
                 let organization=localStorage.getItem('organization')
-                await axios.post('http://localhost:8999/setTabChats',{
+                await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/setTabChats',{
                     CompanyName:CompanyName,
                     tab:`Tab${currentTab}`,
                     chats:JSON.stringify(chat),

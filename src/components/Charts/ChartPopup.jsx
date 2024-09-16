@@ -124,7 +124,7 @@ const ChartPopup = ({
         formData.append('organization',localStorage.getItem('organization'))
         formData.append('CompanyName',`DB${Date.now()}_${chart}`)
         try {
-            const response=await axios.post('http://localhost:8999/uploadsheetFile', formData);
+            const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/uploadsheetFile', formData);
             console.log('File uploaded successfully',response.data.data);
             const data=JSON.parse(response.data.data)
             
@@ -155,7 +155,7 @@ const ChartPopup = ({
     setselectedDbsheet(!selectedDbSheet)
     console.log('selectedhseeetfromdat',selectedsheetfromdbname)
     
-    const response=await axios.post('http://localhost:8999/sheetfromdb',{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
+    const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/sheetfromdb',{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
     const data=JSON.parse(response.data.data)
     const name=response.data.fileName
     const dbcompanyname=response.data.CompanyName
@@ -170,7 +170,7 @@ const ChartPopup = ({
   const handleselectDatabase=async(e)=>{
     e.stopPropagation();
     setClickedDatabase((prev)=>!prev)
-    const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+    const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
     setpresentSheets(response.data.data)
     setLoading1(false);
     response.data.data.map((val,index)=>

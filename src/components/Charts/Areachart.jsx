@@ -32,10 +32,10 @@ const Areachart = ({investmentchange,id,data01,clickedArea,setClickedArea,fromAp
     console.log("id",id)
     if(boxes.length===0)
     {
-      await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization})
+      await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/deletedashboard',{email:email,organization:organization})
       setBoxes([])
     }
-    else{const response=await axios.post('http://localhost:8999/updatedashboard',{email:email,position:position,organization:organization})
+    else{const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/updatedashboard',{email:email,position:position,organization:organization})
     if(response.data.status==200)
     {
       setBoxes(boxes.filter((box,index)=>index!=id))
@@ -80,7 +80,7 @@ const fieldConversionsApi={
     const fun=async()=>{
       let organization=localStorage.getItem('organization')
       
-        const dashboard_response=await axios.post('http://localhost:8999/getDashboardData',{email:localStorage.getItem('email'),organization:organization})
+        const dashboard_response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getDashboardData',{email:localStorage.getItem('email'),organization:organization})
         const entireData=JSON.parse(dashboard_response.data.data.positions)
         let selectedYaxis=''
         let selectedXaxis=''
@@ -103,7 +103,7 @@ const fieldConversionsApi={
           }
         }
         )
-    const Sheet_response=await axios.post('http://localhost:8999/investmentsheetfromdb',{organization:organization,CompanyName:dbCompanyName})  
+    const Sheet_response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/investmentsheetfromdb',{organization:organization,CompanyName:dbCompanyName})  
     if(fromApi&&!isSheetchart)
     { 
       console.log("chartdatatye",chartDatatypeFromApiX,chartDatatypeFromApiY)
@@ -161,7 +161,7 @@ useEffect(() => {
   const fun=async()=>{
     let organization=localStorage.getItem('organization')
     
-      const dashboard_response=await axios.post('http://localhost:8999/getDashboardData',{email:localStorage.getItem('email'),organization:organization})
+      const dashboard_response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getDashboardData',{email:localStorage.getItem('email'),organization:organization})
       const entireData=JSON.parse(dashboard_response.data.data.positions)
       let selectedYaxis=''
       let selectedXaxis=''
@@ -184,7 +184,7 @@ useEffect(() => {
         }
       }
       )
-      const Sheet_response=await axios.post('http://localhost:8999/investmentsheetfromdb',{organization:organization,CompanyName:dbCompanyName})
+      const Sheet_response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/investmentsheetfromdb',{organization:organization,CompanyName:dbCompanyName})
   if(fromApi&&!isSheetchart)
   { 
     console.log("chartdatatye",chartDatatypeFromApiX,chartDatatypeFromApiY)
