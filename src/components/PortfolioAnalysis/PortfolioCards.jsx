@@ -65,11 +65,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
             console.log("hi Bhavesh")
             const organization=`${localStorage.getItem('organization')}_Topcards`
             
-<<<<<<< HEAD
             const response1=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
-=======
-            const response1=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/getportfoliostate',{organization:organization})
->>>>>>> 8b9f5e84a4b7bb290d5d33ec9efe6aed592172bd
             const data1=JSON.parse(response1.data.data)
             let key=''
             let sheetid=''
@@ -82,11 +78,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
             })
             
             console.log(key,"thifsdfsdfsfss")
-<<<<<<< HEAD
             const response=await axios.post('http://localhost:8999/sheetfromdb',{id:sheetid,organization:localStorage.getItem('organization')})
-=======
-            const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/sheetfromdb',{id:sheetid,organization:localStorage.getItem('organization')})
->>>>>>> 8b9f5e84a4b7bb290d5d33ec9efe6aed592172bd
             const data=JSON.parse(response.data.data)
             
 
@@ -144,11 +136,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
 
 
     const handlePlusClick=async()=>{
-<<<<<<< HEAD
         const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
-=======
-        const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
->>>>>>> 8b9f5e84a4b7bb290d5d33ec9efe6aed592172bd
         setsheetpopup(true)
         setallsheets(response.data.data)
         
@@ -188,11 +176,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
 
     useEffect(()=>{
         const setValues=async()=>{
-<<<<<<< HEAD
             const response=await axios.post('http://localhost:8999/sheetfromdb',{id:clickedSheetId,organization:localStorage.getItem('organization')})
-=======
-            const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/sheetfromdb',{id:clickedSheetId,organization:localStorage.getItem('organization')})
->>>>>>> 8b9f5e84a4b7bb290d5d33ec9efe6aed592172bd
             const data=JSON.parse(response.data.data)
             setsheetJson(data)
             const key=Object.keys(data[0])

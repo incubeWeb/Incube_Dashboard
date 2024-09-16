@@ -28,7 +28,7 @@ const Addusers = ({setActiveField,hidenavbar}) => {
             let organization=localStorage.getItem('organization')
             if(searchUser.length<=0)
             {
-                const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/fetchallusers',{
+                const response=await axios.post('http://localhost:8999/fetchallusers',{
                     organization:organization
                 })
                 setAllusers(response.data.data)
@@ -40,7 +40,7 @@ const Addusers = ({setActiveField,hidenavbar}) => {
                 setAllusers([])
             }
             else{
-                const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/findUsers',{
+                const response=await axios.post('http://localhost:8999/findUsers',{
                     user:searchUser,
                     organization:organization
                 })
@@ -61,14 +61,14 @@ const Addusers = ({setActiveField,hidenavbar}) => {
 
     const handleDelete=async(email)=>{
         let organization=localStorage.getItem('organization')
-        const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/deleteUser',{
+        const response=await axios.post('http://localhost:8999/deleteUser',{
             doneBy:localStorage.getItem('email'),
             email:email,
             organization:organization
         })
         if(response.data.status==200)
         {
-            const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/findUsers',{
+            const response=await axios.post('http://localhost:8999/findUsers',{
                 user:searchUser,
                 organization:organization
             })
@@ -92,7 +92,7 @@ const Addusers = ({setActiveField,hidenavbar}) => {
     useEffect(()=>{
         const getUser=async()=>{
             let organization=localStorage.getItem('organization')
-            const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/fetchallusers',{organization:organization})
+            const response=await axios.post('http://localhost:8999/fetchallusers',{organization:organization})
             setAllusers(response.data.data)
             
         }

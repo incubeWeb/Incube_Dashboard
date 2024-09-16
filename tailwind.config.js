@@ -8,7 +8,8 @@ export default {
     extend: {
       fontFamily:{
         roboto:["Roboto", "sans-serif"],
-        noto:["Noto Sans JP", "sans-serif"]
+        noto:["Noto Sans JP", "sans-serif"],
+        kadwa: ['Kadwa', 'sans-serif']
       }
     },
   },

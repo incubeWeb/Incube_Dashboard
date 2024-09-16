@@ -27,11 +27,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
     const organization=localStorage.getItem('organization');
     const position=JSON.stringify(boxes.filter((box,index)=>index!=id));
     if(boxes.length===0) {
-      await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/deletedashboard',{email:email,organization:organization});
+      await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization});
       setBoxes([]);
     }
     else {
-      const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/updatedashboard',{email:email,position:position,organization:organization});
+      const response=await axios.post('http://localhost:8999/updatedashboard',{email:email,position:position,organization:organization});
       if(response.data.status==200) {
         setBoxes(boxes.filter((box,index)=>index!=id));
       }
@@ -77,7 +77,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
 
   useEffect(() => {
     const fun = async () => {
-      const dashboard_response = await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getDashboardData', { email: localStorage.getItem('email'),organization:localStorage.getItem('organization') });
+      const dashboard_response = await axios.post('http://localhost:8999/getDashboardData', { email: localStorage.getItem('email'),organization:localStorage.getItem('organization') });
       const entireData = JSON.parse(dashboard_response.data.data.positions);
       let selectedYaxis = '';
       let isSheetchart = '';
@@ -100,7 +100,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       });
 
       setselectedvalueaxis(selectedYaxis);
-      const Sheet_response = await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/investmentsheetfromdb',{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
+      const Sheet_response = await axios.post('http://localhost:8999/investmentsheetfromdb',{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
       if (fromApi && !isSheetchart) {
         const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
         setmydata(convertedData);
@@ -137,7 +137,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
 
   useEffect(() => {
     const fun = async () => {
-      const dashboard_response = await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getDashboardData', { email: localStorage.getItem('email') ,organization:localStorage.getItem('organization')});
+      const dashboard_response = await axios.post('http://localhost:8999/getDashboardData', { email: localStorage.getItem('email') ,organization:localStorage.getItem('organization')});
       const entireData = JSON.parse(dashboard_response.data.data.positions);
       let selectedYaxis = '';
       let isSheetchart = '';
@@ -160,7 +160,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       });
 
       setselectedvalueaxis(selectedYaxis);
-      const Sheet_response = await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/investmentsheetfromdb',{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
+      const Sheet_response = await axios.post('http://localhost:8999/investmentsheetfromdb',{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
       if (fromApi && !isSheetchart) {
         const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
         setmydata(convertedData);

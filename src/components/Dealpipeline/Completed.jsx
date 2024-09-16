@@ -15,7 +15,7 @@ function Completed({hidenavbar,filter, selectedTab, fetchCompanyData, setActiveF
   const totalPages = Math.ceil(compData.length / itemsPerPage);
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      const response = await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+      const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
       setcompData(response.data.data)
     }
     fetchcompanydata()

@@ -44,7 +44,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     },[])
 
     const handlePlusClick=async()=>{
-        const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+        const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
         setsheetpopup(true)
         setallsheets(response.data.data)
         
@@ -81,10 +81,10 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
         
         if(boxes.length===0)
         {
-          await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/deletedashboard',{email:email,organization:organization})
+          await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization})
           setBoxes([])
         }
-        else{const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/updatedashboard',{email:email,position:position,organization:organization})
+        else{const response=await axios.post('http://localhost:8999/updatedashboard',{email:email,position:position,organization:organization})
         if(response.data.status==200)
         {
           setBoxes(boxes.filter((box,index)=>index!=id))
@@ -132,7 +132,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     
     useEffect(()=>{
         const setValues=async()=>{
-            const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/sheetfromdb',{id:clickedSheetId,organization:localStorage.getItem('organization')})
+            const response=await axios.post('http://localhost:8999/sheetfromdb',{id:clickedSheetId,organization:localStorage.getItem('organization')})
             const data=JSON.parse(response.data.data)
             setsheetJson(data)
             const key=Object.keys(data[0])
