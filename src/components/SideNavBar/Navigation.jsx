@@ -60,7 +60,7 @@ const Navigation = ({activeField,setActiveField,hidenavbar,sethidenavbar}) => {
     },[activeField])
   return (
         <div className='w-[100%] '>
-        <div ref={NavbarRef} className=' text-gray-700 select-none font-roboto w-[20%] shadow-lg z-[60] fixed h-[100%] bg-white p-[40px] pt-[30px] flex flex-col'>
+        <div ref={NavbarRef} className=' text-gray-700 select-none font-roboto w-[20%] shadow-lg z-[60] fixed h-[100%] bg-white p-[40px] pt-[30px] flex flex-col '>
        <div className='flex flex-col items-start justify-start h-[100%] w-[100%]'>
             <div className='w-[100%] h-[13%] flex justify-start items-center'>
                 <p className='text-[21px] font-roboto'>Incube Web</p>

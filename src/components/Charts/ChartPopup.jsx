@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { RxCross2 } from "react-icons/rx";
-import { FaChevronRight, FaGoogle } from "react-icons/fa";
+import { FaChevronRight, FaGoogle, FaLessThan } from "react-icons/fa";
 import { FaArrowLeftLong, FaArrowRight } from "react-icons/fa6";
 import { FaChartPie } from "react-icons/fa";
 import { IoBarChart } from "react-icons/io5";
@@ -129,7 +129,6 @@ const ChartPopup = ({
             const data=JSON.parse(response.data.data)
             
             setdbsheetdata(data)
-            console.log("john"+data)
             setDbSheetIntRows(Object.keys(data[0]))
             console.log(sheetdbdata)
             console.log(dbSheetIntRows)
@@ -146,6 +145,7 @@ const ChartPopup = ({
     setselectedSheetxAxis(dbSheetIntRows[0])
     setselectedSheetYaxis(dbSheetIntRows[0])
     setLoading2(false)
+    
   },[dbSheetIntRows])
 
   
