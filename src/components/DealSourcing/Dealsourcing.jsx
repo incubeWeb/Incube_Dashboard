@@ -25,7 +25,7 @@ const Dealsourcing = ({hidenavbar}) => {
 
   useEffect(()=>{
    const setCompany=async()=>{
-    const res=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getdealsourcingFiles',{organization:localStorage.getItem('organization')})
+    const res=await axios.post('http://localhost:8999/getdealsourcingFiles',{organization:localStorage.getItem('organization')})
     const data=res.data.data
     setCompanies(data)
    }
@@ -43,7 +43,7 @@ const Dealsourcing = ({hidenavbar}) => {
 
   const handleSearch=async()=>{
     const search=document.getElementById('search').value
-    const res=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/searchdealsourcingfiles',{search:search,organization:localStorage.getItem('organization')})
+    const res=await axios.post('http://localhost:8999/searchdealsourcingfiles',{search:search,organization:localStorage.getItem('organization')})
     const data=res.data.data
     setCompanies(data)
   }
@@ -63,7 +63,7 @@ const Dealsourcing = ({hidenavbar}) => {
     setMoreFilters(!moreFilters)
   }
   return (
-    <div className={`${hidenavbar?'ml-[0%] w-[100%]':'ml-[20%] w-[80%]'}select-none text-gray-800 flex flex-col p-[63px] pt-[30px] h-screen font-roboto`}>
+    <div className={`${hidenavbar?'ml-[0%] w-[100%]':'ml-[20%] w-[80%]'}select-none text-gray-800 flex flex-col p-[63px] pt-[30px] h-screen font-sans`}>
       <div className='flex flex-col w-[100%] h-[20%] justify-center'>
         <div className='w-[100%] h-[30%] flex flex-row items-center'>
           <p className='basis-1/2 text-[20px] font-sans font-bold'>232 Startups in Gurugram</p>
@@ -100,7 +100,7 @@ const Dealsourcing = ({hidenavbar}) => {
                       />
                 </div>
                 :
-                <div className='w-[100%] h-[100%] rounded-md flex flex-row items-center justify-center space-x-2 font-semibold' onClick={handleShowCalendar}>
+                <div className='w-[100%] h-[100%] rounded-md flex flex-row items-center font-sans justify-center space-x-2 font-semibold' onClick={handleShowCalendar}>
                         <div>
                             <CiCalendar size={16}/>
                         </div>
@@ -113,7 +113,7 @@ const Dealsourcing = ({hidenavbar}) => {
           <div className='w-[190px] cursor-pointer items-center justify-center space-x-4 rounded-md h-[60%] border-gray-300 border-[1px] flex flex-row' onClick={handleFundingRounds} >
                 <div className=' flex flex-row items-center justify-center space-x-1' >
                     <FiDollarSign size={15}/>
-                    <p className='text-[15px] pt-[2px]  font-semibold'>Funding Rounds</p>
+                    <p className='text-[15px] pt-[2px] font-sans font-semibold'>Funding Rounds</p>
                 </div>
                 <div className='pt-[3px]'><FaChevronDown size={16}/></div>
           </div>

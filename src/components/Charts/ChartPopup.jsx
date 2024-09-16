@@ -7,6 +7,8 @@ import { IoBarChart } from "react-icons/io5";
 import { BiBorderAll, BiLineChart } from "react-icons/bi";
 import { SiGooglesheets } from "react-icons/si";
 import axios from "axios";
+import { AiOutlineLoading3Quarters } from "react-icons/ai"; // If you're using react-icons
+
 const ChartPopup = ({
   
   showlist,
@@ -91,6 +93,9 @@ const ChartPopup = ({
   const [selectedDbSheet,setselectedDbsheet]=useState(false)
   const [presentSheets,setpresentSheets]=useState([])  
   const [selectedsheetfromdbname,setselectedsheetfromdbname]=useState('')
+  const [Loading1,setLoading1]=useState(true);
+  const[Loading2,setLoading2]=useState(true);
+  
 
   
   const handleFileChange = (event) => {
@@ -119,7 +124,7 @@ const ChartPopup = ({
         formData.append('organization',localStorage.getItem('organization'))
         formData.append('CompanyName',`DB${Date.now()}_${chart}`)
         try {
-            const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/uploadsheetFile', formData);
+            const response=await axios.post('http://localhost:8999/uploadsheetFile', formData);
             console.log('File uploaded successfully',response.data.data);
             const data=JSON.parse(response.data.data)
             
@@ -139,6 +144,7 @@ const ChartPopup = ({
   useEffect(()=>{
     setselectedSheetxAxis(dbSheetIntRows[0])
     setselectedSheetYaxis(dbSheetIntRows[0])
+    setLoading2(false)
   },[dbSheetIntRows])
 
   
@@ -148,7 +154,7 @@ const ChartPopup = ({
     setselectedDbsheet(!selectedDbSheet)
     console.log('selectedhseeetfromdat',selectedsheetfromdbname)
     
-    const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/sheetfromdb',{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
+    const response=await axios.post('http://localhost:8999/sheetfromdb',{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
     const data=JSON.parse(response.data.data)
     const name=response.data.fileName
     const dbcompanyname=response.data.CompanyName
@@ -163,8 +169,9 @@ const ChartPopup = ({
   const handleselectDatabase=async(e)=>{
     e.stopPropagation();
     setClickedDatabase((prev)=>!prev)
-    const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+    const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
     setpresentSheets(response.data.data)
+    setLoading1(false);
     response.data.data.map((val,index)=>
       {if(index==0)
       {
@@ -865,14 +872,23 @@ const ChartPopup = ({
             </div>
             <div className="w-[100%] flex h-[30%] items-center space-x-2">
               <select value={selectedsheetfromdbname} onChange={handlesetselecteddbsheetname} className="border-[1px] border-gray-400 w-[80%] h-[40px] text-[14px]">
-                  {
+              {Loading1 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+        Loading...
+      </div>
+    </option>
+  ) : (
                     presentSheets.map(sheet=>
                     <option key={sheet._id} value={sheet._id}>{sheet.name}</option>
                   )
-                  }
+        )}
               </select>
-              <div className="w-[120px] cursor-pointer h-[40px] bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-center">
-                <p className="text-[14px]" onClick={(e)=>selectedSheetFromDatabase(e)}>Confirm sheet</p>
+              <div className="w-[120px] cursor-pointer h-[40px] bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-center">  {Loading1 ? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+          ) : (
+                <p className="text-[14px]" onClick={(e)=>selectedSheetFromDatabase(e)}>Confirm sheet</p>)}
               </div>
             </div>
             
@@ -894,13 +910,23 @@ const ChartPopup = ({
             <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                 <div><p className="text-[14px]">Name field:</p></div>
                 <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
-                  {
+                {Loading2 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+        Loading...
+      </div>
+    </option>
+  ) : (
                     
                     dbSheetIntRows.map(val=>
                       <option key={val.id}>{val}</option>
                     )
-                  }
+         ) }
                 </select>
+             
+       
+
                 <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                   <option>string</option>
                   <option >integer</option>
@@ -909,20 +935,29 @@ const ChartPopup = ({
               <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                 <div><p className="text-[14px]">Value field:</p></div>
                 <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
-                  {
+                {Loading2 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+        Loading...
+      </div>
+    </option>
+  ) : (
                     dbSheetIntRows.map(val=>
                       <option key={val._id}>{val}</option>
                     )
-                  }
+                   ) }
                 </select>
                 <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                   <option>string</option>
                   <option >integer</option>
                 </select>
               </div>
-              <div onClick={(e)=>handleSheetCreatePiechartDB(e)} className="cursor-pointer select-none w-[100%] h-[30px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
+              <div onClick={(e)=>handleSheetCreatePiechartDB(e)} className="cursor-pointer select-none w-[100%] h-[30px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">{Loading2 ? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+          ) : (
                   <p className="text-[14px] text-white">Create the Pie chart</p>
-              </div>
+           )} </div>
           </div>
       </div>
         )}
@@ -1057,14 +1092,23 @@ const ChartPopup = ({
             </div>
             <div className="w-[100%] flex h-[30%] items-center space-x-2">
               <select value={selectedsheetfromdbname} onChange={handlesetselecteddbsheetname} className="border-[1px] border-gray-400 w-[80%] h-[40px] text-[14px]">
-                  {
+              {Loading1 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> {/* Spinner icon */}
+        Loading...
+      </div>
+    </option>
+  ) : (
                     presentSheets.map(sheet=>
                     <option key={sheet._id} value={sheet._id}>{sheet.name}</option>
                   )
-                  }
+            )}
               </select>
-              <div className="w-[120px] h-[40px] cursor-pointer bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-center">
-                <p className="text-[14px]" onClick={(e)=>selectedSheetFromDatabase(e)}>Confirm sheet</p>
+              <div className="w-[120px] h-[40px] cursor-pointer bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-center"> {Loading1 ? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+          ) : (
+                <p className="text-[14px]" onClick={(e)=>selectedSheetFromDatabase(e)}>Confirm sheet</p>)}
               </div>
             </div>
             
@@ -1085,12 +1129,19 @@ const ChartPopup = ({
              <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                <div><p className="text-[14px]">X-axis field:</p></div>
                <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
-                 {
+               {Loading2? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> {/* Spinner icon */}
+        Loading...
+      </div>
+    </option>
+  ) : (
                    
                    dbSheetIntRows.map(val=>
                      <option key={val.id}>{val}</option>
                    )
-                 }
+         ) }
                </select>
                <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                  <option>string</option>
@@ -1100,19 +1151,28 @@ const ChartPopup = ({
              <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                <div><p className="text-[14px]">Y-axis field:</p></div>
                <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
-                 {
+               {Loading2 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> {/* Spinner icon */}
+        Loading...
+      </div>
+    </option>
+  ) : (
                    dbSheetIntRows.map(val=>
                      <option key={val.id}>{val}</option>
                    )
-                 }
+         ) }
                </select>
                <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                  <option>string</option>
                  <option >integer</option>
                </select>
              </div>
-             <div onClick={(e)=>handleSheetCreateAreachartDB(e)} className="cursor-pointer select-none w-[100%] h-[30px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
-                 <p className="text-[14px] text-white">Create the Line chart</p>
+             <div onClick={(e)=>handleSheetCreateAreachartDB(e)} className="cursor-pointer select-none w-[100%] h-[30px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">{Loading2 ? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+          ) : (
+                 <p className="text-[14px] text-white">Create the Line chart</p>)}
              </div>
          </div>
      </div>
@@ -1346,14 +1406,23 @@ const ChartPopup = ({
             </div>
             <div className="w-[100%] flex h-[30%] items-center space-x-2">
               <select value={selectedsheetfromdbname} onChange={handlesetselecteddbsheetname} className="border-[1px] border-gray-400 w-[80%] h-[40px] text-[14px]">
-                  {
+              {Loading1 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+        Loading...
+      </div>
+    </option>
+  ) : (
                     presentSheets.map(sheet=>
                     <option key={sheet._id} value={sheet._id}>{sheet.name}</option>
                   )
-                  }
+       ) }
               </select>
-              <div className="w-[120px] h-[40px] cursor-pointer bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-center">
-                <p className="text-[14px]" onClick={(e)=>selectedSheetFromDatabase(e)}>Confirm sheet</p>
+              <div className="w-[120px] h-[40px] cursor-pointer bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-center">{Loading1? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+          ) : (
+                <p className="text-[14px]" onClick={(e)=>selectedSheetFromDatabase(e)}>Confirm sheet</p>)}
               </div>
             </div>
             
@@ -1376,12 +1445,19 @@ const ChartPopup = ({
             <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
               <div><p className="text-[14px]">X-axis field:</p></div>
               <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
-                {
+              {Loading2 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> {/* Spinner icon */}
+        Loading...
+      </div>
+    </option>
+  ) : (
                   
                   dbSheetIntRows.map(val=>
                     <option key={val.id}>{val}</option>
                   )
-                }
+         ) }
               </select>
               <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                 <option>string</option>
@@ -1392,11 +1468,18 @@ const ChartPopup = ({
             <div className=" w-[100%] h-[%] items-center justify-center flex flex-row space-x-2">
               <div><p className="text-[14px]">Y-axis field:</p></div>
               <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
-                {
+              {Loading2 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> {/* Spinner icon */}
+        Loading...
+      </div>
+    </option>
+  ) : (
                   dbSheetIntRows.map(val=>
                     <option key={val.id}>{val}</option>
                   )
-                }
+        )}
               </select>
               <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                 <option>string</option>
@@ -1405,7 +1488,10 @@ const ChartPopup = ({
               
             </div>
             <div onClick={(e)=>handleSheetCreateBarchartDB(e)} className="cursor-pointer select-none w-[100%] h-[30px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
-                <p className="text-[14px] text-white">Create the Bar chart</p>
+            {Loading2 ? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+          ) : (
+                <p className="text-[14px] text-white">Create the Bar chart</p>)}
             </div>
         </div>
     </div>
@@ -1607,6 +1693,7 @@ const ChartPopup = ({
                 onClick={(e)=>handleCreateBarchart(e)}
                 className="hover:shadow-md hover:bg-sky-500 shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center border-[1px]"
               >
+               
                 <p className="w-[70%]">Create Bar chart</p>
                 <div className="w-[30%] flex justify-end pr-3">
                   <div>

@@ -37,17 +37,17 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar}) => {
     },[allDocs])
     const handleDelete=async (id)=>{
         console.log(id)
-        const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/deleteUploadedfile',{id:id,doneBy:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+        const response=await axios.post('http://localhost:8999/deleteUploadedfile',{id:id,doneBy:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
         if(response.data.status==200)
         {
-            const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+            const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
             setAllDocs(response.data.data)
         }
     }
     const handleView=async (id,name)=>{
         console.log(id)
         setid(id)
-        const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
+        const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
         const data=JSON.parse(response.data.data)
         setjsonData(data)
         setclickedview(!clickedView)
@@ -62,11 +62,11 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar}) => {
         const handle=async()=>{
             if(search.length<=0)
                 {
-                    const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+                    const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
                     setAllDocs(response.data.data)
                 }
                 else{
-                    const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/searchFile',{
+                    const response=await axios.post('http://localhost:8999/searchFile',{
                         search:search,
                         organization:localStorage.getItem('organization')
                     })
@@ -84,7 +84,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar}) => {
         const checkIfSelected=async()=>{
             if(activeField=='documents')
             {
-                const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+                const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
                 setAllDocs(response.data.data)
             }
         }
@@ -99,13 +99,13 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar}) => {
   return (
     <div className={`${hidenavbar?'ml-[2%] w-[90%] h-screen':'ml-[20%] w-[80%] h-screen'} pt-[5%] flex flex-col p-4 items-center justify-start font-sans bg-gray-100`}>
     <div className='w-[100%] h-[10%] flex flex-row space-x-3'>
-        <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className='text-gray-500 hover:text-gray-600 font-sans'>Dashboard</p></Link>
+        <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className='text-gray-500 hover:text-gray-600 font-sans font-semibold'>Dashboard</p></Link>
         <p>/</p>
-        <p className='font-sans'>Document</p>
+        <p className='font-sans font-semibold'>Document</p>
     </div>
     <div className='flex flex-row w-[100%] h-[10%]'>
         <div className='flex flex-row w-[50%]'>
-            <p className='text-[23px] font-sans'>Document</p>
+            <p className='text-[22px] font-sans font-semibold'>Document</p>
         </div>
         <div className='flex flex-row w-[50%] h-[60%] space-x-3 justify-end'>
                 <div className='ease-linear duration-150 cursor-pointer hover:w-[160px] h-[100%] flex flex-row items-center space-x-2 p-2 rounded-md bg-gradient-to-r from-green-500 to-green-700' onClick={()=>setcreateSheet(true)}>

@@ -124,7 +124,7 @@ const Viewsheet = ({ viewdDoc, jsonData, id, setclickedview, clickedview, hidena
           }, {})
         );
 
-      await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/updateSheetFromJson', {
+      await axios.post('http://localhost:8999/updateSheetFromJson', {
         id: id,
         updatedJson: updatedJson,
         organization: localStorage.getItem('organization'),

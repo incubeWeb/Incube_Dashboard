@@ -5,7 +5,7 @@ import { IoArrowBackSharp } from 'react-icons/io5'
 
 const PortfolioHistory = ({setportfolioHistory,sheetKeys,sheetJson,selectedImageFiled}) => {
   return (
-    <div className='h-[140px] w-[100%] flex flex-col space-y-2'>
+    <div className='h-[250px] w-[100%] flex flex-col space-y-2'>
         
         <div className='flex flex-row space-x-2 text-[14px] text-gray-600 '>
                 {
@@ -35,13 +35,13 @@ const PortfolioHistory = ({setportfolioHistory,sheetKeys,sheetJson,selectedImage
                                             sheetKeys.map((k,index)=>
                                                 
                                                 <td className='' colSpan={index=='0'?'2':'1'} key={k._id}>
-                                                   <div className='flex flex-row space-x-4 items-center'>
+                                                   <div className='flex flex-row space-x-4 items-center '>
                                                     {index==0?
                                                             <td className='w-[35px] rounded-md h-[35px] flex items-center justify-center'><img className='w-[25px] rounded-md h-[25px] object-fit' src={val[selectedImageFiled]}/></td>
                                                             :
                                                             <></>
                                                         }
-                                                    <p className='w-[200px] overflow-auto scrollbar-hide text-[14px] text-gray-700 tracking-wide'>{val[k]}</p> 
+                                                    <p className='w-[200px] overflow-auto scrollbar-hide text-[14px]  text-gray-700 tracking-wide'>{val[k]}</p> 
                                                    </div>
                                                     
                                                 </td>

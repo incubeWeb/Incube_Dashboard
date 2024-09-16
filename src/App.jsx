@@ -27,7 +27,7 @@ function App() {
   const [sheetedited,setsheetedited]=useState([])
   
   
-  const socket=io('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999')
+  const socket=io('http://localhost:8999')
   
   
 
@@ -40,7 +40,7 @@ function App() {
         }
         console.log('connecting to socket')
         console.log('connecting to databaseChange')
-        const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/gettimeline',{organization:localStorage.getItem('organization')})
+        const response=await axios.post('http://localhost:8999/gettimeline',{organization:localStorage.getItem('organization')})
         console.log(response)
         if(response.data.data.length>0)
         {

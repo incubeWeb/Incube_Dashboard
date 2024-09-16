@@ -32,7 +32,7 @@ function FirstCol({setActiveField,hidenavbar}) {
 
 
   const showCompanies = async () => {
-    const response = await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getUserfromTeam', {
+    const response = await axios.post('http://localhost:8999/getUserfromTeam', {
       member: localStorage.getItem('email'),
       mainorganization:localStorage.getItem('organization')
     });
@@ -56,7 +56,7 @@ function FirstCol({setActiveField,hidenavbar}) {
 
   const fetchCompanyData = async () => {
     try {
-      const response = await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+      const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
       setCompanyData(response.data.data);
     } catch (error) {
       console.error('Error fetching company data:', error);
@@ -99,7 +99,7 @@ function FirstCol({setActiveField,hidenavbar}) {
         
       <div className='flex flex-col space-y-2 md:space-y-0 md:flex md:flex-row md:w-[100%] md:h-[83px] md:items-center p-3 md:p-0'>
         <div className='flex flex-col md:flex md:flex-col md:pl-[20px] md:w-[721px] md:h-[38px] '>
-          <p className='md:text-[26px] text-[17px]  text-sans text-semibold '>Deal Pipeline</p>
+          <p className='md:text-[22px]  text-[17px]  text-sans text-semibold '>Deal Pipeline</p>
           <p className='md:text-[13px] text-[12px]  text-sans text-semibold  text-gray-500'>Search or go through startups looking to raise fresh rounds.</p>
         </div>
         <div className='md:w-[100%] md:h-[100%] md:flex md:items-center md:justify-end md:mr-[20px]'>

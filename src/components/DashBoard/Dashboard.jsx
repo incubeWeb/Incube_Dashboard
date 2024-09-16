@@ -121,7 +121,7 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
       
       let email=localStorage.getItem('email')
       const organization=localStorage.getItem('organization')
-      let checkDb=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getDashboardData',{email:email,organization:organization})
+      let checkDb=await axios.post('http://localhost:8999/getDashboardData',{email:email,organization:organization})
       
 
       
@@ -164,7 +164,7 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
       
       let email=localStorage.getItem('email')
       const organization=localStorage.getItem('organization')
-      let checkDb=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/getDashboardData',{email:email,organization:organization})
+      let checkDb=await axios.post('http://localhost:8999/getDashboardData',{email:email,organization:organization})
       
 
       
@@ -218,7 +218,7 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
 
         if(boxes.length>0)
         {
-         await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/addDashboardData',{email:email,positions:position,organization:organization}) 
+         await axios.post('http://localhost:8999/addDashboardData',{email:email,positions:position,organization:organization}) 
         }
        
         
@@ -276,7 +276,7 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
 
   return (
     
-    <div className={`${hidenavbar?'w-[100%] ml-[0%]':'w-[100%] pl-[20%]'} space-x-4 flex flex-row h-screen p-[44px] pr-0 pt-0 pb-0 font-roboto`}>
+    <div className={`${hidenavbar?'w-[100%] ml-[0%]':'w-[100%] pl-[20%]'} bg-gray-100 space-x-4 flex flex-row h-screen p-[44px] pr-0 pt-0 pb-0 font-roboto`}>
     {
       loading ? (
         <div className='w-[100%]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>

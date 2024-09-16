@@ -28,7 +28,7 @@ const Addusers = ({setActiveField,hidenavbar}) => {
             let organization=localStorage.getItem('organization')
             if(searchUser.length<=0)
             {
-                const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/fetchallusers',{
+                const response=await axios.post('http://localhost:8999/fetchallusers',{
                     organization:organization
                 })
                 setAllusers(response.data.data)
@@ -40,7 +40,7 @@ const Addusers = ({setActiveField,hidenavbar}) => {
                 setAllusers([])
             }
             else{
-                const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/findUsers',{
+                const response=await axios.post('http://localhost:8999/findUsers',{
                     user:searchUser,
                     organization:organization
                 })
@@ -61,14 +61,14 @@ const Addusers = ({setActiveField,hidenavbar}) => {
 
     const handleDelete=async(email)=>{
         let organization=localStorage.getItem('organization')
-        const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/deleteUser',{
+        const response=await axios.post('http://localhost:8999/deleteUser',{
             doneBy:localStorage.getItem('email'),
             email:email,
             organization:organization
         })
         if(response.data.status==200)
         {
-            const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/findUsers',{
+            const response=await axios.post('http://localhost:8999/findUsers',{
                 user:searchUser,
                 organization:organization
             })
@@ -92,18 +92,18 @@ const Addusers = ({setActiveField,hidenavbar}) => {
     useEffect(()=>{
         const getUser=async()=>{
             let organization=localStorage.getItem('organization')
-            const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/fetchallusers',{organization:organization})
+            const response=await axios.post('http://localhost:8999/fetchallusers',{organization:organization})
             setAllusers(response.data.data)
             
         }
         getUser()
     },[])
   return (
-    <div className={`${hidenavbar?' ml-[2%] w-[97%] ':'ml-[20%] w-[80%]'} pt-[5%] pl-[25px] bg-white flex flex-col items-center justify-start space-y-4  w-[100%] p-[20px] font-roboto`}>
+    <div className={`${hidenavbar?' ml-[2%] w-[97%] ':'ml-[20%] w-[80%]'} pt-[5%] pl-[25px] bg-gray-100 flex flex-col items-center justify-start space-y-4  w-[100%] p-[20px] font-roboto`}>
         <div className='w-[100%] h-[10%] flex flex-row space-x-3'>
-            <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className=' text-gray-300 hover:text-gray-500'>Dashboard</p></Link>
+            <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className=' text-gray-300 hover:text-gray-500 font-sans font-semibold'>Dashboard</p></Link>
             <p className='text-gray-500'>/</p>
-            <p className='text-gray-600'>Users</p>
+            <p className='text-gray-600 font-sans font-semibold'>Users</p>
         </div>
         <div className='bg-white text-gray-500 rounded-t-md p-4 flex flex-row w-[100%] h-[10%]' style={{boxShadow:'0px 1px 4px #D1D5DB'}}>
             <div className='flex flex-row w-[50%]'>

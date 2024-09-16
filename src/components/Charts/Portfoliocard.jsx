@@ -7,6 +7,7 @@ import { LuPencil } from 'react-icons/lu'
 import { RiFundsLine } from 'react-icons/ri'
 import { RxCross2 } from 'react-icons/rx'
 import { IoMdClose } from "react-icons/io";
+import { BsPencil } from "react-icons/bs";
 
 
 
@@ -43,7 +44,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     },[])
 
     const handlePlusClick=async()=>{
-        const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+        const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
         setsheetpopup(true)
         setallsheets(response.data.data)
         
@@ -80,10 +81,10 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
         
         if(boxes.length===0)
         {
-          await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/deletedashboard',{email:email,organization:organization})
+          await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization})
           setBoxes([])
         }
-        else{const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/updatedashboard',{email:email,position:position,organization:organization})
+        else{const response=await axios.post('http://localhost:8999/updatedashboard',{email:email,position:position,organization:organization})
         if(response.data.status==200)
         {
           setBoxes(boxes.filter((box,index)=>index!=id))
@@ -131,7 +132,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     
     useEffect(()=>{
         const setValues=async()=>{
-            const response=await axios.post('http://ec2-13-233-247-65.ap-south-1.compute.amazonaws.com:8999/sheetfromdb',{id:clickedSheetId,organization:localStorage.getItem('organization')})
+            const response=await axios.post('http://localhost:8999/sheetfromdb',{id:clickedSheetId,organization:localStorage.getItem('organization')})
             const data=JSON.parse(response.data.data)
             setsheetJson(data)
             const key=Object.keys(data[0])
@@ -223,10 +224,14 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                         </div>
                     
                     :
+                     
                     <div className='w-[100%] h-[100%]'>
+                    <div className='ml-12 -mb-2'><BsPencil /></div>
                         <div className='bg-blue-500 w-[15%] h-[40px] flex items-center justify-center  -mt-5 rounded-md'>
+                        
                             <RiFundsLine size={28} className='text-white'/>
                         </div>
+                       
                         
                         <div className='w-[100%] h-[30%] flex flex-row items-center justify-start space-x-2 mt-4 '>
                                     {
@@ -238,6 +243,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                                     
                                     <div onClick={()=>handleEdit()}>
                                         <LuPencil className='text-gray-500'/>
+                                        
                                     </div>
                         </div>
                         <div className='w-[100%] h-[40%]  flex flex-row'>
