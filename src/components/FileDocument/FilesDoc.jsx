@@ -56,17 +56,17 @@ const FilesDoc = ({ currentTab,CompanyName }) => {
 
     return (
         <div className="w-[100%] h-[100%]">
-            <div className="p-[16px] w-[100%] h-[100%] rounded-md shadow-md border-[1px] border-gray-300 md:flex md:flex-col space-y-4">
+            <div className="p-[16px] w-[100%] h-[65%] rounded-md shadow-md border-[1px] border-gray-300 md:flex md:flex-col space-y-4">
                 <div className="h-[20%] w-[100%] border-b-[1px] border-gray-300 flex flex-row items-center">
                     <div className="w-[50%] pl-[7px]">
-                        <p className="text-[14px]">Files</p>
+                        <p className="text-[14px] font-inter font-semibold">Files</p>
                     </div>
                     <div className="w-[50%] pr-[7px] flex justify-end">
                         <p
-                            className="text-blue-600 text-[13px] cursor-pointer"
+                            className="text-blue-600 text-[13px] font-inter font-semibold cursor-pointer"
                             onClick={() => setUploadFile(!uploadFile)}
                         >
-                            {uploadFile ? 'View' : 'Add new'}
+                            {uploadFile ? 'View' : ' Add new'}
                         </p>
                     </div>
                 </div>

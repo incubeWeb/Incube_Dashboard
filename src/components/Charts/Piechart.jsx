@@ -209,8 +209,8 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
           <PieChart>
             <defs>
               <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="5%" stopColor="#4A90E2" stopOpacity={0.8}  />
-                <stop offset="50%" stopColor="#007AFF"   stopOpacity={0.6} />
+                <stop offset="3%" stopColor="#4A90E2" stopOpacity={0.8}  />
+                <stop offset="80%" stopColor="#007AFF"   stopOpacity={0.8} />
               </linearGradient>
             </defs>
             <Pie

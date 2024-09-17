@@ -72,7 +72,7 @@ function AddNewDetails({hidenavbar, openAddNewWindow ,CompanyName, handleTotalCa
   };
 
   return (
-    <div className={`${hidenavbar?'w-[100%]':' w-[80%]'} flex flex-col fixed top-0   bg-white h-screen z-[51] p-[34px]`}>
+    <div className={`${hidenavbar?'w-[100%]':' w-[80%]'} flex flex-col fixed top-0  pr-10 bg-white h-screen z-[51]  p-[34px]`}>
       <div ref={MainDiv} className="bg-white w-[100%] h-screen opacity-100 top-0 right-0 fixed"></div>
       <div
         className=" rounded-md mb-[60px] space-y-4 w-[100%] h-[100%] p-[23px] flex flex-col overflow-auto"
@@ -110,18 +110,18 @@ function AddNewDetails({hidenavbar, openAddNewWindow ,CompanyName, handleTotalCa
 
         <div className="flex flex-row items-center h-[60px] justify-center space-x-3">
           <div
-            className="w-[125px] h-[40px] flex-shrink-0 text-blue-600 rounded-md bg-white flex items-center justify-center shadow-md border-[1px] border-gray-200 cursor-pointer"
+            className="w-[130px] h-[40px] flex-shrink-0 text-blue-600 rounded-md bg-white flex items-center justify-center shadow-md border-[1px] border-gray-200 cursor-pointer"
             onClick={handleAddSection}
           >
-            <AiOutlinePlus />
-            <p className="text-[12px] font-semibold">Add New Row</p>
+  
+            <p className="text-[14px] font-semibold font-inter"><span className='text-[18px]'>+</span>Add new row</p>
           </div>
           <div
             className="w-[75px] h-[40px] flex-shrink-0 bg-blue-600 rounded-md text-white flex items-center justify-center cursor-pointer"
             style={{ boxShadow: '0px 2px 5px rgba(0,0,0,0.6)' }}
             onClick={handleSave}
           >
-            <p className="text-[12px] font-semibold">Save</p>
+            <p className="text-[14px] font-semibold font-inter">Save</p>
           </div>
         </div>
       </div>

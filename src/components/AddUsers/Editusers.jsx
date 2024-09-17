@@ -63,7 +63,7 @@ function EditUser({ handleEdit,email,password,role,edit,setAllusers}) {
           </select>
         </div>
         <div className='flex flex-col items-center h-[60px] justify-center'>
-          <button className='bg-blue-600 w-[95px] text-[14px] rounded-md  h-[35px] text-white' onClick={handleUpdate}>Update</button>
+          <button className='bg-blue-600 w-[95px] text-[14px] rounded-md  font-inter h-[35px] text-white' onClick={handleUpdate}>Update</button>
         </div>
       </div>
     </div>

@@ -30,19 +30,19 @@ function CreateNew({ setCreateNew, fetchCompanyData,hidenavbar }) {
           <RxCross2 onClick={() => setCreateNew(false)} size={23} className='cursor-pointer' />
         </div>
         <div className='flex flex-col space-y-2'>
-          <p className='text-[14px] select-none'>Title</p>
-          <input id='title' className='outline-none p-2 text-[14px] text-gray-600 w-[100%] h-[40px] rounded-md border-gray-500 border-[1px] hover:border-blue-600 focus:border-blue-600' />
+          <p className='text-[14px] select-none font-inter font-semibold'>Title</p>
+          <input id='title' className='outline-none p-2 text-[14px] text-gray-600 w-[100%] h-[40px] rounded-md border-gray-500 border-[1px] ' />
         </div>
         <div className='flex flex-col space-y-2'>
-          <p className='text-[14px] select-none'>Profile Photo link</p>
-          <input id='profilelink' className='outline-none p-2 text-[14px] text-gray-600 w-[100%] h-[40px] rounded-md border-gray-500 border-[1px] hover:border-blue-600 focus:border-blue-600' />
+          <p className='text-[14px] select-none font-inter font-semibold'>Profile Photo link</p>
+          <input id='profilelink' className='outline-none p-2 text-[14px] text-gray-600 w-[100%] h-[40px] rounded-md border-gray-500 border-[1px]' />
         </div>
         <div className='flex flex-col space-y-2'>
-          <p className='text-[14px] select-none '>Description</p>
-          <textarea id='description' className='outline-none p-2 text-[14px] text-gray-600 w-[100%] h-[140px] overflow-x-auto resize-none rounded-md border-gray-500 border-[1px] hover:border-blue-600 focus:border-blue-600' />
+          <p className='text-[14px] select-none  font-inter font-semibold'>Description</p>
+          <textarea id='description' className='outline-none p-2 text-[14px] text-gray-600 w-[100%] h-[140px] overflow-x-auto resize-none rounded-md border-gray-500 border-[1px] ' />
         </div>
         <div className='flex flex-col items-center h-[60px] justify-center'>
-          <button className='bg-blue-600 w-[95px] text-[14px] rounded-md  h-[35px] text-white' onClick={saveDetails}>Save</button>
+          <button className='bg-blue-600 w-[95px] text-[14px] rounded-md font-inter font-semibold h-[35px] text-white' onClick={saveDetails}>Save</button>
         </div>
       </div>
     </div>

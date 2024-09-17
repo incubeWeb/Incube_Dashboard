@@ -179,7 +179,7 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                         ))}
                     </div>
                     <div className='w-[100%] h-[8%] flex justify-end'>
-                        <button className='w-[14%] rounded-md h-[40px] bg-blue-600 text-white text-[14px]' onClick={handleApplyChanges}>Apply Changes</button>
+                        <button className='w-[14%] rounded-md h-[40px] bg-blue-600 font-inter font font-semibold text-white text-[14px]' onClick={handleApplyChanges}>Apply Changes</button>
                     </div>
                 </div>
             </div>

@@ -145,7 +145,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
             <defs>
               <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#42a5f5" stopOpacity={0.8} />
-                <stop offset="60%" stopColor="#1e88e5" stopOpacity={0.8} />
+                <stop offset="80%" stopColor="#1e88e5" stopOpacity={0.8} />
               </linearGradient>
             </defs>
             <XAxis dataKey="name"     tickMargin={10} padding={{ left: 10, right: 10 }} />

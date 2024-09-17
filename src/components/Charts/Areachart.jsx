@@ -261,9 +261,9 @@ useEffect(() => {
             <defs>
           
             <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="3%" stopColor="#007BFF" stopOpacity={0.4} />
-              <stop offset="37%" stopColor="#007BFF" stopOpacity={0.2} />
-              <stop offset="60%" stopColor="	#ffffff" stopOpacity={0.0} />
+              <stop offset="20%" stopColor="#004EEB" stopOpacity={0.3} />
+              <stop offset="80%" stopColor="#004EEB" stopOpacity={0.7} />
+             
             </linearGradient>
           </defs>
 

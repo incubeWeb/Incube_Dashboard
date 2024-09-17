@@ -132,7 +132,7 @@ function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenG
                                 
                                 <div key={Tab.Tab} className={` md:w-[55px] w-[55px] h-[80%] rounded-md ${currentTab==Tab.id?'bg-white':'bg-white shadow-lg'} flex items-center justify-center `}>
                                     <div onClick={()=>setCurrentTab(Tab.id)} className='w-[100%] h-[100%] flex items-center justify-center'>
-                                        <p className='text-[12px] font-semibold'>Tab {Tab.id}</p>
+                                        <p className='text-[12px] font-semibold font-inter'>Tab {Tab.id}</p>
                                     </div>
                                     
                                 </div>
@@ -141,14 +141,14 @@ function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenG
                             )}
                             
                             <div className='md:w-[75px] w-[60px] h-[80%] text-blue-600 rounded-md bg-white flex items-center justify-center shadow-lg' onClick={addTabs} >
-                                <p className='text-[12px] font-semibold'>Add new</p>
+                                <p className='text-[12px] font-semibold font-inter'>Add new</p>
                             </div>
                             
                         </div>
                         
                     </div> 
                     <div className='flex flex-row h-[100%] justify-end w-[12%] md:space-x-2' onClick={openAddNewWindow}>
-                        <div className='w-[130px] border-sky-600 border-[1px] h-[80%] flex items-center justify-center rounded-md cursor-pointer'><p className='md:text-[13px] text-[9px] font-bold text-blue-600'>Add details</p></div>
+                        <div className='w-[130px] border-sky-600 border-[1px] h-[80%] flex items-center justify-center rounded-md cursor-pointer'><p className='md:text-[13px] text-[9px] font-bold text-blue-600 font-inter'>Add details</p></div>
                     </div>   
             </div>
         </div>

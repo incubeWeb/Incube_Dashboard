@@ -111,21 +111,21 @@ function FirstCol({setActiveField,hidenavbar}) {
       </div>
 
       <div className='hidden md:flex md:flex-row md:p-[20px] md:pb-2'>
-        <div className='md:flex md:flex-row w-[100%] md:h-[50px] md:bg-[#EAECF0] rounded-md md:p-3 md:space-x-2 relative'>
+        <div className='md:flex md:flex-row w-[100%] md:h-[50px] md:bg-[#EAECF0] font-inter font-semibold rounded-md md:p-3 md:space-x-2 relative'>
           <div ref={bgRef} className="absolute  bg-white shadow-md rounded-md flex items-center justify-center" style={{ pointerEvents: "none", zIndex: 1 }}>
             <p className="text-[14px]"></p>
           </div>
           <div ref={viewRef} className={`${selectedTab=='View All'?'text-gray-200':''}md:text-[14px] md:w-[120px]  rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("View All"); }}>
-            <p className='md:flex md:items-center md:justify-center md:h-full md:text-[14px]'>View All</p>
+            <p className='md:flex md:items-center md:justify-center md:h-full  md:text-[13px]'>View All</p>
           </div>
           <div ref={inProgressRef} className={`${selectedTab=='In Progress'?'text-gray-200':''} md:text-[14px] md:w-[120px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("In Progress"); }}>
-            <p className='md:flex md:items-center md:justify-center md:h-full md:text-[14px]'>In Progress</p>
+            <p className='md:flex md:items-center md:justify-center md:h-full md:text-[13px]'>In Progress</p>
           </div>
           <div ref={unAssignedRef} className={`${selectedTab=='Unassigned'?'text-gray-200':''} md:text-[14px] md:w-[120px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("Unassigned"); }}>
-            <p className='md:flex md:items-center md:justify-center md:h-full md:text-[14px]'>Unassigned</p>
+            <p className='md:flex md:items-center md:justify-center md:h-full md:text-[13px]'>Unassigned</p>
           </div>
           <div ref={completedRef} className={`${selectedTab=='Completed'?'text-gray-200':''} md:text-[14px] md:w-[120px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("Completed"); }}>
-            <p className='md:flex md:items-center md:justify-center md:h-full md:text-[14px]'>Completed</p>
+            <p className='md:flex md:items-center md:justify-center md:h-full md:text-[13px]'>Completed</p>
           </div>
           <div className='md:w-[100%] md:flex md:items-center md:justify-end'>
             {

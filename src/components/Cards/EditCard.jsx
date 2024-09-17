@@ -36,27 +36,27 @@ function EditCard({handleClose,id}) {
     <div className="flex flex-col fixed top-0 left-[20%] bg-white w-full h-screen z-[54] p-[34px]">
 
       <div
-        className="rounded-md mb-[60px] md:space-y-4 w-[100%] h-[100%] md:p-[23px] flex flex-col overflow-auto"
+        className="rounded-md mb-[60px] md:space-y-4 w-[80%] h-[100%] md:p-[23px] flex flex-col overflow-auto"
         style={{ boxShadow: '0px 1px 6px rgba(0, 0, 0, 0.3)' }}
       >
         <div className="w-[100%] flex justify-end">
-          <RxCross2 size={23} className="cursor-pointer" onClick={handleClose} />
+          <RxCross2 size={23} className="cursor-pointer bg-gray-100 rounded-full ml-2 -mt-2" onClick={handleClose} />
         </div>
 
         <div
             className="w-[100%] h-[420px] border-gray-200 shadow-md border-[1px] p-[20px] rounded-md"
           >
             <div className="flex flex-col space-y-2">
-              <p className="text-[14px] select-none">Title</p>
+              <p className="text-[14px] select-none font-inter font-semibold">Title</p>
               <input
-                id='titleText' className="outline-none p-2 text-[14px] text-gray-600 w-[100%] h-[40px] rounded-md border-gray-500 border-[1px] hover:border-blue-600 focus:border-blue-600"
+                id='titleText' className="outline-none p-2 text-[14px] text-gray-600 w-[100%] h-[40px] rounded-md border-gray-500 border-[1px]"
                 
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <p className="text-[14px] select-none">Description</p>
+              <p className="text-[14px] select-none font-inter font-semibold mt-2">Description</p>
               <textarea
-                id='descriptionText' className="outline-none p-2 text-[14px] text-gray-600 w-[100%] h-[210px] overflow-x-auto resize-none rounded-md border-gray-500 border-[1px] hover:border-blue-600 focus:border-blue-600"
+                id='descriptionText' className="outline-none p-2 text-[14px] text-gray-600 w-[100%] h-[210px] overflow-x-auto resize-none rounded-md border-gray-500 border-[1px]"
               />
             </div>
           </div>
@@ -67,7 +67,7 @@ function EditCard({handleClose,id}) {
             style={{ boxShadow: '0px 2px 5px rgba(0,0,0,0.6)' }}
             onClick={handleUpdate}
           >
-            <p className="text-[12px] font-semibold">Update</p>
+            <p className="text-[14px] font-semibold font-inter">Update</p>
           </div>
         </div>
       </div>
