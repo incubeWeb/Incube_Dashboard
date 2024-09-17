@@ -58,7 +58,7 @@ function CreateUser({ handleAddUser,setAllusers }) {
     <div className='font-noto justify-center flex flex-col fixed top-0 left-[20%] right-0 bg-white w-[80%] h-[100%] z-40 p-[34px]'>
       <div className=' rounded-md space-y-4 w-[100%] h-[500px] p-[13px] md:p-[23px] flex flex-col' style={{ boxShadow: '0px 1px 6px rgba(0, 0, 0, 0.3)' }}>
         <div className='w-[100%] flex justify-end'>
-          <RxCross2 onClick={handleAddUser} size={23} className='cursor-pointer' />
+          <RxCross2 onClick={handleAddUser} size={23} className='cursor-pointer bg-gray-100 rounded-full' />
         </div>
         <div className='flex flex-col space-y-2'>
           <p className='text-[14px] select-none'>Email</p>

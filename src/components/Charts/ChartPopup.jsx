@@ -769,7 +769,7 @@ const ChartPopup = ({
                 <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedManual(!clickedManual)} />
               </div>
               <div className="flex w-[20%] justify-end">
-                <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+                <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
               </div>
             </div>
             <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[30%]">
@@ -861,7 +861,7 @@ const ChartPopup = ({
               <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedDatabase(!clickedDatabase)} />
             </div>
             <div className="flex w-[20%] justify-end">
-              <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+              <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
             </div>
           </div>
           <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[30%]">
@@ -903,7 +903,7 @@ const ChartPopup = ({
               <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedPie(!clickedPie)} />
             </div>
             <div className="flex w-[20%] justify-end">
-              <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+              <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
             </div>
           </div>
           <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
@@ -969,7 +969,7 @@ const ChartPopup = ({
               <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setUploadSheetwindow(!uploadSheetWindow)} />
             </div>
             <div className="flex w-[20%] justify-end">
-              <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+              <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
             </div>
           </div>
               { 
@@ -1030,7 +1030,7 @@ const ChartPopup = ({
                                     <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedPie(!clickedPie)} />
                                   </div>
                                   <div className="flex w-[20%] justify-end">
-                                    <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+                                    <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
                                   </div>
                                 </div>
                                 <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
@@ -1081,7 +1081,7 @@ const ChartPopup = ({
               <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedDatabase(!clickedDatabase)} />
             </div>
             <div className="flex w-[20%] justify-end">
-              <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+              <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
             </div>
           </div>
           <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[30%]">
@@ -1123,7 +1123,7 @@ const ChartPopup = ({
              <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedArea(!clickedArea)} />
            </div>
            <div className="flex w-[20%] justify-end">
-             <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+             <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
            </div>
          </div>
          <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
@@ -1185,7 +1185,7 @@ const ChartPopup = ({
               <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setUploadSheetwindow(!uploadSheetWindow)} />
             </div>
             <div className="flex w-[20%] justify-end">
-              <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+              <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
             </div>
           </div>
               { 
@@ -1246,7 +1246,7 @@ const ChartPopup = ({
                                     <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedArea(!clickedArea)} />
                                   </div>
                                   <div className="flex w-[20%] justify-end">
-                                    <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+                                    <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
                                   </div>
                                 </div>
                                 <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
@@ -1298,7 +1298,7 @@ const ChartPopup = ({
                 <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedManual(!clickedManual)} />
               </div>
               <div className="flex w-[20%] justify-end">
-                <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+                <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
               </div>
             </div>
             <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[30%]">
@@ -1394,7 +1394,7 @@ const ChartPopup = ({
               <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedDatabase(!clickedDatabase)} />
             </div>
             <div className="flex w-[20%] justify-end">
-              <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+              <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full"  onClick={showlist} />
             </div>
           </div>
           <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[30%]">
@@ -1439,7 +1439,7 @@ const ChartPopup = ({
             <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedBar(!clickedBar)} />
           </div>
           <div className="flex w-[20%] justify-end">
-            <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+            <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
           </div>
         </div>
         <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
@@ -1505,7 +1505,7 @@ const ChartPopup = ({
               <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setUploadSheetwindow(!uploadSheetWindow)} />
             </div>
             <div className="flex w-[20%] justify-end">
-              <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+              <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
             </div>
           </div>
               { 
@@ -1566,7 +1566,7 @@ const ChartPopup = ({
                                     <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedBar(!clickedBar)} />
                                   </div>
                                   <div className="flex w-[20%] justify-end">
-                                    <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+                                    <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
                                   </div>
                                 </div>
                                 <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
@@ -1618,7 +1618,7 @@ const ChartPopup = ({
                 <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedManual(!clickedManual)} />
               </div>
               <div className="flex w-[20%] justify-end">
-                <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+                <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
               </div>
             </div>
             <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[30%]">
@@ -1708,7 +1708,7 @@ const ChartPopup = ({
 
 
         <div className="w-[100%]  flex justify-end pr-3">
-          <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+          <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
         </div>
         <ul className="mt-10 font-inter space-y-3 p-4 overflow-y-auto ">
           <div

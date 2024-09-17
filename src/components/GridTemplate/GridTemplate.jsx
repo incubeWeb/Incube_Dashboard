@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react'
 import OpenGrid from '../OpenGridTemplate/OpenGrid'
 import OpenUnassignedGrid from '../OpenGridTemplate/OpenUnassignedGrid'
 import OpenCompleteGrid from '../OpenGridTemplate/OpenCompleteGrid'
+import OpenViewallGrid from '../OpenGridTemplate/OpenViewallGrid'
 
 function GridTemplate({hidenavbar,setSelectedTab,selectedTab,setActiveField,Title,description,logo,status,TeamLead_status,pushedby,completed}) {
     const [openGrid,setOpenGrid]=useState(false)
     const [openUnassignedGrid,setopenUnassignedGrid]=useState(false)
     const [openCompleteGrid,setOpenCompleteGrid]=useState(false)
+    const[openViewallGrid,setOpenViewallGrid]=useState(false)
     const handleOpenGrid=async()=>{
         if(selectedTab=='In Progress')
         {
@@ -20,6 +22,10 @@ function GridTemplate({hidenavbar,setSelectedTab,selectedTab,setActiveField,Titl
         {
             setOpenCompleteGrid(!openCompleteGrid)
         }
+        if(selectedTab=='View All')
+            {
+                setOpenCompleteGrid(!openViewallGrid)
+            }
     }
     const check=()=>{
         return localStorage.getItem('role')=='team lead'
@@ -33,12 +39,12 @@ function GridTemplate({hidenavbar,setSelectedTab,selectedTab,setActiveField,Titl
                     <img src={logo} className='rounded-md'/>
                 </div>
                 <div className='flex flex-col justify-center md:h-[100%]'>
-                    <div className='text-[16px] font-semibold'><p>{Title}</p></div>
-                    <div className='text-[13px]'><p>Raising 50m</p></div>
+                    <div className='text-[16px] font-inter font-semibold'><p>{Title}</p></div>
+                    
                 </div>
             </div>
             <div className='md:flex md:w-[100%] md:h-[60px] overflow-y-hidden'>
-                <div className='text-[13px] md:h-full'>
+                <div className='text-[13px] md:h-full font-inter'>
                     <p className='md:h-full'>{description}</p>
                 </div>
             </div>
@@ -125,6 +131,11 @@ function GridTemplate({hidenavbar,setSelectedTab,selectedTab,setActiveField,Titl
         {openCompleteGrid?
             <OpenCompleteGrid hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :<></>}
+
+        {openViewallGrid?
+        <OpenViewallGrid hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+        :<></>}
+
 
     </div>
   )
