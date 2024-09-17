@@ -28,6 +28,7 @@ function App() {
   const [hidenavbar,sethidenavbar]=useState(false)
   const [filesadded,setfilesadded]=useState([])
   const [sheetedited,setsheetedited]=useState([])
+  const [realtimetabchats,setrealtimetabchats]=useState([])
   
   
   const socket=io('http://localhost:8999')
@@ -54,13 +55,16 @@ function App() {
         }
         
         socket.on('databaseChange',(change)=>{
-            console.log('datachanf',change.ns.coll)
             const key=changes.length-1
             const newCol={key:key,updateInColl: change.ns.coll,updateIs: JSON.stringify(change)}
           dispatch(addTimeline(newCol))
           if(change.ns.coll=='UploadedFiles')
           {
             setfilesadded(change)
+          }
+          if(change.ns.coll=='TabChats')
+          {
+            setrealtimetabchats(change)
           }
         })
         socket.on('chats',(chat)=>{
@@ -134,7 +138,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Login setLoginIn={setLoginIn}/>} />
             <Route path="/dashboard" element={<Dashboard realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/>} />
-            <Route path="/dealpipeline" element={<FirstCol setActiveField={setActiveField} hidenavbar={hidenavbar}/>} />
+            <Route path="/dealpipeline" element={<FirstCol realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>} />
             <Route path="/dealsourcing" element={<Dealsourcing hidenavbar={hidenavbar}/>} />
             <Route path="/adduser" element={<Addusers setActiveField={setActiveField} hidenavbar={hidenavbar}/>}/>
             <Route path="/allDocs" element={<Alldocs filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar}/>} />

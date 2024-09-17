@@ -23,6 +23,7 @@ function OpenViewallGrid({hidenavbar,setActiveField,companyName,description,hand
     const [TabCount,setTabCount]=useState(1)
     const [OpenSubbar,setSubbar]=useState(false)
     const [pushComplete,setpushComplete]=useState(false)
+    const [assignedList,setassignedList]=useState([])
 
     const openAddNewWindow=()=>{
         setAddnewWindow(!AddNewWindow)
@@ -30,6 +31,7 @@ function OpenViewallGrid({hidenavbar,setActiveField,companyName,description,hand
     const handleTotalCards=(data)=>{
         setTotalCards(data)
     }
+    
     
 
     useEffect(()=>{

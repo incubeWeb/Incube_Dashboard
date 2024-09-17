@@ -4,7 +4,7 @@ import { BsFileEarmarkPdfFill } from "react-icons/bs";
 import { BsFiletypePng } from "react-icons/bs";
 import { BsFiletypeJpg } from "react-icons/bs";
 import { CiFileOn } from "react-icons/ci";
-const FilesDoc = ({ currentTab,CompanyName }) => {
+const FilesDoc = ({ currentTab,CompanyName,itsfrom }) => {
     const [uploadFile, setUploadFile] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -61,6 +61,9 @@ const FilesDoc = ({ currentTab,CompanyName }) => {
                     <div className="w-[50%] pl-[7px]">
                         <p className="text-[14px] font-inter font-semibold">Files</p>
                     </div>
+                    {
+                        itsfrom!='completed'?
+                    
                     <div className="w-[50%] pr-[7px] flex justify-end">
                         <p
                             className="text-blue-600 text-[13px] font-inter font-semibold cursor-pointer"
@@ -69,6 +72,9 @@ const FilesDoc = ({ currentTab,CompanyName }) => {
                             {uploadFile ? 'View' : ' Add new'}
                         </p>
                     </div>
+                    :
+                    <></>
+                    }
                 </div>
                 <div className="h-[80%] w-[100%]">
                     {uploadFile ? (

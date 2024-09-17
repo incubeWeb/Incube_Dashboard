@@ -138,7 +138,7 @@ function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,han
                 {
                     (TotalCards||[]).map((item)=>
                     
-                    <Card key={item._id} id={item._id} CompanyName={item.CompanyName} Title={item.Title} Description={item.Description} Tab={item.Tab}/>
+                    <Card key={item._id} id={item._id} itsfrom='completed' CompanyName={item.CompanyName} Title={item.Title} Description={item.Description} Tab={item.Tab}/>
                     
                 )
                 }
@@ -156,14 +156,14 @@ function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,han
                 <div className='w-[100%] h-[50%] '>
                 {
                     
-                        <ChatCard currentTab={currentTab} CompanyName={companyName}/>
+                        <ChatCard itsfrom='completed' currentTab={currentTab} CompanyName={companyName}/>
                 
                 }
                 </div>
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <FilesDoc CompanyName={companyName} currentTab={currentTab}/>
+                        <FilesDoc itsfrom='completed' CompanyName={companyName} currentTab={currentTab}/>
                 
                 }
                 </div>
@@ -182,14 +182,14 @@ function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,han
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <ChatCard currentTab={currentTab} CompanyName={companyName}/>
+                        <ChatCard itsfrom='completed' currentTab={currentTab} CompanyName={companyName}/>
                 
                 }
                 </div>
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <FilesDoc CompanyName={companyName} currentTab={currentTab}/>
+                        <FilesDoc itsfrom='completed' CompanyName={companyName} currentTab={currentTab}/>
                 
                 }
                 </div>

@@ -15,7 +15,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 
 
-function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenGrid}) {
+function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenGrid,realtimetabchats}) {
     const [AddNewWindow,setAddnewWindow]=useState(false)
     const [TotalCards,setTotalCards]=useState([])
     const [Tabs,setTabs]=useState([{id:1,Tab:"Tab1"}])
@@ -176,7 +176,7 @@ function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenG
                 <div className='w-[100%] h-[50%] '>
                 {
                     
-                        <ChatCard currentTab={currentTab} CompanyName={companyName}/>
+                        <ChatCard realtimetabchats={realtimetabchats}  currentTab={currentTab} CompanyName={companyName}/>
                 
                 }
                 </div>
@@ -202,7 +202,7 @@ function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenG
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <ChatCard currentTab={currentTab} CompanyName={companyName}/>
+                        <ChatCard realtimetabchats={realtimetabchats} currentTab={currentTab} CompanyName={companyName}/>
                 
                 }
                 </div>

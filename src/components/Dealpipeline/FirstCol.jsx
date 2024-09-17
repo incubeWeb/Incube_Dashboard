@@ -8,7 +8,7 @@ import Inprogrss from './Inprogrss';
 import Unassigned from './Unassigned';
 import Completed from './Completed';
 
-function FirstCol({setActiveField,hidenavbar}) {
+function FirstCol({setActiveField,hidenavbar,realtimetabchats}) {
   const [selectedTab, setSelectedTab] = useState("View All");
   const [companyData, setCompanyData] = useState([]);
   const [filter, setFilter] = useState([]);
@@ -157,7 +157,7 @@ function FirstCol({setActiveField,hidenavbar}) {
         selectedTab === 'View All' ? <Viewall hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
       {
-        selectedTab === 'In Progress' ? <Inprogrss hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
+        selectedTab === 'In Progress' ? <Inprogrss realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
       {
         selectedTab === 'Unassigned' ? <Unassigned hidenavbar={hidenavbar} filter={filter} setSelectedTab={setSelectedTab} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null

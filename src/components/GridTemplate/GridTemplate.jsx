@@ -3,12 +3,26 @@ import OpenGrid from '../OpenGridTemplate/OpenGrid'
 import OpenUnassignedGrid from '../OpenGridTemplate/OpenUnassignedGrid'
 import OpenCompleteGrid from '../OpenGridTemplate/OpenCompleteGrid'
 import OpenViewallGrid from '../OpenGridTemplate/OpenViewallGrid'
+import axios from 'axios'
 
-function GridTemplate({hidenavbar,setSelectedTab,selectedTab,setActiveField,Title,description,logo,status,TeamLead_status,pushedby,completed}) {
+function GridTemplate({hidenavbar,realtimetabchats,setSelectedTab,selectedTab,setActiveField,Title,description,logo,status,TeamLead_status,pushedby,completed}) {
     const [openGrid,setOpenGrid]=useState(false)
     const [openUnassignedGrid,setopenUnassignedGrid]=useState(false)
     const [openCompleteGrid,setOpenCompleteGrid]=useState(false)
     const[openViewallGrid,setOpenViewallGrid]=useState(false)
+    const [assignedList,setassignedList]=useState([])
+
+    useEffect(()=>{
+        const getAssignedTeam=async()=>{
+            const response=await axios.post('http://localhost:8999/getTeams',{
+                assignedBy:localStorage.getItem('email'),
+                mailorganization:localStorage.getItem('organization')
+            })
+            setassignedList(response.data.data)
+        }
+        getAssignedTeam()
+    },[])
+
     const handleOpenGrid=async()=>{
         if(selectedTab=='In Progress')
         {
@@ -24,12 +38,17 @@ function GridTemplate({hidenavbar,setSelectedTab,selectedTab,setActiveField,Titl
         }
         if(selectedTab=='View All')
             {
-                setOpenCompleteGrid(!openViewallGrid)
+                setOpenViewallGrid(!openViewallGrid)
             }
     }
     const check=()=>{
         return localStorage.getItem('role')=='team lead'
     }
+
+    const checkerforTeam=()=>{
+        return assignedList.some(val=>val.mainorganization==localStorage.getItem('organization') && val.organization==Title)
+    }
+
 
   return (
     <div className='shadow-md md:shadow-none  h-[200px]  md:h-[233px] border-[1px] border-gray-200 rounded-md flex flex-col md:hover:shadow-xl duration-75 md:hover:border-0 select-none cursor-pointer ml-2 md:ml-0 mr-2 md:mr-2' onClick={handleOpenGrid}>
@@ -67,7 +86,7 @@ function GridTemplate({hidenavbar,setSelectedTab,selectedTab,setActiveField,Titl
             <></>
         }
         {
-            selectedTab=='View All'&&(localStorage.getItem('role')=='team lead'|| localStorage.getItem('role')=='user' && completed!='completed')?
+            selectedTab=='View All'&&(localStorage.getItem('role')=='team lead'|| localStorage.getItem('role')=='user') && completed!='completed'?
             <div className={`${TeamLead_status=='Unassigned'?'text-red-500':'text-sky-500'} w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[15px] md:text-[15px]  font-roboto`}>
                 <p className='cursor-pointer'>{TeamLead_status}</p>
             </div>
@@ -75,7 +94,7 @@ function GridTemplate({hidenavbar,setSelectedTab,selectedTab,setActiveField,Titl
             <></>
         }
         {
-            selectedTab=='View All'&&(localStorage.getItem('role')=='team lead'|| localStorage.getItem('role')=='user' && completed=='completed')?
+            selectedTab=='View All'&&(localStorage.getItem('role')=='team lead'|| localStorage.getItem('role')=='user') && completed=='completed'?
             <div className={` w-[100%] h-[24%] border-t-2 text-green-500 flex items-center pl-3 text-[15px] md:text-[15px]  font-roboto`}>
                 <p className='cursor-pointer'>Completed</p>
             </div>
@@ -121,7 +140,7 @@ function GridTemplate({hidenavbar,setSelectedTab,selectedTab,setActiveField,Titl
         }
 
         {openGrid?
-        <OpenGrid hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+            <OpenGrid realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :<></>}
 
         {openUnassignedGrid?
@@ -132,9 +151,34 @@ function GridTemplate({hidenavbar,setSelectedTab,selectedTab,setActiveField,Titl
             <OpenCompleteGrid hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :<></>}
 
-        {openViewallGrid?
-        <OpenViewallGrid hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
-        :<></>}
+        {
+            openViewallGrid &&checkerforTeam() && status=='In Progress' && completed=='incomplete' &&(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+            <OpenGrid realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+        :
+            openViewallGrid && status=='In Progress' && completed=='incomplete' &&(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+            <OpenGrid realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+        :
+            openViewallGrid && status=='In Progress' && completed=='completed' &&(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+            <OpenCompleteGrid hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+        :
+            openViewallGrid && status=='Unassigned' && completed=='incomplete' && (localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+            <OpenUnassignedGrid hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+        :
+        <></>
+        }
+
+        {
+            openViewallGrid && status=='In Progress' && completed=='incomplete' && TeamLead_status=='In Progress' &&(localStorage.getItem('role')=='team lead'||localStorage.getItem('role')=='user')?
+            <OpenGrid realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+        :
+            openViewallGrid && status=='In Progress' && completed=='completed' && TeamLead_status=='In Progress' &&(localStorage.getItem('role')=='team lead'||localStorage.getItem('role')=='user')?
+            <OpenCompleteGrid hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+        :
+            openViewallGrid && status=='In Progress' && completed=='incomplete' && TeamLead_status=='Unassigned' &&(localStorage.getItem('role')=='team lead'||localStorage.getItem('role')=='user')?
+            <OpenUnassignedGrid hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+        :
+            <></>
+        }
 
 
     </div>

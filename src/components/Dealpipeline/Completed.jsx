@@ -41,7 +41,11 @@ function Completed({hidenavbar,filter, selectedTab, fetchCompanyData, setActiveF
 
   const currentData = compData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   const check = (company) => {
-    return true
+    if(localStorage.getItem('role')=='admin'||localStorage.getItem('role')=='super admin')
+      {
+        return true 
+      }
+      return filter.includes(company.title);
   };
   return (
     <div>

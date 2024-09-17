@@ -35,8 +35,19 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
         const setUsers = async () => {
             const response = await axios.post('http://localhost:8999/fetchallusers',{organization:localStorage.getItem('organization')});
             const usersData = response.data.data;
-            setAllUsers(usersData);
-
+            if(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')
+            {
+                setAllUsers(usersData)
+            }
+            else if(localStorage.getItem('role')=='team lead'){
+                const filteredData= usersData.filter(val=>val.role!='super admin' && val.role !='admin')
+                setAllUsers(filteredData)
+            }
+            else{
+                const filteredData=usersData.filter(val=>val.email==localStorage.getItem('email'))
+                setAllUsers(filteredData)
+            }
+            
             // Initialize roles state with current user roles
             const initialRoles = usersData.reduce((acc, user) => {
                 acc[user._id] = user.role;
