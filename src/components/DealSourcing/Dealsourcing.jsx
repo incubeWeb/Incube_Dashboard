@@ -194,7 +194,7 @@ const Dealsourcing = ({hidenavbar}) => {
                     <p className='text-gray-800 text-[12px] font-inter font-semibold '>Sort by Price</p>
                 </div>
             </div>
-            <div className='w-[100%] h-[90%] overflow-y-auto space-y-2 pr-6 font-inter'>
+            <div className='w-[100%] h-[90%]  space-y-2 pr-6 font-inter'>
                {
                 companies.map(comp=>(
                     <CompanyTemplate key={comp._id} name={comp.title} description={comp.Description} photolink={comp.photolink}/>

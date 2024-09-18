@@ -108,7 +108,7 @@ function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,han
                     <div><p className='md:text-[14px] text-[13px] font-inter font-semibold'>{description}</p></div>
             </div>
             <div className='flex flex-row w-[100%] h-[40px] space-x-2'>
-                    <div className='w-[100%] h-[100%] bg-gray-300 rounded-md flex flex-row items-center pl-2 space-x-5'>
+                    <div className='w-[100%] h-[100%] bg-gray-100 rounded-md flex flex-row items-center pl-2 space-x-5'>
                         <div className='w-[100%] h-[75%] rounded-md flex items-center justify-start flex-row space-x-2'>
                             {(Tabs||[]).map(Tab=>
                                 

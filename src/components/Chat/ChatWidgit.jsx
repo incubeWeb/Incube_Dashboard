@@ -9,7 +9,8 @@ import { useDispatch,useSelector } from 'react-redux'
 import { addUser,deleteUser, updateMsg,} from '../../states/chatclickedUser'
 import { addMessage } from '../../states/usermessages'
 import { RxCross2 } from 'react-icons/rx'
-
+import user from '../Icons/user.png'
+import user2 from '../Icons/user2.png'
 
 
 const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeChat,setBoxes,boxes}) => {
@@ -211,7 +212,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     
     
   return (
-    <div className=' bg-white space-y-2 font-noto shadow-gray-400 w-[100%]  h-[100%] flex flex-col'>
+    <div className=' bg-white space-y-2 font-inter shadow-gray-400 w-[100%]  h-[100%] flex flex-col'>
         {
                       clickedUser&&openChat!=''?
                       <div className='flex flex-col space-y-4 font-noto p-[20px] fixed  w-[100%] h-[100%] top-0 left-0 rounded-md  bg-white  shadow-lg overflow-y-auto mb-4 ' onClick={(e)=>e.stopPropagation()}>
@@ -223,38 +224,65 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
                         </div>
                         <div className='w-[100%] h-[75%]'>
                               {/*Chat Messages show */}
-                              <div  className=' w-[100%] overflow-y-auto h-[100%] flex items-end flex-col space-y-2 justify-end'>
-                                      {
-                                        [...sendedMsg,...receivedMsg].length==0?
-                                        <div className='w-[100%] h-[100%] flex items-center justify-center'>
-                                            <p className='text-[14px] text-gray-400'>No messages</p>
-                                        </div>
-                                        :
-                                        <div className={ ` ${[...sendedMsg,...receivedMsg].length>7?'':'justify-end'} w-[100%] h-[100%] flex flex-col space-y-2 `}>
-                                          {
-                                            
-                                            ([...sendedMsg,...receivedMsg].sort((a,b)=>a.time-b.time)||[]).map(msg=>
-                                              (msg.sender==localStorage.getItem('email'))
-                                                ?
-                                                <div key={msg._id} className=' flex  justify-end rounded-sm'>
-                                                  <div className='flex bg-blue-400 pl-5 pb-2 pt-3 pr-1 rounded-sm flex-col max-w-xs'>
-                                                    <p className='text-[14px] text-gray-800'>{msg.message}</p>
-                                                  <div className='flex w-[60px] items-end justify-end text-[9px]'>
-                                                    <p>{convertTime(msg.time)}</p>
-                                                  </div>
-                                                  </div>
-                                                </div>
-                                                :
-                                                <div key={msg._id} className='flex w-[100%] items-start'><div className='flex flex-col'><p className='text-[14px] bg-gray-300 pl-6 pr-6 pb-2 pt-2 rounded-md text-gray-800  '>{msg.message}</p><div className='flex w-[60px] items-end justify-end text-[9px]'><p>{convertTime(msg.time)}</p></div></div></div>
-                                              
-                                            )
-                                          }
-                                        </div>
-                                      }    
-                                </div>
+                              <div className='w-[100%] overflow-y-auto h-[100%] flex items-end flex-col space-y-2 justify-end'>
+  {
+    [...sendedMsg, ...receivedMsg].length === 0
+      ? (
+        <div className='w-[100%] h-[100%] flex items-center justify-center'>
+          <p className='text-[14px] text-gray-400'>No messages</p>
+        </div>
+      )
+      : (
+        <div className={`${[...sendedMsg, ...receivedMsg].length > 7 ? '' : 'justify-end'} w-[100%] h-[100%] flex flex-col space-y-2`}>
+          {
+            ([...sendedMsg, ...receivedMsg].sort((a, b) => a.time - b.time) || []).map(msg =>
+              (msg.sender === localStorage.getItem('email'))
+                ? <div key={msg._id} className='w-full'>
+                  <div className='text-[12px] flex justify-end mb-4 mr-3 font-inter font-semibold'>
+                    <div className='flex justify-end items-end h-[20px] w-[20px] mr-2'>
+                      <img src={user} alt='sender-avatar'/>
+                    </div>
+                    {msg.sender}
+                  </div>
+                  <div className='flex justify-end items-end rounded-sm'>
+                    <div className='flex bg-blue-400 pl-3 pb-2 mr-2 ml-4 pt-3 pr-3 mb-4 flex-col max-w-xs text-white rounded-lg relative before:content-[""] before:absolute before:top-[-8px] before:right-[10px] before:w-0 before:h-0 before:border-b-[12px] before:border-l-[10px] before:border-r-[0] before:border-b-blue-400 before:border-l-transparent'>
+                      <p className='text-[14px] text-gray-800'>{msg.message}</p>
+                    </div>
+                  </div>
+                  <div className='flex w-full justify-end items-end'>
+                    <p className='text-[9px] text-gray-500 mr-5'>{convertTime(msg.time)}</p>
+                  </div>
+                </div>
+                : <div key={msg._id} className='flex w-[100%] items-start'>
+                  <div className='flex flex-col'>
+                    <div className='text-[12px] flex justify-start mb-4 mr-3 font-inter font-semibold'>
+                      <div className='flex justify-end items-end h-[20px] w-[20px] mr-2'>
+                        <img src={user2} alt='receiver-avatar'/>
+                      </div>
+                      {msg.sender}
+                    </div>
+                    <p className='text-[14px] pl-3 pr-3 pb-2 pt-2 mr-6 mb-3 bg-gray-200 text-black rounded-lg relative before:content-[""] before:absolute before:top-[-8px] before:right-[10px] before:w-0 before:h-0 before:border-b-[12px] before:border-l-[10px] before:border-r-[0] before:border-b-gray-200 before:border-l-transparent border-[1px] border-gray-300'>
+                      {msg.message}
+                    </p>
+                    <div className='flex w-[60px] items-end justify-start text-[9px]'>
+                      <p>{convertTime(msg.time)}</p>
+                    </div>
+                  </div>
+                </div>
+            )
+          }
+        </div>
+      )
+  }
+</div>
+
 
                               {/*chat Messages end */}
                         </div>
+                       
+          
+                       
+                       
                         <div className='w-[100%] h-[30px] space-x-2 items-center justify-center flex flex-row'>
                             <div className='w-[95%] h-[100%] ml-2'>
                               <input id={`text${id}`} className='w-[100%] text-[14px] pl-2 h-[100%]  px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 ' placeholder='Enter your message here....' onKeyPress={(e)=>e.key=='Enter'?handleSendChat(e):handleTypedMsg(e)} onChange={(e)=>handleTypedMsg(e)}/>
@@ -311,7 +339,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
               </div>:<></>
             }
           </div>
-          <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px]  bg-gray-100 fixed right-[-10px] top-[-15px]' onClick={deleteWidgit}>
+          <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px]  bg-gray-100 fixed right-[-10px] top-[-15px] ' onClick={deleteWidgit}>
               <RxCross2 size={14} className='text-black'/>
         </div> 
       </div>
