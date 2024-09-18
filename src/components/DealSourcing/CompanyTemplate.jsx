@@ -16,15 +16,15 @@ const CompanyTemplate = ({name,description,photolink}) => {
         <div className='w-[80%] h-[100%] flex flex-col space-y-4 text-gray-700'>
             <div className='w-[100%] h-[30%] flex flex-row'>
                   <div className='flex flex-col basis-3/4 '>
-                      <p className='text-[14px]'>{description}</p>
-                      <p className='text-[15px] font-bold'>{name}</p>
+                      <p className='text-[14px] font-inter'>{description}</p>
+                      <p className='text-[15px] font-bold font-inter'>{name}</p>
                   </div>
                   <div className='flex flex-row basis-1/4 items-center justify-end'>
                       <div className='w-[45px] h-[90%] rounded-md border-blue-600 border-[1px] flex flex-col items-center justify-center'><FaRegHeart size={16} className='text-blue-600'/></div>
                   </div>
             </div>
             <div className='w-[100%] h-[40%] flex flex-row'>
-                <div className='basis-3/4 flex font-roboto flex-col space-y-3'>
+                <div className='basis-3/4 flex font-inter flex-col space-y-3 text-[#475467]'>
                       <p className='text-[14px]'>Latest funding round - $50m - 21 Jan 24</p>
                       <div className='flex flex-row text-[15px] space-x-4'>
                         <div className='flex flex-row space-x-1 items-center'>
@@ -48,10 +48,10 @@ const CompanyTemplate = ({name,description,photolink}) => {
             </div>
             <div className='w-[100%] h-[40%] flex flex-row justify-end items-center border-t border-gray-300  space-x-2'>
                 <div className='border-[1px] border-gray-300 w-[120px] h-[80%] mt-4  rounded-md flex items-center justify-center'>
-                    <p className='text-[14px]'>Financials</p>
+                    <p className='text-[14px] font-inter font-semibold'>Financials</p>
                 </div>
                 <div className='border-[1px] border-gray-300 w-[190px] h-[80%] mt-4 rounded-md flex items-center justify-center'>
-                    <p className='text-[14px]'>Download company data</p>
+                    <p className='text-[14px] font-inter font-semibold'>Download company data</p>
                 </div>
             </div>
         </div>
