@@ -149,14 +149,14 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
             <div ref={MainDiv} className='bg-white w-[100%] h-screen fixed'></div>
             <div className='flex flex-row h-[40px] w-[100%] mt-[20px]'>
                 <div className='flex flex-row items-center justify-center'>
-                    <p className='text-gray-500 text-[16px] cursor-pointer hover:text-gray-600 hover:underline hover:underline-offset-2' onClick={handleOpenGrid}>Deal Pipeline</p>
+                    <p className='text-gray-500 text-[16px] cursor-pointer hover:text-gray-600 hover:underline hover:underline-offset-2 font-inter font-semibold' onClick={handleOpenGrid}>Deal Pipeline</p>
                     <CgFormatSlash className='text-gray-300' size={30} />
-                    <p className='text-gray-600 text-[16px]'>{companyName}</p>
+                    <p className='text-gray-600 text-[16px] font-inter font-semibold'>{companyName}</p>
                 </div>
             </div>
             <div className='w-[100%] flex flex-col items-center'>
                 <div className='w-[100%] md:h-[45px] flex flex-col'>
-                    <div><p className='md:text-[31px] text-[20px]'>{companyName}</p></div>
+                    <div><p className='md:text-[30px] text-[20px] font-inter font-semibold'>{companyName}</p></div>
                 </div>
             </div>
             <div className='w-[100%] h-[100%] flex space-x-2 md:flex-row '>
@@ -166,24 +166,24 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                             <input type='checkbox' checked={true} />
                         </div>
                         <div className='flex flex-row w-[50%] pl-6'>
-                            <p className='text-[15px]'>Email</p>
+                            <p className='text-[16px] font-inter font-semibold'>Email</p>
                         </div>
                         <div className='flex flex-row w-[50%] pl-6'>
-                            <p className='text-[15px]'>Role</p>
+                            <p className='text-[16px] font-inter font-semibold'>Role</p>
                         </div>
                     </div>
                     <div className='text-gray-500 flex flex-col overflow-y-auto space-y-2 h-[93%]'>
                         {users.map(user => (
                             <div key={user._id} className='flex border-gray-100 hover:border-gray-300 border-[1px] space-x-7 shadow-sm shadow-gray-200 hover:shadow-gray-300 hover:shadow-md p-2 rounded-md flex-row w-[100%] h-[50px] justify-center pt-3'>
-                                <div className='flex flex-row w-[10%] pl-2'>
+                                <div className='flex flex-row w-[10%] pl-2 font-inter font-semibold'>
                                     <input
                                         type='checkbox'
                                         checked={selects[user._id] || false}
                                         onChange={() => handleCheckboxChange(user._id)}
                                     />
                                 </div>
-                                <p className='text-[14px] w-[50%]'>{user.email}</p>
-                                <div className='w-[50%] text-[14px]'>
+                                <p className='text-[14px] w-[50%] font-inter font-semibold'>{user.email}</p>
+                                <div className='w-[50%] text-[14px] font-inter font-semibold'>
                                     {roles[user._id]}
                                 </div>
                             </div>

@@ -120,7 +120,7 @@ function OpenViewallGrid({hidenavbar,setActiveField,companyName,description,hand
                         <p className='md:text-[31px] text-[30px] w-[50%] font-inter font-semibold'>{companyName}</p>
                         <div className='flex flex-row h-[100%] justify-end w-[48%] pl-4 pt-2'>
                             <div className='cursor-pointer flex flex-row space-x-3 bg-gradient-to-r from-blue-600 to-blue-800 w-[30%] h-[100%] rounded-md items-center justify-center text-white border-blue-600 border-[1px] shadow-gray-300 shadow-md' onClick={handlePushComplete}>
-                                <p className='text-[13px]'>Push to complete</p>
+                                <p className='text-[13px] font-inter font-semibold'>Push to complete</p>
                                 <BiSolidSend size={15} />
                             </div>
                         </div>

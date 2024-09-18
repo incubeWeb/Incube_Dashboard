@@ -115,15 +115,15 @@ function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenG
             
             <div className='w-[100%] md:h-[85px] flex flex-col'>
                     <div className='flex flex-row w-[100%]'>
-                        <p className='md:text-[31px] text-[30px] w-[50%] font-inter font-semibold'>{companyName}</p>
+                        <p className='md:text-[30px] text-[30px] w-[50%] font-inter font-semibold'>{companyName}</p>
                         <div className='flex flex-row h-[100%] justify-end w-[48%] pl-4 pt-2'>
                             <div className='cursor-pointer flex flex-row space-x-3 bg-gradient-to-r from-blue-600 to-blue-800 w-[30%] h-[100%] rounded-md items-center justify-center text-white border-blue-600 border-[1px] shadow-gray-300 shadow-md' onClick={handlePushComplete}>
-                                <p className='text-[13px]'>Push to complete</p>
+                                <p className='text-[13px] font-inter font-semibold'>Push to complete</p>
                                 <BiSolidSend size={15} />
                             </div>
                         </div>
                     </div>
-                    <div><p className='md:text-[14px] text-[14px] font-inter'>{description}</p></div>
+                    <div><p className='md:text-[14px] text-[14px] font-inter font-semibold'>{description}</p></div>
             </div>
             <div className='flex flex-row w-[100%] h-[50px] space-x-2'>
                     <div className='w-[85%] h-[100%] bg-gray-100 rounded-md flex flex-row items-center pl-2 space-x-5'>

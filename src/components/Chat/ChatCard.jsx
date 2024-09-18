@@ -2,6 +2,10 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { FiPlusSquare } from "react-icons/fi";
 import { MdSend } from "react-icons/md";
+import { CiUser } from "react-icons/ci";
+import { FaRegCircle } from "react-icons/fa";
+import user from '../Icons/user.png'
+
 const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
     const [chat,setChat]=useState([])
     const [countChat,setCountChat]=useState(0)
@@ -67,15 +71,29 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
 
                     {
                         chat.map(c=>
-                            <div key={c.id} className='w-[100%]'>
-                                <div  className={`${c.sender==localStorage.getItem('email')?'items-end':'items-start'} mb-2 flex-col rounded-md pr-7  flex `}>
-                                    <p className='text-[12px] text-white border-[1px] border-gray-300 bg-blue-500   p-2 rounded-md shadow-md'>{c.chat}</p> 
-                                </div>
-                                <div className={`${c.sender==localStorage.getItem('email')?'items-end':'items-start'} w-[100%] flex flex-col justify-start pr-2`}>
-                                    <p className='text-[12px] flex items-center'>by {c.sender}</p>
-                                     <p className='pl-3 text-[9px]'>at {ReadableTime(c.time)}</p>
-                                </div>
-                            </div>
+                            <div key={c.id} className='w-full'>
+  <div className={`${c.sender === localStorage.getItem('email') ? 'items-end' : 'items-start'} mb-2 flex-col rounded-md pr-7 flex`}>
+ 
+    <p className='text-[12px] flex items-center font-inter font-semibold mb-2'>
+      <img src={user} className='mr-2  h-[20px] w-[20px]' size={20} />{c.sender}
+    </p>
+    
+ 
+    <p className={`text-[12px] p-3 shadow-md max-w-[75%] ${c.sender === localStorage.getItem('email') 
+    ? 'bg-blue-500 text-white rounded-lg relative before:content-[""] before:absolute before:top-[-8px] before:right-[10px] before:w-0 before:h-0 before:border-b-[12px] before:border-l-[10px] before:border-r-[0] before:border-b-blue-500 before:border-l-transparent'
+    : 'bg-gray-200 text-black rounded-lg relative before:content-[""] before:absolute before:top-[-8px] before:right-[10px] before:w-0 before:h-0 before:border-b-[12px] before:border-l-[10px] before:border-r-[0] before:border-b-gray-200 before:border-l-transparent'} border-[1px] border-gray-300`}>
+    {c.chat}
+</p>
+
+
+  </div>
+  
+  <div className={`${c.sender === localStorage.getItem('email') ? 'items-end' : 'items-start'} w-full flex flex-col justify-start pr-2`}>
+
+    <p className='pl-3 text-[9px] font-inter mr-5 mb-3'>{ReadableTime(c.time)}</p>
+  </div>
+</div>
+
                         )
                     }
                    

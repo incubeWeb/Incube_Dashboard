@@ -70,8 +70,8 @@ function GridTemplate({hidenavbar,realtimetabchats,setSelectedTab,selectedTab,se
         </div>
         {
             selectedTab=='View All' && (localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin' && completed!='completed')?
-            <div className={`${status=='Unassigned'?'text-red-500':'text-sky-500'} w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[15px] md:text-[15px]  font-roboto`}>
-                <p className='cursor-pointer'>{status}</p>
+            <div className={`${status=='Unassigned'?'text-red-500':'text-sky-500'} w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[14px] md:text-[14px]  font-roboto`}>
+                <p className='cursor-pointer font-inter'>{status}</p>
             </div>
             :
             <></>
@@ -79,61 +79,61 @@ function GridTemplate({hidenavbar,realtimetabchats,setSelectedTab,selectedTab,se
         
         {
             selectedTab=='View All' && (localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin' && completed=='completed')?
-            <div className={`text-green-500 w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[15px] md:text-[15px]  font-roboto`}>
-                <p className='cursor-pointer'>Completed</p>
+            <div className={`text-green-500 w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[14px] md:text-[14px]  font-roboto`}>
+                <p className='cursor-pointer font-inter'>Completed</p>
             </div>
             :
             <></>
         }
         {
             selectedTab=='View All'&&(localStorage.getItem('role')=='team lead'|| localStorage.getItem('role')=='user') && completed!='completed'?
-            <div className={`${TeamLead_status=='Unassigned'?'text-red-500':'text-sky-500'} w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[15px] md:text-[15px]  font-roboto`}>
-                <p className='cursor-pointer'>{TeamLead_status}</p>
+            <div className={`${TeamLead_status=='Unassigned'?'text-red-500':'text-sky-500'} w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[14px] md:text-[14px]  font-roboto`}>
+                <p className='cursor-pointer font-inter'>{TeamLead_status}</p>
             </div>
             :
             <></>
         }
         {
             selectedTab=='View All'&&(localStorage.getItem('role')=='team lead'|| localStorage.getItem('role')=='user') && completed=='completed'?
-            <div className={` w-[100%] h-[24%] border-t-2 text-green-500 flex items-center pl-3 text-[15px] md:text-[15px]  font-roboto`}>
-                <p className='cursor-pointer'>Completed</p>
+            <div className={` w-[100%] h-[24%] border-t-2 text-green-500 flex items-center pl-3 text-[14px] md:text-[14px]  font-roboto`}>
+                <p className='cursor-pointer font-inter'>Completed</p>
             </div>
             :
             <></>
         }
         {
             selectedTab=='In Progress' && check()?
-            <div className={`${TeamLead_status=='Unassigned'?'text-red-500':'text-sky-500'} w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[15px] md:text-[15px]  font-roboto`}>
-                <p className='cursor-pointer'>{TeamLead_status}</p>
+            <div className={`${TeamLead_status=='Unassigned'?'text-red-500':'text-sky-500'} w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[14px] md:text-[14px]  font-roboto`}>
+                <p className='cursor-pointer font-inter'>{TeamLead_status}</p>
             </div>
             :
             <></>
         }
         {
             selectedTab=='In Progress' && (localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')?
-            <div className={`${status=='Unassigned'?'text-red-500':'text-sky-500'} w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[15px] md:text-[15px]  font-roboto`}>
-                <p className='cursor-pointer'>{status}</p>
+            <div className={`${status=='Unassigned'?'text-red-500':'text-sky-500'} w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[14px] md:text-[14px]  font-roboto`}>
+                <p className='cursor-pointer font-inter'>{status}</p>
             </div>
             :
             <></>
         }
         {
             selectedTab=='Unassigned'?
-            <div className={`${TeamLead_status=='Unassigned'?'text-red-500':'text-sky-500'} w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[15px] md:text-[15px]  font-roboto`}>
-                <p className='cursor-pointer'>{TeamLead_status}</p>
+            <div className={`${TeamLead_status=='Unassigned'?'text-red-500':'text-sky-500'} w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[14px] md:text-[14px]  font-roboto`}>
+                <p className='cursor-pointer font-inter'>{TeamLead_status}</p>
             </div>
             :
             <></>
         }
         {
             selectedTab=='Completed'?
-            <div className={` text-sky-500 w-[100%] h-[24%]  border-t-2 space-x-2 flex flex-row items-center pl-3 text-[15px] md:text-[15px]  font-roboto`}>
+            <div className={` text-sky-500 w-[100%] h-[24%]  border-t-2 space-x-2 flex flex-row items-center pl-3 text-[15px] md:text-[14px]  font-roboto`}>
                 {
-                <p className={` cursor-pointer w-[50%]`}>
-                        Pushed by {pushedby}
+                <p className={` cursor-pointer w-[50%] font-inter`}>
+                      Pushed by {pushedby}
                 </p>
                 }
-                <p className='text-green-500 w-[50%] flex justify-end pr-3'>Completed</p>
+                <p className='text-green-500 w-[50%] flex justify-end text-[14px] pr-3'>Completed</p>
             </div>
             :
             <></>
