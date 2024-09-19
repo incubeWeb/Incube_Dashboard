@@ -87,7 +87,7 @@ function OpenViewallGrid({hidenavbar,setActiveField,companyName,description,hand
         if(response.data.status==200)
         {
             alert('pushed')
-            window.location.reload()
+            handleOpenGrid()
         }
         setpushComplete(!pushComplete)
     }

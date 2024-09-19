@@ -8,7 +8,7 @@ import Inprogrss from './Inprogrss';
 import Unassigned from './Unassigned';
 import Completed from './Completed';
 
-function FirstCol({setActiveField,hidenavbar,realtimetabchats}) {
+function FirstCol({realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,realtimetabchats,realtimedealpipelinecompany}) {
   const [selectedTab, setSelectedTab] = useState("View All");
   const [companyData, setCompanyData] = useState([]);
   const [filter, setFilter] = useState([]);
@@ -65,12 +65,8 @@ function FirstCol({setActiveField,hidenavbar,realtimetabchats}) {
 
   useEffect(() => {
     fetchCompanyData();
-    const interval = setInterval(() => {
-      fetchCompanyData();
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
+    
+  }, [realtimedealpipelinecompany]);
 
   useEffect(() => {
     if (selectedTab === "View All") moveBackground(viewRef.current, "View All");
@@ -154,16 +150,16 @@ function FirstCol({setActiveField,hidenavbar,realtimetabchats}) {
       </div>
 
       {
-        selectedTab === 'View All' ? <Viewall hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
+        selectedTab === 'View All' ? <Viewall realtimedealpipelinecompany={realtimedealpipelinecompany} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
       {
-        selectedTab === 'In Progress' ? <Inprogrss realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
+        selectedTab === 'In Progress' ? <Inprogrss realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
       {
-        selectedTab === 'Unassigned' ? <Unassigned hidenavbar={hidenavbar} filter={filter} setSelectedTab={setSelectedTab} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
+        selectedTab === 'Unassigned' ? <Unassigned realtimedealpipelinecompany={realtimedealpipelinecompany} hidenavbar={hidenavbar} filter={filter} setSelectedTab={setSelectedTab} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
       {
-        selectedTab === 'Completed' ? <Completed hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
+        selectedTab === 'Completed' ? <Completed realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
       {
         createNew ? <CreateNew  setCreateNew={setCreateNew} hidenavbar={hidenavbar} fetchCompanyData={fetchCompanyData} /> : null

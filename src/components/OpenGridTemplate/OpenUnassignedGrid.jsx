@@ -99,7 +99,7 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                     if(response.data.status==200)
                     { 
                         alert("Done")
-                        window.location.reload()
+                        handleOpenGrid()
                     }
                 
                 if (roles[user._id] =='team lead'){
@@ -115,7 +115,7 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                     if(response.data.status==200)
                     { 
                         alert("Done")
-                        window.location.reload()
+                        handleOpenGrid()
                     }
                 }
             }

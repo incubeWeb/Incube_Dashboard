@@ -29,7 +29,9 @@ function App() {
   const [filesadded,setfilesadded]=useState([])
   const [sheetedited,setsheetedited]=useState([])
   const [realtimetabchats,setrealtimetabchats]=useState([])
-  
+  const [realtimedealpipelinecompany,setrealtimedealpipelinecompany]=useState([])
+  const [realtimedealpipelinecompanyInfo,setrealtimedealpipelinecompanyInfo]=useState([])
+
   
   const socket=io('http://localhost:8999')
   
@@ -65,6 +67,14 @@ function App() {
           if(change.ns.coll=='TabChats')
           {
             setrealtimetabchats(change)
+          }
+          if(change.ns.coll=='DealPipelineCompany')
+          {
+            setrealtimedealpipelinecompany(change)
+          }
+          if(change.ns.coll=='AddNewDetailDealPipeline')
+          {
+            setrealtimedealpipelinecompanyInfo(change)
           }
         })
         socket.on('chats',(chat)=>{
@@ -138,7 +148,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Login setLoginIn={setLoginIn}/>} />
             <Route path="/dashboard" element={<Dashboard realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/>} />
-            <Route path="/dealpipeline" element={<FirstCol realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>} />
+            <Route path="/dealpipeline" element={<FirstCol realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>} />
             <Route path="/dealsourcing" element={<Dealsourcing hidenavbar={hidenavbar}/>} />
             <Route path="/adduser" element={<Addusers setActiveField={setActiveField} hidenavbar={hidenavbar}/>}/>
             <Route path="/allDocs" element={<Alldocs filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar}/>} />

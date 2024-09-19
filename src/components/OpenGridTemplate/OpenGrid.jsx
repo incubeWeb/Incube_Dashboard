@@ -12,10 +12,11 @@ import { FaAngleDoubleLeft } from "react-icons/fa";
 import { FaAngleDoubleRight } from "react-icons/fa";
 import { BiSolidSend } from "react-icons/bi";
 import { Link, useNavigate } from 'react-router-dom';
+import { Bars } from 'react-loader-spinner';
 
 
 
-function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenGrid,realtimetabchats}) {
+function OpenGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,companyName,description,handleOpenGrid,realtimetabchats}) {
     const [AddNewWindow,setAddnewWindow]=useState(false)
     const [TotalCards,setTotalCards]=useState([])
     const [Tabs,setTabs]=useState([{id:1,Tab:"Tab1"}])
@@ -23,28 +24,43 @@ function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenG
     const [TabCount,setTabCount]=useState(1)
     const [OpenSubbar,setSubbar]=useState(false)
     const [pushComplete,setpushComplete]=useState(false)
-
+    const [loading,setloading]=useState(true)
     const openAddNewWindow=()=>{
         setAddnewWindow(!AddNewWindow)
     }
     const handleTotalCards=(data)=>{
         setTotalCards(data)
     }
+
+    
+
+    useEffect(()=>{
+        console.log("hera laal",TabCount)
+        console.log("hera pela",Tabs)
+    },[TabCount,Tabs])
     
 
     useEffect(()=>{
         const fun=async()=>{
-           const data= await axios.post('http://localhost:8999/getOpenedTabs',{organization:localStorage.getItem('organization')})
-           data.data.data||[].map(tabVal=>{
-             let tabs=JSON.parse(tabVal.tabs)
-             setTabCount(parseInt(tabVal.TabsCount))
-             setTabs(tabs)
+            console.log("joker")
+           const data= await axios.post('http://localhost:8999/getOpenedTabs',{companyname:companyName,organization:localStorage.getItem('organization')})
+           let count=1
+           data.data.data.map(tabVal =>{
+             count=tabVal.count
+             setTabCount(count)
+             
            })
+           for(let i=2;i<=count;i++)
+            {
+                setTabs(prev=>[...prev,{id:i,Tab:`Tab${i}`}])
+            }
+           
+
         }
         fun()
     },[])
-
    
+
 
     useEffect(()=>{
         const InitialVal=async()=>{
@@ -54,14 +70,17 @@ function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenG
                 organization:localStorage.getItem('organization')
               })
             setTotalCards(doc.data.data)
+            setTimeout(()=>{
+                setloading(false)
+            },1000)
+            
         }
         InitialVal()
-    },[TotalCards])
+    },[TotalCards,realtimedealpipelinecompanyInfo])
 
     useEffect(()=>{
         const fun=async()=>{
-            console.log(Tabs)
-            await axios.post('http://localhost:8999/setopenedTabs',{count:"uniqueIdentifier",tabs:JSON.stringify(Tabs),TabsCount:TabCount,organization:localStorage.getItem('organization')})
+            await axios.post('http://localhost:8999/setopenedTabs',{companyname:companyName,count:TabCount,organization:localStorage.getItem('organization')})
         }
         fun()
     },[TabCount])
@@ -73,7 +92,7 @@ function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenG
     const addTabs=async()=>{
         setTabs(tabs=>[...tabs,{id:TabCount+1,Tab:`Tab${TabCount+1}`}])
         setCurrentTab(currentTab)
-        setTabCount(TabCount+1)
+        setTabCount(prev=>prev+1)
     }
     const handlePushComplete=async()=>{
         const response=await axios.post('http://localhost:8999/updateCompanyCompleteStatus',{
@@ -85,7 +104,7 @@ function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenG
         if(response.data.status==200)
         {
             alert('pushed')
-            window.location.reload()
+            handleOpenGrid()
         }
         setpushComplete(!pushComplete)
     }
@@ -154,6 +173,14 @@ function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenG
         </div>
         {AddNewWindow?<AddNewDetails hidenavbar={hidenavbar} openAddNewWindow={openAddNewWindow} CompanyName={companyName} handleTotalCards={handleTotalCards} openedTab={currentTab}/>:<></>}
         <div className='w-[100%] h-[100%] flex space-x-2 md:flex-row '>
+           {
+            loading?
+            <div className='md:w-[60%] h-[420px] overflow-y-auto md:space-y-7'>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                    <Bars color="#8884d8" height={80} width={80} />
+                </div>
+            </div>
+            :
            
            
             <div className='md:w-[60%] h-[420px] overflow-y-auto md:space-y-7'>
@@ -164,6 +191,7 @@ function OpenGrid({hidenavbar,setActiveField,companyName,description,handleOpenG
                 }
                 
             </div>
+            }
             <div className='md:hidden'>
                     <div>{OpenSubbar?<FaAngleDoubleRight  onClick={()=>{setSubbar(!OpenSubbar)}}/>:<FaAngleDoubleLeft  onClick={()=>{setSubbar(!OpenSubbar)}}/>}</div>
                     {
