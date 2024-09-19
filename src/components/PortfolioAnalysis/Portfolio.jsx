@@ -150,18 +150,18 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
         <div className='tracking-wider select-none mt-[20px] w-[100%]  bg-white rounded-xl p-4 flex flex-col space-y-2 font-noto'>
             <div className='flex flex-col space-y-3'>
                 <div className='h-[50px] w-[100%] flex flex-row'>
-                    <p className='flex w-[50%] text-[16px] font-roboto tracking-wider'>Investment history</p>
+                    <p className='flex w-[50%] text-[16px] font-inter font-semibold tracking-wider'>Investment History</p>
                     <div className=' w-[75%]  flex flex-row justify-end '>
                         {
                             clickedDots && showHistory?
                             <div className='border-[1px] w-[160px] p-3  h-[120px] z-[40]  bg-white border-gray-300 rounded-md'>
                                 <div onClick={()=>{setsheetmethod('Database'); setselectfield(false);setclickedDots(false);}} className={`${sheetmethod=='Database'?'bg-white':''} p-1 hover:bg-blue-400 flex items-center rounded-md text-[14px] font-roboto`}>
                                                 <FaDatabase className='text-gray-700'/>
-                                                <p className='p-2 cursor-pointer'>Database</p>
+                                                <p className='p-2 cursor-pointer font-inter'>Database</p>
                                             </div>
                                             <div onClick={()=>{setsheetmethod('Google Sheet'); setselectfield(false);setclickedDots(false)}} className={`${sheetmethod=='Google Sheet'?'bg-white':''} p-1 hover:bg-blue-400 flex items-center rounded-md text-[14px] font-roboto`}>
                                                 <FaDatabase className='text-gray-700'/>
-                                                <p className='p-2 cursor-pointer'>Google Sheet</p>
+                                                <p className='p-2 cursor-pointer font-inter'>Google Sheet</p>
                                             </div>
                             </div>
                             :<></>
@@ -176,7 +176,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                         }
                         
 
-                        <div className='w-[90px] text-[14px] rounded-md space-x-2 h-[30px] border-[1px] border-gray-300 items-center justify-center flex flex-row'>
+                        <div className='w-[90px] text-[14px] rounded-md space-x-2 h-[30px] border-[1px] border-gray-300 items-center justify-center font-inter font-semibold flex flex-row'>
                             <RiFilter3Line size={15}/>
                             <p>Filters</p>
                         </div>
@@ -188,7 +188,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                 <div className={`w-[100%] flex justify-center items-center ${showHistory?'':'h-[150px]'} `}>
                     {
                         !showHistory?
-                        <div onClick={()=>setselectfield(true)} className='active:bg-blue-500 active:text-white duration-75  flex flex-row space-x-2 bg-gray-300 rounded-md select-none w-[120px] h-[35px] text-[14px] font-roboto px-2 py-1 items-center text-gray-700'>
+                        <div onClick={()=>setselectfield(true)} className='active:bg-blue-500 active:text-white duration-75  flex flex-row space-x-2 bg-gray-300 rounded-md select-none w-[120px] h-[35px] text-[14px] font-inter px-2 py-1 items-center text-gray-700'>
                             <FaPlus />
                         <p>Select field</p>
                     </div>:

@@ -118,21 +118,13 @@ const fieldConversions = {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data}>
               <XAxis dataKey="name" tick={true} stroke="#8884d8" />
-              <YAxis dataKey='uv' tick={true} />
+              <YAxis dataKey='uv' tick={true}  tickCount={4}/>
+            
               <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
-              <Legend
-                width={100}
-                wrapperStyle={{
-                  top: 40,
-                  right: 20,
-                  backgroundColor: '#f5f5f5',
-                  border: '1px solid #d5d5d5',
-                  borderRadius: 3,
-                  lineHeight: '40px',
-                }}
-              />
-              <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-              <Bar dataKey="uv" fill="#8884d8" barSize={30} />
+              
+           
+              <CartesianGrid stroke="#ccc"   horizontal={true} vertical={false}  />
+              <Bar dataKey="uv" fill="#2970FF" barSize={30} />
             </BarChart>
           </ResponsiveContainer>
         </div>

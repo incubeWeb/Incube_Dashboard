@@ -27,11 +27,11 @@ const MeterComponent = ({ value }) => {
           style={{ transition: 'stroke-dashoffset 0.5s ease' }}
         />
         {/* Text in the center showing the value */}
-        <text x="100" y="80" textAnchor="middle" fontSize="20" fill="#000">
+        <text  x="100" y="80" textAnchor="middle" fontSize="20" fill="#000">
           {`${percentage}%`}
         </text>
       </svg>
-      <p>Meter Value: {percentage}%</p>
+      <p className='font-inter font-semibold'>Meter Value: {percentage}%</p>
     </div>
   );
 };

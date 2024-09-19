@@ -10,6 +10,15 @@ import { FiSearch } from "react-icons/fi";
 import CompanyTemplate from './CompanyTemplate';
 import { RxCross2 } from "react-icons/rx";
 import axios from 'axios';
+import { ZomatoData } from './CompanyTemplate';
+import CompanyTemplate2 from './CompanyTemplate2';
+import { FaPlus } from "react-icons/fa";
+
+
+
+const { Similar_Names } = ZomatoData.data[0];
+const { Company_Info } = ZomatoData.data[1];
+const { LinkedIn } = ZomatoData.data[2];
 
 const Dealsourcing = ({hidenavbar}) => {
   const [value, onChange] = useState([new Date()]);
@@ -17,6 +26,9 @@ const Dealsourcing = ({hidenavbar}) => {
   const [fundingRounds,setFundingRounds]=useState(false)
   const [moreFilters,setMoreFilters]=useState(false)
   const [searchValue,setSearchVal]=useState('')
+
+
+
 
   const [companies,setCompanies]=useState([])
   const handleSearchInputChange=(e)=>{
@@ -194,17 +206,39 @@ const Dealsourcing = ({hidenavbar}) => {
                     <p className='text-gray-800 text-[12px] font-inter font-semibold '>Sort by Price</p>
                 </div>
             </div>
+
+
+
+            
             <div className='w-[100%] h-[90%]  space-y-2 pr-6 font-inter'>
-               {
-                companies.map(comp=>(
-                    <CompanyTemplate key={comp._id} name={comp.title} description={comp.Description} photolink={comp.photolink}/>
-                ))
-               } 
-                
 
 
-            </div>
+            <div className='w-[100%] h-[90%] space-y-2 pr-6 font-inter'>
+  {Similar_Names.length > 0 && (
+    <CompanyTemplate2
+      key={Similar_Names[0]._id} 
+      name={Similar_Names[0].companyname} 
+      description={Similar_Names[0].Description} 
+      photolink={Similar_Names[0].photolink} 
+    />
+  )}
+</div>
+ <div className='w-[100%] h-[90%] space-y-2 pr-6 font-inter'>
+  {Similar_Names.map (v=>(
+    <CompanyTemplate 
+      key={v._id} 
+      name={v.companyname} 
+      description={Similar_Names.Description} 
+      photolink={Similar_Names[0].photolink} 
+    />
+  ))}
+</div>
+</div>
+<div>
+        <p className='flex justify-center w-[95%] h-[10%] rounded-md  shadow-md border-gray-300 border-[1px] -mt-28 font-inter font-semibold '>  <FaPlus  className='mt-1 mr-1'/> Companies</p>
       </div>
+      </div>
+      
     </div>
   );
 };

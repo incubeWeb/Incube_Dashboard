@@ -68,10 +68,10 @@ const PortfolioTop = ({hidenavbar,sheetedited,selectedSheetId}) => {
   return (
     <div className='w-[100%] font-roboto  flex flex-col space-y-4'>
         <div className=' h-[60px] p-2 w-[100%] flex flex-row rounded-md'>
-            <div className='w-[50%] flex items-center justify-start'><p className='text-[22px] tracking-wider font-sans font-semibold '>Portfolio</p></div>
+            <div className='w-[50%] flex items-center justify-start'><p className='text-[30px] tracking-wider font-inter font-semibold '>Portfolio</p></div>
             <div className='w-[50%] flex items-center justify-end space-x-2'>
                 <div><PiCards size={20} /></div>
-                <p className='text-[16px] tracking-wider font-sans font-semibold'>Portfolio</p>
+                <p className='text-[16px] tracking-wider font-inter font-semibold'>Portfolio</p>
             </div>
         </div>
         

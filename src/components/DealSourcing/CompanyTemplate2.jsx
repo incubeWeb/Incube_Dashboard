@@ -7,7 +7,6 @@ import { CiCalendar } from "react-icons/ci";
 import { LuUserSquare2 } from "react-icons/lu";
 import axios from 'axios';
 import { FaPlus } from "react-icons/fa";
-import Building from '../Icons/Building.avif'
 
  export const   ZomatoData = {
   "status": 200,
@@ -199,13 +198,12 @@ console.log("Number of items:", processedData.length);
 
 
 
-const CompanyTemplate = ({name,description,photolink}) => {
+const CompanyTemplate2 = ({name,description,photolink}) => {
   return (
-    
     <div className='font-roboto w-[100%] h-[70%] rounded-md space-x-3 shadow-md border-gray-300 border-[1px] flex flex-row p-[23px]'>
         <div className=' w-[20%] h-[100%] rounded-md'>
         <img
-          src={Building}
+          src={Company_Info.image_url}
                                 alt="Company Logo"
  />
 
@@ -216,7 +214,7 @@ const CompanyTemplate = ({name,description,photolink}) => {
             <div className='w-[100%] h-[30%] flex flex-row'>
                   <div className='flex flex-col basis-3/4 '>
                       {/* <p className='text-[14px] font-inter'>{description}</p> */}
-                      <p className='text-[15px] font-bold font-inter'>{name}</p>
+                      <p className='text-[15px] font-bold font-inter'>{LinkedIn.jsonLD.name}</p>
                   </div>
                   <div className='flex flex-row basis-1/4 items-center justify-end'>
                       <div className='w-[45px] h-[90%] rounded-md border-blue-600 border-[1px] flex flex-col items-center justify-center'><FaRegHeart size={16} className='text-blue-600'/></div>
@@ -267,8 +265,7 @@ const CompanyTemplate = ({name,description,photolink}) => {
             </div>
         </div>
     </div>
-   
   )
 }
 
-export default CompanyTemplate
+export default CompanyTemplate2

@@ -20,7 +20,7 @@ const PortfolioHistory = ({setportfolioHistory,sheetKeys,sheetJson,selectedImage
                                             :
                                             <></>
                                         }
-                                        <p className='w-[200px] tracking-wide'>{k}</p>
+                                        <p className='w-[200px] tracking-wide font-inter font-semibold'>{k}</p>
                                     </div>
                                 </td>)   
                             }
@@ -41,7 +41,7 @@ const PortfolioHistory = ({setportfolioHistory,sheetKeys,sheetJson,selectedImage
                                                             :
                                                             <></>
                                                         }
-                                                    <p className='w-[200px] overflow-auto scrollbar-hide text-[14px]  text-gray-700 tracking-wide'>{val[k]}</p> 
+                                                        <p className='w-[200px] overflow-auto scrollbar-hide text-[14px] font-inter  text-gray-700 tracking-wide'>{val[k]}</p> 
                                                    </div>
                                                     
                                                 </td>

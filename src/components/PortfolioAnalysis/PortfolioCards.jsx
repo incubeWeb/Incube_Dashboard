@@ -284,7 +284,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
                 <div className='w-[100%] flex flex-row items-center justify-start space-x-2'>
                     {
                         !editLabel?
-                        <p className='text-[15px] text-gray-700 flex items-center h-[30px] tracking-wider'>{labelname}</p>
+                        <p className='text-[15px] text-gray-700 flex items-center h-[30px] tracking-wider font-inter font-semibold'>{labelname}</p>
                         :
                         <input ref={inputRef} value={labelname} onChange={(e)=>{setlablename(e.target.value) }} onKeyPress={(e)=>e.key=='Enter'?seteditLabel(false):seteditLabel(true)} className='w-[90px] h-[30px] text-[13px] pl-1 outline-none border-[1px] border-gray-300 rounded-md'/>
                     }
@@ -296,7 +296,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
                 <div className='w-[100%] flex flex-row'>
                     <div className='w-[70%] '>
                         <div className='flex h-[100%] items-center justify-start'>
-                            <p className='text-[20px] text-gray-500'>{showValue}</p>
+                            <p className='text-[20px] font-inter text-gray-500'>{showValue}</p>
                         </div>
                     </div>
                     <div className='w-[30%] flex items-center justify-end'>
