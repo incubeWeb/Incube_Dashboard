@@ -71,7 +71,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
                 <div className='overflow-y-auto w-[100%]'>
 
                     {
-                        chat.map(c=>
+                        (chat||[]).map(c=>
                             <div key={c.id} className='w-full'>
   <div className={`${c.sender === localStorage.getItem('email') ? 'items-end' : 'items-start'} mb-2 flex-col rounded-md pr-7 flex`}>
  

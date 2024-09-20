@@ -130,7 +130,7 @@ const FilesDoc = ({ currentTab,CompanyName,itsfrom }) => {
                     {!uploadFile && (
                         <div className=" overflow-y-auto h-[100%] flex flex-col space-y-2">
                         
-                                {uploadedFiles.map((file, index) => (
+                                {(uploadedFiles||[]).map((file, index) => (
                                     <div key={index} className=" flex h-[30px] p-2 rounded-md border-b-gray-300 border-b-[1px] flex-row items-center justify-between">
                                         <div className='flex flex-row w-[100%] space-x-2 items-center justify-start'>
                                             {file.fileType=='pdf'?<BsFileEarmarkPdfFill className='text-red-500'/>:

@@ -12,15 +12,19 @@ import { FaAngleDoubleLeft } from "react-icons/fa";
 import { FaAngleDoubleRight } from "react-icons/fa";
 import { BiSolidSend } from "react-icons/bi";
 import { Link } from 'react-router-dom';
+import { Bars } from 'react-loader-spinner';
 
 
-function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,handleOpenGrid}) {
+function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,companyName,description,handleOpenGrid}) {
     const [AddNewWindow,setAddnewWindow]=useState(false)
     const [TotalCards,setTotalCards]=useState([])
     const [Tabs,setTabs]=useState([{id:1,Tab:"Tab1"}])
     const [currentTab,setCurrentTab]=useState(1)
     const [TabCount,setTabCount]=useState(1)
     const [OpenSubbar,setSubbar]=useState(false)
+    const [loading,setloading]=useState(true)
+
+
 
 
     useEffect(()=>{
@@ -34,23 +38,29 @@ function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,han
         setTotalCards(data)
     }
 
+    
     useEffect(()=>{
         const fun=async()=>{
-           const data= await axios.post('http://localhost:8999/getOpenedTabs',{organization:localStorage.getItem('organization')})
-           data.data.data.map((tabVal)=>{
-             let tabs=JSON.parse(tabVal.tabs)
-             setTabCount(parseInt(tabVal.TabsCount))
-             setTabs(tabs)
+           const data= await axios.post('http://localhost:8999/getOpenedTabs',{companyname:companyName,organization:localStorage.getItem('organization')})
+           
+           let count=1
+           data.data.data.map(tabVal =>{
+             count=tabVal.count
+             setTabCount(count)
+             
            })
+           for(let i=2;i<=count;i++)
+            {
+                setTabs(prev=>[...prev,{id:i,Tab:`Tab${i}`}])
+            }
+           
+
         }
-        try{
         fun()
-        }catch(e)
-        {
-            setTabCount([])
-            setTabs([])
-        }
     },[])
+
+    
+
 
     useEffect(()=>{
         const InitialVal=async()=>{
@@ -60,14 +70,17 @@ function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,han
                 organization:localStorage.getItem('organization')
               })
             setTotalCards(doc.data.data)
+
+            setTimeout(()=>{
+                setloading(false)
+            },1000)
         }
         InitialVal()
-    },[TotalCards])
+    },[TotalCards,realtimedealpipelinecompanyInfo])
 
     useEffect(()=>{
         const fun=async()=>{
-            console.log(Tabs)
-            await axios.post('http://localhost:8999/setopenedTabs',{count:"uniqueIdentifier",tabs:JSON.stringify(Tabs),TabsCount:TabCount,organization:localStorage.getItem('organization')})
+            await axios.post('http://localhost:8999/setopenedTabs',{companyname:companyName,count:TabCount,organization:localStorage.getItem('organization')})
         }
         fun()
     },[TabCount])
@@ -113,7 +126,7 @@ function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,han
                             {(Tabs||[]).map(Tab=>
                                 
                                 <div key={Tab.Tab} className={` md:w-[55px] w-[55px] h-[75%] rounded-md ${currentTab==Tab.id?'bg-gray-300':'bg-white shadow-md'} flex items-center justify-center `}>
-                                    <div onClick={()=>setCurrentTab(Tab.id)} className='w-[100%] h-[100%] flex items-center justify-center'>
+                                    <div onClick={()=>{setCurrentTab(Tab.id)}} className='w-[100%] h-[100%] flex items-center justify-center'>
                                         <p className='text-[12px] font-semibold'>Tab {Tab.id}</p>
                                     </div>
                                     
@@ -133,17 +146,25 @@ function OpenCompleteGrid({hidenavbar,setActiveField,companyName,description,han
         {AddNewWindow?<AddNewDetails openAddNewWindow={openAddNewWindow} CompanyName={companyName} handleTotalCards={handleTotalCards} openedTab={currentTab}/>:<></>}
         <div className='w-[100%] h-[100%] flex space-x-2 md:flex-row '>
            
+        {
+            loading?
+            <div className='md:w-[60%] h-[420px] overflow-y-auto md:space-y-7'>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                    <Bars color="#8884d8" height={80} width={80} />
+                </div>
+            </div>
+            :
+           
            
             <div className='md:w-[60%] h-[420px] overflow-y-auto md:space-y-7'>
                 {
-                    (TotalCards||[]).map((item)=>
-                    
-                    <Card key={item._id} id={item._id} itsfrom='completed' CompanyName={item.CompanyName} Title={item.Title} Description={item.Description} Tab={item.Tab}/>
-                    
+                    (TotalCards||[]).map(item=>
+                    <Card key={item._id} id={item._id} CompanyName={item.CompanyName} Title={item.Title} Description={item.Description} Tab={item.Tab}/>
                 )
                 }
                 
             </div>
+            }
             <div className='md:hidden'>
                     <div>{OpenSubbar?<FaAngleDoubleRight  onClick={()=>{setSubbar(!OpenSubbar)}}/>:<FaAngleDoubleLeft  onClick={()=>{setSubbar(!OpenSubbar)}}/>}</div>
                     {

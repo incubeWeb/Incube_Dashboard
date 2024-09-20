@@ -6,12 +6,13 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import axios from 'axios';
 import { Bars } from 'react-loader-spinner';
 
-function Inprogrss({hidenavbar, filter, selectedTab, fetchCompanyData, setActiveField,realtimetabchats }) {
+function Inprogrss({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,hidenavbar, filter, selectedTab, fetchCompanyData, setActiveField,realtimetabchats }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [compData,setcompData]=useState([])
   const totalPages = Math.ceil(compData.length / itemsPerPage);
   const [loading,setloading]=useState(true)
+
   useEffect(()=>{
     const fetchcompanydata=async()=>{
       const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
@@ -22,6 +23,15 @@ function Inprogrss({hidenavbar, filter, selectedTab, fetchCompanyData, setActive
       setloading(false)
     },1000)
   },[])
+
+  useEffect(()=>{
+    const fetchcompanydata=async()=>{
+      const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+      setcompData(response.data.data)
+    }
+    fetchcompanydata()
+  },[realtimedealpipelinecompany])
+
   const handlePageChange = (page) => {
     if (page <= 0) {
       page = 1;
@@ -74,6 +84,7 @@ function Inprogrss({hidenavbar, filter, selectedTab, fetchCompanyData, setActive
                 TeamLead_status={company.TeamLead_status}
                 hidenavbar={hidenavbar}
                 realtimetabchats={realtimetabchats}
+                realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo}
               /> : null
           ))
           :
@@ -90,6 +101,7 @@ function Inprogrss({hidenavbar, filter, selectedTab, fetchCompanyData, setActive
                 TeamLead_status={company.TeamLead_status}
                 hidenavbar={hidenavbar}
                 realtimetabchats={realtimetabchats}
+                realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo}
               /> : null
           ))
         }

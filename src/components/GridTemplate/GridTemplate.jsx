@@ -5,7 +5,7 @@ import OpenCompleteGrid from '../OpenGridTemplate/OpenCompleteGrid'
 import OpenViewallGrid from '../OpenGridTemplate/OpenViewallGrid'
 import axios from 'axios'
 
-function GridTemplate({hidenavbar,realtimetabchats,setSelectedTab,selectedTab,setActiveField,Title,description,logo,status,TeamLead_status,pushedby,completed}) {
+function GridTemplate({realtimedealpipelinecompanyInfo,hidenavbar,realtimetabchats,setSelectedTab,selectedTab,setActiveField,Title,description,logo,status,TeamLead_status,pushedby,completed}) {
     const [openGrid,setOpenGrid]=useState(false)
     const [openUnassignedGrid,setopenUnassignedGrid]=useState(false)
     const [openCompleteGrid,setOpenCompleteGrid]=useState(false)
@@ -140,7 +140,7 @@ function GridTemplate({hidenavbar,realtimetabchats,setSelectedTab,selectedTab,se
         }
 
         {openGrid?
-            <OpenGrid realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+            <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :<></>}
 
         {openUnassignedGrid?
@@ -148,18 +148,18 @@ function GridTemplate({hidenavbar,realtimetabchats,setSelectedTab,selectedTab,se
         :<></>}
 
         {openCompleteGrid?
-            <OpenCompleteGrid hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+            <OpenCompleteGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :<></>}
 
         {
             openViewallGrid &&checkerforTeam() && status=='In Progress' && completed=='incomplete' &&(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
-            <OpenGrid realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+            <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
             openViewallGrid && status=='In Progress' && completed=='incomplete' &&(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
-            <OpenGrid realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+            <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
             openViewallGrid && status=='In Progress' && completed=='completed' &&(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
-            <OpenCompleteGrid hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+            <OpenCompleteGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
             openViewallGrid && status=='Unassigned' && completed=='incomplete' && (localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
             <OpenUnassignedGrid hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
@@ -169,10 +169,10 @@ function GridTemplate({hidenavbar,realtimetabchats,setSelectedTab,selectedTab,se
 
         {
             openViewallGrid && status=='In Progress' && completed=='incomplete' && TeamLead_status=='In Progress' &&(localStorage.getItem('role')=='team lead'||localStorage.getItem('role')=='user')?
-            <OpenGrid realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+            <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
             openViewallGrid && status=='In Progress' && completed=='completed' && TeamLead_status=='In Progress' &&(localStorage.getItem('role')=='team lead'||localStorage.getItem('role')=='user')?
-            <OpenCompleteGrid hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+            <OpenCompleteGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
             openViewallGrid && status=='In Progress' && completed=='incomplete' && TeamLead_status=='Unassigned' &&(localStorage.getItem('role')=='team lead'||localStorage.getItem('role')=='user')?
             <OpenUnassignedGrid hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
