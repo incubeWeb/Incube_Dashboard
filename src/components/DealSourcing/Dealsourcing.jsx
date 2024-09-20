@@ -14,192 +14,9 @@ import axios from 'axios';
 import CompanyTemplate2 from './CompanyTemplate2';
 import { FaPlus } from "react-icons/fa";
 
-const   ZomatoData = {
-  "status": 200,
-  "data": [
-      {
-          "Similar_Names": [
-              {
-                  "companyname": "ZOMATO MEDIA PRIVATE LIMITED",
-                  "cin": "U93030DL2010PLC198141"
-              },
-              {
-                  "companyname": "ZOMATO INTERNET PRIVATE LIMITED",
-                  "cin": "U74900DL2015PTC286208"
-              },
-              {
-                  "companyname": "ZOMATO ENTERTAINMENT PRIVATE LIMITED",
-                  "cin": "U74999DL2018PTC342569"
-              },
-              {
-                  "companyname": "ZOMATO CULINARY SERVICES PRIVATE LIMITED",
-                  "cin": "U15549DL2019PTC351669"
-              },
-              {
-                  "companyname": "ZOMATO LOCAL SERVICES PRIVATE LIMITED",
-                  "cin": "U74900DL2019PTC351669"
-              },
-              {
-                  "companyname": "ZOMATO PRIVATE LIMITED",
-                  "cin": "U93030DL2010PLC198141"
-              }
-          ]
-      },
-      {
-          "Company_Info": {
-              "name": " Zomato",
-              "image_url": "https://i.tracxn.com/logo/company/zom_f1819c9a-9f51-49a7-b02d-4ea0f7d04118.jpg?height=120&width=120",
-              "discription": [
-                  {
-                      "Total Funding": "$1.69Bin 18 rounds"
-                  },
-                  {
-                      "Latest Funding Round": "$252MSeries J, Feb 04, 2021"
-                  },
-                  {
-                      "Post Money Valuation": "$1Bas on Jun 29, 2021"
-                  },
-                  {
-                      "Investors": "Info Edge Ventures& 47 more"
-                  },
-                  {
-                      "Ranked": "1stamong 384 active competitors"
-                  },
-                  {
-                      "Annual Revenue": "₹13,000Cr ($1.57B)as on Mar 31, 2024"
-                  },
-                  {
-                      "Employee Count": "5,760as on Jul 31, 2024 "
-                  },
-                  {
-                      "Investment & Acquisitions": "Omninet Technologies& 32 more"
-                  },
-                  {
-                      "Similar Companies": "DoorDash& 3681 more"
-                  }
-              ],
-              "associated_companies": [
-                  {
-                      "Legal Entity Name": "FIRST LAP LLP ",
-                      "Date of incorporation": "Jun 07, 2021",
-                      "Revenue": "-",
-                      "Net Profit": "-",
-                      "Employee Count": "272"
-                  },
-                  {
-                      "Legal Entity Name": "ZOMATO LOCAL SERVICES PRIVATE LIMITED",
-                      "Date of incorporation": "Jun 20, 2019",
-                      "Revenue": "$8.31K (as on Mar 31, 2022)",
-                      "Net Profit": "$3.76K (as on Mar 31, 2022)",
-                      "Employee Count": "517"
-                  },
-                  {
-                      "Legal Entity Name": "ZOMATO ENTERTAINMENT PRIVATE LIMITED",
-                      "Date of incorporation": "Dec 03, 2018",
-                      "Revenue": "$6.62M (as on Mar 31, 2023)",
-                      "Net Profit": "-$638K (as on Mar 31, 2023)",
-                      "Employee Count": "503"
-                  },
-                  {
-                      "Legal Entity Name": "ZOMATO FINANCIAL SERVICES LIMITED",
-                      "Date of incorporation": "Feb 24, 2022",
-                      "Revenue": "-",
-                      "Net Profit": "-",
-                      "Employee Count": "155"
-                  },
-                  {
-                      "Legal Entity Name": "ZOMATO PAYMENTS PRIVATE LIMITED",
-                      "Date of incorporation": "Aug 03, 2021",
-                      "Revenue": "-",
-                      "Net Profit": "-",
-                      "Employee Count": "789"
-                  },
-                  {
-                      "Legal Entity Name": "ZOMATO LIMITED",
-                      "Date of incorporation": "Jan 17, 2010",
-                      "Revenue": "$1.57B (as on Mar 31, 2024)",
-                      "Net Profit": "$42.4M (as on Mar 31, 2024)",
-                      "Employee Count": "572"
-                  }
-              ],
-              "recent_funding": [
-                  {
-                      "Date of funding": "Feb 04, 2021",
-                      "Funding Amount": "$252M",
-                      "Round Name": "Series J",
-                      "Post money valuation": "$5.44B",
-                      "Revenue multiple": "18.3x",
-                      "Investors": "Kora, Fidelity Investments, Tiger Global Management, Bow Wave Capital Management, Dragoneer Investment Group, Manoj Kumar Kundalia, Anshoo Sharma, Variable Insurance Products Fund III, Mirae Asset Global Investments, DF International Partners, ASP India"
-                  },
-                  {
-                      "Date of funding": "Aug 31, 2020",
-                      "Funding Amount": "$660M",
-                      "Round Name": "Series J",
-                      "Post money valuation": "$3.93B",
-                      "Revenue multiple": "11.6x",
-                      "Investors": "Kora, Tiger Global Management, Fidelity Investments, Baillie Gifford, Steadview, Luxor Capital Group, Mirae Asset Venture Investments, Temasek, Bow Wave Capital Management, D1 Capital Partners, Manoj Kumar Kundalia, Anshoo Sharma"
-                  },
-                  {
-                      "Date of funding": "Mar 24, 2020",
-                      "Funding Amount": "$5M",
-                      "Round Name": "Series J",
-                      "Post money valuation": "$3.26B",
-                      "Revenue multiple": "8.5x",
-                      "Investors": "pacifichorizon.co.uk"
-                  }
-              ]
-          }
-      },
-      {
-          "LinkedIn": {
-              "title": "Zomato | LinkedIn",
-              "metaDescription": "Zomato | 1,688,064 followers on LinkedIn. Vision - better food for more people | Zomato’s mission statement is “better food for more people.” Since our inception in 2010, we have grown tremendously, both in scope and scale - and emerged as India’s most trusted brand during the pandemic, along with being one of the largest hyperlocal delivery networks in the country.\n\nToday, Zomato represents a wide range of cultures through its diversified 5000+ team members, 3.5 lakh+ delivery partners, and our biggest collective of the finest restaurant partners.",
-              "jsonLD": {
-                  "@context": "http://schema.org",
-                  "@type": "Organization",
-                  "name": "Zomato",
-                  "url": "https://in.linkedin.com/company/zomato",
-                  "address": {
-                      "type": "PostalAddress",
-                      "streetAddress": "Pioneer Square",
-                      "addressLocality": "Gurugram",
-                      "addressRegion": "Haryana",
-                      "postalCode": "122101",
-                      "addressCountry": "IN"
-                  },
-                  "description": "Zomato’s mission statement is “better food for more people.” Since our inception in 2010, we have grown tremendously, both in scope and scale - and emerged as India’s most trusted brand during the pandemic, along with being one of the largest hyperlocal delivery networks in the country.\n\nToday, Zomato represents a wide range of cultures through its diversified 5000+ team members, 3.5 lakh+ delivery partners, and our biggest collective of the finest restaurant partners. We are grateful that our business is able to provide upward social and economic movement for millions of households – of our delivery partners, as well as restaurant staff. We think of all of us as one big family!\n\nOur passion is driven by purpose and we take immense pride in our initiative ‘Feeding India’, one of India’s largest not-for-profits working to ensure that nobody in India goes to bed hungry. As of now, Feeding India provides over 150,000 nutritious meals to the underprivileged every day.\n\nIn April 2020, Feeding India ran one of the largest food distribution drives in the world during the first wave of COVID, and distributed 78 million meals to daily wagers across the length and breadth of the country.\n\nDuring the second wave of COVID-19, Feeding India was again the first to act. We were able to source over 9,000 oxygen concentrators and distributed them for free to government hospitals across the country. This helped save millions of lives during one of the worst humanitarian crises faced by India in the recent times.\n\nWe’re innovating hard to make last-mile delivery carbon neutral, to eliminate the use of plastic packaging, create meaningful opportunities in the gig economy, and to feed our country’s ever-growing appetite for high-quality, affordable, and hygienic food, one delivery at a time!",
-                  "numberOfEmployees": {
-                      "value": 14940,
-                      "@type": "QuantitativeValue"
-                  },
-                  "logo": {
-                      "contentUrl": "https://media.licdn.com/dms/image/v2/D4D0BAQGmF6yqRQAgCw/company-logo_200_200/company-logo_200_200/0/1700453963264/zomato_logo?e=2147483647&v=beta&t=WAAoVhEV3uASKu23KqJkO-B4_JNJIkvjKm3_j5yi1A0",
-                      "description": "Zomato",
-                      "@type": "ImageObject"
-                  },
-                  "slogan": "Vision - better food for more people",
-                  "sameAs": "https://www.zomato.com/"
-              }
-          }
-       }
-    ]
-}
 
 
 
-
-
-const { Similar_Names } = ZomatoData.data[0];
-const { Company_Info } = ZomatoData.data[1];
-const { LinkedIn } = ZomatoData.data[2];
-const [companyDatas, setCompanyData] = useState([]);
-
-const processedData = Similar_Names.map(item => {
-  return {
-    // companyName: item.name.toUpperCase(), // Transform: example converting name to uppercase
-   
-  };
-});
 
 
 const Dealsourcing = ({hidenavbar}) => {
@@ -212,21 +29,23 @@ const Dealsourcing = ({hidenavbar}) => {
 
 
 
+
   const [companies,setCompanies]=useState([])
+
   const handleSearchInputChange=(e)=>{
-      setSearchVal(e.target.value)
-      
-     
+      setSearchVal(e.target.value)   
   }
 
   useEffect(()=>{
-   const setCompany=async()=>{
-    const res=await axios.post('http://localhost:8999/getdealsourcingFiles',{organization:localStorage.getItem('organization')})
-    const data=res.data.data
-    setCompanies(data)
-   }
-   setCompany()
-  },[])
+    console.log(companies,"comapny nads")
+    
+
+    
+
+
+  },[companies])
+
+ 
 
   // useEffect(()=>{
   //   handleSearch()
@@ -239,22 +58,15 @@ const Dealsourcing = ({hidenavbar}) => {
 
   
   const handleSearch=async()=>{
-    const search=document.getElementById('search').value
-    setSubmittedValue(search)
-   
-    const res = await axios.post('http://localhost:8999/scrape/companyData', {
-  
-      company:searchValue,
-    });
-    console.log(JSON.stringify(res.data));
-    setCompanyData(res.data.data)
+    alert("clicked")
+
+      const res=await axios.post('http://localhost:8999/scrape/companyData',{"company":`${searchValue}`})
+      const data=res.data.data
+      setCompanies(data)
+    
    
   
   }
-useEffect(()=>{
-console.log(companyDatas)
-
-},[companyDatas])
 
   useEffect(()=>{
     console.log(JSON.stringify(value+1).split(" ")[1]+" "+JSON.stringify(value+1).split(" ")[2]+" "+JSON.stringify(value+1).split(" ")[3])
@@ -380,7 +192,7 @@ console.log(companyDatas)
           {/* Additional content here */}
             <div className='w-[90%] h-[65%] flex flex-row'>
               <div className='border-y-[1px] rounded-l-md border-gray-300 border-l-[1px] flex justify-center items-center w-[28px] text-gray-500'><FiSearch size={16} /></div>
-                <input id='search'  onChange={handleSearchInputChange} className='outline-none rounded-r-md border-gray-300 border-y-[1px] border-r-[1px] w-[100%] text-[14px] text-gray-500 placeholder:text-[15px]' placeholder='Search'/>
+                <input  value={searchValue}  onChange={handleSearchInputChange} className='outline-none rounded-r-md border-gray-300 border-y-[1px] border-r-[1px] w-[100%] text-[14px] text-gray-500 placeholder:text-[15px]' placeholder='Search'/>
             </div>
             <div className='flex flex-row h-[65%] space-x-2'>
                   <div className='shadow-md border h-[100%] w-[70px] border-gray-300 rounded-md items-center flex justify-center cursor-pointer' onClick={ClearInput}>
@@ -409,28 +221,21 @@ console.log(companyDatas)
 
 
             <div className='w-[100%] h-[90%] space-y-2 pr-6 font-inter'>
-  {Similar_Names.length > 0 && (
-    <CompanyTemplate2
-      key={Similar_Names[0]._id} 
-      name={Similar_Names[0].companyname} 
-      description={Similar_Names[0].Description} 
-      photolink={Similar_Names[0].photolink} 
-    />
-  )}
-</div>
+               {
+                  companies.length>0?
+                  (companies[0].Similar_Names).map((val,index)=>
+                    <p key={val._id}>{val.companyname}</p>
+                   )
+                   :
+                   <></>
+               }
+            </div>
  <div className='grid w-[100%] h-[90%]  pr-6  grid-cols-3  p-6 gap-8 font-inter'>
-  {Similar_Names.map (v=>(
-    <CompanyTemplate 
-      key={v._id} 
-      name={v.companyname} 
-      description={Similar_Names.Description} 
-      photolink={Similar_Names[0].photolink} 
-    />
-  ))}
+                
 </div>
 </div>
 <div>
-        <p className='flex justify-center w-[95%] h-[10%]  pt-5   -mt-32 font-inter font-semibold '>  <FaPlus  className='mt-1 mr-1'/>{processedData.length+" "+"Similar Companies"}</p>
+        <p className='flex justify-center w-[95%] h-[10%]  pt-5   -mt-32 font-inter font-semibold '>  </p>
       </div>
       </div>
       
