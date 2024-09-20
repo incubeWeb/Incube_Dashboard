@@ -84,7 +84,7 @@ const Navigation = ({activeField,setActiveField,hidenavbar,sethidenavbar}) => {
                 <Link to='/dealsourcing'>
                 <div className={`${activeField=='/dealsourcing'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/dealsourcing')}>
                     <div><SlSocialDropbox size={24} className={`${activeField=='/dealsourcing'?' text-white ':'text-[#667085]'} `}/></div>
-                    <div className='text-[14px] font-inter font-semibold'><p>Deal sourcing</p></div>
+                    <div className='text-[14px] font-inter font-semibold'><p>Deal sourcing (<span className='text-[12px]'>Beta)</span></p></div>
                 </div>
                 </Link>
                 <Link to='/portfolio'>

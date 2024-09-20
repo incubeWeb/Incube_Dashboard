@@ -8,7 +8,7 @@ import { LuUserSquare2 } from "react-icons/lu";
 import axios from 'axios';
 import { FaPlus } from "react-icons/fa";
 
- export const   ZomatoData = {
+  const   ZomatoData = {
   "status": 200,
   "data": [
       {
@@ -217,7 +217,7 @@ const CompanyTemplate2 = ({name,description,photolink}) => {
                       <p className='text-[15px] font-bold font-inter'>{LinkedIn.jsonLD.name}</p>
                   </div>
                   <div className='flex flex-row basis-1/4 items-center justify-end'>
-                      <div className='w-[45px] h-[90%] rounded-md border-blue-600 border-[1px] flex flex-col items-center justify-center'><FaRegHeart size={16} className='text-blue-600'/></div>
+                      <div className='w-[40px] h-[90%] rounded-md border-blue-600 border-[1px] flex flex-col items-center justify-center'><FaRegHeart size={16} className='text-blue-600'/></div>
                   </div>
             </div>
             <div className='w-[100%] h-[40%] flex flex-row'>
@@ -225,12 +225,7 @@ const CompanyTemplate2 = ({name,description,photolink}) => {
 
                 {Company_Info.recent_funding.length > 0 && (
     <p className='font-inter text-[14px]'>Funding Amount {Company_Info.recent_funding[0]['Funding Amount']}</p>
-        )}
-                          
-                        
-
-
-                          
+        )}  
                       <div className='flex flex-row text-[15px] space-x-4'>
                         <div className='flex flex-row space-x-1 items-center'>
                           <IoLocationOutline size={16} />
@@ -248,14 +243,13 @@ const CompanyTemplate2 = ({name,description,photolink}) => {
                         </div>
                       </div>
                 </div>
-                <div className=' mt-10  space-x-2'>
-                <a href={LinkedIn.jsonLD.url}>  <TiSocialLinkedin size={24} className='bg-[#0077B5] rounded text-white'/></a>
+                <div className=' mt-8 ml-28'>
+                <a href={LinkedIn.jsonLD.url}>  <TiSocialLinkedin size={24} className='bg-[#0077B5] rounded text-white ml-7'/></a>
                   
                 </div>
             </div>
             <div className='w-[100%] h-[40%] flex flex-row justify-end items-center border-t border-gray-300 mr-2 space-x-2'>
-            <FaPlus  className='mt-3 pl-1'/><p className=' mt-3 font-inter font-semibold text-[14px]'>{processedData.length+" "+"Similar Companies"}</p>
-               
+           
                 <div className='border-[1px] border-gray-300 w-[120px] h-[80%] mt-4  rounded-md flex items-center justify-center'>
                     <p className='text-[14px] font-inter font-semibold'>Financials</p>
                 </div>
