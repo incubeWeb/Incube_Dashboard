@@ -33,12 +33,16 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
         setShowFilterMenu(!showFilterMenu);
     };
 
-    // Function to handle filter selection and open sorting pop-up
+
     const handleFilterSelection = (filter) => {
         setSelectedFilter(filter);
+        console.log("John"+selectedFilter)
         setShowFilterMenu(false); // Close filter menu
         setShowSortMenu(true); // Open sorting menu
     };
+
+    // Function to handle filter selection and open sorting pop-up
+   
 
     // Function to handle sorting selection
     const handleSortSelection = (sort) => {
@@ -205,53 +209,49 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                          */}
 
                          <div className='relative'>
-            {/* Filter Button */}
-            <div className='w-[90px] text-[14px] rounded-md space-x-2 h-[30px] border-[1px] border-gray-300 items-center justify-center font-inter font-semibold flex flex-row cursor-pointer'
-                onClick={toggleFilterMenu}>
-                <RiFilter3Line size={15} />
-                <p>Filters</p>
-            </div>
+                                    <div className='w-[90px] text-[14px] rounded-md space-x-2 h-[30px] border-[1px] border-gray-300 items-center justify-center font-inter font-semibold flex flex-row cursor-pointer'
+                                        onClick={toggleFilterMenu}>
+                                        <RiFilter3Line size={15} />
+                                        <p>Filters</p>
+                                    </div>
 
-            {/* Filter options pop-up */}
-            {showFilterMenu && (
-                <div className='absolute right-0 mt-2 w-[200px] p-3 bg-white border-gray-300 border-[1px] rounded-md z-50'>
-                    <div
-                        className='p-1 hover:bg-blue-500 flex items-center rounded-md text-[12px] font-semibold font-inter cursor-pointer'
-                        onClick={() => handleFilterSelection('Investor Name')}>
-                        <p className='p-2'>Investor Name</p>
-                    </div>
-                    <div
-                        className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-inter font-semibold cursor-pointer'
-                        onClick={() => handleFilterSelection('Amount Invested')}>
-                        <p className='p-2'>Amount Invested</p>
-                    </div>
-                    <div
-                        className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-inter font-semibold cursor-pointer'
-                        onClick={() => handleFilterSelection('Total Invested Amount')}>
-                        <p className='p-2'>Total Invested Amount</p>
-                    </div>
-                </div>
-            )}
+                                    {/* Filter options pop-up */}
+                                    {showFilterMenu && (
+                                        <div className='absolute right-0 mt-2 w-[200px] p-3 bg-white border-gray-300 border-[1px] rounded-md z-50'>
+                                            <div
+                                                className='p-1 hover:bg-blue-500 flex items-center rounded-md text-[12px] font-semibold font-inter cursor-pointer'
+                                                onClick={() => handleFilterSelection('Investor Name')}>
+                                                <p className='p-2'>Investor Name</p>
+                                            </div>
+                                            <div
+                                                className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-inter font-semibold cursor-pointer'
+                                                onClick={() => handleFilterSelection('Amount Invested')}>
+                                                <p className='p-2'>Amount Invested</p>
+                                            </div>
+                                            <div
+                                                className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-inter font-semibold cursor-pointer'
+                                                onClick={() => handleFilterSelection('Total Invested Amount')}>
+                                                <p className='p-2'>Total Invested Amount</p>
+                                            </div>
+                                        </div>
+                                    )}
 
-            {/* Sorting options pop-up */}
-            {showSortMenu && (
-                <div className='absolute right-0 mt-2 w-[200px] p-3 bg-white border-gray-300 border-[1px] rounded-md z-50'>
-                    <div
-                        className='p-1 hover:bg-blue-500 flex items-center rounded-md text-[12px] font-semibold font-inter cursor-pointer'
-                        onClick={() => handleSortSelection('Ascending')}>
-                        <p className='p-2'>Ascending</p>
-                    </div>
-                    <div
-                        className='p-1 hover:bg-blue-500 flex items-center rounded-md text-[12px] font-semibold font-inter cursor-pointer'
-                        onClick={() => handleSortSelection('Descending')}>
-                        <p className='p-2'>Descending</p>
-                    </div>
-                </div>
-            )}
-
-           
-        </div>
-
+                                    {/* Sorting options pop-up */}
+                                    {showSortMenu && (
+                                        <div className='absolute right-0 mt-2 w-[200px] p-3 bg-white border-gray-300 border-[1px] rounded-md z-50'>
+                                            <div
+                                                className='p-1 hover:bg-blue-500 flex items-center rounded-md text-[12px] font-semibold font-inter cursor-pointer'
+                                                onClick={() => handleSortSelection('Ascending')}>
+                                                <p className='p-2'>Ascending</p>
+                                            </div>
+                                            <div
+                                                className='p-1 hover:bg-blue-500 flex items-center rounded-md text-[12px] font-semibold font-inter cursor-pointer'
+                                                onClick={() => handleSortSelection('Descending')}>
+                                                <p className='p-2'>Descending</p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
 
 
 
@@ -364,7 +364,11 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                 : 
             ((showHistory &&!selectfield)||(!clickedDots&&sheetmethod.length>0)) && !loading?
             <div>
-                <PortfolioHistory selectedImageFiled={selectedImageFiled} setportfolioHistory={setshowHistory} sheetKeys={sheetKeys} sheetJson={sheetJson}/>
+                <PortfolioHistory selectedImageFiled={selectedImageFiled} setportfolioHistory={setshowHistory} sheetKeys={sheetKeys}  
+                    selectedFilter={selectedFilter}
+                                    selectedSort={selectedSort}
+                                    sheetJson={sheetJson}
+                />
             </div>
             :
         <></>

@@ -14,8 +14,9 @@ import { FaPlus } from "react-icons/fa";
 
 
 
-const CompanyTemplate2 = ({name,description,photo,LinkedIn_url, Locality, Country,funding}) => {
+const CompanyTemplate2 = ({name,description,photo,LinkedIn_url, Locality, Country,funding,length}) => {
   return (
+    <div>
     <div className='font-roboto w-[100%] h-[100%] rounded-md space-x-3 shadow-md border-gray-300 border-[1px] flex flex-row p-[23px]'>
         <div className=' w-[20%] h-[100%] rounded-md'>
         <img
@@ -72,9 +73,21 @@ const CompanyTemplate2 = ({name,description,photo,LinkedIn_url, Locality, Countr
                 <div className='border-[1px] border-gray-300 w-[190px] h-[80%] mt-4 rounded-md flex items-center justify-center'>
                     <p className='text-[14px] font-inter font-semibold'>Download company data</p>
                 </div>
+                
+
             </div>
+
+          
         </div>
-       
+
+
+        
+        
+               
+                  
+
+    </div>
+    <p className='flex shadow rounded-md mt-5 w-[100%] h-[70%] justify-center font-inter font-bold'><span className='text-[25px] font-bold -mt-2 mr-1'>+</span> {length} Similar Companies</p>
 
     </div>
   )

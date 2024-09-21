@@ -26,7 +26,8 @@ const Dealsourcing = ({hidenavbar}) => {
   const [searchValue,setSearchVal]=useState('')
   const [submittedValue, setSubmittedValue] = useState('');
 
-const[Loading,setLoading]=useState(false)
+  const[Loading,setLoading]=useState(false)
+  const [processDataLength, setProcessDataLength] = useState(0);
 
 
   const [companies,setCompanies]=useState([])
@@ -67,6 +68,7 @@ const[Loading,setLoading]=useState(false)
   
   // }
 
+
   const handleSearch = async () => {
  
     setLoading(true);   // Set loading to true when search is initiated
@@ -87,6 +89,21 @@ const[Loading,setLoading]=useState(false)
     }
   };
 
+  useEffect(() => {
+    if (companies[0]?.Similar_Names) {
+      const ProcessData = companies[0].Similar_Names.map((v, index) => {
+        console.log("data length: " + companies[0].Similar_Names.length);
+        // Further processing here
+        return v;
+      });
+
+      // Set the length of ProcessData in state
+      setProcessDataLength(ProcessData.length);
+    } else {
+      console.log("Similar_Names is not defined yet.");
+    }
+  }, [companies]); // This effect runs when 'companies' changes
+
 
 
   useEffect(()=>{
@@ -104,8 +121,6 @@ const[Loading,setLoading]=useState(false)
   }
 
 
-  
-   
   
 
   
@@ -255,7 +270,7 @@ const[Loading,setLoading]=useState(false)
       LinkedIn_url={companies[2].LinkedIn.jsonLD.url}
       Locality={companies[2].LinkedIn.jsonLD.address.addressLocality}
       Country={companies[2].LinkedIn.jsonLD.address.addressCountry}
-     
+        length={processDataLength}
 
       
     />
@@ -284,7 +299,8 @@ const[Loading,setLoading]=useState(false)
                   <CompanyTemplate 
              key={index} 
             name={val.companyname} 
-    
+            
+        
     />
                    )
                    :
