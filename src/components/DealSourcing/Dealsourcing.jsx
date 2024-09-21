@@ -13,8 +13,7 @@ import axios from 'axios';
 
 import CompanyTemplate2 from './CompanyTemplate2';
 import { FaPlus } from "react-icons/fa";
-
-
+import { Bars } from 'react-loader-spinner';
 
 
 
@@ -27,20 +26,20 @@ const Dealsourcing = ({hidenavbar}) => {
   const [searchValue,setSearchVal]=useState('')
   const [submittedValue, setSubmittedValue] = useState('');
 
-
+  const[Loading,setLoading]=useState(false)
+  const [processDataLength, setProcessDataLength] = useState(0);
 
 
   const [companies,setCompanies]=useState([])
 
   const handleSearchInputChange=(e)=>{
       setSearchVal(e.target.value)   
+      
   }
 
   useEffect(()=>{
-    console.log(companies,"comapny nads")
-    
 
-    
+
 
 
   },[companies])
@@ -57,16 +56,55 @@ const Dealsourcing = ({hidenavbar}) => {
   }
 
   
-  const handleSearch=async()=>{
-    alert("clicked")
-
-      const res=await axios.post('http://localhost:8999/scrape/companyData',{"company":`${searchValue}`})
-      const data=res.data.data
-      setCompanies(data)
+  // const handleSearch=async()=>{
+  //   // alert("clicked")
+  //       setLoading(true)
+  //     const res=await axios.post('http://localhost:8999/scrape/companyData',{"company":`${searchValue}`})
+  //     const data=res.data.data
+  //    setLoading(false)
+  //     setCompanies(data)
     
    
   
-  }
+  // }
+
+
+  const handleSearch = async () => {
+ 
+    setLoading(true);   // Set loading to true when search is initiated
+    setCompanies([]); 
+    
+    try {
+     
+      const res = await axios.post('http://localhost:8999/scrape/companyData', { "company": `${searchValue}` });
+      
+      const data = res.data.data;
+      
+    
+      setCompanies(data); // Store fetched companies
+    } catch (err) {
+      setError("Failed to fetch data. Please try again.");
+    } finally {
+      setLoading(false); // Stop loading after fetching is complete
+    }
+  };
+
+  useEffect(() => {
+    if (companies[0]?.Similar_Names) {
+      const ProcessData = companies[0].Similar_Names.map((v, index) => {
+        console.log("data length: " + companies[0].Similar_Names.length);
+        // Further processing here
+        return v;
+      });
+
+      // Set the length of ProcessData in state
+      setProcessDataLength(ProcessData.length);
+    } else {
+      console.log("Similar_Names is not defined yet.");
+    }
+  }, [companies]); // This effect runs when 'companies' changes
+
+
 
   useEffect(()=>{
     console.log(JSON.stringify(value+1).split(" ")[1]+" "+JSON.stringify(value+1).split(" ")[2]+" "+JSON.stringify(value+1).split(" ")[3])
@@ -81,6 +119,12 @@ const Dealsourcing = ({hidenavbar}) => {
   const handleMorefilters=()=>{
     setMoreFilters(!moreFilters)
   }
+
+
+  
+
+  
+
   return (
     <div className={`${hidenavbar?'ml-[0%] w-[100%]':'ml-[20%] w-[80%]'}select-none text-gray-800 flex flex-col p-[63px] pt-[30px] h-screen`}>
       <div className='flex flex-col w-[100%] h-[20%] justify-center'>
@@ -213,34 +257,68 @@ const Dealsourcing = ({hidenavbar}) => {
                     <p className='text-gray-800 text-[12px] font-inter font-semibold '>Sort by Price</p>
                 </div>
             </div>
-
-
-
-            
             <div className='w-[100%] h-[90%]  space-y-2 pr-6 font-inter'>
+            
+           
 
+   {  companies.length>0?  
+     <CompanyTemplate2
+      name={companies[2].LinkedIn.jsonLD.name}
+      photo={companies[1].
+        Company_Info.image_url}
+        funding={companies[1].Company_Info.discription[0]['Total Funding']}
+      LinkedIn_url={companies[2].LinkedIn.jsonLD.url}
+      Locality={companies[2].LinkedIn.jsonLD.address.addressLocality}
+      Country={companies[2].LinkedIn.jsonLD.address.addressCountry}
+        length={processDataLength}
 
+      
+    />
+     :
+     <>
+     {Loading ? (
+            
+      <div className='w-[100%]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+          <Bars color="#8884d8" height={80} width={80} />
+          
+        </div>
+
+          ) : (
+                
+       <p className=' items-center text-[22px] font-inter font-semibold mt-5'> Search for Companies..</p>)}
+   
+     </>
+   } 
+  </div>
             <div className='w-[100%] h-[90%] space-y-2 pr-6 font-inter'>
-               {
-                  companies.length>0?
+            <div className='grid w-[100%] h-[90%]  pr-6  pt-6 grid-cols-3   gap-8 font-inter'>
+ {
+                   companies.length>0?
                   (companies[0].Similar_Names).map((val,index)=>
-                    <p key={val._id}>{val.companyname}</p>
+                    
+                  <CompanyTemplate 
+             key={index} 
+            name={val.companyname} 
+            
+        
+    />
                    )
                    :
                    <></>
                }
+</div>
             </div>
- <div className='grid w-[100%] h-[90%]  pr-6  grid-cols-3  p-6 gap-8 font-inter'>
-                
+
+    
+
+
 </div>
+
 </div>
-<div>
-        <p className='flex justify-center w-[95%] h-[10%]  pt-5   -mt-32 font-inter font-semibold '>  </p>
-      </div>
-      </div>
-      
-    </div>
-  );
+);
 };
 
+
+            
+          
 export default Dealsourcing;

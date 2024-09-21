@@ -15,9 +15,10 @@ import { BsBuildings } from "react-icons/bs";
 
 
 
-const CompanyTemplate = ({name,description,photolink}) => {
+const CompanyTemplate = ({name,length}) => {
   return (
    
+    
     <div className='font-inter w-[100%] h-[100%] rounded-md -mt-6 space-x-3 shadow-md border-gray-300 border-[1px] flex  p-[23px]'>
         <div className='mt-2'>
         <BsBuildings size={26} />
@@ -27,6 +28,7 @@ const CompanyTemplate = ({name,description,photolink}) => {
                   <div className='flex -mt-5 items-center justify-end'>
                       <div className='w-[30px] h-[40%] rounded-md border-blue-600 border-[1px] flex flex-col items-center justify-center'><FaRegHeart size={16} className='text-blue-600'/></div>
                   </div>
+                  
             </div>
            
  
