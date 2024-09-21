@@ -15,8 +15,33 @@ function Inprogrss({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-      setcompData(response.data.data)
+      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+        {
+          const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+          //console.log(response.data.data)
+          console.log(response.data.data)
+          const filteredData=response.data.data.filter(val=>val.status=='In Progress' && val.completed=='incomplete')
+          setcompData(filteredData)
+        }
+        else{
+          const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+          const Teamresponse = await axios.post('http://localhost:8999/getUserfromTeam', {
+            member: localStorage.getItem('email'),
+            mainorganization:localStorage.getItem('organization')
+          });
+          const organizationNames=[]
+          
+          Teamresponse.data.data.map(val=>{
+            organizationNames.push(val.organization)
+          })
+          
+          const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
+          console.log("filteredDataCompleted",filteredData)
+          const morefilteredData=filteredData.filter(val=>val.TeamLead_status=='In Progress' && val.completed=='incomplete')
+          setcompData(morefilteredData);
+        }
+
+
     }
     fetchcompanydata()
     setTimeout(()=>{  
@@ -26,8 +51,32 @@ function Inprogrss({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-      setcompData(response.data.data)
+      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+        {
+          const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+          //console.log(response.data.data)
+          console.log(response.data.data)
+          const filteredData=response.data.data.filter(val=>val.status=='In Progress' && val.completed=='incomplete')
+          setcompData(filteredData)
+        }
+        else{
+          const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+          const Teamresponse = await axios.post('http://localhost:8999/getUserfromTeam', {
+            member: localStorage.getItem('email'),
+            mainorganization:localStorage.getItem('organization')
+          });
+          const organizationNames=[]
+          
+          Teamresponse.data.data.map(val=>{
+            organizationNames.push(val.organization)
+          })
+          
+          const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
+          console.log("filteredDataCompleted",filteredData)
+          const morefilteredData=filteredData.filter(val=>val.TeamLead_status=='In Progress' && val.completed=='incomplete')
+          setcompData(morefilteredData);
+        }
+
     }
     fetchcompanydata()
   },[realtimedealpipelinecompany])
@@ -49,13 +98,7 @@ function Inprogrss({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
 
   const currentData = compData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  const check = (company) => {
-    if(localStorage.getItem('role')=='admin'||localStorage.getItem('role')=='super admin')
-    {
-      return true 
-    }
-    return filter.includes(company.title);
-  };
+  
 
   return (
     <div>
@@ -70,9 +113,8 @@ function Inprogrss({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
     <div>
       <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px]'>
         {
-          localStorage.getItem('role')=='team lead' || localStorage.getItem('role')=='user'?
-          currentData.map(company => (
-            company.TeamLead_status === 'In Progress' && check(company) && company.completed !='completed' ?
+          currentData.map(company => 
+            
               <GridTemplate
                 key={company._id}
                 selectedTab={selectedTab}
@@ -85,25 +127,8 @@ function Inprogrss({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
                 hidenavbar={hidenavbar}
                 realtimetabchats={realtimetabchats}
                 realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo}
-              /> : null
-          ))
-          :
-          currentData.map(company => (
-            company.status === 'In Progress' && check(company) && company.completed !='completed' ?
-              <GridTemplate
-                key={company._id}
-                selectedTab={selectedTab}
-                setActiveField={setActiveField}
-                Title={company.title}
-                description={company.Description}
-                logo={company.photolink}
-                status={company.status}
-                TeamLead_status={company.TeamLead_status}
-                hidenavbar={hidenavbar}
-                realtimetabchats={realtimetabchats}
-                realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo}
-              /> : null
-          ))
+              /> 
+          )
         }
         
 

@@ -14,8 +14,32 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
   const [loading,setloading]=useState(true)
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-      setcompData(response.data.data)
+      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+      {
+        const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+        //console.log(response.data.data)
+        console.log(response.data.data)
+        const filteredData=response.data.data.filter(val=>val.status=="Unassigned")
+        setcompData(filteredData)
+      }
+      else{
+        const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+        const Teamresponse = await axios.post('http://localhost:8999/getUserfromTeam', {
+          member: localStorage.getItem('email'),
+          mainorganization:localStorage.getItem('organization')
+        });
+        const organizationNames=[]
+        
+        Teamresponse.data.data.map(val=>{
+          organizationNames.push(val.organization)
+        })
+        
+        const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
+        console.log("filteredData",filteredData)
+        const morefilteredData=filteredData.filter(val=>val.TeamLead_status=='Unassigned' && val.completed!='completed')
+        console.log("more filtered",morefilteredData)
+        setcompData(morefilteredData);
+      }
     }
     fetchcompanydata()
     setTimeout(()=>{  
@@ -25,8 +49,31 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-      setcompData(response.data.data)
+      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+        {
+          const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+          //console.log(response.data.data)
+          console.log(response.data.data)
+          const filteredData=response.data.data.filter(val=>val.status=="Unassigned")
+          setcompData(filteredData)
+        }
+        else{
+          const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+          const Teamresponse = await axios.post('http://localhost:8999/getUserfromTeam', {
+            member: localStorage.getItem('email'),
+            mainorganization:localStorage.getItem('organization')
+          });
+          const organizationNames=[]
+          
+          Teamresponse.data.data.map(val=>{
+            organizationNames.push(val.organization)
+          })
+          
+          const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
+          console.log("filteredData",filteredData)
+          const morefilteredData=filteredData.filter(val=>val.TeamLead_status=='Unassigned'&& val.completed!='completed')
+          setcompData(morefilteredData);
+        }
     }
     fetchcompanydata()
     
@@ -49,13 +96,7 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
 
   const currentData = compData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  const check = (company) => {
-    if(localStorage.getItem('role')=='admin'||localStorage.getItem('role')=='super admin')
-    {
-      return true
-    }
-    return filter.includes(company.title);
-  };
+ 
 
   return (
     <div>
@@ -72,18 +113,16 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
           localStorage.getItem('role')=='team lead' || localStorage.getItem('role')=='user'?
           currentData.map(company => ( 
 
-            company.TeamLead_status === 'Unassigned' && check(company) && company.completed!='completed' ?
+            
             <GridTemplate hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
-            :
-            <></>
+            
           ))
           :
           currentData.map(company => ( 
 
-            company.status === 'Unassigned' && check(company) && company.completed!='completed'?
+            
             <GridTemplate hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
-            :
-            <></>
+           
           ))
         }
         

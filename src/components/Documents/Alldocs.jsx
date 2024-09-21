@@ -23,18 +23,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar}) => {
     const [loading,setloading]=useState(true)
     const [jsonData,setjsonData]=useState([])
 
-    useEffect(()=>{
-        if(allDocs=='undefined')
-        {
-            window.location.reload()
-        }
-    },[])
-    useEffect(()=>{
-        if(allDocs=='undefined')
-        {
-            window.location.reload()
-        }
-    },[allDocs])
+
     const handleDelete=async (id)=>{
         console.log(id)
         const response=await axios.post('http://localhost:8999/deleteUploadedfile',{id:id,doneBy:localStorage.getItem('email'),organization:localStorage.getItem('organization')})

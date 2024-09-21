@@ -37,11 +37,16 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
             const usersData = response.data.data;
             if(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')
             {
-                setAllUsers(usersData)
+                const filteredData= usersData.filter(val=>val.role!='super admin' &&val.role!='admin')
+                
+                const newFilteredData=[...filteredData]
+                setAllUsers(newFilteredData)
             }
             else if(localStorage.getItem('role')=='team lead'){
-                const filteredData= usersData.filter(val=>val.role!='super admin' && val.role !='admin')
-                setAllUsers(filteredData)
+                const filteredData= usersData.filter(val=>val.role!='super admin' && val.role !='admin' && val.role!='team lead')
+                const filter_=usersData.filter(val=>val.email==localStorage.getItem('email'))
+                const newFilteredData=[...filter_,...filteredData]
+                setAllUsers(newFilteredData)
             }
             else{
                 const filteredData=usersData.filter(val=>val.email==localStorage.getItem('email'))

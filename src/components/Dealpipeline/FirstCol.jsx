@@ -21,43 +21,28 @@ function FirstCol({realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,rea
   const [loading,setloading]=useState(true)
 
   useEffect(() => {
-    showCompanies();
-    const interval = setInterval(() => {
-      showCompanies();
-    }, 1000);
 
-    return () => clearInterval(interval);
+    fetchCompanyData();
+
   }, []);
-
-
-
-  const showCompanies = async () => {
-    const response = await axios.post('http://localhost:8999/getUserfromTeam', {
-      member: localStorage.getItem('email'),
-      mainorganization:localStorage.getItem('organization')
-    });
-    const data = response.data.data;
-    const uniqueOrganizations = [];
-    try{
-    data.forEach((d) => {
-      if (!uniqueOrganizations.includes(d.organization)) {
-        uniqueOrganizations.push(d.organization);
-      }
-    });
-  }
-  catch(e)
-  {
-    uniqueOrganizations.push([])
-  }
-
-    setFilter(uniqueOrganizations);
-  }
   
 
   const fetchCompanyData = async () => {
     try {
       const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-      setCompanyData(response.data.data);
+      const Teamresponse = await axios.post('http://localhost:8999/getUserfromTeam', {
+        member: localStorage.getItem('email'),
+        mainorganization:localStorage.getItem('organization')
+      });
+      const organizationNames=[]
+      
+      Teamresponse.data.data.map(val=>{
+        organizationNames.push(val.organization)
+      })
+      
+      const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
+      console.log("filteredData",filteredData)
+      setCompanyData(filteredData);
     } catch (error) {
       console.error('Error fetching company data:', error);
     }
@@ -65,7 +50,6 @@ function FirstCol({realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,rea
 
   useEffect(() => {
     fetchCompanyData();
-    
   }, [realtimedealpipelinecompany]);
 
   useEffect(() => {
@@ -117,9 +101,14 @@ function FirstCol({realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,rea
           <div ref={inProgressRef} className={`${selectedTab=='In Progress'?'text-gray-200':''} md:text-[14px] md:w-[120px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("In Progress"); }}>
             <p className='md:flex md:items-center md:justify-center md:h-full md:text-[13px]'>In Progress</p>
           </div>
-          <div ref={unAssignedRef} className={`${selectedTab=='Unassigned'?'text-gray-200':''} md:text-[14px] md:w-[120px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("Unassigned"); }}>
-            <p className='md:flex md:items-center md:justify-center md:h-full md:text-[13px]'>Unassigned</p>
-          </div>
+          {
+            localStorage.getItem('role')!='user'?
+            <div ref={unAssignedRef} className={`${selectedTab=='Unassigned'?'text-gray-200':''} md:text-[14px] md:w-[120px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("Unassigned"); }}>
+              <p className='md:flex md:items-center md:justify-center md:h-full md:text-[13px]'>Unassigned</p>
+            </div>
+            :
+            <></>
+          }
           <div ref={completedRef} className={`${selectedTab=='Completed'?'text-gray-200':''} md:text-[14px] md:w-[120px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("Completed"); }}>
             <p className='md:flex md:items-center md:justify-center md:h-full md:text-[13px]'>Completed</p>
           </div>

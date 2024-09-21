@@ -31,13 +31,6 @@ function OpenGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,com
     const handleTotalCards=(data)=>{
         setTotalCards(data)
     }
-
-    
-
-    useEffect(()=>{
-        console.log("hera laal",TabCount)
-        console.log("hera pela",Tabs)
-    },[TabCount,Tabs])
     
 
     useEffect(()=>{

@@ -15,8 +15,35 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
   const totalPages = Math.ceil(compData.length / itemsPerPage);
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-      setcompData(response.data.data)
+      
+      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+        {
+          const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+          //console.log(response.data.data)
+          console.log(response.data.data)
+          const filteredData=response.data.data.filter(val=>val.completed=='completed')
+          setcompData(filteredData)
+        }
+        else{
+          const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+          const Teamresponse = await axios.post('http://localhost:8999/getUserfromTeam', {
+            member: localStorage.getItem('email'),
+            mainorganization:localStorage.getItem('organization')
+          });
+          const organizationNames=[]
+          
+          Teamresponse.data.data.map(val=>{
+            organizationNames.push(val.organization)
+          })
+          const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
+
+          const morefilteredData=filteredData.filter(val=>val.completed=='completed')
+         
+          setcompData(morefilteredData);
+        }
+
+
+
     }
     fetchcompanydata()
     setTimeout(()=>{  
@@ -26,8 +53,32 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-      setcompData(response.data.data)
+      
+      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+        {
+          const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+          //console.log(response.data.data)
+          console.log(response.data.data)
+          const filteredData=response.data.data.filter(val=> val.completed=='completed')
+          setcompData(filteredData)
+        }
+        else{
+          const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+          const Teamresponse = await axios.post('http://localhost:8999/getUserfromTeam', {
+            member: localStorage.getItem('email'),
+            mainorganization:localStorage.getItem('organization')
+          });
+          const organizationNames=[]
+          
+          Teamresponse.data.data.map(val=>{
+            organizationNames.push(val.organization)
+          })
+          
+          const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
+          console.log("filteredDataCompleted",filteredData)
+          const morefilteredData=filteredData.filter(val=> val.completed=='completed')
+          setcompData(morefilteredData);
+        }
     }
     fetchcompanydata()
     
@@ -51,13 +102,7 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
   };
 
   const currentData = compData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-  const check = (company) => {
-    if(localStorage.getItem('role')=='admin'||localStorage.getItem('role')=='super admin')
-      {
-        return true 
-      }
-      return filter.includes(company.title);
-  };
+  
   return (
     <div>
       {
@@ -71,7 +116,6 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
       <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
       {
           currentData.map(company => 
-            company.completed == 'completed' && check(company) ?
               <GridTemplate
                 key={company._id}
                 selectedTab={selectedTab}
@@ -84,7 +128,7 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
                 pushedby={company.pushedby}
                 hidenavbar={hidenavbar}
                 realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo}
-              /> : <></>
+              /> 
           )
           
         }

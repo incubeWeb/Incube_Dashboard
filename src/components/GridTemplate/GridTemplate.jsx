@@ -42,7 +42,7 @@ function GridTemplate({realtimedealpipelinecompanyInfo,hidenavbar,realtimetabcha
             }
     }
     const check=()=>{
-        return localStorage.getItem('role')=='team lead'
+        return localStorage.getItem('role')=='team lead' || localStorage.getItem('role')==='user'
     }
 
     const checkerforTeam=()=>{

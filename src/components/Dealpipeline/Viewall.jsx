@@ -14,8 +14,30 @@ function Viewall({realtimedealpipelinecompany,filter, selectedTab,setActiveField
   const [loading,setloading]=useState(true)
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-      setcompData(response.data.data)
+      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+        {
+          const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+          //console.log(response.data.data)
+          console.log(response.data.data)
+          
+          setcompData(response.data.data)
+        }
+        else{
+          const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+          const Teamresponse = await axios.post('http://localhost:8999/getUserfromTeam', {
+            member: localStorage.getItem('email'),
+            mainorganization:localStorage.getItem('organization')
+          });
+          const organizationNames=[]
+          
+          Teamresponse.data.data.map(val=>{
+            organizationNames.push(val.organization)
+          })
+          
+          const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
+          console.log("filteredData",filteredData)
+          setcompData(filteredData);
+        }
     }
     fetchcompanydata()
     setTimeout(()=>{  
@@ -25,8 +47,30 @@ function Viewall({realtimedealpipelinecompany,filter, selectedTab,setActiveField
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
+      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+        {
+          const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+          //console.log(response.data.data)
+          console.log(response.data.data)
+          
+          setcompData(response.data.data)
+        }
+        else{
       const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-      setcompData(response.data.data)
+      const Teamresponse = await axios.post('http://localhost:8999/getUserfromTeam', {
+        member: localStorage.getItem('email'),
+        mainorganization:localStorage.getItem('organization')
+      });
+      const organizationNames=[]
+      
+      Teamresponse.data.data.map(val=>{
+        organizationNames.push(val.organization)
+      })
+      
+      const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
+      console.log("filteredData",filteredData)
+      setcompData(filteredData);
+    }
     }
     fetchcompanydata()
   },[realtimedealpipelinecompany])
@@ -48,13 +92,7 @@ function Viewall({realtimedealpipelinecompany,filter, selectedTab,setActiveField
 
   const currentData = compData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   
-  const check = (company) => {
-    if(localStorage.getItem('role')=='admin'||localStorage.getItem('role')=='super admin')
-    {
-      return true
-    }
-    return filter.includes(company.title);
-  };
+  
   {try{
   return (
     <div>
@@ -66,10 +104,9 @@ function Viewall({realtimedealpipelinecompany,filter, selectedTab,setActiveField
       <div>
        <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
         {currentData.map(company => (
-          check(company) ?
+          
           <GridTemplate completed={company.completed} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
-          :
-          <></>
+          
         ))}
         </div>
         <div className='cursor-pointer flex flex-row w-[100%] h-[40px] mt-[35px] items-center justify-center space-x-2'>
