@@ -71,34 +71,17 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
         updateRealtimevalue()
     },[sheetedited])
 
-    useEffect(()=>{
-        const storevalues=async()=>{
-
-                const organization=`${localStorage.getItem('organization')}_ShownGraph`
-                const stateJson={showBarchart:showBarchart,showPiechart:showPiechart,showLinechart:showLinechart,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
-                await axios.post('http://localhost:8999/setportfoliostate',{
-                    organization:organization,
-                    portfolioState:JSON.stringify(stateJson)
-                })
-                console.log("fsfsss",stateJson)
-            }
-            if((showBarchart || showPiechart || showLinechart)&&sheetJson!=[])
-            {
-                storevalues()
-            }
-           
-    },[showBarchart,showPiechart,showLinechart])
 
     useEffect(()=>{
         const setGraphValues=async()=>{
             const organization=`${localStorage.getItem('organization')}_ShownGraph`
             const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
             console.log(response,"bhavesh singh")
-            const data=response.data.data || response.data.status
-            
+            const data=response.data.data 
+            const status=response.data.status
             const stateValues=JSON.parse(data)||{}
-            
-            if(data!=-200)
+            console.log("here_fsd",stateValues)
+            if(status==200)
             {
             setshowBarchart(stateValues.showBarchart)
             setshowPiechart(stateValues.showPiechart)
@@ -193,11 +176,21 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
     }
     const handleSheetCreateBarchart=async()=>{
         //create bar chart Logic
+
         setsheetrowsselect(false)
-        
         setshowBarchart(true)
         setshowLinechart(false)
         setshowPiechart(false)
+
+        const organization=`${localStorage.getItem('organization')}_ShownGraph`
+            const stateJson={showBarchart:true,showPiechart:false,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
+            await axios.post('http://localhost:8999/setportfoliostate',{
+                organization:organization,
+                portfolioState:JSON.stringify(stateJson)
+            })
+            console.log("fsfsss",stateJson)
+
+        console.log(chartDatatypeX,chartDatatypeY,sheetfieldselectedX,sheetfieldselectedY,"pro bha")
     }
     const handleSheetCreatePiechart=async()=>{
         //create bar chart Logic
@@ -206,6 +199,14 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
         setshowPiechart(true)
         setshowLinechart(false)
         setshowBarchart(false)
+
+        const organization=`${localStorage.getItem('organization')}_ShownGraph`
+            const stateJson={showBarchart:false,showPiechart:true,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
+            await axios.post('http://localhost:8999/setportfoliostate',{
+                organization:organization,
+                portfolioState:JSON.stringify(stateJson)
+            })
+            console.log("fsfsss",stateJson)
     }
     const handleSheetCreateLinechart=async()=>{
         //create bar chart Logic
@@ -214,6 +215,14 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
         setshowLinechart(true)
         setshowPiechart(false)
         setshowBarchart(false)
+
+        const organization=`${localStorage.getItem('organization')}_ShownGraph`
+            const stateJson={showBarchart:false,showPiechart:false,showLinechart:true,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
+            await axios.post('http://localhost:8999/setportfoliostate',{
+                organization:organization,
+                portfolioState:JSON.stringify(stateJson)
+            })
+            console.log("fsfsss",stateJson)
     }
 
     useEffect(()=>
@@ -367,7 +376,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
                                           )
                                         }
                                       </select>
-                                      <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+                                      <select value={chartDatatypeX} onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
                                         <option >integer</option>
                                       </select>
@@ -381,7 +390,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
                                           )
                                         }
                                       </select>
-                                      <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+                                      <select value={chartDatatypeY} onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
                                         <option >integer</option>
                                       </select>
@@ -415,7 +424,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
                                           )
                                         }
                                       </select>
-                                      <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+                                      <select value={chartDatatypeX} onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
                                         <option >integer</option>
                                       </select>
@@ -429,7 +438,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
                                           )
                                         }
                                       </select>
-                                      <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+                                      <select value={chartDatatypeY} onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
                                         <option >integer</option>
                                       </select>
@@ -463,7 +472,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
                                           )
                                         }
                                       </select>
-                                      <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+                                      <select value={chartDatatypeX} onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
                                         <option >integer</option>
                                       </select>
@@ -477,7 +486,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
                                           )
                                         }
                                       </select>
-                                      <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+                                      <select value={chartDatatypeY} onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
                                         <option >integer</option>
                                       </select>

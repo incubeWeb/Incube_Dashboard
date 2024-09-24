@@ -31,9 +31,12 @@ function App() {
   const [realtimetabchats,setrealtimetabchats]=useState([])
   const [realtimedealpipelinecompany,setrealtimedealpipelinecompany]=useState([])
   const [realtimedealpipelinecompanyInfo,setrealtimedealpipelinecompanyInfo]=useState([])
+  const [googleaccountconnected,setgoogleaccountconnected]=useState([])
+  const [realtimedocumentvisibility,setrealtimedocumentvisibility]=useState([])
 
-  
+
   const socket=io('http://localhost:8999')
+  const socket2=io('http://localhost:1222')
   
   
 
@@ -55,6 +58,12 @@ function App() {
             dispatch(addTimeline(item))
           )
         }
+
+        socket2.on('Googleconnected',(change)=>{
+          console.log("google conn",change)
+          setgoogleaccountconnected(change)
+        })
+
         
         socket.on('databaseChange',(change)=>{
             const key=changes.length-1
@@ -75,6 +84,10 @@ function App() {
           if(change.ns.coll=='AddNewDetailDealPipeline')
           {
             setrealtimedealpipelinecompanyInfo(change)
+          }
+          if(change.ns.coll=='DocsVisibility')
+          {
+            setrealtimedocumentvisibility(change)
           }
         })
         socket.on('chats',(chat)=>{
@@ -144,14 +157,14 @@ function App() {
     <BrowserRouter>
       {login ? (
         <>
-          {pathname !== '/' && <Navigation activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />}
+          {pathname !== '/' && <Navigation googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />}
           <Routes>
             <Route path="/" element={<Login setLoginIn={setLoginIn}/>} />
             <Route path="/dashboard" element={<Dashboard realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/>} />
             <Route path="/dealpipeline" element={<FirstCol realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>} />
             <Route path="/dealsourcing" element={<Dealsourcing hidenavbar={hidenavbar}/>} />
             <Route path="/adduser" element={<Addusers setActiveField={setActiveField} hidenavbar={hidenavbar}/>}/>
-            <Route path="/allDocs" element={<Alldocs filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar}/>} />
+            <Route path="/allDocs" element={<Alldocs realtimedocumentvisibility={realtimedocumentvisibility} filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar}/>} />
             <Route path="/investment" element={<AddInvestment hidenavbar={hidenavbar}/>}/>
             <Route path='/portfolio' element={<Portfolio sheetedited={sheetedited} hidenavbar={hidenavbar} />}/>
             

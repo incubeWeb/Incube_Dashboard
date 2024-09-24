@@ -5,6 +5,12 @@ const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldse
     const [data,setdata]=useState([])
 
     useEffect(()=>{
+      console.log("mysgeet",sheetJson)
+      console.log(sheetfieldselectedX,chartDatatypeX)
+      console.log("y",sheetfieldselectedY,chartDatatypeY)
+    },[sheetJson,sheetfieldselectedX,sheetfieldselectedY,chartDatatypeX,chartDatatypeY])
+
+    useEffect(()=>{
       const settingValuesofData=async()=>{
             const mydata=[]
             sheetJson.map(val=>{
@@ -16,7 +22,7 @@ const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldse
             setdata(converteddata)
     }
     settingValuesofData()
-    },[sheetJson])
+    },[sheetJson,sheetfieldselectedX,sheetfieldselectedY,chartDatatypeX,chartDatatypeY])
 
     useEffect(()=>{
         const settingValuesofData=async()=>{
@@ -112,9 +118,13 @@ const fieldConversions = {
           
         },
       ];
+      const yAxisTickFormatter = (value) => value; 
   return (
     <div style={{ width: '100%', height: '100%' }} className='mt-8 pr-10 '>
         <div style={{ width: '100%', height: '100%' }}>
+
+        {
+          chartDatatypeX=='string' && chartDatatypeY=='integer'?
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data}>
               <XAxis dataKey="name" tick={true} stroke="#8884d8" />
@@ -127,6 +137,34 @@ const fieldConversions = {
               <Bar dataKey="uv" fill="#2970FF" barSize={30} />
             </BarChart>
           </ResponsiveContainer>
+          :
+          chartDatatypeX=='integer' && chartDatatypeY=='string'?
+          <ResponsiveContainer width="100%" height="100%">
+                    <BarChart layout="vertical" data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                        {/* XAxis now handles the 'uv' values (which are numerical) */}
+                        <XAxis type="number" tick={true} stroke="#8884d8" />
+                        {/* YAxis now handles the 'name' values (which are categorical/strings) */}
+                        <YAxis dataKey="uv" type="category" tickFormatter={yAxisTickFormatter} tick={true} />
+                        <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
+                        <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
+                        <Bar dataKey="name" fill="#2970FF" barSize={30} />
+                    </BarChart>
+                </ResponsiveContainer>
+          :
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data}>
+              <XAxis dataKey="name" tick={true} stroke="#8884d8" />
+              <YAxis dataKey='uv' tick={true}  tickCount={4}/>
+            
+              <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
+              
+           
+              <CartesianGrid stroke="#ccc"   horizontal={true} vertical={false}  />
+              <Bar dataKey="uv" fill="#2970FF" barSize={30} />
+            </BarChart>
+          </ResponsiveContainer>
+          }
+          
         </div>
     </div>
   )

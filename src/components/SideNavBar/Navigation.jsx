@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FiAlignJustify } from "react-icons/fi";
 import {gsap} from 'gsap'
 import Incubelogo from '../Icons/Incubelogo.svg'
@@ -10,17 +10,54 @@ import { RiHome6Line } from "react-icons/ri";
 import { HiOutlineChartBarSquare } from "react-icons/hi2";
 import { SlSocialDropbox } from "react-icons/sl";
 import { RiCheckboxMultipleLine } from "react-icons/ri";
+import axios from 'axios';
+import { Bars } from 'react-loader-spinner';
 
 
 
-const Navigation = ({activeField,setActiveField,hidenavbar,sethidenavbar}) => {
+const Navigation = ({googleaccountconnected,activeField,setActiveField,hidenavbar,sethidenavbar}) => {
   
     const location=useLocation()
+    
+
+    const [showgoogleconnected,setshowgoogleconnected]=useState(false)
+    const [loading,setloading]=useState(false)
+
     const handleLogout=()=>{
           localStorage.clear() 
     }
     const NavbarRef=useRef(null)
     const settingBtnRef=useRef(null)
+
+    useEffect(()=>
+    {
+        const checkGoogleLogin=async()=>{
+           const response= await axios.post('http://localhost:1222/check-login-google',{
+                email:localStorage.getItem('email'),
+                organization:localStorage.getItem('organization')
+            })
+            if(response.data.status==200 &&response.data.msg=="Valid Refresh token")
+            {
+                setshowgoogleconnected(true)
+            }
+        }
+        checkGoogleLogin()
+    },[googleaccountconnected])
+
+    useEffect(()=>
+        {
+            const checkGoogleLogin=async()=>{
+               const response= await axios.post('http://localhost:1222/check-login-google',{
+                    email:localStorage.getItem('email'),
+                    organization:localStorage.getItem('organization')
+                })
+                if(response.data.status==200 &&response.data.msg=="Valid Refresh token")
+                {
+                    setshowgoogleconnected(true)
+                }
+            }
+            checkGoogleLogin()
+        },[])
 
     const hideNav=()=>{
         if(!hidenavbar)
@@ -59,6 +96,44 @@ const Navigation = ({activeField,setActiveField,hidenavbar,sethidenavbar}) => {
     useEffect(()=>{
         setActiveField(location.pathname)
     },[activeField])
+
+
+    const handleRemoveGoogleConnect=async()=>{
+        setloading(true)
+        const email=localStorage.getItem('email')
+        const organization=localStorage.getItem("organization")
+        const response= await axios.post('http://localhost:1222/logout-google',{
+            email:email
+            ,organization:organization
+        })
+        if(response.data.status==200)
+        {
+            
+            setTimeout(()=>{
+                setloading(false)
+                setshowgoogleconnected(false)
+            },1000)    
+        }
+    }
+
+    const handleGoogleConnect=async()=>
+    {
+        setloading(true)
+        const email=localStorage.getItem('email')
+        const organization=localStorage.getItem("organization")
+        const response= await axios.post('http://localhost:1222/generate-link',{
+            email:email
+            ,organization:organization
+        })
+        if(response.data.status==200)
+        {
+            window.open(response.data.url,'_blank','noopener,noreferrer')
+            setTimeout(()=>{
+                setloading(false)
+            },1000)    
+        }
+    }
+
   return (
         <div className='w-[100%] '>
         <div ref={NavbarRef} className=' text-gray-700 select-none font-roboto w-[20%] shadow-lg z-[60] fixed h-[100%] bg-white p-[40px] pt-[30px] flex flex-col '>
@@ -105,9 +180,31 @@ const Navigation = ({activeField,setActiveField,hidenavbar,sethidenavbar}) => {
                     <div className='text-[14px] font-inter font-semibold'><p>Documents</p></div>
                 </div>
                 </Link>
-
             </div>
 
+            <div className='w-[100%] h-[60px] flex items-center justify-center'>
+            {
+                loading?
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                    <Bars color="#8884d8" height={30} width={80} />
+                </div>
+                :
+                <div className='w-[100%] h-[100%]'>
+                    {
+                        showgoogleconnected?
+                        <div onClick={()=>handleRemoveGoogleConnect()} className='w-[90%] cursor-pointer flex items-center justify-center h-[80%] bg-gradient-to-r from-red-500 to-red-700 rounded-lg'>
+                            <p className='text-white text-[15px]'>Remove Google Connection</p>
+                        </div>
+                        :
+                        <div onClick={()=>handleGoogleConnect()} className='w-[90%] cursor-pointer flex items-center justify-center h-[80%] bg-gradient-to-r from-red-500 to-red-700 rounded-lg'>
+                            <p className='text-white text-[15px]'>Connect Google</p>
+                        </div>
+                    }
+                    
+                </div>
+            }
+                
+            </div>
            
 
             <div className='w-[100%] h-[20%] flex items-center justify-center border-t mb-10 border-gray-400 '>
@@ -116,8 +213,8 @@ const Navigation = ({activeField,setActiveField,hidenavbar,sethidenavbar}) => {
                      <div className='flex flex-row w-[100%]  h-[40%] items-center justify-center  space-x-2 ' > 
                     
                        
-                         <div><p className='text-[14px] font-inter cursor-pointer text-gray-500' onClick={handleLogout}>Logout</p></div>
-                         <div><img src={Logout} className='cursor-pointer' onClick={handleLogout}/></div>
+                         <div><p className='text-[14px] font-inter cursor-pointer text-gray-500 ' onClick={handleLogout}>Logout</p></div>
+                         <div className=''><img src={Logout} className='cursor-pointer' onClick={handleLogout}/></div>
                     </div>
                     </a>
             </div>
