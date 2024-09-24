@@ -46,6 +46,10 @@ const PortfolioPieChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldse
             return 0;
         }
       }
+      useEffect(()=>{
+
+        console.log("abc"+JSON.stringify(data))
+      },[data])
       
   function convertDataTypes(array, fieldConversions) {
     return array.map(obj => {
@@ -71,7 +75,7 @@ const PortfolioPieChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldse
 }
 
 const fieldConversions = {
-    name: chartDatatypeX,
+    name:'string',
     value: chartDatatypeY
   };
 

@@ -277,7 +277,7 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
 
   return (
     
-    <div className={`${hidenavbar?'w-[100%] ml-[0%]':'w-[100%] pl-[20%]'} bg-gray-100 space-x-4 flex flex-row h-screen p-[44px] pr-0 pt-0 pb-0 font-roboto`}>
+    <div className={`${hidenavbar?'w-[100%] ml-[0%]':'w-[100%] pl-[20%]'} bg-white space-x-4 flex flex-row h-screen p-[44px] pr-0 pt-0 pb-0 font-roboto`}>
     {
       loading ? (
         <div className='w-[100%]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -295,17 +295,24 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
   </div>
 </div>
 
-      <div className='w-[100%] flex flex-col items-center'>
+      <div className='w-[90%] min-h-[1000%] flex flex-col items-center oveflow-y-auto '>
         {(boxes||[]).map((box,index) => (
           <Rnd
             
             key={box.id}
-            className='border-gray-300 bg-white border-[1px] rounded-lg p-4 pt-7'
+            className='border-gray-300 bg-white border-[0.5px] rounded-lg p-4 pt-7'
             size={{ width: box.width, height: box.height }}
             position={{ x: box.x, y: box.y }}
+            
+         bounds='parent'
+         
             onDragStop={(e, direction) => setPosition(box.id, direction)}
+          
+            
+
             onResizeStop={(e, direction, ref, delta, position) => setSize(box.id, ref, position)}
-            // Ensure the Rnd component stays within its parent container
+           
+           
           >
             {console.log("its is type os")}
             {(() => {

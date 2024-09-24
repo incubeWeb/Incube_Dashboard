@@ -143,7 +143,7 @@ const Viewsheet = ({ viewdDoc, jsonData, id, setclickedview, clickedview, hidena
       <div className='bg-green-600 mr-2 pl-2 rounded-t-md w-[100%] h-[50px] items-center flex flex-row space-x-4'>
         <div className='flex w-[50%] flex-row space-x-2 items-center'>
           <BsFileEarmarkExcelFill size={20} className='text-green-300' />
-          <p className='text-white text-[16px]'>{viewdDoc}.xlsx</p>
+          <p className='text-white text-[16px]'>{viewdDoc}</p>
         </div>
         <div className='w-[50%] text-white h-[100%] space-x-2 items-center justify-end flex pr-4'>
           <TiTick size={20} onClick={handleGetUpdatedJson} className='cursor-pointer hover:h-[24px] w-[24px]' />

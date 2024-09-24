@@ -339,8 +339,8 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
               </div>:<></>
             }
           </div>
-          <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px]  bg-gray-100 fixed right-[-10px] top-[-15px] ' onClick={deleteWidgit}>
-              <RxCross2 size={14} className='text-black'/>
+          <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px]  bg-gray-100 fixed right-[-2px] top-[-8px] ' onClick={deleteWidgit}>
+              <RxCross2 size={14} className='text-black' />
         </div> 
       </div>
   )

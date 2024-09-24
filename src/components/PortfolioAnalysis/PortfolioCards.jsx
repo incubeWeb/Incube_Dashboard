@@ -8,6 +8,7 @@ import { LuPencil } from 'react-icons/lu'
 import { RiFundsLine } from 'react-icons/ri'
 import { RxCross2 } from 'react-icons/rx'
 import { Bars } from 'react-loader-spinner'
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid,setvalueid,changevalue,setchangevalue}) => {
     const [editLabel,seteditLabel]=useState(false)
@@ -18,6 +19,8 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
     const [showValue,setshowvalue]=useState('$0')
     const inputRef=useRef(null)
     const [loading,setloading]=useState(true)
+    const [loading1,setLoading1]=useState(false)
+    const [loading2,setLoading2]=useState(true)
 
     const handleEdit=()=>{
         seteditLabel(true)
@@ -136,10 +139,11 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
 
 
     const handlePlusClick=async()=>{
+        setLoading1(true)
         const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
         setsheetpopup(true)
         setallsheets(response.data.data)
-        
+        setLoading1(false)
     }
 
     const handleselectsheetfield=()=>{
@@ -193,12 +197,13 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
             console.log("this",fileteredKey)
             setsheetfieldselected(fileteredKey[0])
             setsheetKeys(fileteredKey)
+            setLoading2(false)
         }
         setValues()
     },[clickedSheetId])
 
   return (
-   
+   <div>
     <div className='flex flex-col space-y-4 bg-white p-3 w-[100%] h-[160px] rounded-xl '>
                  {
         loading?
@@ -229,17 +234,29 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
                                         <div className=' w-[100%] h-[40%] flex flex-col items-center justify-center space-y-8 space-x-2'>
                                             
                                             <select onChange={(e)=>setsheetfieldselected(e.target.value)} className='w-[220px] h-[30px] text-[14px] text-gray-700 rounded-md border-gray-300 border-[1px]'>
+                                            {loading2 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+        Loading...
+      </div>
+    </option>
+  ) : (
+                                                
                                                             
-                                                {sheetKeys.map(k=>
+                                                sheetKeys.map(k=>
                                                     <option key={k._id}>{k}</option>
                                                     )
-                                                }
+                                              )  }
 
                                             </select>
                                         </div>
                                         <div className='w-[100%] mt-[14px] flex flex-row items-center justify-center'>
                                             <div onClick={handleselectsheetfield} className='select-none cursor-pointer flex flex-row w-[120px] rounded-md h-[40px] items-center justify-center bg-gradient-to-r from-green-500 to-green-800 spae-x-2'>
-                                                <p className='text-[14px] text-white'>Set sheet field</p>
+                                            {loading2 ? (
+                                     <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+                                ) : (<p className='text-[14px] text-white'>Set sheet field</p>)
+                                            }
                                                 
                                             </div>
                                         </div>
@@ -300,13 +317,22 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
                         </div>
                     </div>
                     <div className='w-[30%] flex items-center justify-end'>
+    
+                    {loading1 ? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+          ) : (
                         <div className='h-[20px] cursor-pointer'  onClick={handlePlusClick}>
                             <FaCirclePlus className='text-gray-500 h-[20px] w-[20px]' />
-                        </div>
+                               </div>)}
                     </div>
                 </div>
                 </div>
             }
+       
+            </div>
+           
+
+
             </div>
   )
 }

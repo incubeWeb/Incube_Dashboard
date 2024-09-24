@@ -8,9 +8,12 @@ import { RiFundsLine } from 'react-icons/ri'
 import { RxCross2 } from 'react-icons/rx'
 import { IoMdClose } from "react-icons/io";
 import { BsPencil } from "react-icons/bs";
-
-
-
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { RiBarChartFill, RiPieChart2Line } from 'react-icons/ri'; 
+import { AiOutlineClose } from 'react-icons/ai';  // Close icon
+import { PiMoney } from "react-icons/pi";
+import { FaPeopleGroup } from "react-icons/fa6";
+import { LuTriangle } from "react-icons/lu";
 
 const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfoliocardwidgitcount,capturingPortfoliowidgitvalues,setcapturingPortfoliowidgitvalues}) => {
     const [editLabel,seteditLabel]=useState(false)
@@ -25,6 +28,20 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     const [sheetfieldselected,setsheetfieldselected]=useState('')
     const [sheetKeys,setsheetKeys]=useState([])
     const [sheetJson,setsheetJson]=useState([])
+    const[loading1,setLoading]=useState(false);
+    const[Loading2,setLoading2]=useState(true);
+    
+   
+        const [icon, setIcon] = useState(<RiBarChartFill size={28} className="text-white" />); // State to track selected icon
+        const [showPopup, setShowPopup] = useState(false); // State to control popup visibility
+      
+        const handleIconClick = (newIcon) => {
+          setIcon(newIcon);
+          setShowPopup(false); // Close popup after selecting icon
+        };
+
+
+
 
     useEffect(()=>{
         console.log(capturingPortfoliowidgitvalues+"abc"+id);
@@ -44,10 +61,11 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     },[])
 
     const handlePlusClick=async()=>{
+        setLoading(true)
         const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
         setsheetpopup(true)
         setallsheets(response.data.data)
-        
+        setLoading(false)
     }
     const handlesheetclick=async(id,name)=>{
         setsheetname(name)
@@ -149,6 +167,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
             console.log("this",fileteredKey)
             setsheetfieldselected(fileteredKey[0])
             setsheetKeys(fileteredKey)
+            setLoading2(false)
         }
         setValues()
     },[clickedSheetId])
@@ -204,19 +223,29 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                             <div className=' w-[100%] h-[40%] flex flex-col items-center justify-center space-y-8 space-x-2'>
                                 
                                 <select onChange={(e)=>setsheetfieldselected(e.target.value)} className='w-[220px] h-[30px] text-[14px] text-gray-700 rounded-md border-gray-300 border-[1px]'>
-                                                
-                                    {(sheetKeys||[]
+                                {Loading2 ? (
+                <option value="">
+             <div className="flex items-center">
+              <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+             Loading...
+             </div>
+            </option>
+  ) : (                
+                                    (sheetKeys||[]
                                         
                                     ).map(k=>
                                         <option key={k._id}>{k}</option>
                                         )
-                                    }
+                                   ) }
 
                                 </select>
                             </div>
                             <div className='w-[100%] mt-[14px] flex flex-row items-center justify-center'>
                                 <div onClick={handleselectsheetfield} className='select-none cursor-pointer flex flex-row w-[120px] rounded-md h-[40px] items-center justify-center bg-gradient-to-r from-green-500 to-green-800 spae-x-2'>
-                                    <p className='text-[14px] text-white'>Set sheet field</p>
+                                {Loading2 ? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+          ) : (
+                                    <p className='text-[14px] text-white'>Set sheet field</p>)}
                                     
                                 </div>
                             </div>
@@ -226,13 +255,60 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                     :
                      
                     <div className='w-[100%] h-[100%]'>
-                    <div className='ml-12 -mb-2'><BsPencil /></div>
-                        <div className='bg-blue-500 w-[15%] h-[40px] flex items-center justify-center  -mt-5 rounded-md'>
+                    {/* <div className='ml-12 -mb-2'><BsPencil /></div> */}
+
+                    <div className="ml-12 -mb-2" >
+                      <BsPencil className="cursor-pointer" onClick={() => setShowPopup(!showPopup)}/>
+                     </div>
+                          <div className="bg-blue-500 w-[15%] h-[40px] flex items-center justify-center -mt-5 rounded-md">
+                      {icon}
+                    </div>
+
+
+
+                        {/* <div className='bg-blue-500 w-[15%] h-[40px] flex items-center justify-center  -mt-5 rounded-md'>
                         
                             <RiFundsLine size={28} className='text-white'/>
                         </div>
-                       
-                        
+                        */}
+                        {showPopup && (
+        <div className="fixed top-0 left-0 w-[200px] bg-white shadow-md p-4 z-50 rounded-lg">
+          <div className="flex justify-between items-center">
+            <h3 className="text-[14px] font-semibold">Select an Icon</h3>
+            <AiOutlineClose
+              size={20}
+              className="cursor-pointer"
+              onClick={() => setShowPopup(false)}
+            />
+          </div>
+
+          {/* Icon selection options */}
+          <div className="grid grid-cols-3 gap-2 mt-2">
+            <div onClick={() => handleIconClick(<RiFundsLine size={28} className="text-white" />)} className="cursor-pointer">
+              <RiFundsLine size={28} className="text-gray-700 hover:text-blue-500" />
+            </div>
+            <div onClick={() => handleIconClick(<RiBarChartFill size={28} className="text-white" />)} className="cursor-pointer">
+               <RiBarChartFill size={28}className="text-gray-700 hover:text-blue-500" />
+            </div>
+            
+            <div onClick={() => handleIconClick(<PiMoney  size={28} className="text-white" />)} className="cursor-pointer">
+              <PiMoney  size={28} className="text-gray-700 hover:text-blue-500" />
+            </div>
+            <div onClick={() => handleIconClick(<FaPeopleGroup  size={28} className="text-white" />)} className="cursor-pointer">
+              <FaPeopleGroup   size={28} className="text-gray-700 hover:text-blue-500" />
+            </div>
+            <div onClick={() => handleIconClick(<LuTriangle size={28} className="text-white" />)} className="cursor-pointer">
+              <LuTriangle    size={28} className="text-gray-700 hover:text-blue-500" />
+            </div>
+        
+          </div>
+        </div>
+      )}
+
+
+
+
+
                         <div className='w-[100%] h-[30%] flex flex-row items-center justify-start space-x-2 mt-4 '>
                                     {
                                         !editLabel?
@@ -254,7 +330,10 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                             </div>
                             <div className='w-[100%] h-[100%] flex items-center justify-end'>
                                 <div className='h-[80%] flex items-center cursor-pointer mt-14'  onClick={handlePlusClick}>
-                                <FaCirclePlus className='text-gray-500' size={24} />
+                                {loading1 ? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+            ) : (
+                                <FaCirclePlus className='text-gray-500' size={24} />)}
                                 </div>
                             </div>
                         </div>

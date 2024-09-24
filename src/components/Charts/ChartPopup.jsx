@@ -886,7 +886,8 @@ const ChartPopup = ({
                   )
         )}
               </select>
-              <div className="w-[120px] cursor-pointer h-[40px] bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-center">  {Loading1 ? (
+              <div className="w-[120px] cursor-pointer h-[40px] bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-center">  
+              {Loading1 ? (
             <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
           ) : (
                 <p className="text-[14px]" onClick={(e)=>selectedSheetFromDatabase(e)}>Confirm sheet</p>)}

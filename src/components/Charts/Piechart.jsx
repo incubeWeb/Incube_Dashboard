@@ -221,7 +221,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
               cy="50%"
               outerRadius={outerRadius}
               fill="url(#blueGradient)" // Apply the gradient
-              label={renderCustomLabel} // Use custom label function
+             
             />
             <Tooltip />
        
