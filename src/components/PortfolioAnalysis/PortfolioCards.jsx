@@ -21,6 +21,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
     const [loading,setloading]=useState(true)
     const [loading1,setLoading1]=useState(false)
     const [loading2,setLoading2]=useState(true)
+    const [googlesheetfiles,setgoogledriveSheets]=useState([])
 
     const handleEdit=()=>{
         seteditLabel(true)
@@ -31,6 +32,31 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
             }
         },100)
     }
+
+    useEffect(()=>
+    {
+        console.log("this is showvale",showValue,labelname)
+        const fun=async()=>{
+            const organization=`${localStorage.getItem('organization')}_Topcards`
+            
+            const response1=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
+            const data1=JSON.parse(response1.data.data)
+            console.log(data1,'mydat')
+            const JsonData=data1
+            const filterdata=JsonData.filter(val=>val.id!=id)
+            const new_data=[{id:id,showValue:showValue,labelname:labelname}]
+            const final_data=[...filterdata,...new_data]
+
+            await axios.post('http://localhost:8999/setportfoliostate',{
+                organization:organization,
+                portfolioState:JSON.stringify(final_data)
+            })
+            
+
+        }
+        fun()
+    },[showValue,editLabel])
+
     const [sheets,setallsheets]=useState([])
     const [sheetpopup,setsheetpopup]=useState(false)
     const [sheetJson,setsheetJson]=useState([])
@@ -141,8 +167,27 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
     const handlePlusClick=async()=>{
         setLoading1(true)
         const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+        const response2=await axios.post('http://localhost:8999/get-document-visibility',{
+            email:localStorage.getItem('email'),
+            organization:localStorage.getItem('organization')
+        })
+        const set2DocsIds=response2.data.allfiles.map(doc=>doc.Document_id)
+        
+        const filteredSet1=response.data.data.filter(doc=>!set2DocsIds.includes(doc._id))
+        const tosetdata=[...response2.data.data,...filteredSet1]
+
+        const response3=await axios.post('http://localhost:1222/get-drivesheets',{
+            email:localStorage.getItem('email'),
+            organization:localStorage.getItem("organization")
+        })
+        if(response3.data.status==200 && response3.data.message!="no refresh token found")
+        {
+            const files=response3.data.data
+            setgoogledriveSheets(files)
+        }
+        
+        setallsheets(tosetdata)
         setsheetpopup(true)
-        setallsheets(response.data.data)
         setLoading1(false)
     }
 
@@ -194,13 +239,67 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
                 }
                 )
             })
-            console.log("this",fileteredKey)
+            
             setsheetfieldselected(fileteredKey[0])
             setsheetKeys(fileteredKey)
             setLoading2(false)
         }
         setValues()
     },[clickedSheetId])
+
+    useEffect(()=>{
+
+    },[])
+
+
+    const handleGooglesheetclicked=async (id,name)=>{
+            
+        setsheetClicked(true)
+        setsheetpopup(false)
+        
+        const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:id,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+        if(response.data.status==200)
+        {
+        const allJson=response.data.data
+        console.log(response)
+        await Promise.all(allJson)
+        console.log('thsi')
+        const keys=allJson[0].data
+        const showdata=allJson[1].data[0]
+        const finalJson=[]
+        allJson.map(val=>{
+            if(val.rowIndex!=1)
+            {
+                const result=keys.reduce((obj,key,value)=>{obj[key]=val.data[value]; return obj},{})
+                finalJson.push(result)
+            }
+        })
+        setsheetJson(finalJson)
+        const key_=Object.keys(finalJson[0])
+                
+        const fileteredKey=[]
+                finalJson.map(d=>{
+                    key_.map(k=>{
+                        if(d[k]!=""&&!fileteredKey.includes(k)){
+                        fileteredKey.push(k)
+                        }
+                    }
+                    )
+                })
+
+            console.log("adu",fileteredKey)
+            setsheetfieldselected(fileteredKey[0])
+            setsheetKeys(fileteredKey)
+            setLoading2(false)
+
+        }
+        else{
+            setsheetfieldselected('wrong sheet format')
+            setsheetKeys(['none'])
+            setLoading2(false)
+        }
+    }
+
 
   return (
    <div>
@@ -233,7 +332,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
                                         </div>
                                         <div className=' w-[100%] h-[40%] flex flex-col items-center justify-center space-y-8 space-x-2'>
                                             
-                                            <select onChange={(e)=>setsheetfieldselected(e.target.value)} className='w-[220px] h-[30px] text-[14px] text-gray-700 rounded-md border-gray-300 border-[1px]'>
+                                            <select value={sheetfieldselected}  onChange={(e)=>setsheetfieldselected(e.target.value)} className='w-[220px] h-[30px] text-[14px] text-gray-700 rounded-md border-gray-300 border-[1px]'>
                                             {loading2 ? (
     <option value="">
       <div className="flex items-center">
@@ -277,17 +376,36 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
                                 </div>
                             </div>
                             
-                            <div  className={`p-1 flex h-[100%]  items-center rounded-md text-[14px] flex-col font-roboto`}>
+                            <div  className={`p-1 flex h-[100%]  items-center rounded-md text-[14px] flex-col font-roboto overflow-y-auto`}>
                             {(sheets||[]).map(doc=>
+                                    doc.fileType=='xlsx'?
                                     <div key={doc._id}  className='w-[100%] flex flex-col space-y-2'>
                                             <div onMouseEnter={()=>sethover(true)} onMouseLeave={()=>sethover(false)} onClick={()=>handlesheetclick(doc._id,doc.name)} className='w-[100%] h-[45px] hover:bg-blue-500 p-2 rounded-md select-none cursor-pointer hover:text-white flex flex-row items-center justify-start'>
                                                 <div>
                                                     <FaRegFileExcel className={` text-green-500`} size={19}/>
                                                 </div>
-                                                <p className={` text-[14px] px-5 tracking-wider`}>{doc.name.substring(doc.name.length-15,doc.name.length)}</p>
+                                                <p className={` text-[14px] px-5 tracking-wider`}>{doc.name}</p>
                                             </div>
                                     </div>
+                                    :
+                                    <></>
                                 )}  
+                                {
+                                    googlesheetfiles.length>0?
+                                    <div className='w-[100%] font-inter text-[14px] font-semibold mt-4 mb-2 h-[40px] flex items-center pl-2'><p>Google sheets:</p></div>
+                                    :
+                                    <></>
+                                }
+                                {(googlesheetfiles||[]).map(doc=>
+                                    <div key={doc._id}  className='w-[100%] flex flex-col space-y-2'>
+                                            <div onMouseEnter={()=>sethover(true)} onMouseLeave={()=>sethover(false)} onClick={()=>handleGooglesheetclicked(doc.id,doc.name)} className='w-[100%] h-[45px] hover:bg-blue-500 p-2 rounded-md select-none cursor-pointer hover:text-white flex flex-row items-center justify-start'>
+                                                <div>
+                                                    <FaRegFileExcel className={` text-green-500`} size={19}/>
+                                                </div>
+                                                <p className={` text-[14px] px-5 tracking-wider`}>{doc.name}</p>
+                                            </div>
+                                    </div>
+                                )}
                             </div>
                             
                             

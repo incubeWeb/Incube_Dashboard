@@ -84,9 +84,10 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
 
     useEffect(()=>{
         const saveCurrentState=async()=>{
-            
+            console.log("my sheet json bhaesh",sheetJson)
             const stateJson=[{sheetmethod:sheetmethod,allSheets:allSheets,selectedSheetId:selectedSheetId,sheetJson:sheetJson,sheetKeys:sheetKeys,selectedImageFiled:selectedImageFiled,showHistory:true,showimagepopup:showimagepopup,sheetname:sheetname,selectfield:selectfield}]
             
+            console.log("new val is here",stateJson)
            // localStorage.setItem('portfolioState',JSON.stringify(stateJson))
             if(sheetJson.length>0 && selectedImageFiled!="")
             {
@@ -106,7 +107,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
     const handleselect=()=>{
         
         setshowHistory(true)
-        
+        setsheetmethod('')
         setshowimagePopup(!showimagepopup)
     }
     const [clickedDots,setclickedDots]=useState(false)
@@ -191,8 +192,8 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
             
            // console.log("fff",response.data.data[0]._id)
             
-
         }
+        console.log("currently at",sheetmethod)
 
         if(sheetmethod=='Database')
         {
@@ -224,12 +225,17 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                 )
             })
             console.log("this",fileteredKey)
-            
+            console.log("changesd")
             setsheetKeys(fileteredKey)
         }
-        const setGoogleSheetJSon=async()=>{
+        const googleSheetJson=async()=>{
             const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedSheetId,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+            console.log(response,"mysterious")
+
+            if(response.data.status==200)
+            {
             const allJson=response.data.data
+            
             const keys=allJson[0].data
             const finalJson=[]
             allJson.map(val=>{
@@ -239,38 +245,39 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                     finalJson.push(result)
                 }
             })
-        
-            const data=finalJson
-            console.log(selectedSheetId,"google sheetis")
-            setsheetJson(data)
-            console.log("google sheet",data)
 
+        const data=finalJson
+        setsheetJson(data)
+            console.log("sheetfsdfsdf",data)
             const key=Object.keys(data[0])
-                
-                const fileteredKey=[]
-                data.map(d=>{
-                    key.map(k=>{
-                        if(d[k]!=""&&!fileteredKey.includes(k)){
-                        fileteredKey.push(k)
-                        }
+            
+            const fileteredKey=[]
+            data.map(d=>{
+                key.map(k=>{
+                    if(d[k]!=""&&!fileteredKey.includes(k)){
+                    fileteredKey.push(k)
                     }
-                    )
-                })
-                console.log("google this",fileteredKey)
-                
-                setsheetKeys(fileteredKey)
-
+                }
+                )
+            })
+            console.log("this",fileteredKey)
+            console.log("changesd")
+            setsheetKeys(fileteredKey)
+        }else{
+            setsheetKeys(['none'])
+        }
+        
         }
         if(sheetmethod=='Database')
         {
             setJSon()
-            setsheetmethod('')
         }
         if(sheetmethod=='Google Sheet')
         {
-            setGoogleSheetJSon()
-            setsheetmethod('')
+            googleSheetJson()
         }
+        
+        
     },[selectedSheetId,sheetedited])
 
   return (
@@ -357,13 +364,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                                             </div>
                                         </div>
                                     )}
-                                </div>
-
-
-
-
-                        
-                        
+                                </div>  
                     </div>
                 </div>
                 <div className={`w-[100%] flex justify-center items-center ${showHistory?'':'h-[150px]'} `}>
@@ -397,7 +398,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                     <></>
                     }
                     {
-                        !selectfield && sheetmethod=='Database'?
+                        !selectfield && sheetmethod!="Google Sheet" && sheetmethod!="" ?
                         <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
                             <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
                                 {
@@ -406,7 +407,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                                         <IoMdArrowBack />
                                     </div>
                                     :
-                                    <div onClick={()=>{setselectfield(false);setsheetmethod('')}} className='cursor-pointer h-[50px]'>
+                                    <div onClick={()=>{setselectfield(false);setsheetmethod("")}} className='cursor-pointer h-[50px]'>
                                         <RxCross2/>
                                     </div>
                                 }
@@ -427,7 +428,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                     }
 
                     {
-                        !selectfield && sheetmethod=='Google Sheet'?
+                        !selectfield && sheetmethod!="Database" && sheetmethod!="" ?
                         <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
                             <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
                                 {
@@ -436,13 +437,14 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                                         <IoMdArrowBack />
                                     </div>
                                     :
-                                    <div onClick={()=>{setselectfield(false);setsheetmethod('')}} className='cursor-pointer h-[50px]'>
-                                        <RxCross2/>
+                                    <div onClick={()=>{setselectfield(false);setsheetmethod("")}} className='cursor-pointer h-[50px]'>
+                                       <RxCross2/>
                                     </div>
                                 }
                                 <div  className={`${sheetmethod=='Google Sheet'?'bg-white':''} p-1 flex items-center rounded-md text-[14px] flex-col font-roboto`}>
                                 {(allSheets||[]).map(doc=>
-                                        <GoogleSheetDatabaseSheets setsheetname={setsheetname} showimagepopup={showimagepopup} setshowimagePopup={setshowimagePopup} setsheetmethod={setsheetmethod} key={doc.id} sheetKeys={sheetKeys} selectedImageFiled={selectedImageFiled} setselectedImageField={setselectedImageField} id={doc.id} setportfolioHistory={setshowHistory} setshowHistory={setshowHistory} sheetname={doc.name} setselectedSheetId={setselectedSheetId}/>  
+                                        <GoogleSheetDatabaseSheets setsheetname={setsheetname} showimagepopup={showimagepopup} setshowimagePopup={setshowimagePopup} setsheetmethod={setsheetmethod} key={doc.id} sheetKeys={sheetKeys} selectedImageFiled={selectedImageFiled} setselectedImageField={setselectedImageField} id={doc.id} setportfolioHistory={setshowHistory} setshowHistory={setshowHistory} sheetname={doc.name} setselectedSheetId={setselectedSheetId}/>
+                                        
                                     )}  
                                 </div>
                                 
@@ -452,14 +454,15 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                         :
                         <></>
                     }
-                    {
-                                showimagepopup?
+
+                            {
+                                showimagepopup && sheetmethod!="Google Sheet" && sheetmethod!=""   ?
                                 <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
                                     <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
                                         
                                         <div className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
-                                            <div className='flex items-center justify-center h-[40px]' onClick={()=>{setshowimagePopup(false); setsheetmethod('Google Sheet')}}>
-                                                <IoMdArrowBack  className=' cursor-pointer' size={17}/>
+                                            <div className='flex items-center justify-center h-[40px]' onClick={(()=>{setshowimagePopup(false); setsheetmethod('Database')})}>
+                                            <IoMdArrowBack  className=' cursor-pointer' size={17}/>
                                             </div>
                                             <div className='text-gray-500 h-[40px] text-[15px] flex items-center justify-center'>
                                                 {sheetname}
@@ -490,13 +493,13 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                                     <></>
                         }
 
-                            {
-                                showimagepopup && sheetmethod=='Database' ?
+{
+                                showimagepopup && sheetmethod!="Database" && sheetmethod!=""   ?
                                 <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
                                     <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
                                         
                                         <div className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
-                                            <div className='flex items-center justify-center h-[40px]' onClick={(()=>{setshowimagePopup(false); setsheetmethod('Database')})}>
+                                            <div className='flex items-center justify-center h-[40px]' onClick={(()=>{setshowimagePopup(false); setsheetmethod('Google Sheet')})}>
                                             <IoMdArrowBack  className=' cursor-pointer' size={17}/>
                                             </div>
                                             <div className='text-gray-500 h-[40px] text-[15px] flex items-center justify-center'>

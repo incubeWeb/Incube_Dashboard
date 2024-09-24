@@ -31,7 +31,7 @@ const DatabaseSheets = ({id,setshowHistory,setsheetmethod,setsheetname,showimage
                     <BsDatabaseFill className='text-green-600' size={20}/>
                 </div>
                 <div className='h-[100%] w-[100%] flex items-center justify-start'>
-                    <p className='text-[14px]  flex items-center px-5'>{sheetname.substring(sheetname.length-15,sheetname.length)}</p>
+                    <p className='text-[14px]  flex items-center px-5'>{sheetname}</p>
                 </div>
             </div>
 
