@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { FaChartLine, FaChartPie, FaRegFileExcel } from 'react-icons/fa'
 import { IoMdArrowRoundBack } from 'react-icons/io'
-import { IoBarChart } from 'react-icons/io5'
+import { IoBarChart, IoRefresh } from 'react-icons/io5'
 import { RxCross2 } from 'react-icons/rx'
 import { VscGraphLine } from 'react-icons/vsc'
 import PortfolioBarChart from './PortfolioBarChart'
@@ -37,6 +37,11 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
     const [changeChart,setchangeChart]=useState(false)
     const [loading,setloading]=useState(true)
 
+    const [googlesheetfiles,setgooglesheetfiles]=useState([])
+
+    const RefreshSheets=()=>{
+        setavailableDatabaseSheets()
+    }
 
     useEffect(()=>
     {
@@ -111,12 +116,70 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
     }
     const setavailableDatabaseSheets=async()=>{
         const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
-        setallSheets(response.data.data) 
+        const response2=await axios.post('http://localhost:8999/get-document-visibility',{
+            email:localStorage.getItem('email'),
+            organization:localStorage.getItem('organization')
+        })
+        const set2DocsIds=response2.data.allfiles.map(doc=>doc.Document_id)
+        
+        const filteredSet1=response.data.data.filter(doc=>!set2DocsIds.includes(doc._id))
+        const tosetdata=[...response2.data.data,...filteredSet1]
+
+        const response3=await axios.post('http://localhost:1222/get-drivesheets',{
+            email:localStorage.getItem('email'),
+            organization:localStorage.getItem("organization")
+        })
+        if(response3.data.status==200 && response3.data.message!="no refresh token found")
+        {
+            const files=response3.data.data
+            setgooglesheetfiles(files)
+        }
+        
+        setallSheets(tosetdata)
+        
+
+        
     }
+
+    const handleGooglesheetclicked=async (id,name)=>{
+        console.log("sheet id",id,name)
+        setsheetClicked(id)
+        const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:id,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+        
+        const allJson=response.data.data
+        const keys=allJson[0].data
+        const finalJson=[]
+        allJson.map(val=>{
+            if(val.rowIndex!=1)
+            {
+                const result=keys.reduce((obj,key,value)=>{obj[key]=val.data[value]; return obj},{})
+                finalJson.push(result)
+            }
+        })
+        console.log(finalJson)
+        setsheetJson(finalJson)
+                const key=Object.keys(finalJson[0])
+                
+                const fileteredKey=[]
+                finalJson.map(d=>{
+                    key.map(k=>{
+                        if(d[k]!=""&&!fileteredKey.includes(k)){
+                        fileteredKey.push(k)
+                        }
+                    }
+                    )
+                })
+                setsheetfieldselectedX(fileteredKey[0])
+                setsheetfieldselectedY(fileteredKey[0])
+                setsheetKeys(fileteredKey)       
+    }
+
+
     const handlesheetclicked=async (id)=>{
             setsheetClicked(id)
             const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
                 const data=JSON.parse(response.data.data)
+                console.log("sheetjson",data)
                 setsheetJson(data)
                 const key=Object.keys(data[0])
                 
@@ -275,22 +338,50 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
                 clickedBar?
                 <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
                         <div className='p-2 flex flex-col  w-[360px] h-[300px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
-                            <div className='h-[50px]'>
+                            <div className='h-[50px] flex'>
                                         <div className='w-[20px] cursor-pointer ' onClick={()=>{setclickedBar(false);setchartselectpopup(true)}}>
                                             <IoMdArrowRoundBack className='w-[20px]'/>
                                         </div>
+                                        <div className='w-[100%] flex justify-end'>
+                                            <div className='w-[16px] h-[16px] cursor-pointer' onClick={()=>{RefreshSheets()}}>
+                                                <IoRefresh size={16} />
+                                            </div>
+                                        </div>
                             </div>
-                            <div className='flex flex-col'>
+                            <div className='flex flex-col overflow-y-auto'>
                                 
                                 {
                                     (allsheet||[]).map(val=>
+                                        val.fileType=='xlsx'?
                                         <div key={val._id} onClick={()=>{setsheetrowsselect(true);setclickedBar(false); handlesheetclicked(val._id)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
                                             <p className='w-[50%] text-[14px]'>{val.name.substring(val.name.length-15,val.name.length)}</p>
                                             <div className='w-[50%] flex text-green-800 items-center justify-end'>
                                                 <FaRegFileExcel />
                                             </div>
                                         </div>
+                                        :
+                                        <></>
                                     )
+
+                                    
+                                }
+                                {
+                                    googlesheetfiles.length>0?
+                                    <div className='w-[100%] font-inter text-[14px] font-semibold mt-4 mb-2 h-[40px] flex items-center pl-2'><p>Google sheets:</p></div>
+                                    :
+                                    <></>
+                                }
+                                {
+                                    (googlesheetfiles||[]).map(val=>
+                                        <div key={val._id} onClick={()=>{setsheetrowsselect(true);setclickedBar(false); handleGooglesheetclicked(val.id,val.name)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
+                                            <p className='w-[50%] text-[14px]'>{val.name.substring(val.name.length-15,val.name.length)}</p>
+                                            <div className='w-[50%] flex text-green-800 items-center justify-end'>
+                                                <FaRegFileExcel />
+                                            </div>
+                                        </div>
+                                    )
+
+                                    
                                 }
                                 
                             </div>
@@ -308,17 +399,38 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
                                             <IoMdArrowRoundBack className='w-[20px]'/>
                                         </div>
                             </div>
-                            <div className='flex flex-col'>
+                            <div className='flex flex-col overflow-y-auto'>
                                 
                                 {
                                     (allsheet||[]).map(val=>
+                                        val.fileType=='xlsx'?
                                         <div key={val._id} onClick={()=>{setsheetrowsselectLine(true);setclickedLine(false); handlesheetclickedLine(val._id)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
                                             <p className='w-[50%] text-[14px]'>{val.name.substring(val.name.length-15,val.name.length)}</p>
                                             <div className='w-[50%] flex text-green-800 items-center justify-end'>
                                                 <FaRegFileExcel />
                                             </div>
                                         </div>
+                                        :
+                                        <></>
                                     )
+                                }
+                                {
+                                    googlesheetfiles.length>0?
+                                    <div className='w-[100%] font-inter text-[14px] font-semibold mt-4 mb-2 flex items-center pl-2'><p>Google sheets:</p></div>
+                                    :
+                                    <></>
+                                }
+                                {
+                                    (googlesheetfiles||[]).map(val=>
+                                        <div key={val._id} onClick={()=>{setsheetrowsselect(true);setclickedBar(false); handleGooglesheetclicked(val.id,val.name)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
+                                            <p className='w-[50%] text-[14px]'>{val.name.substring(val.name.length-15,val.name.length)}</p>
+                                            <div className='w-[50%] flex text-green-800 items-center justify-end'>
+                                                <FaRegFileExcel />
+                                            </div>
+                                        </div>
+                                    )
+
+                                    
                                 }
                                 
                             </div>
@@ -336,17 +448,40 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
                                             <IoMdArrowRoundBack className='w-[20px]'/>
                                         </div>
                             </div>
-                            <div className='flex flex-col'>
+                            <div className='flex flex-col overflow-y-auto'>
                                 
                                 {
                                     (allsheet||[]).map(val=>
+                                        val.fileType=='xlsx'?
                                         <div key={val._id} onClick={()=>{setsheetrowsselectPie(true);setclickedPie(false); handlesheetclickedPie(val._id)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
                                             <p className='w-[50%] text-[14px]'>{val.name.substring(val.name.length-15,val.name.length)}</p>
                                             <div className='w-[50%] flex text-green-800 items-center justify-end'>
                                                 <FaRegFileExcel />
                                             </div>
                                         </div>
+                                        :
+                                        <></>
                                     )
+                                }
+
+                                {
+                                    googlesheetfiles.length>0?
+                                    <div className='w-[100%] font-inter text-[14px] font-semibold mt-4 mb-2 flex items-center pl-2'><p>Google sheets:</p></div>
+                                    :
+                                    <></>
+                                }
+
+                                {
+                                    (googlesheetfiles||[]).map(val=>
+                                        <div key={val._id} onClick={()=>{setsheetrowsselect(true);setclickedBar(false); handleGooglesheetclicked(val.id,val.name)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
+                                            <p className='w-[50%] text-[14px]'>{val.name.substring(val.name.length-15,val.name.length)}</p>
+                                            <div className='w-[50%] flex text-green-800 items-center justify-end'>
+                                                <FaRegFileExcel />
+                                            </div>
+                                        </div>
+                                    )
+
+                                    
                                 }
                                 
                             </div>

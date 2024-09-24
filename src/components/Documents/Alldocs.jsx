@@ -85,9 +85,21 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
 
 
     const handleGoogleSheetView=(id,name)=>{
-
+        window.open(`https://drive.google.com/file/d/${id}/view`,'_blank')
     }
-    const handleGoogleSheetDelete=(id)=>{
+    const handleGoogleSheetDelete=async(id)=>{
+        const response=await axios.post('http://localhost:1222/delete-drive-file',{
+            email:localStorage.getItem('email'),
+            organization:localStorage.getItem('organization'),
+            field_id:id
+        })
+
+        if(response.data.status==200)
+        {
+            alert('google file deleted')
+            GetDriveSheets()
+        }
+
 
     }
 
@@ -349,7 +361,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
                             <p className='text-[14px] pl-2 '>{gmailname}</p>
                         </div>
                         <div className='w-[15%] h-[100%] pl-4 scrollbar-hide overflow-x-auto flex items-end justify-start'>
-                            <p className='text-[14px] pl-3'>xlsx</p>
+                            <p className='text-[14px] pl-3'>{doc.mimeType}</p>
                         </div>
                         <div className='w-[20%] items-end scrollbar-hide overflow-x-auto justify-start flex h-[100%]'>
                             <p className='text-[14px] pl-2'>{doc.name}</p>

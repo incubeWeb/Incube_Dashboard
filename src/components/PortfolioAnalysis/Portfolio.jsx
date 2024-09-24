@@ -10,6 +10,7 @@ import { IoMdArrowBack } from 'react-icons/io'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import PortfolioTop from './PortfolioTop'
 import { Bars } from 'react-loader-spinner'
+import GoogleSheetDatabaseSheets from './GoogleSheetDatabaseSheets'
 
 const Portfolio = ({hidenavbar,sheetedited}) => {
     const [sheetmethod,setsheetmethod]=useState('')
@@ -19,7 +20,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
     const [sheetKeys,setsheetKeys]=useState([])
     const [selectedImageFiled,setselectedImageField]=useState('')
     const [showHistory,setshowHistory]=useState(false)
-    const [showimagepopup,setshowimagePopup]=useState('')
+    const [showimagepopup,setshowimagePopup]=useState(false)
     const [sheetname,setsheetname]=useState('')
     const [selectfield,setselectfield]=useState(false)
     const [loading,setloading]=useState(true)
@@ -113,36 +114,98 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
     useEffect(()=>{
         const setavailableDatabaseSheets=async()=>{
             const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
-            setallSheets(response.data.data)
+            const response2=await axios.post('http://localhost:8999/get-document-visibility',{
+                email:localStorage.getItem('email'),
+                organization:localStorage.getItem('organization')
+            })
+            const set2DocsIds=response2.data.allfiles.map(doc=>doc.Document_id)
+            
+            const filteredSet1=response.data.data.filter(doc=>!set2DocsIds.includes(doc._id))
+            const tosetdata=[...response2.data.data,...filteredSet1]
+
+            
+            setallSheets(tosetdata)
            // console.log("fff",response.data.data[0]._id)
             
 
         }
+
+        const setavailableGoogleDatabaseSheets=async()=>{
+            const response3=await axios.post('http://localhost:1222/get-drivesheets',{
+                email:localStorage.getItem('email'),
+                organization:localStorage.getItem("organization")
+            })
+            if(response3.data.status==200 && response3.data.message!="no refresh token found")
+            {
+                const files=response3.data.data
+                setallSheets(files)
+            }
+            else{
+                setallSheets([])
+            }
+            
+           // console.log("fff",response.data.data[0]._id)
+            
+
+        }
+        
         if(sheetmethod=='Database')
         {
             setavailableDatabaseSheets()
         }
-        else{
-            setallSheets([])
+        else if(sheetmethod=='Google Sheet')
+        {
+            setavailableGoogleDatabaseSheets()
         }
     },[])
 
     useEffect(()=>{
         const setavailableDatabaseSheets=async()=>{
             const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
-            setallSheets(response.data.data)  
+            const response2=await axios.post('http://localhost:8999/get-document-visibility',{
+                email:localStorage.getItem('email'),
+                organization:localStorage.getItem('organization')
+            })
+            const set2DocsIds=response2.data.allfiles.map(doc=>doc.Document_id)
             
+            const filteredSet1=response.data.data.filter(doc=>!set2DocsIds.includes(doc._id))
+            const tosetdata=[...response2.data.data,...filteredSet1]
+
+            
+            setallSheets(tosetdata)
         }
+
+        const setavailableGoogleDatabaseSheets=async()=>{
+            const response3=await axios.post('http://localhost:1222/get-drivesheets',{
+                email:localStorage.getItem('email'),
+                organization:localStorage.getItem("organization")
+            })
+            if(response3.data.status==200 && response3.data.message!="no refresh token found")
+            {
+                const files=response3.data.data
+                setallSheets(files)
+            }
+            else{
+                setallSheets([])
+            }
+            
+           // console.log("fff",response.data.data[0]._id)
+            
+
+        }
+
         if(sheetmethod=='Database')
         {
             setavailableDatabaseSheets()
         }
-        else{
-            setallSheets([])
+        else if(sheetmethod=='Google Sheet')
+        {
+            setavailableGoogleDatabaseSheets()
         }
     },[sheetmethod])
 
     useEffect(()=>{
+        console.log("sheetId",sheetmethod)
         const setJSon=async()=>{
             const response=await axios.post('http://localhost:8999/sheetfromdb',{id:selectedSheetId,organization:localStorage.getItem('organization')})
             const data=JSON.parse(response.data.data)
@@ -164,7 +227,50 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
             
             setsheetKeys(fileteredKey)
         }
-        setJSon()
+        const setGoogleSheetJSon=async()=>{
+            const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedSheetId,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+            const allJson=response.data.data
+            const keys=allJson[0].data
+            const finalJson=[]
+            allJson.map(val=>{
+                if(val.rowIndex!=1)
+                {
+                    const result=keys.reduce((obj,key,value)=>{obj[key]=val.data[value]; return obj},{})
+                    finalJson.push(result)
+                }
+            })
+        
+            const data=finalJson
+            console.log(selectedSheetId,"google sheetis")
+            setsheetJson(data)
+            console.log("google sheet",data)
+
+            const key=Object.keys(data[0])
+                
+                const fileteredKey=[]
+                data.map(d=>{
+                    key.map(k=>{
+                        if(d[k]!=""&&!fileteredKey.includes(k)){
+                        fileteredKey.push(k)
+                        }
+                    }
+                    )
+                })
+                console.log("google this",fileteredKey)
+                
+                setsheetKeys(fileteredKey)
+
+        }
+        if(sheetmethod=='Database')
+        {
+            setJSon()
+            setsheetmethod('')
+        }
+        if(sheetmethod=='Google Sheet')
+        {
+            setGoogleSheetJSon()
+            setsheetmethod('')
+        }
     },[selectedSheetId,sheetedited])
 
   return (
@@ -296,7 +402,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                             <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
                                 {
                                     clickedDots?
-                                    <div onClick={()=>{setselectfield(!selectfield);setsheetmethod('')}} className='cursor-pointer h-[50px]'>
+                                    <div onClick={()=>{setselectfield(!selectfield);setsheetmethod('Database')}} className='cursor-pointer h-[50px]'>
                                         <IoMdArrowBack />
                                     </div>
                                     :
@@ -306,7 +412,37 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                                 }
                                 <div  className={`${sheetmethod=='Database'?'bg-white':''} p-1 flex items-center rounded-md text-[14px] flex-col font-roboto`}>
                                 {(allSheets||[]).map(doc=>
+                                        doc.fileType=='xlsx'?
                                         <DatabaseSheets setsheetname={setsheetname} showimagepopup={showimagepopup} setshowimagePopup={setshowimagePopup} setsheetmethod={setsheetmethod} key={doc._id} sheetKeys={sheetKeys} selectedImageFiled={selectedImageFiled} setselectedImageField={setselectedImageField} id={doc._id} setportfolioHistory={setshowHistory} setshowHistory={setshowHistory} sheetname={doc.name} setselectedSheetId={setselectedSheetId}/>
+                                        :
+                                        <></>
+                                    )}  
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                        :
+                        <></>
+                    }
+
+                    {
+                        !selectfield && sheetmethod=='Google Sheet'?
+                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
+                            <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
+                                {
+                                    clickedDots?
+                                    <div onClick={()=>{setselectfield(!selectfield);setsheetmethod('Google Sheet')}} className='cursor-pointer h-[50px]'>
+                                        <IoMdArrowBack />
+                                    </div>
+                                    :
+                                    <div onClick={()=>{setselectfield(false);setsheetmethod('')}} className='cursor-pointer h-[50px]'>
+                                        <RxCross2/>
+                                    </div>
+                                }
+                                <div  className={`${sheetmethod=='Google Sheet'?'bg-white':''} p-1 flex items-center rounded-md text-[14px] flex-col font-roboto`}>
+                                {(allSheets||[]).map(doc=>
+                                        <GoogleSheetDatabaseSheets setsheetname={setsheetname} showimagepopup={showimagepopup} setshowimagePopup={setshowimagePopup} setsheetmethod={setsheetmethod} key={doc.id} sheetKeys={sheetKeys} selectedImageFiled={selectedImageFiled} setselectedImageField={setselectedImageField} id={doc.id} setportfolioHistory={setshowHistory} setshowHistory={setshowHistory} sheetname={doc.name} setselectedSheetId={setselectedSheetId}/>  
                                     )}  
                                 </div>
                                 
@@ -317,7 +453,45 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                         <></>
                     }
                     {
-                                showimagepopup ?
+                                showimagepopup?
+                                <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
+                                    <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
+                                        
+                                        <div className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
+                                            <div className='flex items-center justify-center h-[40px]' onClick={()=>{setshowimagePopup(false); setsheetmethod('Google Sheet')}}>
+                                                <IoMdArrowBack  className=' cursor-pointer' size={17}/>
+                                            </div>
+                                            <div className='text-gray-500 h-[40px] text-[15px] flex items-center justify-center'>
+                                                {sheetname}
+                                            </div>
+                                            
+                                        </div>
+                                        <div className=' w-[100%] h-[40%] flex flex-col items-center justify-center space-y-8 space-x-2'>
+                                            <p className='text-[15px] text-white'>select image field</p>
+                                            <select onChange={(e)=>setselectedImageField(e.target.value)} className='w-[220px] h-[30px] text-[14px] text-gray-700 rounded-md border-gray-300 border-[1px]'>
+                                                            
+                                                {sheetKeys.map(k=>
+                                                    <option key={k._id}>{k}</option>
+                                                    )
+                                                }
+
+                                            </select>
+                                        </div>
+                                        <div className='w-[100%] mt-[14px] flex flex-row items-center justify-center'>
+                                            <div onClick={handleselect} className='select-none cursor-pointer flex flex-row w-[120px] rounded-md h-[40px] items-center justify-center bg-gradient-to-r from-green-500 to-green-800 spae-x-2'>
+                                                <p className='text-[14px] text-white'>Set image key</p>
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                    :
+                                    <></>
+                        }
+
+                            {
+                                showimagepopup && sheetmethod=='Database' ?
                                 <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
                                     <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
                                         

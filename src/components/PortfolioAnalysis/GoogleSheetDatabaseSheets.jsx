@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
 import { BsDatabaseFill } from 'react-icons/bs'
-import { FaCaretRight } from 'react-icons/fa'
-import { RxCross2 } from 'react-icons/rx'
-import { SiGooglesheets } from 'react-icons/si'
 
-const DatabaseSheets = ({id,setshowHistory,setsheetmethod,setsheetname,showimagepopup,setshowimagePopup,sheetKeys,selectedImageFiled,setselectedImageField,sheetname,setselectedSheetId,setportfolioHistory}) => {
+const GoogleSheetDatabaseSheets = ({setgooglesheetimagepopup,id,setshowHistory,setsheetmethod,setsheetname,showimagepopup,setshowimagePopup,sheetKeys,selectedImageFiled,setselectedImageField,sheetname,setselectedSheetId,setportfolioHistory}) => {
     const [hover,sethover]=useState(false)
     
     
@@ -12,7 +9,7 @@ const DatabaseSheets = ({id,setshowHistory,setsheetmethod,setsheetname,showimage
         setselectedSheetId(id)
         setshowimagePopup(true)
         setsheetname(sheetname)
-        setsheetmethod('Database')
+        setsheetmethod('Google Sheet')
         setselectedImageField(sheetKeys[0])
     }
     
@@ -41,4 +38,4 @@ const DatabaseSheets = ({id,setshowHistory,setsheetmethod,setsheetname,showimage
   )
 }
 
-export default DatabaseSheets
+export default GoogleSheetDatabaseSheets
