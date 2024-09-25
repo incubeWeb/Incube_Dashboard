@@ -35,7 +35,6 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
 
     useEffect(()=>
     {
-        console.log("this is showvale",showValue,labelname)
         const fun=async()=>{
             const organization=`${localStorage.getItem('organization')}_Topcards`
             
@@ -54,7 +53,10 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
             
 
         }
-        fun()
+        if(showValue!='$0' || labelname!='')
+        {
+                fun()
+        }
     },[showValue,editLabel])
 
     const [sheets,setallsheets]=useState([])
@@ -67,7 +69,6 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
 
     useEffect(()=>
     {
-        console.log(selectedSheetId,"ths")
         if(!editLabel && clickedSheetId!="")
         {
             setvalueid(prev => {

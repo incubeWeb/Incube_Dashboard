@@ -12,7 +12,7 @@ import PortfolioTop from './PortfolioTop'
 import { Bars } from 'react-loader-spinner'
 import GoogleSheetDatabaseSheets from './GoogleSheetDatabaseSheets'
 
-const Portfolio = ({hidenavbar,sheetedited}) => {
+const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     const [sheetmethod,setsheetmethod]=useState('')
     const [allSheets,setallSheets]=useState([])
     const [selectedSheetId,setselectedSheetId]=useState([])
@@ -82,14 +82,53 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
         setStateValues()
     },[])
 
-    
+    useEffect(()=>{
+        const setStateValues=async()=>{
+           const organization=localStorage.getItem('organization')
+            const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
+            const data=response.data.data
+
+           // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
+           const stateValues=JSON.parse(data)||[]
+            if(stateValues.length>0)
+            {
+                stateValues.map(val=>{
+                setsheetmethod(val.sheetmethod)
+                setallSheets(val.allSheets)
+                setselectedSheetId(val.selectedSheetId)
+                setsheetJson(val.sheetJson)
+                setsheetKeys(val.sheetKeys)
+                setselectedImageField(val.selectedImageFiled)
+                setshowHistory(val.showHistory)
+                setshowimagePopup(val.showimagepopup)
+                setsheetname(val.sheetname)
+                setselectfield(val.selectfield)
+                setTimeout(()=>{
+                    setloading(false)
+                },1000)
+                })
+            }
+        }
+        setStateValues()
+    },[realtimeportfoliostate])
+
     
 
-    const handleselect=()=>{
+    const handleselect=async()=>{
         
-        setshowHistory(true)
-        setsheetmethod('')
-        setshowimagePopup(!showimagepopup)
+        const constructPortfolioState=[{sheetmethod:'',allSheets:allSheets,selectedSheetId:selectedSheetId,sheetJson:sheetJson,sheetKeys:sheetKeys,selectedImageFiled:selectedImageFiled,showHistory:true,showimagepopup:!showimagepopup,sheetname:sheetname,selectfield:selectfield}]
+        const response=await axios.post('http://localhost:8999/setportfoliostate',{
+            organization:localStorage.getItem('organization'),
+            portfolioState:JSON.stringify(constructPortfolioState)
+        })
+        if(response.data.status==200)
+        {
+            setshowHistory(true)
+            setsheetmethod('')
+            setshowimagePopup(!showimagepopup)
+        }
+        
+        
     }
     const [clickedDots,setclickedDots]=useState(false)
 
@@ -264,11 +303,11 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
   return (
     <div className={`${hidenavbar?'pl-[4%] w-[100%]':'pl-[21%] w-[100%]'} p-4 font-noto  flex flex-col space-y-4 bg-gray-100`}>
         <div className='w-[100%]  flex flex-col'>{/*Portfolio content */}
-            <PortfolioTop selectedSheetId={selectedSheetId} hidenavbar={hidenavbar} sheetedited={sheetedited}/>
+            <PortfolioTop realtimeportfoliostate={realtimeportfoliostate} selectedSheetId={selectedSheetId} hidenavbar={hidenavbar} sheetedited={sheetedited}/>
         </div>
 
-        <div className='tracking-wider select-none mt-[20px] w-[100%]  bg-white rounded-xl p-4 flex flex-col space-y-2 font-noto'>
-            <div className='flex flex-col space-y-3'>
+        <div className='tracking-wider   select-none mt-[20px] w-[100%] bg-white rounded-xl p-4 flex flex-col space-y-2 font-noto'>
+            <div className='flex flex-col  space-y-3'>
                 <div className='h-[50px] w-[100%] flex flex-row'>
                     <p className='flex w-[50%] text-[16px] font-inter font-semibold tracking-wider'>Investment History</p>
                     <div className=' w-[75%]  flex flex-row justify-end '>
@@ -521,8 +560,8 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
             </div>
                 : 
             ((showHistory &&!selectfield)||(!clickedDots&&sheetmethod.length>0)) && !loading?
-            <div>
-                <PortfolioHistory selectedImageFiled={selectedImageFiled} setportfolioHistory={setshowHistory} sheetKeys={sheetKeys}  
+            <div className='overflow-y-auto h-[100%]' >
+                <PortfolioHistory realtimeportfoliostate={realtimeportfoliostate} selectedImageFiled={selectedImageFiled} setportfolioHistory={setshowHistory} sheetKeys={sheetKeys}  
                     selectedFilter={selectedFilter}
                                     selectedSort={selectedSort}
                                     sheetJson={sheetJson}

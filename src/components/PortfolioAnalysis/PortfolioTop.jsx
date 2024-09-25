@@ -8,31 +8,12 @@ import axios from 'axios'
 import PortfolioTopGraph from './PortfolioTopGraph'
 import { Bars } from 'react-loader-spinner'
 
-const PortfolioTop = ({hidenavbar,sheetedited,selectedSheetId}) => {
+const PortfolioTop = ({realtimeportfoliostate,hidenavbar,sheetedited,selectedSheetId}) => {
     const [valueid,setvalueid]=useState([{id:1,labelname:'Total fund',showValue:'$0'},{id:2,labelname:'Fund utilized',showValue:'$0'},{id:3,labelname:'Funds remaining',showValue:'$0'},{id:4,labelname:'ROI',showValue:'$0'}])
 
     const [changevalue,setchangevalue]=useState(false)
     
     
-    useEffect(()=>{
-        const setTopCardsValues=async()=>{
-            
-            const isEqual = JSON.stringify(valueid) === JSON.stringify([{id:1,labelname:'Total fund',showValue:'$0'},{id:2,labelname:'Fund utilized',showValue:'$0'},{id:3,labelname:'Funds remaining',showValue:'$0'},{id:4,labelname:'ROI',showValue:'$0'}]);
-            
-            const organization=`${localStorage.getItem('organization')}_Topcards`
-            if(!isEqual && (valueid[0]['labelname']!=''))
-            {
-                await axios.post('http://localhost:8999/setportfoliostate',{
-                    organization:organization,
-                    portfolioState:JSON.stringify(valueid)
-                })
-            }
-        }
-        
-         
-        setTopCardsValues()
-        
-    },[valueid])
 
     useEffect(()=>{
         const getTopCardsValues=async()=>{
@@ -48,7 +29,7 @@ const PortfolioTop = ({hidenavbar,sheetedited,selectedSheetId}) => {
         }
         getTopCardsValues()
 
-    },[sheetedited])
+    },[sheetedited,realtimeportfoliostate])
 
   useEffect(()=>{
     const getTopCardsValues=async()=>{
@@ -87,7 +68,7 @@ const PortfolioTop = ({hidenavbar,sheetedited,selectedSheetId}) => {
         </div>
         
         <div>
-            <PortfolioTopGraph sheetedited={sheetedited}  hidenavbar={hidenavbar}/>
+            <PortfolioTopGraph realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited}  hidenavbar={hidenavbar}/>
         </div>
     </div>
   )

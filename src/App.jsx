@@ -33,7 +33,7 @@ function App() {
   const [realtimedealpipelinecompanyInfo,setrealtimedealpipelinecompanyInfo]=useState([])
   const [googleaccountconnected,setgoogleaccountconnected]=useState([])
   const [realtimedocumentvisibility,setrealtimedocumentvisibility]=useState([])
-
+  const [realtimeportfoliostate,setrealtimeportfoliostate]=useState([])
 
   const socket=io('http://localhost:8999')
   const socket2=io('http://localhost:1222')
@@ -89,6 +89,12 @@ function App() {
           {
             setrealtimedocumentvisibility(change)
           }
+          if(change.ns.coll=='PortfolioState')
+          {
+            console.log("mychange")
+            setrealtimeportfoliostate(change)
+          }
+
         })
         socket.on('chats',(chat)=>{
           console.log('this is chat',chat)
@@ -166,7 +172,7 @@ function App() {
             <Route path="/adduser" element={<Addusers setActiveField={setActiveField} hidenavbar={hidenavbar}/>}/>
             <Route path="/allDocs" element={<Alldocs realtimedocumentvisibility={realtimedocumentvisibility} filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar}/>} />
             <Route path="/investment" element={<AddInvestment hidenavbar={hidenavbar}/>}/>
-            <Route path='/portfolio' element={<Portfolio sheetedited={sheetedited} hidenavbar={hidenavbar} />}/>
+            <Route path='/portfolio' element={<Portfolio realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited} hidenavbar={hidenavbar} />}/>
             
           </Routes>
         </>

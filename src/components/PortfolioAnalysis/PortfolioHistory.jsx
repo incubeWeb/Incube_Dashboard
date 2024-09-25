@@ -5,7 +5,7 @@ import { IoArrowBackSharp } from 'react-icons/io5'
 
 const PortfolioHistory = ({setportfolioHistory,sheetKeys,sheetJson,selectedImageFiled}) => {
   return (
-    <div className='h-[140px] w-[100%] flex flex-col space-y-2'>
+    <div className=' w-[100%] flex flex-col space-y-2'>
         
         <div className='flex flex-row space-x-2 text-[14px] text-gray-600 '>
                 {

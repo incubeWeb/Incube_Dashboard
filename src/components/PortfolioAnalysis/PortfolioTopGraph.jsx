@@ -12,7 +12,7 @@ import { HiOutlineDotsVertical } from 'react-icons/hi'
 import PortfolioMeter from './PortfolioMeter'
 import { Bars } from 'react-loader-spinner'
 
-const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
+const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
     const [chartselectpopup,setchartselectpopup]=useState(false)
     const [clickedBar,setclickedBar]=useState(false)
     const [clickedPie,setclickedPie]=useState(false)
@@ -74,7 +74,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
 
         }
         updateRealtimevalue()
-    },[sheetedited])
+    },[sheetedited,realtimeportfoliostate])
 
 
     useEffect(()=>{
@@ -285,7 +285,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited}) => {
                 organization:organization,
                 portfolioState:JSON.stringify(stateJson)
             })
-            console.log("fsfsss",stateJson)
+            console.log("fsfsss",stateJson,realtimeportfoliostate)
     }
 
     useEffect(()=>
