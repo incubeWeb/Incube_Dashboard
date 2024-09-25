@@ -921,6 +921,12 @@ const ChartPopup = ({
                 </select>
               </div>
               <div onClick={(e)=>handleSheetCreatePiechartDB(e)} className="cursor-pointer select-none w-[100%] h-[30px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
+<<<<<<< Updated upstream
+=======
+              {Loading2 ? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+          ) : (
+>>>>>>> Stashed changes
                   <p className="text-[14px] text-white">Create the Pie chart</p>
               </div>
           </div>

@@ -294,7 +294,11 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
   </div>
 </div>
 
+<<<<<<< Updated upstream
       <div className='w-[100%] flex flex-col items-center'>
+=======
+      <div className=' flex flex-col items-center oveflow-y-auto '>
+>>>>>>> Stashed changes
         {(boxes||[]).map((box,index) => (
           <Rnd
             
@@ -302,7 +306,32 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
             className='border-gray-300 bg-white border-[1px] rounded-lg p-4 pt-7'
             size={{ width: box.width, height: box.height }}
             position={{ x: box.x, y: box.y }}
+<<<<<<< Updated upstream
             onDragStop={(e, direction) => setPosition(box.id, direction)}
+=======
+           
+           
+         
+            // onDragStop={(e, direction) => setPosition(box.id, direction)}
+            onDragStop={(e, data) => {
+      const parentWidth = e.target.parentElement.offsetWidth;
+      const maxX = (parentWidth * 0.9) - box.width; 
+
+      
+      if (data.x > maxX) {
+        data.x = maxX;
+      } else if (data.x < 0) {
+        data.x = 0;
+      }
+
+    
+      setPosition(box.id, { x: data.x, y: data.y });
+    }}
+            
+          
+            
+
+>>>>>>> Stashed changes
             onResizeStop={(e, direction, ref, delta, position) => setSize(box.id, ref, position)}
             // Ensure the Rnd component stays within its parent container
           >

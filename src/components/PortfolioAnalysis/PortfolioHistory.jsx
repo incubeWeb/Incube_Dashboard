@@ -1,7 +1,56 @@
+<<<<<<< Updated upstream
 import React from 'react'
 import { FaImages } from 'react-icons/fa'
 import { IoMdImage } from 'react-icons/io'
 import { IoArrowBackSharp } from 'react-icons/io5'
+=======
+import React, { useState, useEffect, useRef } from 'react';
+import { IoMdImage } from 'react-icons/io';
+import { RiFilter3Line } from "react-icons/ri";
+import { BsBuildings } from "react-icons/bs";
+
+const PortfolioHistory = ({ setportfolioHistory, sheetKeys, sheetJson, selectedImageFiled }) => {
+  const [showFilterMenu, setShowFilterMenu] = useState(false); // Filter menu state
+  const [showSortMenu, setShowSortMenu] = useState(false); // Sorting menu state
+  const [selectedFilter, setSelectedFilter] = useState('Amount Invested'); // Default selected filter
+  const [sorting, setSorting] = useState('Ascending'); // Sorting order
+  const [sortedData, setSortedData] = useState(sheetJson || []); // To store sorted data
+
+  const filterMenuRef = useRef(null);  // Reference for the filter menu
+  const sortMenuRef = useRef(null);    // Reference for the sort menu
+
+  // Function to toggle filter menu visibility
+  const toggleFilterMenu = () => setShowFilterMenu(!showFilterMenu);
+  const toggleSortMenu = () => setShowSortMenu(!showSortMenu);
+
+  // Function to handle sorting selection
+  const handleSortSelection = (sort) => {
+    setSorting(sort);
+    setShowSortMenu(false); // Close sorting menu after selection
+  };
+
+  // Sort functions for different fields
+  
+  
+  // Effect hook to recompute sortedData based on selected filter and sorting order
+ 
+  // Close filter and sort menu if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (filterMenuRef.current && !filterMenuRef.current.contains(event.target)) {
+        setShowFilterMenu(false);  
+      }
+      if (sortMenuRef.current && !sortMenuRef.current.contains(event.target)) {
+        setShowSortMenu(false);  
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+>>>>>>> Stashed changes
 
 const PortfolioHistory = ({setportfolioHistory,sheetKeys,sheetJson,selectedImageFiled}) => {
   return (

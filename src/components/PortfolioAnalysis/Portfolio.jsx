@@ -180,7 +180,60 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                             <RiFilter3Line size={15}/>
                             <p>Filters</p>
                         </div>
+<<<<<<< Updated upstream
                         
+=======
+                         */}
+
+                         <div className='relative'>
+                                    {/* <div className='w-[90px] text-[14px] rounded-md space-x-2 h-[30px] border-[1px] border-gray-300 items-center justify-center font-inter font-semibold flex flex-row cursor-pointer'
+                                        onClick={toggleFilterMenu}>
+                                        <RiFilter3Line size={15} />
+                                        <p>Filters</p>
+                                    </div> */}
+
+                                    {/* Filter options pop-up */}
+                                    {showFilterMenu && (
+                                        <div className='absolute right-0 mt-2 w-[200px] p-3 bg-white border-gray-300 border-[1px] rounded-md z-50'>
+                                            <div
+                                                className='p-1 hover:bg-blue-500 flex items-center rounded-md text-[12px] font-semibold font-inter cursor-pointer'
+                                                onClick={() => handleFilterSelection('Investor Name')}>
+                                                <p className='p-2'>Investor Name</p>
+                                            </div>
+                                            <div
+                                                className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-inter font-semibold cursor-pointer'
+                                                onClick={() => handleFilterSelection('Amount Invested')}>
+                                                <p className='p-2'>Amount Invested</p>
+                                            </div>
+                                            <div
+                                                className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-inter font-semibold cursor-pointer'
+                                                onClick={() => handleFilterSelection('Total Invested Amount')}>
+                                                <p className='p-2'>Total Invested Amount</p>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Sorting options pop-up */}
+                                    {showSortMenu && (
+                                        <div className='absolute right-0 mt-2 w-[200px] p-3 bg-white border-gray-300 border-[1px] rounded-md z-50'>
+                                            <div
+                                                className='p-1 hover:bg-blue-500 flex items-center rounded-md text-[12px] font-semibold font-inter cursor-pointer'
+                                                onClick={() => handleSortSelection('Ascending')}>
+                                                <p className='p-2'>Ascending</p>
+                                            </div>
+                                            <div
+                                                className='p-1 hover:bg-blue-500 flex items-center rounded-md text-[12px] font-semibold font-inter cursor-pointer'
+                                                onClick={() => handleSortSelection('Descending')}>
+                                                <p className='p-2'>Descending</p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+
+
+
+>>>>>>> Stashed changes
                         
                         
                     </div>
