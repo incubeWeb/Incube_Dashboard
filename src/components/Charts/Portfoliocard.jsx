@@ -37,10 +37,11 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
         const [showPopup, setShowPopup] = useState(false);
          
       
+    const uniqueIconKey = `selectedIcon-${id}`;
        
 
         const handleIconClick = (iconName) => {
-          localStorage.setItem("selectedIcon", iconName); 
+          localStorage.setItem(uniqueIconKey, iconName); 
           setIcon(getIconComponent(iconName)); 
           setShowPopup(false); 
         };
@@ -64,7 +65,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
         };
       
         useEffect(() => {
-          const savedIcon = localStorage.getItem("selectedIcon");
+          const savedIcon = localStorage.getItem(uniqueIconKey);
           if (savedIcon) {
             setIcon(getIconComponent(savedIcon)); // Set the icon based on the stored icon name
           } else {
@@ -73,7 +74,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
           }
 
         
-        }, []);
+        }, [uniqueIconKey]);
 
 
 
