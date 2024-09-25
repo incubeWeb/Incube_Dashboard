@@ -111,22 +111,21 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
             const response=await axios.post('http://localhost:8999/sheetfromdb',{id:sheetid,organization:localStorage.getItem('organization')})
             const data=JSON.parse(response.data.data)
             
+            let value=data[0][key]
 
-            let value=''
-            try{
-                value=parseInt(data[0][key]) 
+            // let value=''
+            // try{
+            //     value=parseInt(data[0][key]) 
                 
-                if(isNaN(data[0][key]))
-                {
-                    value='$0'
-                }
-            }
-            catch(e)
-            {
-                value='$0'
-            }
-            console.log(value,key,"card")
-            console.log("blye bhabesf")
+            //     if(isNaN(data[0][key]))
+            //     {
+            //         value='$0'
+            //     }
+            // }
+            // catch(e)
+            // {
+            //     value='$0'
+            // }
             
             setvalueid(prev => {
                 const exists = prev.some(val => val.id === id); // Check if the id exists
@@ -195,20 +194,20 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
     const handleselectsheetfield=()=>{
         setsheetClicked(false)
         setsheetpopup(false)
-        
-        let value=''
-        try{
-            value=parseInt(sheetJson[0][sheetfieldselected]) 
+        let value=sheetJson[0][sheetfieldselected]
+        // let value=''
+        // try{
+        //     value=parseInt(sheetJson[0][sheetfieldselected]) 
             
-            if(isNaN(sheetJson[0][sheetfieldselected]))
-            {
-                value='$0'
-            }
-        }
-        catch(e)
-        {
-            value='$0'
-        }
+        //     if(isNaN(sheetJson[0][sheetfieldselected]))
+        //     {
+        //         value='$0'
+        //     }
+        // }
+        // catch(e)
+        // {
+        //     value='$0'
+        // }
 
         
         
