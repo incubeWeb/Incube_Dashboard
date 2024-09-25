@@ -75,6 +75,13 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
 
   const chatRef=useRef(null)
 
+  const cardData = [
+    { id: 1, name: 'Card One' },
+    { id: 2, name: 'Card Two' },
+    { id: 3, name: 'Card Three' },
+    // This array can grow infinitely
+  ];
+
   useEffect(()=>{
       const handleOpenChat=()=>{
         gsap.from(chatRef.current,{
@@ -295,25 +302,31 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
   </div>
 </div>
 
-      <div className='w-[90%] min-h-[1000%] flex flex-col items-center oveflow-y-auto '>
+      <div className='flex flex-col items-center oveflow-y-auto '>
         {(boxes||[]).map((box,index) => (
-          <Rnd
-            
-            key={box.id}
-            className='border-gray-300 bg-white border-[0.5px] rounded-lg p-4 pt-7'
-            size={{ width: box.width, height: box.height }}
-            position={{ x: box.x, y: box.y }}
-            
-         bounds='parent'
-         
-            onDragStop={(e, direction) => setPosition(box.id, direction)}
-          
-            
+         <Rnd
+    key={box.id}
+    className='border-gray-300 bg-white border-[0.5px] rounded-lg p-4 pt-7'
+    size={{ width: box.width, height: box.height }}
+    position={{ x: box.x, y: box.y }}
+    
+    
+    onDragStop={(e, data) => {
+      const parentWidth = e.target.parentElement.offsetWidth;
+      const maxX = (parentWidth * 0.8) - box.width; 
 
-            onResizeStop={(e, direction, ref, delta, position) => setSize(box.id, ref, position)}
-           
-           
-          >
+     
+      if (data.x > maxX) {
+        data.x = maxX;
+      } else if (data.x < 0) {
+        data.x = 0; 
+      }
+
+      setPosition(box.id, { x: data.x, y: data.y });
+    }}
+
+    onResizeStop={(e, direction, ref, delta, position) => setSize(box.id, ref, position)}
+  >
             {console.log("its is type os")}
             {(() => {
             try {
@@ -332,6 +345,8 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
                   )
                 case 'portfoliocard':
                   return (
+
+                    
                     <Portfoliocard 
                     id={index}
                      setBoxes={setBoxes} 
@@ -340,6 +355,9 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
                      portfoliocardwidgitcount={portfoliocardwidgitcount}
                      capturingPortfoliowidgitvalues={capturingPortfoliowidgitvalues}
                      setcapturingPortfoliowidgitvalues={setcapturingPortfoliowidgitvalues}
+                     
+                    
+
                      />
 
                   )

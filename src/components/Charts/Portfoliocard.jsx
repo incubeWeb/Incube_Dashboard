@@ -31,14 +31,50 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     const[loading1,setLoading]=useState(false);
     const[Loading2,setLoading2]=useState(true);
     
-   
-        const [icon, setIcon] = useState(<RiBarChartFill size={28} className="text-white" />); // State to track selected icon
-        const [showPopup, setShowPopup] = useState(false); // State to control popup visibility
+
+        const [selectedIcon, setSelectedIcon] = useState(null);
+        const [icon, setIcon] = useState(null); 
+        const [showPopup, setShowPopup] = useState(false);
+         
       
-        const handleIconClick = (newIcon) => {
-          setIcon(newIcon);
-          setShowPopup(false); // Close popup after selecting icon
+       
+
+        const handleIconClick = (iconName) => {
+          localStorage.setItem("selectedIcon", iconName); 
+          setIcon(getIconComponent(iconName)); 
+          setShowPopup(false); 
         };
+
+        
+        const getIconComponent = (iconName) => {
+          switch (iconName) {
+            case "RiFundsLine":
+              return <RiFundsLine size={28} className="text-white" />;
+            case "RiBarChartFill":
+              return <RiBarChartFill size={28} className="text-white" />;
+            case "PiMoney":
+              return <PiMoney size={28} className="text-white" />;
+            case "FaPeopleGroup":
+              return <FaPeopleGroup size={28} className="text-white" />;
+            case "LuTriangle":
+              return <LuTriangle size={28} className="text-white" />;
+            default:
+              return <RiBarChartFill size={28} className="text-white" />; // Default icon
+          }
+        };
+      
+        useEffect(() => {
+          const savedIcon = localStorage.getItem("selectedIcon");
+          if (savedIcon) {
+            setIcon(getIconComponent(savedIcon)); // Set the icon based on the stored icon name
+          } else {
+            // Set default icon if no icon is saved in localStorage
+            setIcon(<RiBarChartFill size={28} className="text-white" />);
+          }
+
+        
+        }, []);
+
 
 
 
@@ -263,51 +299,41 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                           <div className="bg-blue-500 w-[15%] h-[40px] flex items-center justify-center -mt-5 rounded-md">
                       {icon}
                     </div>
-
-
-
-                        {/* <div className='bg-blue-500 w-[15%] h-[40px] flex items-center justify-center  -mt-5 rounded-md'>
-                        
-                            <RiFundsLine size={28} className='text-white'/>
-                        </div>
-                        */}
-                        {showPopup && (
+                    {showPopup && (
         <div className="fixed top-0 left-0 w-[200px] bg-white shadow-md p-4 z-50 rounded-lg">
           <div className="flex justify-between items-center">
             <h3 className="text-[14px] font-semibold">Select an Icon</h3>
             <AiOutlineClose
               size={20}
               className="cursor-pointer"
-              onClick={() => setShowPopup(false)}
+              onClick={() => setShowPopup(false)} // Close popup on close icon click
             />
           </div>
 
-          {/* Icon selection options */}
+          {/* Icon selection grid */}
           <div className="grid grid-cols-3 gap-2 mt-2">
-            <div onClick={() => handleIconClick(<RiFundsLine size={28} className="text-white" />)} className="cursor-pointer">
+            <div onClick={() => handleIconClick("RiFundsLine")} className="cursor-pointer">
               <RiFundsLine size={28} className="text-gray-700 hover:text-blue-500" />
             </div>
-            <div onClick={() => handleIconClick(<RiBarChartFill size={28} className="text-white" />)} className="cursor-pointer">
-               <RiBarChartFill size={28}className="text-gray-700 hover:text-blue-500" />
+            <div onClick={() => handleIconClick("RiBarChartFill")} className="cursor-pointer">
+              <RiBarChartFill size={28} className="text-gray-700 hover:text-blue-500" />
             </div>
-            
-            <div onClick={() => handleIconClick(<PiMoney  size={28} className="text-white" />)} className="cursor-pointer">
-              <PiMoney  size={28} className="text-gray-700 hover:text-blue-500" />
+            <div onClick={() => handleIconClick("PiMoney")} className="cursor-pointer">
+              <PiMoney size={28} className="text-gray-700 hover:text-blue-500" />
             </div>
-            <div onClick={() => handleIconClick(<FaPeopleGroup  size={28} className="text-white" />)} className="cursor-pointer">
-              <FaPeopleGroup   size={28} className="text-gray-700 hover:text-blue-500" />
+            <div onClick={() => handleIconClick("FaPeopleGroup")} className="cursor-pointer">
+              <FaPeopleGroup size={28} className="text-gray-700 hover:text-blue-500" />
             </div>
-            <div onClick={() => handleIconClick(<LuTriangle size={28} className="text-white" />)} className="cursor-pointer">
-              <LuTriangle    size={28} className="text-gray-700 hover:text-blue-500" />
+            <div onClick={() => handleIconClick("LuTriangle")} className="cursor-pointer">
+              <LuTriangle size={28} className="text-gray-700 hover:text-blue-500" />
             </div>
-        
           </div>
         </div>
       )}
 
 
 
-
+    
 
                         <div className='w-[100%] h-[30%] flex flex-row items-center justify-start space-x-2 mt-4 '>
                                     {
