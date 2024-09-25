@@ -82,26 +82,7 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
         setStateValues()
     },[])
 
-    useEffect(()=>{
-        const saveCurrentState=async()=>{
-            console.log("my sheet json bhaesh",sheetJson)
-            const stateJson=[{sheetmethod:sheetmethod,allSheets:allSheets,selectedSheetId:selectedSheetId,sheetJson:sheetJson,sheetKeys:sheetKeys,selectedImageFiled:selectedImageFiled,showHistory:true,showimagepopup:showimagepopup,sheetname:sheetname,selectfield:selectfield}]
-            
-            console.log("new val is here",stateJson)
-           // localStorage.setItem('portfolioState',JSON.stringify(stateJson))
-            if(sheetJson.length>0 && selectedImageFiled!="")
-            {
-                await axios.post('http://localhost:8999/setportfoliostate',{
-                    organization:localStorage.getItem('organization'),
-                    portfolioState:JSON.stringify(stateJson)
     
-                })
-            }
-            
-        }
-        saveCurrentState()
-    },[sheetmethod,allSheets,selectedSheetId,sheetJson,sheetKeys,showHistory,showimagepopup,sheetname,selectfield])
-
     
 
     const handleselect=()=>{
