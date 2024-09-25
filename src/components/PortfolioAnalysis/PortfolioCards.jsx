@@ -111,21 +111,21 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
             const response=await axios.post('http://localhost:8999/sheetfromdb',{id:sheetid,organization:localStorage.getItem('organization')})
             const data=JSON.parse(response.data.data)
             
-            let value=data[0][key]
+            //let value=data[0][key]
 
-            // let value=''
-            // try{
-            //     value=parseInt(data[0][key]) 
+            let value=''
+            try{
+                value=parseInt(data[0][key]) 
                 
-            //     if(isNaN(data[0][key]))
-            //     {
-            //         value='$0'
-            //     }
-            // }
-            // catch(e)
-            // {
-            //     value='$0'
-            // }
+                if(isNaN(data[0][key]))
+                {
+                    value='$0'
+                }
+            }
+            catch(e)
+            {
+                value='$0'
+            }
             
             setvalueid(prev => {
                 const exists = prev.some(val => val.id === id); // Check if the id exists
