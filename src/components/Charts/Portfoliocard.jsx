@@ -31,17 +31,21 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     const[loading1,setLoading]=useState(false);
     const[Loading2,setLoading2]=useState(true);
     
-
-        const [selectedIcon, setSelectedIcon] = useState(null);
-        const [icon, setIcon] = useState(null); 
-        const [showPopup, setShowPopup] = useState(false);
-         
+    
+    const [selectedIcon, setSelectedIcon] = useState(null);
+    const [icon, setIcon] = useState(<RiBarChartFill size={28} className="text-white" />); 
+    const [showPopup, setShowPopup] = useState(false);
+    const [iconname,seticonname]=useState('')
       
     const uniqueIconKey = `selectedIcon-${id}`;
        
+        useEffect(()=>{
+          console.log(portfoliocardwidgitcount,"dff")
+        },[iconname])
 
         const handleIconClick = (iconName) => {
-          localStorage.setItem(uniqueIconKey, iconName); 
+         // localStorage.setItem(uniqueIconKey, iconName); 
+          seticonname(iconName)
           setIcon(getIconComponent(iconName)); 
           setShowPopup(false); 
         };
@@ -64,24 +68,23 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
           }
         };
       
-        useEffect(() => {
-          const savedIcon = localStorage.getItem(uniqueIconKey);
-          if (savedIcon) {
-            setIcon(getIconComponent(savedIcon)); // Set the icon based on the stored icon name
-          } else {
-            // Set default icon if no icon is saved in localStorage
-            setIcon(<RiBarChartFill size={28} className="text-white" />);
-          }
+        // useEffect(() => {
+        //  // const savedIcon = localStorage.getItem(uniqueIconKey);
+        //   if (savedIcon) {
+        //     setIcon(getIconComponent(savedIcon)); // Set the icon based on the stored icon name
+        //   } else {
+        //     // Set default icon if no icon is saved in localStorage
+        //     setIcon(<RiBarChartFill size={28} className="text-white" />);
+        //   }
 
         
-        }, [uniqueIconKey]);
+        // }, [uniqueIconKey]);
 
 
 
 
 
     useEffect(()=>{
-        console.log(capturingPortfoliowidgitvalues+"abc"+id);
         if(capturingPortfoliowidgitvalues!=[])
         {
             (capturingPortfoliowidgitvalues||[]).map(val=>{
@@ -90,6 +93,8 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                         
                         setlablename(val.portfoliowidgit.labelname)
                         setshowvalue(val.portfoliowidgit.showValue)
+                        seticonname(val.portfoliowidgit.portfolioicon)
+                        setIcon(getIconComponent(val.portfoliowidgit.portfolioicon))
                     }
                 }
             )
@@ -114,10 +119,11 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     {
         const settingvalue=()=>{
             let myid=id+1
-            const isFine=JSON.stringify({id:myid,labelname:labelname,showValue:showValue})===JSON.stringify({id:myid,labelname:'Enter Label',showValue:'$0'})
+            const isFine=JSON.stringify({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname})===JSON.stringify({id:myid,labelname:'Enter Label',showValue:'$0',portfolioicon:''})
            if(!isFine)
            {
-            setportfoliocardwidgitcount({id:myid,labelname:labelname,showValue:showValue})
+            
+            setportfoliocardwidgitcount({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname})
            }
         }
         if(!editLabel)
@@ -125,7 +131,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
             settingvalue()
         }
         
-    },[editLabel,showValue])
+    },[editLabel,showValue,iconname])
 
     
 

@@ -57,6 +57,8 @@ const ChartPopup = ({
   setportfoliocardwidgit,
   portfoliocardwidgitcount,
   setportfoliocardwidgitcount,
+  portfoliocardicon,
+  setportfoliocardicon
   
   
 }) => {
