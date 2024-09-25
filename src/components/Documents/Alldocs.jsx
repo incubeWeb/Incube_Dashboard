@@ -328,7 +328,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     <div className='w-[100%] h-[80%] space-y-2 rounded-md border-gray-200  bg-white flex flex-col p-4'>
        <div className='w-[100%] h-[40px] mb-4 flex flex-row space-x-2 items-center'>
             <p className='text-[18px] font-semibold w-[20%]'>Google Drive Documents</p>
-            <div className='text-blue-500 w-[10%]'><FaGoogleDrive /></div>
+           <FaGoogleDrive  size={24} className='mr-4 text-blue-500'/>
             <div className='w-[70%] flex items-center justify-end'>
                 <div className='w-[20px] h-[20px] cursor-pointer' onClick={()=>GetDriveSheets()} >
                     <IoRefresh size={20} />

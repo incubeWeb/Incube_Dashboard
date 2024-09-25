@@ -30,6 +30,7 @@ const Navigation = ({googleaccountconnected,activeField,setActiveField,hidenavba
     const NavbarRef=useRef(null)
     const settingBtnRef=useRef(null)
     const [showPopup, setShowPopup] = useState(false); 
+    const [showPopup1, setShowPopup1] = useState(false);  
       
     useEffect(()=>
     {
@@ -194,8 +195,10 @@ const Navigation = ({googleaccountconnected,activeField,setActiveField,hidenavba
                 <div className='w-[100%] h-[100%]'>
                     {
                         showgoogleconnected?
-                        <div onClick={()=>handleRemoveGoogleConnect()} className='w-[90%] cursor-pointer flex items-center justify-center h-[80%] '>
-                        <button class="w-[90%] flex items-center justify-between bg-white  shadow-md rounded-md p-2 hover:bg-gray-100 transition duration-200">
+                        <div>
+                        <div className='w-[120%] cursor-pointer mt-4 flex items-center justify-center h-[100%] '>
+                          
+                            <button onClick={()=>{setShowPopup1(true); setShowPopup(false);}}  class=" h-[110%] -mt-2 flex items-center justify-between mr-6 bg-white  shadow-md rounded-md p-2 hover:bg-gray-100 transition duration-200">
                 <div class="relative">
                  <div class="absolute inset-0"></div>
                         </div>
@@ -209,24 +212,45 @@ const Navigation = ({googleaccountconnected,activeField,setActiveField,hidenavba
                  <path fill="none" d="M0 0h48v48H0z"></path>
         </svg>
             </div>
-            <span class="text-gray-700 font-inter font-bold pr-3">Remove google connection</span>
+            <span class="text-gray-700  text-[12px] font-inter font-bold pr-3">Disconnect to google</span>
             </div>
             
             </button>
-                        </div>
+ 
+           
+            {showPopup1 && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+    <div className="relative w-[90%] md:w-[400px] bg-white shadow-md p-8 rounded-lg">
+      <AiOutlineClose
+        size={20}
+        className="absolute top-4 right-4 bg-gray-100 rounded-full w-[25px] h-[25px] cursor-pointer"
+        onClick={() => setShowPopup1(false)}
+      />
+      <div className="flex flex-col items-center mt-8">
+        <p className="text-[14px] font-inter font-semibold text-center">
+          Are you sure you want to disconnect with google?
+          <br /><br />
+          <span
+            className='font-inter text-[18px] px-6 py-2 bg-white rounded-md hover:bg-gray-100 hover:text-black cursor-pointer inline-block'
+            onClick={() => handleRemoveGoogleConnect()}
+          >
+            Ok
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+)}
+
+                            </div> 
+                            </div>
                         :
                         <div>
-                          <div className='w-[90%] cursor-pointer flex items-center justify-center h-[100%] '>
-                            
-                            
-                            {/* <p className='text-white text-[16px] font-inter font-semibold'>Connect to Google<img  src={google} className='h-[30px] w-[30px] ml-36 -mt-7'></img></p> */}
+                          <div className='w-[120%] cursor-pointer mt-4 flex items-center justify-center h-[100%] '>
                           
                                 
             
-  
-
-                          
-                            <button onClick={() => setShowPopup(!showPopup)}  class="w-[110%] h-[110%] -mt-2 flex items-center justify-between bg-white  shadow-md rounded-md p-2 hover:bg-gray-100 transition duration-200">
+                            <button onClick={() => {setShowPopup(true); setShowPopup1(false);}}  class=" h-[110%] -mt-2 flex items-center justify-between mr-6 bg-white  shadow-md rounded-md p-2 hover:bg-gray-100 transition duration-200">
                 <div class="relative">
                  <div class="absolute inset-0"></div>
                         </div>
@@ -240,7 +264,7 @@ const Navigation = ({googleaccountconnected,activeField,setActiveField,hidenavba
                  <path fill="none" d="M0 0h48v48H0z"></path>
         </svg>
             </div>
-            <span class="text-gray-700 font-inter font-bold pr-5">Connect to google</span>
+            <span class="text-gray-700  text-[12px] font-inter font-bold pr-3">Connect to google</span>
             </div>
             
             </button>
@@ -248,20 +272,31 @@ const Navigation = ({googleaccountconnected,activeField,setActiveField,hidenavba
            
 
                             </div> 
+                {showPopup && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+    <div className="relative w-[90%] md:w-[400px] bg-white shadow-md p-8 rounded-lg">
+      <AiOutlineClose
+        size={20}
+        className="absolute top-4 right-4 bg-gray-100 rounded-full w-[25px] h-[25px] cursor-pointer"
+        onClick={() => setShowPopup(false)}
+      />
+      <div className="flex flex-col items-center mt-8">
+        <p className="text-[14px] font-inter font-semibold text-center">
+          Are you sure you want to connect with google?
+          <br /><br />
+          <span
+            className='font-inter text-[18px] px-6 py-2 bg-white rounded-md hover:bg-gray-100 hover:text-black cursor-pointer inline-block'
+            onClick={() => handleGoogleConnect()}
+          >
+            Ok
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+)}
 
-                            {showPopup && (
-        <div className=" ml-80  w-[100%] bg-white shadow-md p-8 rounded-lg -mt-40">
-          <div className="flex justify-between items-center">
-         
-            <p className="text-[14px] font-inter font-semibold"   >Are you sure you want to connect with google<br/><br/><span className='ml-20 font-inter text-[18px] px-6 py-2 bg-white rounded-md hover:bg-gray-100 hover:text-black cursor-pointer inline-block'onClick={()=>handleGoogleConnect()} >Ok</span></p>
-            <AiOutlineClose
-              size={24}
-              className="cursor-pointer -mt-36"
-              onClick={() => setShowPopup(false)}
-            />
-                  </div>
-                </div>
-                )}
+
                             
                             </div>
                         } 
@@ -275,9 +310,9 @@ const Navigation = ({googleaccountconnected,activeField,setActiveField,hidenavba
             </div>
            
 
-            <div className='w-[100%] h-[20%] flex items-center justify-center border-t mb-10 border-gray-400 '>
+            <div className='w-[100%] h-[20%] flex items-center justify-center border-t mt-5 border-gray-400 '>
             
-                    <a href='/' className='w-[70%] h-[100%] flex items-center justify-center'> 
+                    <a href='/' className='w-[40%] h-[40%] flex items-center justify-center'> 
                      <div className='flex flex-row w-[100%]  h-[40%] items-center justify-center  space-x-2 ' > 
                     
                        

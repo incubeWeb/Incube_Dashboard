@@ -4,6 +4,7 @@ import OpenUnassignedGrid from '../OpenGridTemplate/OpenUnassignedGrid'
 import OpenCompleteGrid from '../OpenGridTemplate/OpenCompleteGrid'
 import OpenViewallGrid from '../OpenGridTemplate/OpenViewallGrid'
 import axios from 'axios'
+import { FaDownload } from "react-icons/fa6";
 
 function GridTemplate({realtimedealpipelinecompanyInfo,hidenavbar,realtimetabchats,setSelectedTab,selectedTab,setActiveField,Title,description,logo,status,TeamLead_status,pushedby,completed}) {
     const [openGrid,setOpenGrid]=useState(false)
@@ -52,16 +53,26 @@ function GridTemplate({realtimedealpipelinecompanyInfo,hidenavbar,realtimetabcha
 
   return (
     <div className='shadow-md md:shadow-none  h-[200px]  md:h-[233px] border-[1px] border-gray-200 rounded-md flex flex-col md:hover:shadow-xl duration-75 md:hover:border-0 select-none cursor-pointer ml-2 md:ml-0 mr-2 md:mr-2' onClick={handleOpenGrid}>
+    <div className="flex justify-end">
+  <div className='font-inter font-semibold text-[12px] bg-white p-2 shadow-md rounded-md h-[30px] w-[40px]'>
+  <FaDownload  size={18}/>
+  </div>
+</div>
         <div className='flex flex-col w-[100%] h-[76%] pl-3 pr-3 pt-5 space-y-7'>
             <div className='flex flex-row w-[100%] h-[34%] space-x-3'>
-                <div className='w-[15%] h-[100%] flex items-center'>
+                <div className='w-[15%] h-[100%] -mt-4 flex items-center'>
                     <img src={logo} className='rounded-md'/>
                 </div>
+         
                 <div className='flex flex-col justify-center md:h-[100%]'>
-                    <div className='text-[16px] font-inter font-semibold'><p>{Title}</p></div>
+                    <div className='text-[16px] font-inter font-semibold -mt-6'><p>{Title}</p></div>
                     
                 </div>
+
+              
+     
             </div>
+            
             <div className='md:flex md:w-[100%] md:h-[60px] overflow-y-hidden'>
                 <div className='text-[13px] md:h-full font-inter'>
                     <p className='md:h-full'>{description}</p>
