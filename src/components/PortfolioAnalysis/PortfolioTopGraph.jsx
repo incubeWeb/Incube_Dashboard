@@ -11,6 +11,7 @@ import PortfolioLineChart from './PortfolioLineChart'
 import { HiOutlineDotsVertical } from 'react-icons/hi'
 import PortfolioMeter from './PortfolioMeter'
 import { Bars } from 'react-loader-spinner'
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
     const [chartselectpopup,setchartselectpopup]=useState(false)
@@ -36,7 +37,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
 
     const [changeChart,setchangeChart]=useState(false)
     const [loading,setloading]=useState(true)
-
+    const[Loading1,setLoading1]=useState(true)
     const [googlesheetfiles,setgooglesheetfiles]=useState([])
 
     const RefreshSheets=()=>{
@@ -171,7 +172,8 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                 })
                 setsheetfieldselectedX(fileteredKey[0])
                 setsheetfieldselectedY(fileteredKey[0])
-                setsheetKeys(fileteredKey)       
+                setsheetKeys(fileteredKey)  
+                   
     }
 
 
@@ -195,7 +197,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                 setsheetfieldselectedX(fileteredKey[0])
                 setsheetfieldselectedY(fileteredKey[0])
                 setsheetKeys(fileteredKey)
-
+                setLoading1(false) 
     }
     const handlesheetclickedPie=async (id)=>{
         const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
@@ -215,7 +217,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
             setsheetfieldselectedX(fileteredKey[0])
             setsheetfieldselectedY(fileteredKey[0])
             setsheetKeys(fileteredKey)
-
+            setLoading1(false) 
     }
     const handlesheetclickedLine=async (id)=>{
         const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
@@ -235,7 +237,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
             setsheetfieldselectedX(fileteredKey[0])
             setsheetfieldselectedY(fileteredKey[0])
             setsheetKeys(fileteredKey)
-
+            setLoading1(false) 
     }
     const handleSheetCreateBarchart=async()=>{
         //create bar chart Logic
@@ -252,7 +254,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                 portfolioState:JSON.stringify(stateJson)
             })
             console.log("fsfsss",stateJson)
-
+            setLoading1(false) 
         console.log(chartDatatypeX,chartDatatypeY,sheetfieldselectedX,sheetfieldselectedY,"pro bha")
     }
     const handleSheetCreatePiechart=async()=>{
@@ -504,12 +506,19 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">X-axis</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedX(e.target.value)}>
-                                        {
+                                      {Loading1 ? (
+                     <option value="">
+                 <div className="flex items-center">
+                  <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+                 Loading...
+                </div>
+                </option>
+                 ) : (
                                           
                                           (sheetKeys||[]).map(val=>
                                             <option key={val.id}>{val}</option>
                                           )
-                                        }
+                                       ) }
                                       </select>
                                       <select value={chartDatatypeX} onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
@@ -519,11 +528,18 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Y-axis</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedY(e.target.value)}>
-                                        {
+                                      {Loading1 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+        Loading...
+      </div>
+    </option>
+  ) : (
                                           (sheetKeys||[]).map(val=>
                                             <option key={val.id}>{val}</option>
                                           )
-                                        }
+                                       ) }
                                       </select>
                                       <select value={chartDatatypeY} onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
@@ -531,7 +547,10 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                                       </select>
                                     </div>
                                     <div onClick={()=>handleSheetCreateBarchart()} className="cursor-pointer select-none w-[100%] h-[40px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
-                                        <p className="text-[14px] text-white">Create the Bar chart</p>
+                                    {Loading1 ? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+          ) : (
+                                        <p className="text-[14px] text-white">Create the Bar chart</p>)}
                                     </div>
                             </div>
                     </div>
@@ -552,12 +571,19 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Label</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedX(e.target.value)}>
-                                        {
+                                      {Loading1 ? (
+                     <option value="">
+                 <div className="flex items-center">
+                  <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+                 Loading...
+                </div>
+                </option>
+                 ) : (
                                           
                                           (sheetKeys||[]).map(val=>
                                             <option key={val.id}>{val}</option>
                                           )
-                                        }
+                                       ) }
                                       </select>
                                       <select value={chartDatatypeX} onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
@@ -567,11 +593,18 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Value</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedY(e.target.value)}>
-                                        {
+                                      {Loading1 ? (
+                     <option value="">
+                 <div className="flex items-center">
+                  <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+                 Loading...
+                </div>
+                </option>
+                 ) : (
                                           (sheetKeys||[]).map(val=>
                                             <option key={val.id}>{val}</option>
                                           )
-                                        }
+                                       )}
                                       </select>
                                       <select value={chartDatatypeY} onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
@@ -579,7 +612,10 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                                       </select>
                                     </div>
                                     <div onClick={()=>handleSheetCreatePiechart()} className="cursor-pointer select-none w-[100%] h-[40px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
-                                        <p className="text-[14px] text-white">Create the Pie chart</p>
+                                    {Loading1 ? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+          ) : (
+                                        <p className="text-[14px] text-white">Create the Pie chart</p>)}
                                     </div>
                             </div>
                     </div>
@@ -600,12 +636,19 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">X-axis</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedX(e.target.value)}>
-                                        {
+                                      {Loading1 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+        Loading...
+      </div>
+    </option>
+  ) : (
                                           
                                           (sheetKeys||[]).map(val=>
                                             <option key={val.id}>{val}</option>
                                           )
-                                        }
+                                        )}
                                       </select>
                                       <select value={chartDatatypeX} onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
@@ -615,11 +658,18 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Y-axis</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedY(e.target.value)}>
-                                        {
+                                      {Loading1 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+        Loading...
+      </div>
+    </option>
+  ) : (
                                           (sheetKeys||[]).map(val=>
                                             <option key={val.id}>{val}</option>
                                           )
-                                        }
+                                       ) }
                                       </select>
                                       <select value={chartDatatypeY} onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
@@ -627,7 +677,10 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                                       </select>
                                     </div>
                                     <div onClick={()=>handleSheetCreateLinechart()} className="cursor-pointer select-none w-[100%] h-[40px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
-                                        <p className="text-[14px] text-white">Create the Line chart</p>
+                                    {Loading1 ? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+          ) : (
+                                        <p className="text-[14px] text-white">Create the Line chart</p>)}
                                     </div>
                             </div>
                     </div>
