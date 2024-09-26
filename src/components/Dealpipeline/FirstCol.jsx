@@ -41,10 +41,10 @@ function FirstCol({realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,rea
       })
       
       const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
-      console.log("filteredData",filteredData)
+    
       setCompanyData(filteredData);
     } catch (error) {
-      console.error('Error fetching company data:', error);
+      
     }
   };
 

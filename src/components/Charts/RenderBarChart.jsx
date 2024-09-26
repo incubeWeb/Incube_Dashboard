@@ -31,8 +31,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
     const email=localStorage.getItem('email');
     const organization=localStorage.getItem('organization');
     const position=JSON.stringify(boxes.filter((box,index)=>index!=id));
-    console.log(boxes);
-    console.log("id",id);
+   
     if(boxes.length===0)
     {
       await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization});
@@ -114,18 +113,18 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
       const Sheet_response=await axios.post('http://localhost:8999/investmentsheetfromdb',{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
       
       if(fromApi && !isSheetchart) { 
-        console.log("1")
+       
         const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
       }
       else if(fromApi && isSheetchart && clickedsheetname.length > 0) {
-        console.log("2bar")
+       
         if(fromdrive)
           {
             setitsfromdatabase(true)
             const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
-              console.log(response,"mysterious")
+          
   
               if(response.data.status==200)
               {
@@ -162,12 +161,12 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
           }
       }
       else if (isSheetchart && clickedsheetname.length > 0) {
-        console.log("3d")
+  
         if(fromdrive)
           {
             setitsfromdatabase(true)
             const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
-              console.log(response,"mysterious")
+           
   
               if(response.data.status==200)
               {
@@ -204,13 +203,13 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
           }
       }
       else if(isSheetchart && clickedsheetname.length <= 0) {
-        console.log("4")
+     
         const convertedData = convertDataTypes(data01[0], {name: chartdatatypex, uv: chartdatatypey});
         setmydata(convertedData);
       }
       else {
         const convertedData = convertDataTypes(data01[0], fieldConversionsNormal);
-        console.log("5")
+       
         setmydata(convertedData);
       }
     };

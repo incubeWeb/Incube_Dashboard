@@ -52,9 +52,7 @@ const PortfolioPieChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfie
         settingValuesofData();
     }, [sheetJson, sheetfieldselectedX, sheetfieldselectedY]);
 
-    useEffect(() => {
-        console.log("Data:", JSON.stringify(data));
-    }, [data]);
+
 
     const fieldConversions = {
         name: 'string',

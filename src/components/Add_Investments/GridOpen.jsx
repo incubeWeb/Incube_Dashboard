@@ -56,7 +56,7 @@ function GridOpen({hidenavbar,companyName,description,handleOpenGrid}) {
                 search:search,
                 organization:organization
             })
-            console.log("bha",data.data.data)
+            
             if(data.data.data.length!=0)
             {
             setTotalCards(data.data.data)

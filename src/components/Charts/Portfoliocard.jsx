@@ -40,7 +40,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     const uniqueIconKey = `selectedIcon-${id}`;
        
         useEffect(()=>{
-          console.log(portfoliocardwidgitcount,"dff")
+          
         },[iconname])
 
         const handleIconClick = (iconName) => {
@@ -207,7 +207,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                 }
                 )
             })
-            console.log("this",fileteredKey)
+           
             setsheetfieldselected(fileteredKey[0])
             setsheetKeys(fileteredKey)
             setLoading2(false)

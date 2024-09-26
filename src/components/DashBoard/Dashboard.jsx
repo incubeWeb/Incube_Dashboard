@@ -114,7 +114,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
         })
       }
       
-   // console.log(openChatbar)
+  
     if(openChatbar)
     {
       handleOpenChat()
@@ -210,8 +210,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
           const chartYdatatype=d.chartDatatypeY
           const isSheetChart=d.isSheetChart
           const portfoliowidgit=d.portfoliowidgitcount || []
-          console.log(portfoliowidgit,"nice")
-          console.log(isSheetChart,"bro")
+      
           setisSheetChart(isSheetChart)
           setchartDatatypeFromApiX(prev=>[...prev,{chartDatatypeX:chartXdatatype}])
           setchartDatatypeFromApiY(prev=>[...prev,{chartDatatypeY:chartYdatatype}])
@@ -244,7 +243,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
         const organization=localStorage.getItem('organization')
         
         let position=JSON.stringify(boxes)
-        console.log("my boxes",boxes.length)
+
 
         if(boxes.length>0)
         {
@@ -261,7 +260,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
   }, [boxes]);
 
   useEffect(()=>{
-    console.log("meow",portfoliocardwidgitcount)
+  
     
       setBoxes(prev=>
       prev.map(b=>
@@ -276,7 +275,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
 
   const addBox = (chartType) => {
       setaddingBox(!addingBox)
-      //console.log(piechartCount)
+   
       
     
   };
@@ -349,7 +348,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
 
     onResizeStop={(e, direction, ref, delta, position) => setSize(box.id, ref, position)}
   >
-            {console.log("its is type os")}
+          
             {(() => {
             try {
               switch (box.type) {
@@ -506,7 +505,6 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
             } catch (error) 
             {
               
-              console.log(error)
               setTimeout(()=>{
                 handleretry()
               },1000)

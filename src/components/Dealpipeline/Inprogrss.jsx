@@ -18,8 +18,7 @@ function Inprogrss({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
       if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
         {
           const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-          //console.log(response.data.data)
-          console.log(response.data.data)
+        
           const filteredData=response.data.data.filter(val=>val.status=='In Progress' && val.completed=='incomplete')
           setcompData(filteredData)
         }
@@ -36,7 +35,7 @@ function Inprogrss({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
           })
           
           const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
-          console.log("filteredDataCompleted",filteredData)
+        
           const morefilteredData=filteredData.filter(val=>val.TeamLead_status=='In Progress' && val.completed=='incomplete')
           setcompData(morefilteredData);
         }
@@ -54,8 +53,7 @@ function Inprogrss({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
       if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
         {
           const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-          //console.log(response.data.data)
-          console.log(response.data.data)
+
           const filteredData=response.data.data.filter(val=>val.status=='In Progress' && val.completed=='incomplete')
           setcompData(filteredData)
         }
@@ -72,7 +70,7 @@ function Inprogrss({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
           })
           
           const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
-          console.log("filteredDataCompleted",filteredData)
+
           const morefilteredData=filteredData.filter(val=>val.TeamLead_status=='In Progress' && val.completed=='incomplete')
           setcompData(morefilteredData);
         }

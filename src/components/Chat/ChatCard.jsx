@@ -19,7 +19,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
             
             doc.data.data.map(d=>
                 {let chat=JSON.parse(d.chats)
-                console.log(chat)
+                
                 setChat(chat)
                 }
             )

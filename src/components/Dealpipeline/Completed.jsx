@@ -19,8 +19,7 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
       if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
         {
           const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-          //console.log(response.data.data)
-          console.log(response.data.data)
+   
           const filteredData=response.data.data.filter(val=>val.completed=='completed')
           setcompData(filteredData)
         }
@@ -57,8 +56,7 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
       if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
         {
           const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-          //console.log(response.data.data)
-          console.log(response.data.data)
+       
           const filteredData=response.data.data.filter(val=> val.completed=='completed')
           setcompData(filteredData)
         }
@@ -75,7 +73,7 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
           })
           
           const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
-          console.log("filteredDataCompleted",filteredData)
+        
           const morefilteredData=filteredData.filter(val=> val.completed=='completed')
           setcompData(morefilteredData);
         }

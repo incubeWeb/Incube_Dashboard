@@ -24,7 +24,7 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
       assignedBy:localStorage.getItem('email'),
       mainorganization:"Organization1"
     })
-    console.log(response,"this")
+    
    setassignedDeals(response.data.data)
   }
   useEffect(()=>{
@@ -53,8 +53,8 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
     const email=localStorage.getItem('email')
     const organization=localStorage.getItem('organization')
     const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
-    console.log(boxes)
-    console.log("id",id)
+    
+ 
     if(boxes.length===0)
     {
       await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization})
@@ -70,7 +70,7 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
 
   const convertTime=(time)=>{
     const T=new Date(Number(time))
-    console.log(time)
+
     return T.toLocaleTimeString()
   }
   return (

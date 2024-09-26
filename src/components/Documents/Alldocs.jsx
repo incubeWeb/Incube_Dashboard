@@ -46,9 +46,9 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         if(response.data.status==200 && response.data.message!="no refresh token found")
         {
             const files=response.data.data
-            console.log(response.data.gmail)
+            
             setgmailname(response.data.gmail)
-            // console.log("my fle",files)
+       
             setgoogledriveSheets(files)
             
         }
@@ -68,9 +68,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         
     }
 
-    useEffect(()=>{
-        console.log(allDocs,"my dc")
-    },[allDocs])
+  
 
     useEffect(()=>{
         
@@ -83,7 +81,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
                 email:localStorage.getItem('email'),
                 organization:localStorage.getItem('organization')
             })
-            console.log("this is getted data",response.data.data)
+      
 
         }
         file()
@@ -112,7 +110,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     }
 
     const handleDelete=async (id)=>{
-        console.log(id)
+       
         const response=await axios.post('http://localhost:8999/deleteUploadedfile',{id:id,doneBy:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
         const response2=await axios.post('http://localhost:8999/delete-private-file',{doc_id:id,organization:localStorage.getItem('organization')})
         if(response.data.status==200 &&response2.data.status==200)
@@ -128,11 +126,11 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
             const filteredSet1=response.data.data.filter(doc=>!set2DocsIds.includes(doc._id))
             const tosetdata=[...response2.data.data,...filteredSet1]
             setAllDocs(tosetdata)
-            console.log(privatefiles,"this")
+           
         }
     }
     const handleView=async (id,name)=>{
-        console.log(id)
+    
         setid(id)
         const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
         const data=JSON.parse(response.data.data)

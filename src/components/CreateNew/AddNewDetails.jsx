@@ -42,7 +42,7 @@ function AddNewDetails({hidenavbar, openAddNewWindow ,CompanyName, handleTotalCa
         Tab:`Tab${openedTab}`,
         organization:localStorage.getItem('organization')
       }));
-    console.log(JSON.stringify(data_, null, 2));
+   
     const output=JSON.stringify(data_, null, 2)
     await axios.post('http://localhost:8999/addNewDetail',{
       data:output,

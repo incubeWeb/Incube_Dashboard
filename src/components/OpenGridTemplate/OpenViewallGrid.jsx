@@ -62,7 +62,7 @@ function OpenViewallGrid({hidenavbar,setActiveField,companyName,description,hand
 
     useEffect(()=>{
         const fun=async()=>{
-            console.log(Tabs)
+            
             await axios.post('http://localhost:8999/setopenedTabs',{count:"uniqueIdentifier",tabs:JSON.stringify(Tabs),TabsCount:TabCount,organization:localStorage.getItem('organization')})
         }
         fun()

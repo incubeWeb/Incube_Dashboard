@@ -25,7 +25,7 @@ const PortfolioTop = ({realtimeportfoliostate,hidenavbar,sheetedited,selectedShe
            // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
            const stateValues=JSON.parse(data)||[]
            setvalueid(stateValues)
-           console.log(stateValues,"sheet edited")
+        
         }
         getTopCardsValues()
 
@@ -40,7 +40,7 @@ const PortfolioTop = ({realtimeportfoliostate,hidenavbar,sheetedited,selectedShe
        // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
        const stateValues=JSON.parse(data)||[]
        setvalueid(stateValues)
-       console.log(stateValues)
+     
     }
     getTopCardsValues()
   },[])

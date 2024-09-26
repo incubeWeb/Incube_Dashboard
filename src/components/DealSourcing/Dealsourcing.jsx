@@ -92,7 +92,7 @@ const Dealsourcing = ({hidenavbar}) => {
   useEffect(() => {
     if (companies[0]?.Similar_Names) {
       const ProcessData = companies[0].Similar_Names.map((v, index) => {
-        console.log("data length: " + companies[0].Similar_Names.length);
+
         // Further processing here
         return v;
       });
@@ -100,15 +100,13 @@ const Dealsourcing = ({hidenavbar}) => {
       // Set the length of ProcessData in state
       setProcessDataLength(ProcessData.length);
     } else {
-      console.log("Similar_Names is not defined yet.");
+     
     }
   }, [companies]); // This effect runs when 'companies' changes
 
 
 
-  useEffect(()=>{
-    console.log(JSON.stringify(value+1).split(" ")[1]+" "+JSON.stringify(value+1).split(" ")[2]+" "+JSON.stringify(value+1).split(" ")[3])
-  },[value])
+  
 
   const handleShowCalendar=()=>{
     setShowCalendar(!showCalendar)

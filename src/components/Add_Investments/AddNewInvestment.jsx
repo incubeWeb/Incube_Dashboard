@@ -46,7 +46,7 @@ function AddNewInvestment({hidenavbar, openAddNewWindow ,CompanyName, handleTota
   const setSuggestionInField=(fieldval,fieldid)=>{
 
     handleChange(fieldid,'title',fieldval)
-    console.log(suggested)
+ 
   }
 
   const handleSave = async() => {
@@ -89,7 +89,7 @@ function AddNewInvestment({hidenavbar, openAddNewWindow ,CompanyName, handleTota
     });
   };
   const checkusedsuggestion=(val)=>{
-    console.log('thisi ',val)
+ 
     let isPresent=false
    sections
       .filter(section => section.title.trim() !== '')
@@ -99,7 +99,7 @@ function AddNewInvestment({hidenavbar, openAddNewWindow ,CompanyName, handleTota
         isPresent=true
        }
       })
-    console.log("fsds",isPresent)
+ 
     return isPresent
   }
 

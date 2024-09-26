@@ -62,7 +62,7 @@ const PrivatePopup = ({hidenavbar,setfileprivate,docId}) => {
       setcheckedUsers(prev=>[...prev,{id:val._id,value:false}])
       }
     })
-    console.log(response.data.data,"mydata")
+ 
 
   }
   useEffect(()=>{

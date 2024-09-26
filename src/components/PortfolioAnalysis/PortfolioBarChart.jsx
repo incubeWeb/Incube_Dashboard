@@ -4,21 +4,16 @@ import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAx
 const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldselectedX,sheetfieldselectedY}) => {
     const [data,setdata]=useState([])
 
-    useEffect(()=>{
-      console.log("mysgeet",sheetJson)
-      console.log(sheetfieldselectedX,chartDatatypeX)
-      console.log("y",sheetfieldselectedY,chartDatatypeY)
-    },[sheetJson,sheetfieldselectedX,sheetfieldselectedY,chartDatatypeX,chartDatatypeY])
-
+  
     useEffect(()=>{
       const settingValuesofData=async()=>{
             const mydata=[]
             sheetJson.map(val=>{
                 mydata.push({name:val[sheetfieldselectedX],uv:val[sheetfieldselectedY]})
             })
-            console.log("final my data",mydata)
+           
             const converteddata=convertDataTypes(mydata, fieldConversions);
-            console.log("converteddata",converteddata)
+           
             setdata(converteddata)
     }
     settingValuesofData()
@@ -30,9 +25,9 @@ const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldse
                 sheetJson.map(val=>{
                     mydata.push({name:val[sheetfieldselectedX],uv:val[sheetfieldselectedY]})
                 })
-                console.log("final my data",mydata)
+             
                 const converteddata=convertDataTypes(mydata, fieldConversions);
-                console.log("converteddata",converteddata)
+            
                 setdata(converteddata)
         }
         settingValuesofData()

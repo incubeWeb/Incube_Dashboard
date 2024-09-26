@@ -36,7 +36,7 @@ const Addusers = ({setActiveField,hidenavbar}) => {
             }
             else if(searchUser.includes('\\'))
             {
-                console.log(searchUser)
+               
                 setAllusers([])
             }
             else{

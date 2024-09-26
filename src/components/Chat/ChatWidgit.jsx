@@ -39,7 +39,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
         organization:localStorage.getItem('organization')
       })
       const users=response.data.data
-      //console.log(users)
+   
       setUsers(users)
     }
     
@@ -54,8 +54,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     const email=localStorage.getItem('email')
     const organization=localStorage.getItem('organization')
     const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
-    console.log(boxes)
-    console.log("id",id)
+
     if(boxes.length===0)
     {
       await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization})
@@ -74,7 +73,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     const fetchall=async()=>{
       const response=await axios.post('http://localhost:8999/fetchallusers',{organization:localStorage.getItem('organization')})
       const users=response.data.data
-      console.log("total users",users)
+    
       setUsers(users)
       const UserChatpositionRes=await axios.post('http://localhost:8999/chatwidgituserpositionvalues',{
         email:localStorage.getItem('email')+`${id}`,
@@ -82,7 +81,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
       })
       if(UserChatpositionRes.data.status==200)
       {
-        console.log('i',UserChatpositionRes.data.data)
+       
         const ans=UserChatpositionRes.data.data
         setUsers(ans)
       }
@@ -98,7 +97,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
   },[])
 
   useEffect(()=>{
-    console.log('openuse',openuser)
+   
     const setChats=async()=>{
 
         let response1=await axios.post('http://localhost:8999/readChat',{
@@ -116,12 +115,12 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
         response1.data.data.map(response=>
           dataS.push({sender:response.sender,message:response.message,time:response.time})
         )
-        console.log("Sendedchats",dataS)
+        
         setsendedMsg(dataS)
         response2.data.data.map(response=>
           dataR.push({sender:response.sender,message:response.message,time:response.time})
         )
-        console.log("receivedChats",dataR)
+       
         setreceivedMsg(dataR)    
     }
     try{
@@ -136,7 +135,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
 
   useEffect(()=>{
     const chatingData=()=>{
-      console.log(realtimeChat.fullDocument)
+      
       if(realtimeChat.fullDocument.sender==localStorage.getItem('email') && realtimeChat.fullDocument.receiver==openuser)
         {
           setsendedMsg(prev=>[...prev,{sender:realtimeChat.fullDocument.sender,message:realtimeChat.fullDocument.message,time:realtimeChat.fullDocument.time}])
@@ -150,17 +149,16 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
       chatingData()
     }catch(e)
     {
-      console.log('no new msg',e)
+      
     }
 
   },[realtimeChat])
 
   useEffect(()=>{
     
-    console.log("here",[...sendedMsg,...receivedMsg].sort((a,b)=>{
-      console.log('time',typeof(a.time))
+   
       parseInt(a.time)-parseInt(b.time)
-    }))
+    
   },[sendedMsg,receivedMsg])
  
 
@@ -183,7 +181,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
 
   const handleSendChat=async(e)=>
     { 
-      console.log("tset",msg)
+      
       e.stopPropagation()
       const response=await axios.post('http://localhost:8999/sendChat',{
         sender:localStorage.getItem('email'),

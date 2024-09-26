@@ -17,8 +17,7 @@ function Viewall({realtimedealpipelinecompany,filter, selectedTab,setActiveField
       if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
         {
           const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-          //console.log(response.data.data)
-          console.log(response.data.data)
+        
           
           setcompData(response.data.data)
         }
@@ -35,7 +34,7 @@ function Viewall({realtimedealpipelinecompany,filter, selectedTab,setActiveField
           })
           
           const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
-          console.log("filteredData",filteredData)
+       
           setcompData(filteredData);
         }
     }
@@ -50,8 +49,7 @@ function Viewall({realtimedealpipelinecompany,filter, selectedTab,setActiveField
       if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
         {
           const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-          //console.log(response.data.data)
-          console.log(response.data.data)
+         
           
           setcompData(response.data.data)
         }
@@ -68,7 +66,7 @@ function Viewall({realtimedealpipelinecompany,filter, selectedTab,setActiveField
       })
       
       const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
-      console.log("filteredData",filteredData)
+   
       setcompData(filteredData);
     }
     }

@@ -27,9 +27,6 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
 
 
 
-    useEffect(()=>{
-        console.log(Tabs,"my tabs")
-    },[Tabs])
 
     const openAddNewWindow=()=>{
         setAddnewWindow(!AddNewWindow)

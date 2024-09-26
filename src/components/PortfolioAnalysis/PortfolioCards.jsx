@@ -40,7 +40,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
             
             const response1=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
             const data1=JSON.parse(response1.data.data)
-            console.log(data1,'mydat')
+           
             const JsonData=data1
             const filterdata=JsonData.filter(val=>val.id!=id)
             const new_data=[{id:id,showValue:showValue,labelname:labelname}]
@@ -92,7 +92,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
     useEffect(()=>
     {
         const applyRealchanges=async()=>{
-            console.log("hi Bhavesh")
+         
             const organization=`${localStorage.getItem('organization')}_Topcards`
             
             const response1=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
@@ -107,7 +107,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
                 }
             })
             
-            console.log(key,"thifsdfsdfsfss")
+       
             const response=await axios.post('http://localhost:8999/sheetfromdb',{id:sheetid,organization:localStorage.getItem('organization')})
             const data=JSON.parse(response.data.data)
             
@@ -146,7 +146,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
 
     useEffect(()=>{
         const getTopCardsValues=async()=>{
-            console.log('my',valueid)
+         
             valueid.map(val=>{
                 
                 if(val.id==id)
@@ -261,9 +261,9 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
         if(response.data.status==200)
         {
         const allJson=response.data.data
-        console.log(response)
+      
         await Promise.all(allJson)
-        console.log('thsi')
+    
         const keys=allJson[0].data
         const showdata=allJson[1].data[0]
         const finalJson=[]
@@ -287,7 +287,6 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
                     )
                 })
 
-            console.log("adu",fileteredKey)
             setsheetfieldselected(fileteredKey[0])
             setsheetKeys(fileteredKey)
             setLoading2(false)

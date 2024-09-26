@@ -12,8 +12,7 @@ const Timeline = ({id,boxes,setBoxes}) => {
         const email=localStorage.getItem('email')
         const organization=localStorage.getItem('organization')
         const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
-        console.log(boxes)
-        console.log("id",id)
+     
         if(boxes.length===0)
         {
           await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization})
@@ -43,7 +42,7 @@ const Timeline = ({id,boxes,setBoxes}) => {
         const data=JSON.parse(item.updateIs)
         const time=data.fullDocument.time
         toSend=convertTimestampToReadableTime(parseInt(time))
-        console.log(toSend)
+      
         return toSend || ""
     }
     const DateData=(item)=>{
@@ -58,7 +57,7 @@ const Timeline = ({id,boxes,setBoxes}) => {
             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
         ];
         toSend=`${monthNames[month]} ${date}`
-        console.log(toSend)
+      
         return toSend || ""
     }
 
@@ -95,7 +94,7 @@ const Timeline = ({id,boxes,setBoxes}) => {
             {
                 const valueStatus=Object.keys(data.updateDescription.updatedFields)
                 valueStatus.map(stat=>{
-                    console.log(valueStatus[stat])
+                 
                     if(stat=='status' &&data.updateDescription.updatedFields[stat]=='In Progress')
                     {
                         toSend=`notshow`
@@ -131,37 +130,37 @@ const Timeline = ({id,boxes,setBoxes}) => {
                
                const changes=JSON.parse(obj[3])
                
-               console.log("ff",changes)
+             
                 
                 changes.map((change)=>{
-                    console.log("dd",change)
+                
                     if(change=='role')
                     {
-                        console.log("hier")
+                       
                         toSend+=`${email} has been updated by ${doneBy} value ${change} has been updated to ${role}`
                     }
                     if(change=='password')
                     {
-                        console.log('hfsi',role)
+                     
                         toSend+=`${email} has been updated by ${doneBy} value ${change} has been updated to ${pass}`
-                        console.log("tu se",toSend)
+                       
                     }
                 })
                
                }catch(e)
                {
                     toSend=''
-                    console.log("re",raw)
+                   
                     const filter2=raw.split('-')[1]
                     const semi_filter2=filter2.split('],[')
                     const obj2=JSON.parse("["+semi_filter2[1])
                    if(obj2.length>0)
                    {
                     obj2.map((change)=>{
-                        console.log("dd",change)
+                   
                         if(change=='role')
                         {
-                            console.log("hier")
+                           
                             toSend+=`${email} has been updated by ${doneBy} value ${change} has been updated to ${role}, `
                         }
                         if(change=='password')
@@ -285,7 +284,7 @@ const Timeline = ({id,boxes,setBoxes}) => {
 </div>
 
   )}catch(e){
-    console.log("erroe",e)
+    
     return(
         <>error</>
     )

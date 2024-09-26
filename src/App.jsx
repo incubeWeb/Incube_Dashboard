@@ -50,10 +50,9 @@ function App() {
         {
           setLoginIn(true)
         }
-        console.log('connecting to socket')
-        console.log('connecting to databaseChange')
+       
         const response=await axios.post('http://localhost:8999/gettimeline',{organization:localStorage.getItem('organization')})
-        console.log(response)
+        
         if(response.data.data.length>0)
         {
           response.data.data.map(item=>
@@ -63,7 +62,7 @@ function App() {
         }
 
         socket2.on('Googleconnected',(change)=>{
-          console.log("google conn",change)
+          
           setgoogleaccountconnected(change)
         })
 
@@ -94,13 +93,13 @@ function App() {
           }
           if(change.ns.coll=='PortfolioState')
           {
-            console.log("mychange")
+            
             setrealtimeportfoliostate(change)
           }
 
         })
         socket.on('chats',(chat)=>{
-          console.log('this is chat',chat)
+          
           setrealtimeChat(chat)
         })
 
@@ -109,7 +108,7 @@ function App() {
         })
 
         socket.on('sheetedited',(data)=>{
-          console.log("this data sheet edt",data)
+      
           setsheetedited(data)
         })
       

@@ -144,9 +144,6 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
         });
     });
 
-    useEffect(() => {
-        console.log(selects);
-    }, [selects]);
 
     return (
         <div className={`${hidenavbar?' w-[100%] pl-[54px]':'ml-[20%] w-[80%]'} pt-[50px] h-screen z-50 space-y-7 bg-white absolute top-0 right-0 overflow-hidden p-[23px] flex flex-col cursor-default`} onClick={handleBubbling}>

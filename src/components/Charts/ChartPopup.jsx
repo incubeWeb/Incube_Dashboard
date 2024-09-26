@@ -104,7 +104,7 @@ const ChartPopup = ({
   const handleFileChange = (event) => {
     event.stopPropagation()
     const file = event.target.files[0];
-    console.log(file)
+   
     if (file) {
         setSelectedFile(file);
         setupload(!upload)
@@ -128,24 +128,23 @@ const ChartPopup = ({
         formData.append('CompanyName',`DB${Date.now()}_${chart}`)
         try {
             const response=await axios.post('http://localhost:8999/uploadsheetFile', formData);
-            console.log('File uploaded successfully',response.data.data);
+
             const data=JSON.parse(response.data.data)
             
             setdbsheetdata(data)
             setDbSheetIntRows(Object.keys(data[0]))
-            console.log(sheetdbdata)
-            console.log(dbSheetIntRows)
+         
             setSelectedFile(null);
         } catch (error) {
             console.error('Error uploading file', error);
         }
     }
     setdbsheetrows(!showDbSheetRows)
-    console.log('dbsheetrow',showDbSheetRows)
+    
   };
 
   useEffect(()=>{
-    console.log(dbSheetIntRows,"sheets")
+    
     setselectedSheetxAxis(dbSheetIntRows[0])
     setselectedSheetYaxis(dbSheetIntRows[0])
     setLoading2(false)
@@ -157,7 +156,7 @@ const ChartPopup = ({
   const selectedSheetFromDatabase=async(e)=>{
     e.stopPropagation()
     setselectedDbsheet(!selectedDbSheet)
-    console.log('selectedhseeetfromdat',selectedsheetfromdbname)
+
     
     const response=await axios.post('http://localhost:8999/sheetfromdb',{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
     if(response.data.status==200)
@@ -167,21 +166,21 @@ const ChartPopup = ({
       const dbcompanyname=response.data.CompanyName
       setclickedSheetname(name)
       setdbCompanyName(dbcompanyname)
-      console.log("hi",dbcompanyname,"---")
+      
       setdbsheetdata(data)
       setDbSheetIntRows(Object.keys(data[0]))
       setSelectedFile(null);
     }
     else{
       const response2=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetfromdbname,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
-            console.log(response2,"mysterious")
+            
             
             if(response2.data.status==200)
             {
                 const allJson=response2.data.data
-                console.log(allJson,'this is allJson')
+       
                 const keys=allJson[0].data
-                console.log(keys,"this is kseys")
+              
                 const finalJson=[]
                 allJson.map(val=>{
                     if(val.rowIndex!=1)
@@ -198,7 +197,7 @@ const ChartPopup = ({
                 setdbCompanyName(dbcompanyname)
                 setdbsheetdata(data)
                 setDbSheetIntRows(Object.keys(data[0]))
-                console.log(Object.keys(data[0]))
+          
                 setSelectedFile(null);    
             }
             else{
@@ -218,7 +217,7 @@ const ChartPopup = ({
     setclickedGoogle(false)
     setClickedDatabase((prev)=>!prev)
     const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
-    console.log(response.data.data,"db")
+   
     setpresentSheets(response.data.data)
     setLoading1(false);
     response.data.data.map((val,index)=>
@@ -230,7 +229,7 @@ const ChartPopup = ({
   }
 
   const handleGoogleFunctionality=async(e)=>{
-    console.log('Handling google')
+    
 
     e.stopPropagation();
     setClickedDatabase((prev)=>!prev)
@@ -244,8 +243,7 @@ const ChartPopup = ({
   {
       const files=response3.data.data
       setpresentSheets(files)
-      console.log(files,'sheet')
-      console.log(response3.data.data[0].id,'this is key')
+     
       setselectedsheetfromdbname(response3.data.data[0].id)
         
       
@@ -427,9 +425,8 @@ const ChartPopup = ({
       setchartDatatypeY('string')  
  }
  const handleSheetCreateAreachartDB=()=>{
-  console.log('values are',selectedSheetXaxis,selectedSheetYaxis)
-    
-    console.log("data01 area",data01)
+
+   
     setareachartcount([{values:data01}])
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
@@ -456,9 +453,9 @@ const ChartPopup = ({
 
 
  const handleSheetCreateAreachart=()=>{
-  console.log('values are',selectedSheetXaxis,selectedSheetYaxis)
+
     
-    console.log("data01 area",data01)
+
     setareachartcount([{values:data01}])
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
@@ -485,9 +482,7 @@ const ChartPopup = ({
 
  const handleSheetCreateBarchartDB=()=>{
 
-  console.log('values are',selectedSheetXaxis,selectedSheetYaxis)
-    
-  console.log("data01 area",data01)
+
   setbarchartcount([{values:data01}])
     const lastBox = boxes[boxes.length - 1];
     const newBox = {
@@ -514,9 +509,7 @@ const ChartPopup = ({
 
  const handleSheetCreateBarchart=()=>{
 
-  console.log('values are',selectedSheetXaxis,selectedSheetYaxis)
-    
-  console.log("data01 area",data01)
+
   setbarchartcount([{values:data01}])
     const lastBox = boxes[boxes.length - 1];
     const newBox = {
@@ -544,7 +537,7 @@ const ChartPopup = ({
 
   const handleCreatePiechart=()=>{
       xAxisValues.map((val,index)=>setdata01(prev=>[...prev,{name:val,value:parseInt(yAxisValues[index])}]))
-      console.log("data01",data01)
+    
       setpiechartcount(prev=>[...prev,{values:[...data01,...xAxisValues.map((val,index)=>({name:val,value:parseInt(yAxisValues[index])}))]}])
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
@@ -690,7 +683,7 @@ const ChartPopup = ({
   };
 
   useEffect(() => {
-    console.log(yAxis);
+
   }, [yAxis]);
 
   const handleManualCreation = (e) => {
@@ -707,7 +700,7 @@ const ChartPopup = ({
   };
   const handlesetselecteddbsheetname=(e)=>{
     e.stopPropagation()
-    console.log(e.target.value)
+    
     setselectedsheetfromdbname(e.target.value)
   }
 

@@ -68,7 +68,7 @@ const Login = ({ setLoginIn }) => {
         password: password,
         organization:organization
       });
-      console.log(response.data.status)
+     
       const status = response.data.status;
       if (status == 200) {
         localStorage.setItem('login',true)

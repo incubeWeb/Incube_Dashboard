@@ -17,8 +17,7 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
       if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
       {
         const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-        //console.log(response.data.data)
-        console.log(response.data.data)
+   
         const filteredData=response.data.data.filter(val=>val.status=="Unassigned")
         setcompData(filteredData)
       }
@@ -35,9 +34,9 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
         })
         
         const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
-        console.log("filteredData",filteredData)
+     
         const morefilteredData=filteredData.filter(val=>val.TeamLead_status=='Unassigned' && val.completed!='completed')
-        console.log("more filtered",morefilteredData)
+     
         setcompData(morefilteredData);
       }
     }
@@ -52,8 +51,7 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
       if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
         {
           const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-          //console.log(response.data.data)
-          console.log(response.data.data)
+       
           const filteredData=response.data.data.filter(val=>val.status=="Unassigned")
           setcompData(filteredData)
         }
@@ -70,7 +68,7 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
           })
           
           const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
-          console.log("filteredData",filteredData)
+        
           const morefilteredData=filteredData.filter(val=>val.TeamLead_status=='Unassigned'&& val.completed!='completed')
           setcompData(morefilteredData);
         }

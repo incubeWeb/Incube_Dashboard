@@ -108,19 +108,17 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       setselectedvalueaxis(selectedYaxis);
       const Sheet_response = await axios.post('http://localhost:8999/investmentsheetfromdb',{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
       if (fromApi && !isSheetchart) {
-        console.log("1")
+      
         const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
       } else if (fromApi && isSheetchart && clickedsheetname.length > 0) {
-        
-        console.log("2")
+      
         if(fromdrive)
           {
             setitsfromdatabase(true)
             const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
-              console.log(response,"mysterious")
-  
+           
               if(response.data.status==200)
               {
               const allJson=response.data.data
@@ -157,12 +155,12 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         setFromApi(false);
             }
       } else if (isSheetchart && clickedsheetname.length > 0) {
-        console.log("3")
+       
         if(fromdrive)
           {
             setitsfromdatabase(true)
             const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
-              console.log(response,"mysterious")
+          
   
               if(response.data.status==200)
               {
@@ -199,11 +197,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         setFromApi(false);
             }
       } else if (isSheetchart && clickedsheetname.length <= 0) {
-        console.log("4")
+       
         const convertedData = convertDataTypes(data01[0], {name:chartdatatypex,value:chartdatatypey});
         setmydata(convertedData);
       } else {
-        console.log("5")
+      
         const convertedData = convertDataTypes(data01[0], fieldConversionsNormal);
         setmydata(convertedData);
       }
@@ -244,18 +242,17 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       setselectedvalueaxis(selectedYaxis);
       const Sheet_response = await axios.post('http://localhost:8999/investmentsheetfromdb',{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
       if (fromApi && !isSheetchart) {
-        console.log("6")
+  
         const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
       } else if (fromApi && isSheetchart && clickedsheetname.length > 0) {
-        console.log("7")
+       
         if(fromdrive)
         {
           setitsfromdatabase(true)
           const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
-            console.log(response,"mysterious")
-
+          
             if(response.data.status==200)
             {
             const allJson=response.data.data
@@ -285,7 +282,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
             {
               setitsfromdatabase(true)
               const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
-                console.log(response,"mysterious")
+           
     
                 if(response.data.status==200)
                 {
@@ -323,7 +320,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
             }
         }
       } else if (isSheetchart && clickedsheetname.length > 0) {
-        console.log("8")
+    
         setitsfromdatabase(true);
         let dt = JSON.parse(Sheet_response.data.data);
         let filteredDt = [];
@@ -333,11 +330,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         setmydata(convertedData);
         setFromApi(false);
       } else if (isSheetchart && clickedsheetname.length <= 0) {
-        console.log("9")
+        
         const convertedData = convertDataTypes(data01[0], {name:chartdatatypex,value:chartdatatypey});
         setmydata(convertedData);
       } else {
-        console.log("10")
+        
         const convertedData = convertDataTypes(data01, fieldConversionsNormal);
         setmydata(convertedData);
       }

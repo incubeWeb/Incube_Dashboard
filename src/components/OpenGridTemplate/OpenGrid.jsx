@@ -35,7 +35,7 @@ function OpenGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,com
 
     useEffect(()=>{
         const fun=async()=>{
-            console.log("joker")
+          
            const data= await axios.post('http://localhost:8999/getOpenedTabs',{companyname:companyName,organization:localStorage.getItem('organization')})
            let count=1
            data.data.data.map(tabVal =>{

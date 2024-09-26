@@ -37,7 +37,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
     const handleFilterSelection = (filter) => {
         setSelectedFilter(filter);
-        console.log("John"+selectedFilter)
+     
         setShowFilterMenu(false); // Close filter menu
         setShowSortMenu(true); // Open sorting menu
     };
@@ -146,8 +146,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
             
             setallSheets(tosetdata)
-           // console.log("fff",response.data.data[0]._id)
-            
+          
 
         }
 
@@ -165,7 +164,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 setallSheets([])
             }
             
-           // console.log("fff",response.data.data[0]._id)
+          
             
 
         }
@@ -209,11 +208,10 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             else{
                 setallSheets([])
             }
-            
-           // console.log("fff",response.data.data[0]._id)
+          
             
         }
-        console.log("currently at",sheetmethod)
+    
 
         if(sheetmethod=='Database')
         {
@@ -226,13 +224,13 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     },[sheetmethod])
 
     useEffect(()=>{
-        console.log("sheetId",sheetmethod)
+     
         const setJSon=async()=>{
             const response=await axios.post('http://localhost:8999/sheetfromdb',{id:selectedSheetId,organization:localStorage.getItem('organization')})
             const data=JSON.parse(response.data.data)
-            console.log(selectedSheetId,"sheetis")
+          
             setsheetJson(data)
-            console.log("sheet",data)
+          
             const key=Object.keys(data[0])
             
             const fileteredKey=[]
@@ -244,13 +242,12 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 }
                 )
             })
-            console.log("this",fileteredKey)
-            console.log("changesd")
+         
             setsheetKeys(fileteredKey)
         }
         const googleSheetJson=async()=>{
             const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedSheetId,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
-            console.log(response,"mysterious")
+        
 
             if(response.data.status==200)
             {
@@ -268,7 +265,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
         const data=finalJson
         setsheetJson(data)
-            console.log("sheetfsdfsdf",data)
+          
             const key=Object.keys(data[0])
             
             const fileteredKey=[]
@@ -280,8 +277,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 }
                 )
             })
-            console.log("this",fileteredKey)
-            console.log("changesd")
+        
             setsheetKeys(fileteredKey)
         }else{
             setsheetKeys(['none'])

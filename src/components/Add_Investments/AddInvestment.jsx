@@ -42,7 +42,7 @@ const AddInvestment = ({hidenavbar}) => {
     const fetchcompanydata=async()=>{
       let organization=localStorage.getItem('organization')
       const response = await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/getDealpipelineCompany',{organization:organization});
-      console.log(response.data.data)
+    
       setcompanyData(response.data.data)
     }
     if(currentView=='Database')

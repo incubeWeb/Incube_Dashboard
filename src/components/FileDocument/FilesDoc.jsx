@@ -11,7 +11,7 @@ const FilesDoc = ({ currentTab,CompanyName,itsfrom }) => {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        console.log(file)
+
         if (file) {
             setSelectedFile(file);
         }
@@ -31,7 +31,7 @@ const FilesDoc = ({ currentTab,CompanyName,itsfrom }) => {
             formData.append('organization',localStorage.getItem('organization'))
             try {
                 const response = await axios.post('http://localhost:8999/uploadFile', formData);
-                console.log('File uploaded successfully', response.data);
+               
                 setSelectedFile(null);
                 fetchUploadedFiles(); // Clear selected file after upload
                 setUploadFile(!uploadFile)

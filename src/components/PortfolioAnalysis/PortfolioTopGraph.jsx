@@ -83,11 +83,11 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
         const setGraphValues=async()=>{
             const organization=`${localStorage.getItem('organization')}_ShownGraph`
             const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
-            console.log(response,"bhavesh singh")
+           
             const data=response.data.data 
             const status=response.data.status
             const stateValues=JSON.parse(data)||{}
-            console.log("here_fsd",stateValues)
+        
             if(status==200)
             {
             setshowBarchart(stateValues.showBarchart)
@@ -144,7 +144,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
     }
 
     const handleGooglesheetclicked=async (id,name)=>{
-        console.log("sheet id",id,name)
+       
         setsheetClicked(id)
         const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:id,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
         
@@ -158,7 +158,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                 finalJson.push(result)
             }
         })
-        console.log(finalJson)
+     
         setsheetJson(finalJson)
                 const key=Object.keys(finalJson[0])
                 
@@ -182,7 +182,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
             setsheetClicked(id)
             const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
                 const data=JSON.parse(response.data.data)
-                console.log("sheetjson",data)
+              
                 setsheetJson(data)
                 const key=Object.keys(data[0])
                 
@@ -254,9 +254,9 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                 organization:organization,
                 portfolioState:JSON.stringify(stateJson)
             })
-            console.log("fsfsss",stateJson)
+           
             setLoading1(false) 
-        console.log(chartDatatypeX,chartDatatypeY,sheetfieldselectedX,sheetfieldselectedY,"pro bha")
+        
     }
     const handleSheetCreatePiechart=async()=>{
         //create bar chart Logic
@@ -272,7 +272,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                 organization:organization,
                 portfolioState:JSON.stringify(stateJson)
             })
-            console.log("fsfsss",stateJson)
+            
     }
     const handleSheetCreateLinechart=async()=>{
         //create bar chart Logic
@@ -288,7 +288,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                 organization:organization,
                 portfolioState:JSON.stringify(stateJson)
             })
-            console.log("fsfsss",stateJson,realtimeportfoliostate)
+            
     }
 
     useEffect(()=>

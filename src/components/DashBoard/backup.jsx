@@ -44,20 +44,14 @@ const Dashboard = () => {
 
   const chatRef=useRef(null)
 
-  useEffect(()=>{
-    const CreateChart=()=>{
-      console.log("at dashboard")
-      console.log(xAxisValues,yAxisValues)
-    }
-    CreateChart()
-  },[xAxisValues,yAxisValues])
+
   useEffect(()=>{
     const fun=async()=>{
       const response=await axios.post('http://localhost:8999/findUsers',{
         user:searchUser
       })
       const users=response.data.data
-      console.log(users)
+     
       setUsers(users)
     }
     fun()
@@ -73,7 +67,7 @@ const Dashboard = () => {
         })
       }
       
-    console.log(openChatbar)
+    
     if(openChatbar)
     {
       handleOpenChat()
@@ -86,7 +80,8 @@ const Dashboard = () => {
   }
 
   const handleOpenchatbar=()=>{
-    console.log(openChatbar)
+   
+
     gsap.to(chatRef.current,{
       x:"200%",
       duration:"0.4",
@@ -118,10 +113,10 @@ const Dashboard = () => {
 
   useEffect(()=>{
     const checkBoxValues=async()=>{
-      console.log(localStorage.getItem('email'))
+  
       let email=localStorage.getItem('email')
       let checkDb=await axios.post('http://localhost:8999/getDashboardData',{email:email})
-      console.log(checkDb)
+    
       if(checkDb.data.status==200)
       {
         let val=JSON.parse(checkDb.data.data.positions)
