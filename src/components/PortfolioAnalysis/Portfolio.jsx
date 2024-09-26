@@ -390,10 +390,8 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 <div className={`w-[100%] flex justify-center items-center ${showHistory?'':'h-[150px]'} `}>
                     {
                         !showHistory?
-                        <div onClick={()=>setselectfield(true)} className='active:bg-blue-500 active:text-white duration-75  flex flex-row space-x-2 bg-gray-300 rounded-md select-none w-[120px] h-[35px] text-[14px] font-inter px-2 py-1 items-center text-gray-700'>
-                            <FaPlus />
-                        <p>Select field</p>
-                    </div>:
+                        <></>
+                      :
                     <></>
                     }
                     {

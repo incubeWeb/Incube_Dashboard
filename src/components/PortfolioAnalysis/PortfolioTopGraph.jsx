@@ -18,6 +18,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
     const [clickedBar,setclickedBar]=useState(false)
     const [clickedPie,setclickedPie]=useState(false)
     const [clickedLine,setclickedLine]=useState(false)
+    const [loading2,setloading2]=useState(true)
 
     const [sheetclicked,setsheetClicked]=useState('')
 
@@ -137,7 +138,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
         }
         
         setallSheets(tosetdata)
-        
+        setloading2(false)
 
         
     }
@@ -352,7 +353,11 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                             </div>
                             <div className='flex flex-col overflow-y-auto'>
                                 
-                                {
+                            { loading2 ?
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%',marginTop:'40px' }}>
+                        <Bars color="#8884d8" height={40} width={40} />
+                    </div>
+                    :  
                                     (allsheet||[]).map(val=>
                                         val.fileType=='xlsx'?
                                         <div key={val._id} onClick={()=>{setsheetrowsselect(true);setclickedBar(false); handlesheetclicked(val._id)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
@@ -403,7 +408,11 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                             </div>
                             <div className='flex flex-col overflow-y-auto'>
                                 
-                                {
+                            { loading2 ?
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%',marginTop:'40px' }}>
+                        <Bars color="#8884d8" height={40} width={40} />
+                    </div>
+                    :  
                                     (allsheet||[]).map(val=>
                                         val.fileType=='xlsx'?
                                         <div key={val._id} onClick={()=>{setsheetrowsselectLine(true);setclickedLine(false); handlesheetclickedLine(val._id)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
@@ -452,7 +461,11 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                             </div>
                             <div className='flex flex-col overflow-y-auto'>
                                 
-                                {
+                           { loading2 ?
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%',marginTop:'40px' }}>
+                        <Bars color="#8884d8" height={40} width={40} />
+                    </div>
+                    :  
                                     (allsheet||[]).map(val=>
                                         val.fileType=='xlsx'?
                                         <div key={val._id} onClick={()=>{setsheetrowsselectPie(true);setclickedPie(false); handlesheetclickedPie(val._id)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
@@ -462,9 +475,12 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                                             </div>
                                         </div>
                                         :
-                                        <></>
+                                        <>
+                                            
+                                        </>
                                     )
                                 }
+            
 
                                 {
                                     googlesheetfiles.length>0?

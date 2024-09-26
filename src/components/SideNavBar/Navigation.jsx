@@ -150,7 +150,7 @@ const Navigation = ({googleaccountconnected,activeField,setActiveField,hidenavba
                 <Link to='/dashboard'>
                     <div className={`${activeField=='/dashboard'?'bg-blue-600 text-white':'select-none hover:bg-gray-300 cursor-pointer hover:text-white'} flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`}  onClick={()=>setActiveField('/dashboard')}>
                         <div><RiHome6Line  size={24}  className={`${activeField=='/dashboard'?' text-white ':'text-[#667085]'} `}/> </div>
-                    <div className='text-[14px] -mb-2 font-inter font-semibold'><p>Dashboard</p></div>
+                    <div className='text-[14px] font-inter font-semibold'><p>Dashboard</p></div>
                     </div>
                 </Link>
                 <Link to='/dealpipeline'>
