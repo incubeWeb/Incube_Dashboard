@@ -24,6 +24,9 @@ function App() {
   const [realtimeChat,setrealtimeChat]=useState([])
   const changes=useSelector((state)=>state.timelinestate)
   const dispatch=useDispatch()
+  
+  
+  
   const [investmentchange,setinvestmentchange]=useState([])
   const [hidenavbar,sethidenavbar]=useState(false)
   const [filesadded,setfilesadded]=useState([])
@@ -166,7 +169,7 @@ function App() {
           {pathname !== '/' && <Navigation googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />}
           <Routes>
             <Route path="/" element={<Login setLoginIn={setLoginIn}/>} />
-            <Route path="/dashboard" element={<Dashboard realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/>} />
+            <Route path="/dashboard" element={<Dashboard setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/>} />
             <Route path="/dealpipeline" element={<FirstCol realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>} />
             <Route path="/dealsourcing" element={<Dealsourcing hidenavbar={hidenavbar}/>} />
             <Route path="/adduser" element={<Addusers setActiveField={setActiveField} hidenavbar={hidenavbar}/>}/>

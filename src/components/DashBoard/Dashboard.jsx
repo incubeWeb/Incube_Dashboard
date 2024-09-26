@@ -20,9 +20,14 @@ import { Bars } from 'react-loader-spinner';
 import Portfoliocard from '../Charts/Portfoliocard';
 import NewsWidgit from '../News_widgit/NewsWidgit';
 import { FaPlus } from "react-icons/fa6";
+import AssignedDeals from '../AssignedDeals/AssignedDeals';
+import OpenGrid from '../OpenGridTemplate/OpenGrid';
+import OpenCompleteGrid from '../OpenGridTemplate/OpenCompleteGrid';
+import OpenUnassignedGrid from '../OpenGridTemplate/OpenUnassignedGrid';
+import CalendarWidgit from '../Calendar/CalendarWidgit';
 
 
-const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
+const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
   const [boxes, setBoxes] = useState([]);
   const [openChatbar,setopenChatbar]=useState(false)
   const [showPopup, setShowPopup] = useState(false);
@@ -34,6 +39,12 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
   const [clickUseremail,setclickeduseremail]=useState('')
   const [chartDatatypeY,setchartDatatypeY]=useState('string')
   const [chartDatatypeX,setchartDatatypeX]=useState('string')
+  const [companyName,setCompanyName]=useState('')
+  const [companyDiscription,setcompanyDiscription]=useState('')
+  const [status,setstatus]=useState('')
+  const [TeamLead_status,setTeamLead_status]=useState('')
+  const [completed,setcompleted]=useState('')
+
 
   const [chartDatatypeFromApiX,setchartDatatypeFromApiX]=useState([])
   const [chartDatatypeFromApiY,setchartDatatypeFromApiY]=useState([])
@@ -67,6 +78,8 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
   const [fromApi,setFromApi]=useState(false)
   const [isSheetchart,setisSheetChart]=useState(false)
   const [capturingPortfoliowidgitvalues,setcapturingPortfoliowidgitvalues]=useState([])
+  
+  const [assigneddealclicked,setassigneddealclicked]=useState(false)
 
   const [retry,setretry]=useState(false)
   const [loading,setloading]=useState(true)
@@ -81,7 +94,16 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
     { id: 3, name: 'Card Three' },
     // This array can grow infinitely
   ];
-
+  const Navigate=useNavigate()
+  const handleOpenGrid=async()=>{
+    
+    setassigneddealclicked(!assigneddealclicked)
+    localStorage.setItem('activeField','/dealpipeline')
+    setActiveField('/dealpipeline')
+    
+    Navigate('/dealpipeline')
+    
+}
   useEffect(()=>{
       const handleOpenChat=()=>{
         gsap.from(chatRef.current,{
@@ -372,6 +394,39 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
                     handleSeeUsers={handleSeeUsers} 
                     setclickeduseremail={setclickeduseremail}/>
                   )
+                case 'calendarwidgit':
+                  return(
+                    <CalendarWidgit
+                      id={index}
+                      setBoxes={setBoxes}
+                      boxes={boxes}
+                    />
+                  )
+                
+                case 'AssignedDeals':
+                  return(
+                    <AssignedDeals
+                      id={index}
+                      setBoxes={setBoxes}
+                      boxes={boxes}
+                      hidenavbar={hidenavbar}
+                      realtimetabchats={realtimetabchats}
+                      realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo}
+                      setassigneddealclicked={setassigneddealclicked}
+                      status={status}
+                      setstatus={setstatus}
+                      TeamLead_status={TeamLead_status}
+                      setTeamLead_status={setTeamLead_status}
+                      completed={completed}
+                      setcompleted={setcompleted}
+                      openViewallGrid={assigneddealclicked}
+                      setOpenViewallGrid={setassigneddealclicked}
+                      setcompanyDiscription={setcompanyDiscription}
+                      setCompanyName={setCompanyName}
+                      setActiveField={setActiveField}
+                    />
+                  )
+
                 case 'Areachart':
                   if (areachartCount.length > 0) {
                     return (
@@ -513,7 +568,42 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
       )}
       </div>
     } 
-     
+
+    {
+      assigneddealclicked?
+      <div className='w-[100%] h-screen fixed left-[-10px] '>
+          {
+              assigneddealclicked && status=='In Progress' && completed=='incomplete' &&(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+              <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
+          :
+              assigneddealclicked && status=='In Progress' && completed=='incomplete' &&(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+              <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
+          :
+              assigneddealclicked && status=='In Progress' && completed=='completed' &&(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+              <OpenCompleteGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab="View All" setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
+          :
+              assigneddealclicked && status=='Unassigned' && completed=='incomplete' && (localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+              <OpenUnassignedGrid hidenavbar={hidenavbar} setSelectedTab="View All" setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
+          :
+          <></>
+          }
+
+          {
+              assigneddealclicked && status=='In Progress' && completed=='incomplete' && TeamLead_status=='In Progress' &&(localStorage.getItem('role')=='team lead'||localStorage.getItem('role')=='user')?
+              <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
+          :
+              assigneddealclicked && status=='In Progress' && completed=='completed' && TeamLead_status=='In Progress' &&(localStorage.getItem('role')=='team lead'||localStorage.getItem('role')=='user')?
+              <OpenCompleteGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab="View All" setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
+          :
+              assigneddealclicked && status=='In Progress' && completed=='incomplete' && TeamLead_status=='Unassigned' &&(localStorage.getItem('role')=='team lead'||localStorage.getItem('role')=='user')?
+              <OpenUnassignedGrid hidenavbar={hidenavbar} setSelectedTab='View All' setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
+          :
+              <></>
+          }
+      </div>
+      :
+      <></>
+    }
 
     </div>
   );

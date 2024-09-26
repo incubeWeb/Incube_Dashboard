@@ -10,6 +10,11 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
   const [mydata,setmydata]=useState([]);
   const [itsfromDatabase,setitsfromdatabase]=useState(false);
 
+  const [mydatatypex,setmydatatypex]=useState(chartDatatypeX)
+  const [mydatatypey,setmydatatypey]=useState(chartDatatypeY)
+
+  const [isitfromDrive,setisitfromdrive]=useState(false)
+
   function extractValue(input) {
     const continuousDigitsPattern = /^\D*(\d+)\D*$/;
     const str=String(input);
@@ -85,6 +90,8 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
       let chartdatatypex='';
       let chartdatatypey='';
       let dbCompanyName='';
+      let fromdrive='';
+      let selectedsheetidfordrive=''
       
       entireData.map((m,index)=>{
         if(index==id)
@@ -94,19 +101,57 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
           isSheetchart=m.isSheetChart;
           clickedsheetname=m.clickedsheetname;
           chartdatatypex=m.chartDatatypeX;
+          setmydatatypex(chartdatatypex)
           chartdatatypey=m.chartDatatypeY;
+          setmydatatypey(chartdatatypey)
           dbCompanyName=m.dbCompanyName;
+          fromdrive=m.fromdrive
+          setisitfromdrive(fromdrive)
+          selectedsheetidfordrive=m.selectedsheetfromdbname
         }
       });
 
       const Sheet_response=await axios.post('http://localhost:8999/investmentsheetfromdb',{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
       
       if(fromApi && !isSheetchart) { 
+        console.log("1")
         const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
       }
       else if(fromApi && isSheetchart && clickedsheetname.length > 0) {
+        console.log("2bar")
+        if(fromdrive)
+          {
+            setitsfromdatabase(true)
+            const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+              console.log(response,"mysterious")
+  
+              if(response.data.status==200)
+              {
+              const allJson=response.data.data
+              
+              const keys=allJson[0].data
+              const finalJson=[]
+              allJson.map(val=>{
+                      if(val.rowIndex!=1)
+                      {
+                          const result=keys.reduce((obj,key,value)=>{obj[key]=val.data[value]; return obj},{})
+                          finalJson.push(result)
+                      }
+                  })
+  
+              const data=finalJson
+              let dt = data
+              let filteredDt = [];
+              dt.map(d => filteredDt.push({ name: d[selectedXaxis], uv: d[selectedYaxis] }));
+  
+              const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+              setmydata(convertedData);
+              setFromApi(false);
+            }
+          }
+          else{
         setitsfromdatabase(true);
         let dt=JSON.parse(Sheet_response.data.data); 
         let filteredDt = [];
@@ -114,8 +159,41 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
         const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
+          }
       }
       else if (isSheetchart && clickedsheetname.length > 0) {
+        console.log("3d")
+        if(fromdrive)
+          {
+            setitsfromdatabase(true)
+            const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+              console.log(response,"mysterious")
+  
+              if(response.data.status==200)
+              {
+              const allJson=response.data.data
+              
+              const keys=allJson[0].data
+              const finalJson=[]
+              allJson.map(val=>{
+                      if(val.rowIndex!=1)
+                      {
+                          const result=keys.reduce((obj,key,value)=>{obj[key]=val.data[value]; return obj},{})
+                          finalJson.push(result)
+                      }
+                  })
+  
+              const data=finalJson
+              let dt = data
+              let filteredDt = [];
+              dt.map(d => filteredDt.push({ name: d[selectedXaxis], uv: d[selectedYaxis] }));
+  
+              const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+              setmydata(convertedData);
+              setFromApi(false);
+            }
+          }
+          else{
         setitsfromdatabase(true);
         let dt = JSON.parse(Sheet_response.data.data);
         let filteredDt = [];
@@ -123,49 +201,89 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
         const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
+          }
       }
       else if(isSheetchart && clickedsheetname.length <= 0) {
+        console.log("4")
         const convertedData = convertDataTypes(data01[0], {name: chartdatatypex, uv: chartdatatypey});
         setmydata(convertedData);
       }
       else {
         const convertedData = convertDataTypes(data01[0], fieldConversionsNormal);
+        console.log("5")
         setmydata(convertedData);
       }
     };
     fun();
   }, [investmentchange]);
 
+  const yAxisTickFormatter = (value) => value; 
   return (
     <div style={{ width: '100%', height: '95%' ,paddingBottom:'15px'}} className='mt-8  pr-10'>
       
       <div style={{ width: '100%', height: '100%' }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={mydata}>
-            <defs>
-              <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#42a5f5" stopOpacity={0.8} />
-                <stop offset="80%" stopColor="#1e88e5" stopOpacity={0.8} />
-              </linearGradient>
-            </defs>
-            <XAxis dataKey="name"     tickMargin={10} padding={{ left: 10, right: 10 }} />
-            <YAxis    tickCount={4}  />
-            <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
-                     <CartesianGrid stroke="#ccc"   horizontal={true} vertical={false}  />
-            <Bar dataKey="uv" fill="url(#blueGradient)" barSize={30} />
+      {
+          mydatatypex=='string' && mydatatypey=='integer'?
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={mydata}>
+              <XAxis dataKey="name" tick={true} stroke="#8884d8" />
+              <YAxis dataKey='uv' tick={true}  tickCount={4}/>
             
-          </BarChart>
-          
-        </ResponsiveContainer>
+              <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
+              
+           
+              <CartesianGrid stroke="#ccc"   horizontal={true} vertical={false}  />
+              <Bar dataKey="uv" fill="#2970FF" barSize={30} />
+            </BarChart>
+          </ResponsiveContainer>
+          :
+          mydatatypex=='integer' && mydatatypey=='string'?
+          <ResponsiveContainer width="100%" height="100%">
+                    <BarChart layout="vertical" data={mydata} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                        {/* XAxis now handles the 'uv' values (which are numerical) */}
+                        <XAxis type="number" tick={true} stroke="#8884d8" />
+                        {/* YAxis now handles the 'name' values (which are categorical/strings) */}
+                        <YAxis dataKey="uv" type="category" tickFormatter={yAxisTickFormatter} tick={true} />
+                        <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
+                        <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
+                        <Bar dataKey="name" fill="#2970FF" barSize={30} />
+                    </BarChart>
+                </ResponsiveContainer>
+          :
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={mydata}>
+              <XAxis dataKey="name" tick={true} stroke="#8884d8" />
+              <YAxis dataKey='uv' tick={true}  tickCount={4}/>
+            
+              <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
+              
+           
+              <CartesianGrid stroke="#ccc"   horizontal={true} vertical={false}  />
+              <Bar dataKey="uv" fill="#2970FF" barSize={30} />
+            </BarChart>
+          </ResponsiveContainer>
+          }
       </div>
 
       {
-        itsfromDatabase ?
-          <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
-            <div className='w-[10px] h-[10px] bg-green-600 rounded-[50%] mt-[2px]'></div> 
-            <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Database</p>
-          </div> : null
-      }
+              itsfromDatabase &&!isitfromDrive?
+                <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
+                  <div className='w-[10px] h-[10px] bg-green-600 rounded-[50%] mt-[2px]'></div> 
+                  <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Database</p>
+
+                </div>:
+                <></>
+            }
+
+{
+              itsfromDatabase &&isitfromDrive?
+                <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
+                  <div className='w-[10px] h-[10px] bg-orange-600 rounded-[50%] mt-[2px]'></div> 
+                  <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Google Drive</p>
+
+                </div>:
+                <></>
+            }
 
       <div className='z-[10] cursor-pointer flex pl-[1px] items-center justify-center w-[20px] rounded-xl h-[20px] bg-gray-100 fixed right-[-10px] top-[-15px] mt-4 mr-3' onClick={deleteWidgit}>
         <RxCross2 size={14} className='text-black'/>

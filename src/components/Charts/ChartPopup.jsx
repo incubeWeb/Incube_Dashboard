@@ -85,6 +85,7 @@ const ChartPopup = ({
   const [showDbSheetRows,setdbsheetrows]=useState(false)
   const [clickedSheetName,setclickedSheetname]=useState('')
   const [dbCompanyName,setdbCompanyName]=useState('')
+  const [clickedGoogle,setclickedGoogle]=useState(false)
 
   
   const [dbSheetIntRows,setDbSheetIntRows]=useState([])
@@ -144,6 +145,7 @@ const ChartPopup = ({
   };
 
   useEffect(()=>{
+    console.log(dbSheetIntRows,"sheets")
     setselectedSheetxAxis(dbSheetIntRows[0])
     setselectedSheetYaxis(dbSheetIntRows[0])
     setLoading2(false)
@@ -158,21 +160,65 @@ const ChartPopup = ({
     console.log('selectedhseeetfromdat',selectedsheetfromdbname)
     
     const response=await axios.post('http://localhost:8999/sheetfromdb',{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
-    const data=JSON.parse(response.data.data)
-    const name=response.data.fileName
-    const dbcompanyname=response.data.CompanyName
-    setclickedSheetname(name)
-    setdbCompanyName(dbcompanyname)
-    console.log("hi",dbcompanyname,"---")
-    setdbsheetdata(data)
-    setDbSheetIntRows(Object.keys(data[0]))
-    setSelectedFile(null);
+    if(response.data.status==200)
+    {
+      const data=JSON.parse(response.data.data)
+      const name=response.data.fileName
+      const dbcompanyname=response.data.CompanyName
+      setclickedSheetname(name)
+      setdbCompanyName(dbcompanyname)
+      console.log("hi",dbcompanyname,"---")
+      setdbsheetdata(data)
+      setDbSheetIntRows(Object.keys(data[0]))
+      setSelectedFile(null);
+    }
+    else{
+      const response2=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetfromdbname,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+            console.log(response2,"mysterious")
+            
+            if(response2.data.status==200)
+            {
+                const allJson=response2.data.data
+                console.log(allJson,'this is allJson')
+                const keys=allJson[0].data
+                console.log(keys,"this is kseys")
+                const finalJson=[]
+                allJson.map(val=>{
+                    if(val.rowIndex!=1)
+                    {
+                        const result=keys.reduce((obj,key,value)=>{obj[key]=val.data[value]; return obj},{})
+                        finalJson.push(result)
+                        
+                    }
+                })
+                const data=finalJson
+                const name='Google Sheet'
+                const dbcompanyname='Google sheet'
+                setclickedSheetname(name)
+                setdbCompanyName(dbcompanyname)
+                setdbsheetdata(data)
+                setDbSheetIntRows(Object.keys(data[0]))
+                console.log(Object.keys(data[0]))
+                setSelectedFile(null);    
+            }
+            else{
+              const name='Google Sheet'
+                const dbcompanyname='Google sheet'
+                setclickedSheetname(name)
+                setdbCompanyName(dbcompanyname)
+                setdbsheetdata([])
+                setDbSheetIntRows(['none'])
+                setSelectedFile(null);  
+            }
+    }
 
   }
   const handleselectDatabase=async(e)=>{
     e.stopPropagation();
+    setclickedGoogle(false)
     setClickedDatabase((prev)=>!prev)
     const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+    console.log(response.data.data,"db")
     setpresentSheets(response.data.data)
     setLoading1(false);
     response.data.data.map((val,index)=>
@@ -182,8 +228,36 @@ const ChartPopup = ({
       }}
     )
   }
-  const handleGoogleFunctionality=()=>{
+
+  const handleGoogleFunctionality=async(e)=>{
     console.log('Handling google')
+
+    e.stopPropagation();
+    setClickedDatabase((prev)=>!prev)
+    setclickedGoogle(true)
+    const response3=await axios.post('http://localhost:1222/get-drivesheets',{
+      email:localStorage.getItem('email'),
+      organization:localStorage.getItem("organization")
+  })
+
+  if(response3.data.status==200 && response3.data.message!="no refresh token found")
+  {
+      const files=response3.data.data
+      setpresentSheets(files)
+      console.log(files,'sheet')
+      console.log(response3.data.data[0].id,'this is key')
+      setselectedsheetfromdbname(response3.data.data[0].id)
+        
+      
+  }
+  else{
+      setpresentSheets([])
+  }
+    setLoading1(false);
+  
+   
+
+
   }
   const handleSheetData=(e)=>{
     e.stopPropagation()
@@ -209,10 +283,10 @@ const ChartPopup = ({
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
       try{
-        setBoxes([...boxes, { ...newBox, type : "BarChart" , barchartCount:[...data01,...xAxisValues.map((val,index)=>({name:val,uv:parseInt(yAxisValues[index])}))] }]);
+        setBoxes([...boxes, { ...newBox, type : "BarChart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, barchartCount:[...data01,...xAxisValues.map((val,index)=>({name:val,uv:parseInt(yAxisValues[index])}))] }]);
       }catch(e)
       {
-        setBoxes([...boxes, { ...newBox, type : "BarChart" , barchartCount:[...data01,...xAxisValues.map((val,index)=>({name:val,uv:parseInt(yAxisValues[index])}))] }]);
+        setBoxes([...boxes, { ...newBox, type : "BarChart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, barchartCount:[...data01,...xAxisValues.map((val,index)=>({name:val,uv:parseInt(yAxisValues[index])}))] }]);
       }
       setShowPopup(false);
       setdata01([])
@@ -243,10 +317,10 @@ const ChartPopup = ({
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
       try{
-        setBoxes([...boxes, { ...newBox, type : "Areachart" , areachartCount:[...data01,...xAxisValues.map((val,index)=>({pv:parseInt(val),uv:parseInt(yAxisValues[index])}))] }]);
+        setBoxes([...boxes, { ...newBox, type : "Areachart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, areachartCount:[...data01,...xAxisValues.map((val,index)=>({pv:parseInt(val),uv:parseInt(yAxisValues[index])}))] }]);
       }catch(e)
       {
-        setBoxes([...boxes, { ...newBox, type : "Areachart" , areachartCount:[...data01,...xAxisValues.map((val,index)=>({pv:val,uv:parseInt(yAxisValues[index])}))] }]);
+        setBoxes([...boxes, { ...newBox, type : "Areachart" ,selectedsheetfromdbname:selectedsheetfromdbname,fromdrive:clickedGoogle, areachartCount:[...data01,...xAxisValues.map((val,index)=>({pv:val,uv:parseInt(yAxisValues[index])}))] }]);
       }
       setShowPopup(false);
       setdata01([])
@@ -311,7 +385,7 @@ const ChartPopup = ({
         x: 10,
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
-      setBoxes([...boxes, { ...newBox, type : "Piechart" , piechartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName }]);
+      setBoxes([...boxes, { ...newBox, type : "Piechart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, piechartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName }]);
       setShowPopup(false);
       setdbCompanyName('')
       setdata01([])
@@ -338,7 +412,7 @@ const ChartPopup = ({
         x: 10,
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
-      setBoxes([...boxes, { ...newBox, type : "Piechart" , piechartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetchart:false,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis, }]);
+      setBoxes([...boxes, { ...newBox, type : "Piechart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, piechartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetchart:false,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis, }]);
       setShowPopup(false);
       setdata01([])
       setdbCompanyName('')
@@ -365,7 +439,7 @@ const ChartPopup = ({
         x: 10,
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
-      setBoxes([...boxes, { ...newBox, type : "Areachart" , areachartCount:data01 ,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName,}]);
+      setBoxes([...boxes, { ...newBox, type : "Areachart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, areachartCount:data01 ,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName,}]);
       setShowPopup(false);
       setdata01([])
       setdbCompanyName('')
@@ -394,7 +468,7 @@ const ChartPopup = ({
         x: 10,
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
-      setBoxes([...boxes, { ...newBox, type : "Areachart" , areachartCount:data01 ,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:false,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName}]);
+      setBoxes([...boxes, { ...newBox, type : "Areachart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, areachartCount:data01 ,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:false,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName}]);
       setShowPopup(false);
       setdata01([])
       setdbCompanyName('')
@@ -423,7 +497,7 @@ const ChartPopup = ({
       x: 10,
       y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
     };
-    setBoxes([...boxes, { ...newBox, type : "BarChart" , barchartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName }]);
+    setBoxes([...boxes, { ...newBox, type : "BarChart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, barchartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName }]);
     setShowPopup(false);
     setdata01([])
     setdbCompanyName('')
@@ -452,7 +526,7 @@ const ChartPopup = ({
       x: 10,
       y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
     };
-    setBoxes([...boxes, { ...newBox, type : "BarChart" , barchartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:false,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName }]);
+    setBoxes([...boxes, { ...newBox, type : "BarChart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, barchartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:false,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName }]);
     setShowPopup(false);
     setdata01([])
     setdbCompanyName('')
@@ -480,7 +554,7 @@ const ChartPopup = ({
         x: 10,
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
-      setBoxes([...boxes, { ...newBox, type : "Piechart" , piechartCount:[...data01,...xAxisValues.map((val,index)=>({name:val,value:parseInt(yAxisValues[index])}))]}]);
+      setBoxes([...boxes, { ...newBox, type : "Piechart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, piechartCount:[...data01,...xAxisValues.map((val,index)=>({name:val,value:parseInt(yAxisValues[index])}))]}]);
       setShowPopup(false);
       setdata01([])
      // setdata01(da) 
@@ -491,6 +565,21 @@ const ChartPopup = ({
       setYaxis(0)
       setClickedPie(false)
    }
+   const handleAssignedDealswidgit=(e)=>{
+    e.stopPropagation()
+    settypeofchart('AssignedDeals')
+    setchatwidgit((prev)=>!prev)
+    const lastBox = boxes[boxes.length - 1];
+      const newBox = {
+        id: lastBox ? lastBox.id + 1 : 1,
+        width: '30%',
+        height: '430px',
+        x: 10,
+        y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
+      };
+    setBoxes([...boxes, { ...newBox, type : "AssignedDeals" }]);
+    setShowPopup(false); 
+  } 
 
   const handlechatwidgit=(e)=>{
     e.stopPropagation()
@@ -505,6 +594,22 @@ const ChartPopup = ({
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
     setBoxes([...boxes, { ...newBox, type : "chat" }]);
+    setShowPopup(false); 
+  }
+
+  const handlecalendarwidgit=(e)=>{
+    e.stopPropagation()
+    settypeofchart('calendarwidgit')
+    setchatwidgit((prev)=>!prev)
+    const lastBox = boxes[boxes.length - 1];
+      const newBox = {
+        id: lastBox ? lastBox.id + 1 : 1,
+        width: '25%',
+        height: '430px',
+        x: 10,
+        y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
+      };
+    setBoxes([...boxes, { ...newBox, type : "calendarwidgit" }]);
     setShowPopup(false); 
   }
 
@@ -882,11 +987,27 @@ const ChartPopup = ({
         Loading...
       </div>
     </option>
-  ) : (
-                    presentSheets.map(sheet=>
-                    <option key={sheet._id} value={sheet._id}>{sheet.name}</option>
-                  )
-        )}
+  ) : 
+  clickedGoogle?
+  (
+    presentSheets.map(sheet=>
+      
+    <option key={sheet.id} value={sheet.id}>{sheet.name}</option>
+    
+  )
+):
+(
+  presentSheets.map(sheet=>
+    sheet.fileType=='xlsx'?
+  <option key={sheet._id} value={sheet._id}>{sheet.name}</option>
+  :
+  <></>
+)
+)
+  
+  
+  
+  }
               </select>
               <div className="w-[120px] cursor-pointer h-[40px] bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-center">  
               {Loading1 ? (
@@ -1103,11 +1224,25 @@ const ChartPopup = ({
         Loading...
       </div>
     </option>
-  ) : (
-                    presentSheets.map(sheet=>
-                    <option key={sheet._id} value={sheet._id}>{sheet.name}</option>
-                  )
-            )}
+  ) : 
+  clickedGoogle?
+  (
+    presentSheets.map(sheet=>
+      
+    <option key={sheet.id} value={sheet.id}>{sheet.name}</option>
+    
+  )
+)
+:
+(
+  presentSheets.map(sheet=>
+    sheet.fileType.toLowerCase()=='xlsx'?
+  <option key={sheet._id} value={sheet._id}>{sheet.name}</option>
+  :
+  <></>
+)
+)
+  }
               </select>
               <div className="w-[120px] h-[40px] cursor-pointer bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-center"> {Loading1 ? (
             <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
@@ -1417,11 +1552,26 @@ const ChartPopup = ({
         Loading...
       </div>
     </option>
-  ) : (
-                    presentSheets.map(sheet=>
-                    <option key={sheet._id} value={sheet._id}>{sheet.name}</option>
-                  )
-       ) }
+  ) : 
+  clickedGoogle?
+  (
+    presentSheets.map(sheet=>
+      
+    <option key={sheet.id} value={sheet.id}>{sheet.name}</option>
+    
+  )
+)
+:
+(
+  presentSheets.map(sheet=>
+    sheet.fileType=='xlsx'?
+  <option key={sheet._id} value={sheet._id}>{sheet.name}</option>
+  :
+  <></>
+)
+)
+  
+  }
               </select>
               <div className="w-[120px] h-[40px] cursor-pointer bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-center">{Loading1? (
             <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
@@ -1742,7 +1892,7 @@ const ChartPopup = ({
               </div>
             </div>
           <div
-            onClick={() => addComponent("calendar")}
+            onClick={handlecalendarwidgit}
             className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"
           >
             <p className="w-[70%]">Calendars</p>
@@ -1762,7 +1912,7 @@ const ChartPopup = ({
             </div>
           </div>
           <div
-            onClick={() => addComponent("deals")}
+            onClick={handleAssignedDealswidgit}
             className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"
           >
             <p className="w-[70%]">Assigned deals</p>

@@ -9,6 +9,9 @@ import { IoMdClose } from "react-icons/io";
 const Areachart = ({investmentchange,id,data01,clickedArea,setClickedArea,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [mydata,setmydata]=useState([])
   const [itsfromDatabase,setitsfromdatabase]=useState(false)
+  const [mydatatypex,setmydatatypex]=useState(chartDatatypeX)
+  const [mydatatypey,setmydatatypey]=useState(chartDatatypeY)
+  const [isitfromDrive,setisitfromdrive]=useState(false)
   function extractValue(input) {
     // Regex to match a string with continuous digits
     const continuousDigitsPattern = /^\D*(\d+)\D*$/;
@@ -89,6 +92,8 @@ const fieldConversionsApi={
         let chartdatatypex=''
         let chartdatatypey=''
          let dbCompanyName=''
+         let fromdrive='';
+      let selectedsheetidfordrive=''
         entireData.map((m,index)=>
         {
           if(index==id)
@@ -98,8 +103,13 @@ const fieldConversionsApi={
             isSheetchart=m.isSheetChart
             clickedsheetname=m.clickedsheetname
             chartdatatypex=m.chartDatatypeX
+            setmydatatypex(chartdatatypex)
             chartdatatypey=m.chartDatatypeY
+            setmydatatypey(chartdatatypey)
             dbCompanyName=m.dbCompanyName
+            fromdrive=m.fromdrive
+            setisitfromdrive(fromdrive)
+          selectedsheetidfordrive=m.selectedsheetfromdbname
           }
         }
         )
@@ -117,6 +127,36 @@ const fieldConversionsApi={
     }
     else if(fromApi&&isSheetchart&&clickedsheetname.length>0)
       {
+        if(fromdrive)
+          {
+            setitsfromdatabase(true)
+            const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+              console.log(response,"mysterious")
+  
+              if(response.data.status==200)
+              {
+              const allJson=response.data.data
+              
+              const keys=allJson[0].data
+              const finalJson=[]
+              allJson.map(val=>{
+                      if(val.rowIndex!=1)
+                      {
+                          const result=keys.reduce((obj,key,value)=>{obj[key]=val.data[value]; return obj},{})
+                          finalJson.push(result)
+                      }
+                  })
+  
+              const data=finalJson
+              let dt = data
+              let filteredDt = [];
+              dt.map(d => filteredDt.push({ pv: d[selectedXaxis], uv: d[selectedYaxis] }));
+  
+              const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+              setmydata(convertedData);
+              setFromApi(false);
+            }
+          }else{
         setitsfromdatabase(true)
        let dt=JSON.parse(Sheet_response.data.data) 
        let filteredDt=[]
@@ -129,9 +169,40 @@ const fieldConversionsApi={
           setmydata(convertedData)
           setFromApi(false)
       }
+      }
       else if (isSheetchart&&clickedsheetname.length>0) 
         {
           console.log("8")
+          if(fromdrive)
+            {
+              setitsfromdatabase(true)
+              const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+                console.log(response,"mysterious")
+    
+                if(response.data.status==200)
+                {
+                const allJson=response.data.data
+                
+                const keys=allJson[0].data
+                const finalJson=[]
+                allJson.map(val=>{
+                        if(val.rowIndex!=1)
+                        {
+                            const result=keys.reduce((obj,key,value)=>{obj[key]=val.data[value]; return obj},{})
+                            finalJson.push(result)
+                        }
+                    })
+    
+                const data=finalJson
+                let dt = data
+                let filteredDt = [];
+                dt.map(d => filteredDt.push({ pv: d[selectedXaxis], uv: d[selectedYaxis] }));
+    
+                const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+                setmydata(convertedData);
+                setFromApi(false);
+              }
+            }else{
           setitsfromdatabase(true)
         let dt = JSON.parse(Sheet_response.data.data);
         let filteredDt = [];
@@ -140,6 +211,7 @@ const fieldConversionsApi={
         const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
         setmydata(convertedData);
         setFromApi(false);
+            }
       }
       else if(isSheetchart&&clickedsheetname.length<=0)
         {
@@ -170,6 +242,8 @@ useEffect(() => {
         let chartdatatypex=''
         let chartdatatypey=''
          let dbCompanyName=''
+         let fromdrive='';
+      let selectedsheetidfordrive=''
       entireData.map((m,index)=>
       {
         if(index==id)
@@ -179,8 +253,13 @@ useEffect(() => {
           isSheetchart=m.isSheetChart
           clickedsheetname=m.clickedsheetname
             chartdatatypex=m.chartDatatypeX
+            setmydatatypex(chartdatatypex)
             chartdatatypey=m.chartDatatypeY
+            setmydatatypey(chartdatatypey)
             dbCompanyName=m.dbCompanyName
+            fromdrive=m.fromdrive
+            setisitfromdrive(fromdrive)
+          selectedsheetidfordrive=m.selectedsheetfromdbname
         }
       }
       )
@@ -198,6 +277,36 @@ useEffect(() => {
   }
   else if(fromApi&&isSheetchart&&clickedsheetname.length>0)
     {
+      if(fromdrive)
+        {
+          setitsfromdatabase(true)
+          const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+            console.log(response,"mysterious")
+
+            if(response.data.status==200)
+            {
+            const allJson=response.data.data
+            
+            const keys=allJson[0].data
+            const finalJson=[]
+            allJson.map(val=>{
+                    if(val.rowIndex!=1)
+                    {
+                        const result=keys.reduce((obj,key,value)=>{obj[key]=val.data[value]; return obj},{})
+                        finalJson.push(result)
+                    }
+                })
+
+            const data=finalJson
+            let dt = data
+            let filteredDt = [];
+            dt.map(d => filteredDt.push({ pv: d[selectedXaxis], uv: d[selectedYaxis] }));
+
+            const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+            setmydata(convertedData);
+            setFromApi(false);
+          }
+        }else{
       setitsfromdatabase(true)
      let dt=JSON.parse(Sheet_response.data.data) 
      let filteredDt=[]
@@ -210,9 +319,40 @@ useEffect(() => {
         setmydata(convertedData)
         setFromApi(false)
     }
+    }
     else if (isSheetchart&&clickedsheetname.length>0) 
       {
         console.log("8")
+        if(fromdrive)
+          {
+            setitsfromdatabase(true)
+            const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+              console.log(response,"mysterious")
+  
+              if(response.data.status==200)
+              {
+              const allJson=response.data.data
+              
+              const keys=allJson[0].data
+              const finalJson=[]
+              allJson.map(val=>{
+                      if(val.rowIndex!=1)
+                      {
+                          const result=keys.reduce((obj,key,value)=>{obj[key]=val.data[value]; return obj},{})
+                          finalJson.push(result)
+                      }
+                  })
+  
+              const data=finalJson
+              let dt = data
+              let filteredDt = [];
+              dt.map(d => filteredDt.push({ pv: d[selectedXaxis], uv: d[selectedYaxis] }));
+  
+              const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+              setmydata(convertedData);
+              setFromApi(false);
+            }
+          }else{
         setitsfromdatabase(true)
       let dt = JSON.parse(Sheet_response.data.data);
       let filteredDt = [];
@@ -221,6 +361,7 @@ useEffect(() => {
       const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
       setmydata(convertedData);
       setFromApi(false);
+          }
     }
     else if(isSheetchart&&clickedsheetname.length<=0)
     {
@@ -241,55 +382,53 @@ useEffect(() => {
   return (
     <div style={{ width: '100%', height: '90%' }} className='mt-8  pr-10'>
     <div className='w-[100%] h-[100%] mt-3 pr-14'>
-      <ResponsiveContainer width="100%" height="100%">
-      <AreaChart
-        width={500}
-        height={300}
-        data={mydata}
-
-
-
-
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 20,
-        }}
-      >
-
-            <defs>
-          
-            <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="20%" stopColor="#004EEB" stopOpacity={0.3} />
-              <stop offset="80%" stopColor="#004EEB" stopOpacity={0.7} />
-             
-            </linearGradient>
-          </defs>
-
-
-          <CartesianGrid stroke="#ccc"  horizontal={true} vertical={false} />
-        <XAxis dataKey="pv" tick={true}     tickMargin={10} padding={{ left: 10, right: 10 }}  />
-        
-        <YAxis tick={true}   tickCount={4} padding={{ top: 10, bottom: 10 }} />
-        <Tooltip />
-       
-      
-       
-            
-
-    <Area type="monotone" dataKey="uv" stroke="#007BFF" fill="url(#blueGradient)" strokeWidth={3}/>
-
-        
-      </AreaChart>
-    </ResponsiveContainer>
+    <ResponsiveContainer width="100%" height="100%">
+                    {mydatatypex === 'string' && mydatatypey === 'integer' ? (
+                        // Standard layout: String on X-axis, Integer on Y-axis
+                        <AreaChart
+                            data={mydata}
+                            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                        >
+                            <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
+                            <XAxis dataKey="pv" tickCount={4}/>
+                            <YAxis tickCount={4} />
+                            <Tooltip />
+                            <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
+                            <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
+                        </AreaChart>
+                    ) : (
+                        // Horizontal layout: Integer on X-axis, String on Y-axis
+                        <AreaChart
+                            layout="vertical"
+                            data={mydata}
+                            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                        >
+                             <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
+                            <XAxis type="number" dataKey="pv" />
+                            <YAxis type="category" dataKey="uv"  tickCount={4}/>
+                            <Tooltip />
+                            <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
+                            <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
+                        </AreaChart>
+                    )}
+                </ResponsiveContainer>
     
     </div>
     {
-              itsfromDatabase?
+              itsfromDatabase &&!isitfromDrive?
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-green-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Database</p>
+
+                </div>:
+                <></>
+            }
+
+{
+              itsfromDatabase &&isitfromDrive?
+                <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
+                  <div className='w-[10px] h-[10px] bg-orange-600 rounded-[50%] mt-[2px]'></div> 
+                  <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Google Drive</p>
 
                 </div>:
                 <></>

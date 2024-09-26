@@ -103,7 +103,6 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                     }
                     if(response.data.status==200)
                     { 
-                        alert("Done")
                         handleOpenGrid()
                     }
                 
