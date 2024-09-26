@@ -737,7 +737,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                                 <></>
                         }
                         {
-                            (showBarchart ||showPiechart || showLinechart)
+                            (showBarchart ||showPiechart || showLinechart) && (localStorage.getItem('role')=='super admin' || localStorage.getItem('role')=='admin')
                             ?
                                 <div className='cursor-pointer' onClick={()=>setchangeChart(!changeChart)}>
                                     <HiOutlineDotsVertical size={17}/>

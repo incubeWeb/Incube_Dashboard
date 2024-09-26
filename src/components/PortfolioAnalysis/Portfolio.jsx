@@ -322,7 +322,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                             :<></>
                         }
                         {
-                            showHistory?
+                            showHistory && (localStorage.getItem('role')=='super admin' || localStorage.getItem('role')=='admin')?
                             <div className='h-[30px] flex items-center' onClick={()=>{setclickedDots(!clickedDots)}}>
                                 <BsThreeDotsVertical className='cursor-pointer'/>
                             </div>

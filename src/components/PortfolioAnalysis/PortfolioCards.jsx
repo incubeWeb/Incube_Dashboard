@@ -437,10 +437,11 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
     
                     {loading1 ? (
             <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
-          ) : (
+          ) : localStorage.getItem('role')=='super admin' || localStorage.getItem('role')=='admin'?(
                         <div className='h-[20px] cursor-pointer'  onClick={handlePlusClick}>
                             <FaCirclePlus className='text-gray-500 h-[20px] w-[20px]' />
-                               </div>)}
+                        </div>
+               ):<></>}
                     </div>
                 </div>
                 </div>
