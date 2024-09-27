@@ -60,17 +60,17 @@ const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfi
     return (
         <div style={{ width: '100%', height: '90%' }} className='mt-8 pr-10'>
              { chartDatatypeX=='string' && chartDatatypeY=='integer'?   
-      <div className='pl-4' style={{ paddingBottom: '12px' }}>
-      <p className='text-[16px] font-bold font-inter -mt-6'>Vertical Line Chart</p>
+      <div className='pl-8' style={{ paddingBottom: '30px' }}>
+      <p className='text-[18px] font-bold font-inter -mt-8'>Vertical Line Chart</p>
     </div> 
     : 
-    <div  className='pl-4 -pt-4'  style={{ paddingBottom: '12px' }} >
-      <p className='text-[16px] font-bold font-inter -mt-6'>Horizontal Line Chart</p>
+    <div  className='pl-8 -pt-4'  style={{ paddingBottom: '30px' }} >
+      <p className='text-[18px] font-bold font-inter -mt-8'>Horizontal Line Chart</p>
     </div>
      
      }
 
-            <div style={{ width: '100%', height: '95%' }}>
+            <div style={{ width: '100%', height: '90%' }}>
                 <ResponsiveContainer width="100%" height="100%">
                     {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ? (
                         // Standard layout: String on X-axis, Integer on Y-axis
@@ -79,10 +79,18 @@ const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfi
                             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                         >
                             <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                            <XAxis dataKey="pv" tickCount={4}/>
-                            <YAxis tickCount={4} />
-                            <Tooltip />
-                            <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
+                            <XAxis dataKey="pv" tickCount={4}
+                                tick={{ fontSize: 16, fontFamily: 'Inter', fill: '#8884d8' }}
+
+                            />
+                            <YAxis tickCount={4}
+                            tick={{ fontSize: 14, fontFamily: 'Inter', fill: '#8884d8' }} />
+                            <Tooltip
+  contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
+  itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+  labelStyle={{ color: '#ccc' }}
+/>
+                            
                             <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
                         </AreaChart>
                     ) : (
@@ -95,8 +103,12 @@ const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfi
                              <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
                             <XAxis type="number" dataKey="pv" />
                             <YAxis type="category" dataKey="uv"  tickCount={4}/>
-                            <Tooltip />
-                            <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
+                            <Tooltip
+  contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
+  itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+  labelStyle={{ color: '#ccc' }}
+/>
+                            
                             <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
                         </AreaChart>
                     )}

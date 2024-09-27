@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PieChart, Pie, ResponsiveContainer ,Tooltip} from 'recharts';
+import { PieChart, Pie, ResponsiveContainer ,Tooltip,Legend} from 'recharts';
 import { Bars } from 'react-loader-spinner';
 import axios from 'axios';
 import { RxCross2 } from 'react-icons/rx';
@@ -342,6 +342,10 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
     };
     fun();
   }, [investmentchange]);
+  const legendFormatter = (value, entry) => {
+    const { name, value: val } = entry.payload;
+    return `${name}: ${val}`;
+};
 
   // Custom label function to display name and value
   const renderCustomLabel = ({ name, value }) => `${name}: ${value}`;
@@ -367,10 +371,17 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
               data={mydata}
               cx="50%"
               cy="50%"
-              outerRadius={outerRadius}
+              outerRadius={90}
               fill="url(#blueGradient)" // Apply the gradient
              
             />
+             <Legend
+                        layout="vertical"
+                        align="right"
+                        verticalAlign="middle"
+                        formatter={legendFormatter}
+                        wrapperStyle={{ paddingLeft: '20px', lineHeight: '30px' }}
+                    />
             <Tooltip />
        
           </PieChart>

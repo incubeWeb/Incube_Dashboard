@@ -13,7 +13,7 @@ import { FaAngleDoubleRight } from "react-icons/fa";
 import { BiSolidSend } from "react-icons/bi";
 import { Link } from 'react-router-dom';
 import { Bars } from 'react-loader-spinner';
-
+import { FaDownload } from "react-icons/fa6";
 
 function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,companyName,description,handleOpenGrid}) {
     const [AddNewWindow,setAddnewWindow]=useState(false)
@@ -26,6 +26,39 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
 
 
 
+    const handleDownloadDealsourcefile=async(e)=>{
+        e.stopPropagation();
+        try{
+            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/createpdf/create-pdf`, {
+                companyname: companyName,
+               
+                organization: localStorage.getItem('organization'),
+            }, {
+                responseType: 'blob', // Important for handling binary data
+            });
+    
+            // Create a download link for the blob
+            const blob = new Blob([response.data], { type: 'application/pdf' }); // Specify the correct MIME type
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${companyName}.pdf`;
+           // Set the file name
+            document.body.appendChild(a);
+            a.click(); // Trigger the download
+            a.remove();
+            window.URL.revokeObjectURL(url); // Clean up URL object
+        }catch(e)
+        {
+            alert("error downloading pdf")
+        }
+    }
+
+//     useEffect(()=>{
+
+// console.log(err.e)
+//         handleDownloadDealsourcefile()
+//     },[])
 
 
     const openAddNewWindow=()=>{
@@ -113,8 +146,12 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
             <div className='w-[100%] md:h-[85px] flex flex-col'>
                     <div className='flex flex-row w-[100%]'>
                         <p className='md:text-[30px] text-[25px] w-[50%] font-inter font-semibold'>{companyName}</p>
-                        
+                        <div className='cursor-pointer flex flex-row space-x-10 absalute right-3 absolute  mr-4 bg-gradient-to-r from-blue-600 to-blue-800 w-[150px] h-[35px] rounded-md items-center justify-center text-white border-blue-600 border-[1px] shadow-gray-300 shadow-md' onClick={(e)=>handleDownloadDealsourcefile(e)}>
+                                <p className='text-[13px] font-inter font-semibold  tracking-wider'>Download</p>
+                                <FaDownload size={15} />
+                            </div>
                     </div>
+                  
                     <div><p className='md:text-[14px] text-[13px] font-inter font-semibold'>{description}</p></div>
             </div>
             <div className='flex flex-row w-[100%] h-[40px] space-x-2'>

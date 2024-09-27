@@ -50,40 +50,11 @@ function GridTemplate({realtimedealpipelinecompanyInfo,hidenavbar,realtimetabcha
         return assignedList.some(val=>val.mainorganization==localStorage.getItem('organization') && val.organization==Title)
     }
 
-    const handleDownloadDealsourcefile=async(e)=>{
-        e.stopPropagation();
-        try{
-            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/createpdf/create-pdf`, {
-                companyname: Title,
-                organization: localStorage.getItem('organization'),
-            }, {
-                responseType: 'blob', // Important for handling binary data
-            });
-    
-            // Create a download link for the blob
-            const blob = new Blob([response.data], { type: 'application/pdf' }); // Specify the correct MIME type
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${Title}.pdf`; // Set the file name
-            document.body.appendChild(a);
-            a.click(); // Trigger the download
-            a.remove();
-            window.URL.revokeObjectURL(url); // Clean up URL object
-        }catch(e)
-        {
-            alert("error downloading pdf")
-        }
-    }
-
+   
   return (
     <div className='shadow-md md:shadow-none  h-[200px]  md:h-[233px] border-[1px] border-gray-200 rounded-md flex flex-col md:hover:shadow-xl duration-75 md:hover:border-0 select-none cursor-pointer ml-2 md:ml-0 mr-2 md:mr-2' onClick={handleOpenGrid}>
     <div className="flex justify-end">
-  <div className='font-inter font-semibold text-[12px] bg-white p-2 shadow-md rounded-md h-[30px] w-[40px]'>
-    <div className='cursor-default' onClick={(e)=>handleDownloadDealsourcefile(e)}>
-        <FaDownload  size={18}/>
-    </div>
-  </div>
+  
 </div>
         <div className='flex flex-col w-[100%] h-[76%] pl-3 pr-3 pt-5 space-y-7'>
             <div className='flex flex-row w-[100%] h-[34%] space-x-3'>

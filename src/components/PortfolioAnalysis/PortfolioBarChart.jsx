@@ -115,28 +115,40 @@ const fieldConversions = {
       ];
       const yAxisTickFormatter = (value) => value; 
   return (
-    <div style={{ width: '100%', height: '90%' }} className='mt-2 pr-10 '>
+    <div style={{ width: '100%', height: '90%' }} className='mt-2 pr-10 ml-8 '>
      { chartDatatypeX=='string' && chartDatatypeY=='integer'?   
-      <div className='pl-4' style={{ paddingBottom: '12px' }}>
-      <p className='text-[16px] font-bold font-inter -mt-6'>Vertical Bar Chart</p>
+      <div className='pl-4' style={{ paddingBottom: '20px' }}>
+      <p className='text-[18px] font-bold font-inter -mt-4'>Vertical Bar Chart</p>
     </div> 
     : 
-    <div  className='pl-4 -pt-4'  style={{ paddingBottom: '12px' }} >
-      <p className='text-[16px] font-bold font-inter -mt-6'>Horizontal Bar Chart</p>
+    <div  className='pl-4 -pt-4'  style={{ paddingBottom: '20px' }} >
+      <p className='text-[18px] font-bold font-inter -mt-4'>Horizontal Bar Chart</p>
     </div>
      
      }
-        <div style={{ width: '100%', height: '95%' }}>
+        <div style={{ width: '100%', height: '90%' }}>
       
         {
           chartDatatypeX=='string' && chartDatatypeY=='integer'?
           
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data}>
-              <XAxis dataKey="name" tick={true} stroke="#8884d8" />
-              <YAxis dataKey='uv' tick={true}  tickCount={4}/>
+              <XAxis dataKey="name" stroke="#8884d8" 
+                  tick={{ fontSize: 16, fontFamily: 'Inter', fill: '#8884d8' }}
+
+
+              />
+              <YAxis dataKey='uv'   tickCount={4}
+
+    tick={{ fontSize: 14, fontFamily: 'Inter', fill: '#8884d8' }}
+              />
             
-              <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
+             
+              <Tooltip
+  contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
+  itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+  labelStyle={{ color: '#ccc' }}
+/>
               
            
               <CartesianGrid stroke="#ccc"   horizontal={true} vertical={false}  />
@@ -162,7 +174,12 @@ const fieldConversions = {
               <XAxis dataKey="name" tick={true} stroke="#8884d8" />
               <YAxis dataKey='uv' tick={true}  tickCount={4}/>
             
-              <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
+             
+              <Tooltip
+   contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
+    itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+   labelStyle={{ color: '#ccc' }}
+/>
               
            
               <CartesianGrid stroke="#ccc"   horizontal={true} vertical={false}  />

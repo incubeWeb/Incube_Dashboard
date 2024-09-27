@@ -122,9 +122,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
                 itsfrom!='completed'?
         
             <div className='w-[100%] pl-2 h-[20%] md:flex md:flex-row space-x-2 md:items-center justify-center'>
-                <div className='w-[6%] h-[100%] flex justify-start  items-center'>
-                    <FiPlusSquare size={25}/>
-                </div>
+                
                 <div className='w-[90%] md:space-x-3 h-[100%] md:flex md:flex-row pb-2 pt-1 pr-3'>
                     <div className=' w-[95%] h-[100%]   border-[1px]   border-gray-300 rounded-md flex flex-row'>
                         <input value={mychat} onChange={(e)=>setmychat(e.target.value)} onKeyPress={(e)=>e.key=='Enter'?handleChat():<></>}  className='w-[100%] h-[100%]  rounded-md outline-none text-[14px] pl-2'/>

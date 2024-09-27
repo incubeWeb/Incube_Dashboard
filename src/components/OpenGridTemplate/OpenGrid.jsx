@@ -13,6 +13,7 @@ import { FaAngleDoubleRight } from "react-icons/fa";
 import { BiSolidSend } from "react-icons/bi";
 import { Link, useNavigate } from 'react-router-dom';
 import { Bars } from 'react-loader-spinner';
+import { FaDownload } from "react-icons/fa6";
 
 
 
@@ -32,7 +33,31 @@ function OpenGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,com
         setTotalCards(data)
     }
     
-
+    const handleDownloadDealsourcefile=async(e)=>{
+        e.stopPropagation();
+        try{
+            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/createpdf/create-pdf`, {
+                companyname: companyName,
+                organization: localStorage.getItem('organization'),
+            }, {
+                responseType: 'blob', // Important for handling binary data
+            });
+    
+            // Create a download link for the blob
+            const blob = new Blob([response.data], { type: 'application/pdf' }); // Specify the correct MIME type
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${companyName}.pdf`; // Set the file name
+            document.body.appendChild(a);
+            a.click(); // Trigger the download
+            a.remove();
+            window.URL.revokeObjectURL(url); // Clean up URL object
+        }catch(e)
+        {
+            alert("error downloading pdf")
+        }
+    }
     useEffect(()=>{
         const fun=async()=>{
           
@@ -122,14 +147,21 @@ function OpenGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,com
             <div className='flex flex-row items-center justify-center'>
             <p className='text-gray-500 text-[16px] cursor-pointer hover:text-gray-600 hover:underline hover:underline-offset-2 font-inter font-semibold ' onClick={handleOpenGrid}>Deal Pipeline</p><CgFormatSlash className='text-gray-300' size={30}/><p className='text-gray-600 text-[16px] font-inter font-semibold'>{companyName}</p>
             </div>
+           
         </div>
         <div className='w-[100%] flex flex-col items-center'>
             
             <div className='w-[100%] md:h-[85px] flex flex-col'>
                     <div className='flex flex-row w-[100%]'>
                         <p className='md:text-[30px] text-[30px] w-[50%] font-inter font-semibold'>{companyName}</p>
+                    
                         <div className='flex flex-row h-[100%] justify-end w-[48%] pl-4 pt-2'>
-                            <div className='cursor-pointer flex flex-row space-x-3 bg-gradient-to-r from-blue-600 to-blue-800 w-[30%] h-[100%] rounded-md items-center justify-center text-white border-blue-600 border-[1px] shadow-gray-300 shadow-md' onClick={handlePushComplete}>
+                     
+          <div className='cursor-pointer flex flex-row space-x-10 mr-4 bg-gradient-to-r from-blue-600 to-blue-800 w-[150px] h-[35px] rounded-md items-center justify-center text-white border-blue-600 border-[1px] shadow-gray-300 shadow-md' onClick={(e)=>handleDownloadDealsourcefile(e)}>
+                                <p className='text-[13px] font-inter font-semibold'>Download</p>
+                                <FaDownload size={15} />
+                            </div>
+                            <div className='cursor-pointer flex flex-row space-x-2 bg-gradient-to-r from-blue-600 to-blue-800 w-[150px] h-[35px] rounded-md items-center justify-center text-white border-blue-600 border-[1px] shadow-gray-300 shadow-md' onClick={handlePushComplete}>
                                 <p className='text-[13px] font-inter font-semibold'>Push to complete</p>
                                 <BiSolidSend size={15} />
                             </div>

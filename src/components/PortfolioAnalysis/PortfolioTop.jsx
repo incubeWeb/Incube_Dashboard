@@ -67,7 +67,7 @@ const PortfolioTop = ({realtimeportfoliostate,hidenavbar,sheetedited,selectedShe
             
         </div>
         
-        <div>
+        <div className='w-[100%] h-[420px] '>
             <PortfolioTopGraph realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited}  hidenavbar={hidenavbar}/>
         </div>
     </div>
