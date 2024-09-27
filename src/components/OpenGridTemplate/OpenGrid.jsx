@@ -58,6 +58,7 @@ function OpenGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,com
             alert("error downloading pdf")
         }
     }
+
     useEffect(()=>{
         const fun=async()=>{
           
@@ -112,6 +113,7 @@ function OpenGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,com
         setCurrentTab(currentTab)
         setTabCount(prev=>prev+1)
     }
+
     const handlePushComplete=async()=>{
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanyCompleteStatus`,{
             completed:'completed',
@@ -174,7 +176,7 @@ function OpenGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,com
                         <div className='w-[100%] h-[75%] rounded-md flex items-center justify-start flex-row space-x-2'>
                             {(Tabs||[]).map(Tab=>
                                 
-                                <div key={Tab.Tab} className={` md:w-[55px] w-[55px] h-[80%] rounded-md ${currentTab==Tab.id?'bg-white border border-blue-500 border-1px':'bg-white shadow-lg'} flex items-center justify-center `}>
+                                <div key={Tab.id} className={` md:w-[55px] w-[55px] h-[80%] rounded-md ${currentTab==Tab.id?'bg-white border border-blue-500 border-1px':'bg-white shadow-lg'} flex items-center justify-center `}>
                                     <div onClick={()=>setCurrentTab(Tab.id)} className='w-[100%] h-[100%] flex items-center justify-center'>
                                         <p className='text-[12px] font-semibold font-inter'>Tab {Tab.id}</p>
                                     </div>

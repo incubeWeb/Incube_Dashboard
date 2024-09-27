@@ -14,6 +14,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
 
     useEffect(()=>{
         const fun=async()=>{
+           // console.log(currentTab)
             let organization=localStorage.getItem('organization')
             const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization})
             
