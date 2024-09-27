@@ -149,17 +149,12 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
       chatingData()
     }catch(e)
     {
-      
+      console.log(e)
     }
 
   },[realtimeChat])
 
-  useEffect(()=>{
-    
-   
-      parseInt(a.time)-parseInt(b.time)
-    
-  },[sendedMsg,receivedMsg])
+  
  
 
 

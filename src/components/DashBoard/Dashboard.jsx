@@ -87,6 +87,8 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
   const drawerRef=useRef(null)
 
   const chatRef=useRef(null)
+  const blockerRef=useRef(null)
+  const rndRef=useRef(null)
 
   const cardData = [
     { id: 1, name: 'Card One' },
@@ -283,11 +285,22 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
   
 
 
-  const setPosition = (id, direction) => {
+  const setPosition = (id, direction,width) => {
+    
+    if(parseInt(direction.x)<parseInt(window.innerWidth/2)-100)
+    {
     setBoxes(boxes.map(box =>
       box.id === id ? { ...box, x: direction.x, y: direction.y } : box
     ));
+    }
+    else{
+      setBoxes(boxes.map(box =>
+        box.id === id ? { ...box, x: 499, y: direction.y } : box
+      ));
+    }
   };
+
+
 
   const setSize = (id, ref, position) => {
     setBoxes(boxes.map(box =>
@@ -306,7 +319,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
 
   return (
     
-    <div className={`${hidenavbar?'w-[100%] ml-[0%]':'w-[100%] pl-[20%]'} bg-white space-x-4 flex flex-row h-screen p-[44px] pr-0 pt-0 pb-0 font-roboto`}>
+    <div className={`${hidenavbar?'w-[100%] ml-[0%]':'w-[100%] pl-[20%]'}  bg-white space-x-4 flex flex-row h-screen p-[44px] pr-0 pt-0 pb-0 font-roboto`}>
     {
       loading ? (
         <div className='w-[100%]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -322,18 +335,20 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
   >
     <p> <span className='text-[20px] font-bold'>+</span>  Add widgets</p>
   </div>
+  
 </div>
 
-      <div className=' w=[80%] h-full flex flex-col items-center oveflow-y-auto '>
+      <div className='w-[100%] h-[100%]  flex flex-col items-center '>
         {(boxes||[]).map((box,index) => (
          <Rnd
-    key={box.id}
-    className='border-gray-300 bg-white border-[0.5px] rounded-lg p-4 pt-7'
-    size={{ width: box.width, height: box.height }}
-    position={{ x: box.x, y: box.y }}
-    bounds='parent'
+        
+          key={box.id}
+          className='border-gray-300 bg-white border-[0.5px] rounded-lg p-4 pt-7'
+          size={{ width: box.width, height: box.height }}
+          position={{ x: box.x, y: box.y }}
+          
 
-    onDragStop={(e, direction) => setPosition(box.id, direction)}
+            onDragStop={(e, direction) => setPosition(box.id, direction,box.width)}
             onResizeStop={(e, direction, ref, delta, position) => setSize(box.id, ref, position)}
             
           >
