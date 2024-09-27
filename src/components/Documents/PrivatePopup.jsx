@@ -12,7 +12,7 @@ const PrivatePopup = ({hidenavbar,setfileprivate,docId}) => {
   const [searchUser,setsearchuser]=useState('')
 
   const handlesharenow=async()=>{
-    const response=await axios.post('http://localhost:8999/insert-private-Visibility',{
+    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/insert-private-Visibility`,{
       emails:JSON.stringify(checkedUsers),
       organization:localStorage.getItem('organization'),
       Document_id:docId
@@ -34,7 +34,7 @@ const PrivatePopup = ({hidenavbar,setfileprivate,docId}) => {
         setUsers()
       }
      else{
-      const response=await axios.post('http://localhost:8999/findUsers',{
+      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/findUsers`,{
         user:searchUser,
         organization:localStorage.getItem('organization')
       })
@@ -47,7 +47,7 @@ const PrivatePopup = ({hidenavbar,setfileprivate,docId}) => {
 
   const setUsers=async()=>{
     let organization=localStorage.getItem('organization')
-    const response=await axios.post('http://localhost:8999/fetchallusers',{
+    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/fetchallusers`,{
       organization:organization
     })
     setorganizationusers(response.data.data)

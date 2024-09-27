@@ -76,7 +76,7 @@ const Dealsourcing = ({hidenavbar}) => {
     
     try {
      
-      const res = await axios.post('http://localhost:8999/scrape/companyData', { "company": `${searchValue}` });
+      const res = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/scrape/companyData`, { "company": `${searchValue}` });
       
       const data = res.data.data;
       

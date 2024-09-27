@@ -35,7 +35,7 @@ const Navigation = ({googleaccountconnected,activeField,setActiveField,hidenavba
     useEffect(()=>
     {
         const checkGoogleLogin=async()=>{
-           const response= await axios.post('http://localhost:1222/check-login-google',{
+           const response= await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{
                 email:localStorage.getItem('email'),
                 organization:localStorage.getItem('organization')
             })
@@ -50,7 +50,7 @@ const Navigation = ({googleaccountconnected,activeField,setActiveField,hidenavba
     useEffect(()=>
         {
             const checkGoogleLogin=async()=>{
-               const response= await axios.post('http://localhost:1222/check-login-google',{
+               const response= await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{
                     email:localStorage.getItem('email'),
                     organization:localStorage.getItem('organization')
                 })
@@ -105,7 +105,7 @@ const Navigation = ({googleaccountconnected,activeField,setActiveField,hidenavba
         setloading(true)
         const email=localStorage.getItem('email')
         const organization=localStorage.getItem("organization")
-        const response= await axios.post('http://localhost:1222/logout-google',{
+        const response= await axios.post(`${import.meta.env.VITE_HOST_URL}1222/logout-google`,{
             email:email
             ,organization:organization
         })
@@ -124,7 +124,7 @@ const Navigation = ({googleaccountconnected,activeField,setActiveField,hidenavba
         setloading(true)
         const email=localStorage.getItem('email')
         const organization=localStorage.getItem("organization")
-        const response= await axios.post('http://localhost:1222/generate-link',{
+        const response= await axios.post(`${import.meta.env.VITE_HOST_URL}1222/generate-link`,{
             email:email
             ,organization:organization
         })

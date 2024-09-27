@@ -151,7 +151,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
       
       let email=localStorage.getItem('email')
       const organization=localStorage.getItem('organization')
-      let checkDb=await axios.post('http://localhost:8999/getDashboardData',{email:email,organization:organization})
+      let checkDb=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`,{email:email,organization:organization})
       
 
       
@@ -194,7 +194,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
       
       let email=localStorage.getItem('email')
       const organization=localStorage.getItem('organization')
-      let checkDb=await axios.post('http://localhost:8999/getDashboardData',{email:email,organization:organization})
+      let checkDb=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`,{email:email,organization:organization})
       
 
       
@@ -247,7 +247,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
 
         if(boxes.length>0)
         {
-         await axios.post('http://localhost:8999/addDashboardData',{email:email,positions:position,organization:organization}) 
+         await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addDashboardData`,{email:email,positions:position,organization:organization}) 
         }
        
         

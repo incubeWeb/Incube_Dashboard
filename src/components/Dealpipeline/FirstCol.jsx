@@ -29,8 +29,8 @@ function FirstCol({realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,rea
 
   const fetchCompanyData = async () => {
     try {
-      const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-      const Teamresponse = await axios.post('http://localhost:8999/getUserfromTeam', {
+      const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+      const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
         member: localStorage.getItem('email'),
         mainorganization:localStorage.getItem('organization')
       });

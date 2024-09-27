@@ -15,7 +15,7 @@ const CalendarWidgit = ({id,setBoxes,boxes}) => {
     useEffect(()=>
     {
       const setCalender=async()=>{
-        const response=await axios.post('http://localhost:1222/get-mycalender-details',{email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-mycalender-details`,{email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
         console.log(response)
         if(response.data.status==200 && typeof(response.data.message)=='undefined')
         {
@@ -34,7 +34,7 @@ const CalendarWidgit = ({id,setBoxes,boxes}) => {
 
     useEffect(()=>{
       const checkgooglelogin=async()=>{
-          const response=await axios.post('http://localhost:1222/check-login-google',{email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+          const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
           if(response.data.status==200)
           {
             setgooglelogincheck(true)
@@ -54,10 +54,10 @@ const CalendarWidgit = ({id,setBoxes,boxes}) => {
   
       if(boxes.length===0)
       {
-        await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization})
+        await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization})
         setBoxes([])
       }
-      else{const response=await axios.post('http://localhost:8999/updatedashboard',{email:email,position:position,organization:organization})
+      else{const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization})
       if(response.data.status==200)
       {
         setBoxes(boxes.filter((box,index)=>index!=id))

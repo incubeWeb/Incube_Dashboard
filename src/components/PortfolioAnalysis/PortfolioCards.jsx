@@ -38,7 +38,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
         const fun=async()=>{
             const organization=`${localStorage.getItem('organization')}_Topcards`
             
-            const response1=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
+            const response1=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{organization:organization})
             const data1=JSON.parse(response1.data.data)
            
             const JsonData=data1
@@ -46,7 +46,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
             const new_data=[{id:id,showValue:showValue,labelname:labelname}]
             const final_data=[...filterdata,...new_data]
 
-            await axios.post('http://localhost:8999/setportfoliostate',{
+            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
                 organization:organization,
                 portfolioState:JSON.stringify(final_data)
             })
@@ -95,7 +95,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
          
             const organization=`${localStorage.getItem('organization')}_Topcards`
             
-            const response1=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
+            const response1=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{organization:organization})
             const data1=JSON.parse(response1.data.data)
             let key=''
             let sheetid=''
@@ -108,7 +108,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
             })
             
        
-            const response=await axios.post('http://localhost:8999/sheetfromdb',{id:sheetid,organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetid,organization:localStorage.getItem('organization')})
             const data=JSON.parse(response.data.data)
             
             //let value=data[0][key]
@@ -166,8 +166,8 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
 
     const handlePlusClick=async()=>{
         setLoading1(true)
-        const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
-        const response2=await axios.post('http://localhost:8999/get-document-visibility',{
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
+        const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
             email:localStorage.getItem('email'),
             organization:localStorage.getItem('organization')
         })
@@ -176,7 +176,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
         const filteredSet1=response.data.data.filter(doc=>!set2DocsIds.includes(doc._id))
         const tosetdata=[...response2.data.data,...filteredSet1]
 
-        const response3=await axios.post('http://localhost:1222/get-drivesheets',{
+        const response3=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-drivesheets`,{
             email:localStorage.getItem('email'),
             organization:localStorage.getItem("organization")
         })
@@ -225,7 +225,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
 
     useEffect(()=>{
         const setValues=async()=>{
-            const response=await axios.post('http://localhost:8999/sheetfromdb',{id:clickedSheetId,organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:clickedSheetId,organization:localStorage.getItem('organization')})
             const data=JSON.parse(response.data.data)
             setsheetJson(data)
             const key=Object.keys(data[0])
@@ -257,7 +257,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
         setsheetClicked(true)
         setsheetpopup(false)
         
-        const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:id,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:id,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
         if(response.data.status==200)
         {
         const allJson=response.data.data

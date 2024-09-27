@@ -33,7 +33,7 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
 
     useEffect(() => {
         const setUsers = async () => {
-            const response = await axios.post('http://localhost:8999/fetchallusers',{organization:localStorage.getItem('organization')});
+            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/fetchallusers`,{organization:localStorage.getItem('organization')});
             const usersData = response.data.data;
             if(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')
             {
@@ -74,28 +74,28 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
         const settingRoles = async () => {
             const selectedUsers = users.filter(user => selects[user._id]);
             await Promise.all(selectedUsers.map(async (user) => {
-                await axios.post('http://localhost:8999/updateuser', {
+                await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateuser`, {
                     email: user.email,
                     password: user.password,
                     role: roles[user._id],
                     organization:localStorage.getItem('organization')
                 });
                 
-                    const response = await axios.post('http://localhost:8999/addTeam', {
+                    const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addTeam`, {
                         organization: companyName,
                         member:  user.email,
                         position:roles[user._id],
                         assignedBy:localStorage.getItem('email'),
                         mainorganization:localStorage.getItem('organization')
                     });
-                    await axios.post('http://localhost:8999/updateCompanystatus', {
+                    await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanystatus`, {
                         company: companyName,
                         status: 'In Progress',
                         organization:localStorage.getItem('organization')
                     });
                     if(localStorage.getItem('role')=='team lead')
                     {
-                        await axios.post('http://localhost:8999/updateCompanyTeamLeadstatus', {
+                        await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanyTeamLeadstatus`, {
                             company: companyName,
                             TeamLead_status: 'In Progress',
                             organization:localStorage.getItem('organization')
@@ -108,7 +108,7 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                 
                 if (roles[user._id] =='team lead'){
 
-                    const response = await axios.post('http://localhost:8999/addTeam', {
+                    const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addTeam`, {
                         organization: companyName,
                         member:  user.email,
                         position:roles[user._id],

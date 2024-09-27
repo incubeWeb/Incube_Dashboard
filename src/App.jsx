@@ -17,7 +17,6 @@ import Viewsheet from "./components/ViewSheet/Viewsheet";
 
 
 
-
 function App() {
   const [activeField, setActiveField] = useState('/dashboard');
   const [login, setLoginIn] = useState(false);
@@ -38,8 +37,9 @@ function App() {
   const [realtimedocumentvisibility,setrealtimedocumentvisibility]=useState([])
   const [realtimeportfoliostate,setrealtimeportfoliostate]=useState([])
 
-  const socket=io('http://localhost:8999')
-  const socket2=io('http://localhost:1222')
+  
+  const socket=io(`${import.meta.env.VITE_HOST_URL}8999`)
+  const socket2=io(`${import.meta.env.VITE_HOST_URL}1222`)
   
   
 
@@ -51,7 +51,7 @@ function App() {
           setLoginIn(true)
         }
        
-        const response=await axios.post('http://localhost:8999/gettimeline',{organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/gettimeline`,{organization:localStorage.getItem('organization')})
         
         if(response.data.data.length>0)
         {
@@ -114,6 +114,7 @@ function App() {
       
       }
       fun()
+      
       return ()=>{
           socket.disconnect()
       }

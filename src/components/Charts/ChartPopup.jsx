@@ -127,7 +127,7 @@ const ChartPopup = ({
         formData.append('organization',localStorage.getItem('organization'))
         formData.append('CompanyName',`DB${Date.now()}_${chart}`)
         try {
-            const response=await axios.post('http://localhost:8999/uploadsheetFile', formData);
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/uploadsheetFile`, formData);
 
             const data=JSON.parse(response.data.data)
             
@@ -158,7 +158,7 @@ const ChartPopup = ({
     setselectedDbsheet(!selectedDbSheet)
 
     
-    const response=await axios.post('http://localhost:8999/sheetfromdb',{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
+    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
     if(response.data.status==200)
     {
       const data=JSON.parse(response.data.data)
@@ -172,7 +172,7 @@ const ChartPopup = ({
       setSelectedFile(null);
     }
     else{
-      const response2=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetfromdbname,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+      const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetfromdbname,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
             
             
             if(response2.data.status==200)
@@ -216,7 +216,7 @@ const ChartPopup = ({
     e.stopPropagation();
     setclickedGoogle(false)
     setClickedDatabase((prev)=>!prev)
-    const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
+    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
    
     setpresentSheets(response.data.data)
     setLoading1(false);
@@ -234,7 +234,7 @@ const ChartPopup = ({
     e.stopPropagation();
     setClickedDatabase((prev)=>!prev)
     setclickedGoogle(true)
-    const response3=await axios.post('http://localhost:1222/get-drivesheets',{
+    const response3=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-drivesheets`,{
       email:localStorage.getItem('email'),
       organization:localStorage.getItem("organization")
   })

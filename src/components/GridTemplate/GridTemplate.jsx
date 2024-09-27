@@ -15,7 +15,7 @@ function GridTemplate({realtimedealpipelinecompanyInfo,hidenavbar,realtimetabcha
 
     useEffect(()=>{
         const getAssignedTeam=async()=>{
-            const response=await axios.post('http://localhost:8999/getTeams',{
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTeams`,{
                 assignedBy:localStorage.getItem('email'),
                 mailorganization:localStorage.getItem('organization')
             })
@@ -53,7 +53,7 @@ function GridTemplate({realtimedealpipelinecompanyInfo,hidenavbar,realtimetabcha
     const handleDownloadDealsourcefile=async(e)=>{
         e.stopPropagation();
         try{
-            const response = await axios.post('http://localhost:8999/createpdf/create-pdf', {
+            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/createpdf/create-pdf`, {
                 companyname: Title,
                 organization: localStorage.getItem('organization'),
             }, {

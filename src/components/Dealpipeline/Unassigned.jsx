@@ -16,14 +16,14 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
     const fetchcompanydata=async()=>{
       if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
       {
-        const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+        const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
    
         const filteredData=response.data.data.filter(val=>val.status=="Unassigned")
         setcompData(filteredData)
       }
       else{
-        const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-        const Teamresponse = await axios.post('http://localhost:8999/getUserfromTeam', {
+        const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+        const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
           member: localStorage.getItem('email'),
           mainorganization:localStorage.getItem('organization')
         });
@@ -50,14 +50,14 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
     const fetchcompanydata=async()=>{
       if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
         {
-          const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
+          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
        
           const filteredData=response.data.data.filter(val=>val.status=="Unassigned")
           setcompData(filteredData)
         }
         else{
-          const response = await axios.post('http://localhost:8999/getDealpipelineCompany',{organization:localStorage.getItem('organization')});
-          const Teamresponse = await axios.post('http://localhost:8999/getUserfromTeam', {
+          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+          const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
             member: localStorage.getItem('email'),
             mainorganization:localStorage.getItem('organization')
           });

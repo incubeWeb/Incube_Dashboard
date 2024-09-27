@@ -28,7 +28,7 @@ const Login = ({ setLoginIn }) => {
     const website=org_web
     const password=org_pass
 
-    const response=await axios.post('http://localhost:8999/createOrganization',{
+    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/createOrganization`,{
       name:name,
       location:location,
       entity:entity,
@@ -63,7 +63,7 @@ const Login = ({ setLoginIn }) => {
     const password = document.getElementById('password').value;
     const organization=document.getElementById('organization').value
     try {
-      const response = await axios.post('http://localhost:8999/login', {
+      const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/login`, {
         email: email,
         password: password,
         organization:organization
@@ -96,6 +96,7 @@ const Login = ({ setLoginIn }) => {
 
   return (
     <div className='font-roboto w-[100%] h-screen bg-gray-200 flex items-center justify-center'>
+      
       <div className='flex relative flex-row w-[70%] h-[80%] bg-white rounded-xl border-gray-300 borddr-[1px] shadow-md'>
         <div className='space-y-3 z-40 flex-col absolute w-[50%] h-[100%] bg-blue-500 rounded-r-xl shadow-lg shadow-gray-400 border-r-[1px] border-gray-300 flex items-center justify-center text-white'>
           <p className='text-[25px] tracking-wider'>Incube Web Login</p>

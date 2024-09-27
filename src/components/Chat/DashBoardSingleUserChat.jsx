@@ -9,12 +9,12 @@ const DashBoardSingleUserChat = ({receiver,clickUserField,openChatbar}) => {
   useEffect(()=>{
     const ReadMsg=async()=>
       {
-        const response1=await axios.post('http://localhost:8999/readChat',{
+        const response1=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/readChat`,{
           sender:localStorage.getItem('email'),
           receiver:receiver,
           organization:localStorage.getItem('organization')
         })
-        const response2=await axios.post('http://localhost:8999/readChat',{
+        const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}readChat`,{
           sender:receiver,
           receiver:localStorage.getItem('email'),
           organization:localStorage.getItem('organization')
@@ -35,12 +35,12 @@ const DashBoardSingleUserChat = ({receiver,clickUserField,openChatbar}) => {
 
   useEffect(()=>{
       const setMsg=async()=>{
-        const response1=await axios.post('http://localhost:8999/readChat',{
+        const response1=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/readChat`,{
           sender:localStorage.getItem('email'),
           receiver:receiver,
           organization:localStorage.getItem('organization')
         })
-        const response2=await axios.post('http://localhost:8999/readChat',{
+        const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/readChat`,{
           sender:receiver,
           receiver:localStorage.getItem('email'),
           organization:localStorage.getItem('organization')
@@ -72,7 +72,7 @@ const DashBoardSingleUserChat = ({receiver,clickUserField,openChatbar}) => {
         document.getElementById('message').value=""
         if(msg!="")
         {
-          const response=await axios.post('http://localhost:8999/sendChat',{
+          const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sendChat`,{
             sender:localStorage.getItem('email'),
             receiver:receiver,
             message:msg,

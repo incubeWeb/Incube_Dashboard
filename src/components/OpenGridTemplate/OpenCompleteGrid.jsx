@@ -38,7 +38,7 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
     
     useEffect(()=>{
         const fun=async()=>{
-           const data= await axios.post('http://localhost:8999/getOpenedTabs',{companyname:companyName,organization:localStorage.getItem('organization')})
+           const data= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getOpenedTabs`,{companyname:companyName,organization:localStorage.getItem('organization')})
            
            let count=1
            data.data.data.map(tabVal =>{
@@ -61,7 +61,7 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
 
     useEffect(()=>{
         const InitialVal=async()=>{
-            const doc=await axios.post('http://localhost:8999/getNewDetails',{
+            const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getNewDetails`,{
                 CompanyName:companyName,
                 Tab:`Tab${currentTab}`,
                 organization:localStorage.getItem('organization')
@@ -77,7 +77,7 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
 
     useEffect(()=>{
         const fun=async()=>{
-            await axios.post('http://localhost:8999/setopenedTabs',{companyname:companyName,count:TabCount,organization:localStorage.getItem('organization')})
+            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setopenedTabs`,{companyname:companyName,count:TabCount,organization:localStorage.getItem('organization')})
         }
         fun()
     },[TabCount])

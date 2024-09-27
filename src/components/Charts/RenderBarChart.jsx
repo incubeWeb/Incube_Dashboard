@@ -34,11 +34,11 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
    
     if(boxes.length===0)
     {
-      await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization});
+      await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization});
       setBoxes([]);
     }
     else{
-      const response=await axios.post('http://localhost:8999/updatedashboard',{email:email,position:position,organization:organization});
+      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization});
       if(response.data.status==200)
       {
         setBoxes(boxes.filter((box,index)=>index!=id));
@@ -80,7 +80,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
 
   useEffect(() => {
     const fun=async()=>{
-      const dashboard_response=await axios.post('http://localhost:8999/getDashboardData',{email:localStorage.getItem('email'),organization:localStorage.getItem('organization')});
+      const dashboard_response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`,{email:localStorage.getItem('email'),organization:localStorage.getItem('organization')});
       const entireData=JSON.parse(dashboard_response.data.data.positions);
       let selectedYaxis='';
       let selectedXaxis='';
@@ -110,7 +110,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
         }
       });
 
-      const Sheet_response=await axios.post('http://localhost:8999/investmentsheetfromdb',{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
+      const Sheet_response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/investmentsheetfromdb`,{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
       
       if(fromApi && !isSheetchart) { 
        
@@ -123,7 +123,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
         if(fromdrive)
           {
             setitsfromdatabase(true)
-            const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
           
   
               if(response.data.status==200)
@@ -165,7 +165,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
         if(fromdrive)
           {
             setitsfromdatabase(true)
-            const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
            
   
               if(response.data.status==200)

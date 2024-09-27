@@ -20,7 +20,7 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
 
   const Navigate=useNavigate()
   const getAllDeals=async()=>{
-   const response= await axios.post('http://localhost:8999/getTeams',{
+   const response= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTeams`,{
       assignedBy:localStorage.getItem('email'),
       mainorganization:"Organization1"
     })
@@ -32,7 +32,7 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
   },[])
 
   const handleCompany=async(companyname)=>{
-    const response=await axios.post('http://localhost:8999/searchdealsourcingfiles',{
+    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/searchdealsourcingfiles`,{
       search:companyname,
       organization:"Organization1"
     })
@@ -57,10 +57,10 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
  
     if(boxes.length===0)
     {
-      await axios.post('http://localhost:8999/deletedashboard',{email:email,organization:organization})
+      await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization})
       setBoxes([])
     }
-    else{const response=await axios.post('http://localhost:8999/updatedashboard',{email:email,position:position,organization:organization})
+    else{const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization})
     if(response.data.status==200)
     {
       setBoxes(boxes.filter((box,index)=>index!=id))

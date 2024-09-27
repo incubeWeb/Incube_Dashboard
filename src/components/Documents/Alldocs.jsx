@@ -39,7 +39,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
 
     const GetDriveSheets=async()=>{
         setloading1(true)
-        const response=await axios.post('http://localhost:1222/get-googledrive-sheets',{
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-googledrive-sheets`,{
             email:localStorage.getItem('email'),
             organization:localStorage.getItem("organization")
         })
@@ -56,7 +56,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     }
 
     const handlepublicfun=async(id)=>{
-        const response=await axios.post('http://localhost:8999/delete-private-file',{
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/delete-private-file`,{
             doc_id:id,
             organization:localStorage.getItem('organization')
         })
@@ -77,7 +77,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
 
     useEffect(()=>{
         const file=async()=>{
-            const response=await axios.post('http://localhost:8999/get-document-visibility',{
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
                 email:localStorage.getItem('email'),
                 organization:localStorage.getItem('organization')
             })
@@ -94,7 +94,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         window.open(`https://drive.google.com/file/d/${id}/view`,'_blank')
     }
     const handleGoogleSheetDelete=async(id)=>{
-        const response=await axios.post('http://localhost:1222/delete-drive-file',{
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/delete-drive-file`,{
             email:localStorage.getItem('email'),
             organization:localStorage.getItem('organization'),
             field_id:id
@@ -111,12 +111,12 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
 
     const handleDelete=async (id)=>{
        
-        const response=await axios.post('http://localhost:8999/deleteUploadedfile',{id:id,doneBy:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
-        const response2=await axios.post('http://localhost:8999/delete-private-file',{doc_id:id,organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deleteUploadedfile`,{id:id,doneBy:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+        const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/delete-private-file`,{doc_id:id,organization:localStorage.getItem('organization')})
         if(response.data.status==200 &&response2.data.status==200)
         {
-            const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
-            const response2=await axios.post('http://localhost:8999/get-document-visibility',{
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
+            const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
                 email:localStorage.getItem('email'),
                 organization:localStorage.getItem('organization')
             })
@@ -132,7 +132,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     const handleView=async (id,name)=>{
     
         setid(id)
-        const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:id,organization:localStorage.getItem('organization')})
         const data=JSON.parse(response.data.data)
         setjsonData(data)
         setclickedview(!clickedView)
@@ -147,8 +147,8 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         const handle=async()=>{
             if(search.length<=0)
                 {
-                    const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
-                    const response2=await axios.post('http://localhost:8999/get-document-visibility',{
+                    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
+                    const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
                         email:localStorage.getItem('email'),
                         organization:localStorage.getItem('organization')
                     })
@@ -160,11 +160,11 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
                     setAllDocs(tosetdata)
                 }
                 else{
-                    const response=await axios.post('http://localhost:8999/searchFile',{
+                    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/searchFile`,{
                         search:search,
                         organization:localStorage.getItem('organization')
                     })
-                    const response2=await axios.post('http://localhost:8999/get-document-visibility',{
+                    const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
                         email:localStorage.getItem('email'),
                         organization:localStorage.getItem('organization')
                     })
@@ -185,8 +185,8 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     useEffect(()=>{
         const setDocsData=async()=>
         {
-            const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
-            const response2=await axios.post('http://localhost:8999/get-document-visibility',{
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
+            const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
                 email:localStorage.getItem('email'),
                 organization:localStorage.getItem('organization')
             })
@@ -205,8 +205,8 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         const checkIfSelected=async()=>{
             if(activeField=='documents')
             {
-                const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
-                const response2=await axios.post('http://localhost:8999/get-document-visibility',{
+                const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
+                const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
                     email:localStorage.getItem('email'),
                     organization:localStorage.getItem('organization')
                 })

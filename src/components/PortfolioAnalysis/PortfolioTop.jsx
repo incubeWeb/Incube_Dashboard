@@ -19,7 +19,7 @@ const PortfolioTop = ({realtimeportfoliostate,hidenavbar,sheetedited,selectedShe
         const getTopCardsValues=async()=>{
             
             const organization=`${localStorage.getItem('organization')}_Topcards`
-            const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{organization:organization})
             const data=response.data.data
     
            // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
@@ -34,7 +34,7 @@ const PortfolioTop = ({realtimeportfoliostate,hidenavbar,sheetedited,selectedShe
   useEffect(()=>{
     const getTopCardsValues=async()=>{
         const organization=`${localStorage.getItem('organization')}_Topcards`
-        const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{organization:organization})
         const data=response.data.data
 
        // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
