@@ -14,10 +14,11 @@ import { BiSolidSend } from "react-icons/bi";
 import { Link, useNavigate } from 'react-router-dom';
 import { Bars } from 'react-loader-spinner';
 import { FaDownload } from "react-icons/fa6";
+import { FiMinus } from 'react-icons/fi';
 
 
 
-function OpenGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,companyName,description,handleOpenGrid,realtimetabchats}) {
+function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,companyName,description,handleOpenGrid,realtimetabchats}) {
     const [AddNewWindow,setAddnewWindow]=useState(false)
     const [TotalCards,setTotalCards]=useState([])
     const [Tabs,setTabs]=useState([{id:1,Tab:"Tab1"}])
@@ -32,6 +33,34 @@ function OpenGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,com
     const handleTotalCards=(data)=>{
         setTotalCards(data)
     }
+
+    useEffect(()=>{
+        console.log("hi tabs addede")
+    },[realtimeDealpipelinetabs])
+
+    useEffect(()=>{
+        const fun=async()=>{
+            const data= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getOpenedTabs`,{companyname:companyName,organization:localStorage.getItem('organization')})
+            let count=1
+            data.data.data.map(tabVal =>{
+              count=tabVal.count
+              
+            })
+            setTabCount(count) 
+            for(let i=1;i<=count;i++)
+             {
+                setTabs(prev => {
+                    const isIdPresent = prev.some(tab => tab.id === i); // Check if id already exists
+                    if (isIdPresent) {
+                      return prev; // Return the current state if id exists
+                    }
+                    return [...prev, { id: i, Tab: `Tab${i}` }]; // Add new tab if id doesn't exist
+                  });
+             }
+         }
+         fun()
+    },[realtimeDealpipelinetabs])
+
     
     const handleDownloadDealsourcefile=async(e)=>{
         e.stopPropagation();
@@ -66,12 +95,18 @@ function OpenGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,com
            let count=1
            data.data.data.map(tabVal =>{
              count=tabVal.count
-             setTabCount(count)
-             
            })
-           for(let i=2;i<=count;i++)
+           setTabCount(count)
+           for(let i=1;i<=count;i++)
             {
-                setTabs(prev=>[...prev,{id:i,Tab:`Tab${i}`}])
+                console.log("this",{id:i,Tab:`Tab${i}`})
+                setTabs(prev => {
+                    const isIdPresent = prev.some(tab => tab.id === i); // Check if id already exists
+                    if (isIdPresent) {
+                      return prev; // Return the current state if id exists
+                    }
+                    return [...prev, { id: i, Tab: `Tab${i}` }]; // Add new tab if id doesn't exist
+                  });
             }
            
 
@@ -97,23 +132,23 @@ function OpenGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,com
         InitialVal()
     },[TotalCards,realtimedealpipelinecompanyInfo])
 
-    useEffect(()=>{
-        const fun=async()=>{
-            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setopenedTabs`,{companyname:companyName,count:TabCount,organization:localStorage.getItem('organization')})
-        }
-        fun()
-    },[TabCount])
-
     const handleBubbling=(e)=>{
         e.stopPropagation()
     }
+    
 
     const addTabs=async()=>{
-        setTabs(tabs=>[...tabs,{id:TabCount+1,Tab:`Tab${TabCount+1}`}])
-        setCurrentTab(currentTab)
+        const tabis=parseInt(TabCount)+1
+        setTabs(tabs=>[...tabs,{id:parseInt(TabCount)+1,Tab:`Tab${tabis}`}])
         setTabCount(prev=>prev+1)
+        const tabscount=parseInt(TabCount)+1
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setopenedTabs`,{companyname:companyName,count:tabscount,organization:localStorage.getItem('organization')})
+       
     }
 
+    const handledeletetab=async()=>{
+
+    }
     const handlePushComplete=async()=>{
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanyCompleteStatus`,{
             completed:'completed',
@@ -180,7 +215,6 @@ function OpenGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,com
                                     <div onClick={()=>setCurrentTab(Tab.id)} className='w-[100%] h-[100%] flex items-center justify-center'>
                                         <p className='text-[12px] font-semibold font-inter'>Tab {Tab.id}</p>
                                     </div>
-                                    
                                 </div>
                                 
                                 
@@ -238,7 +272,7 @@ function OpenGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,com
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <FilesDoc CompanyName={companyName} currentTab={currentTab}/>
+                        <FilesDoc filesadded={filesadded} CompanyName={companyName} currentTab={currentTab}/>
                 
                 }
                 </div>
@@ -264,7 +298,7 @@ function OpenGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,com
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <FilesDoc CompanyName={companyName} currentTab={currentTab}/>
+                        <FilesDoc filesadded={filesadded} CompanyName={companyName} currentTab={currentTab}/>
                 
                 }
                 </div>

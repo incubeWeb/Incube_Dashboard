@@ -6,7 +6,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import axios from 'axios';
 import { Bars } from 'react-loader-spinner';
 
-function Viewall({realtimedealpipelinecompany,filter, selectedTab,setActiveField }) {
+function Viewall({filesadded,realtimeDealpipelinetabs,realtimetabchats,realtimedealpipelinecompany,filter, selectedTab,setActiveField }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [compData,setcompData]=useState([])
@@ -103,7 +103,7 @@ function Viewall({realtimedealpipelinecompany,filter, selectedTab,setActiveField
        <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
         {currentData.map(company => (
           
-          <GridTemplate completed={company.completed} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
+          <GridTemplate filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimetabchats={realtimetabchats} completed={company.completed} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
           
         ))}
         </div>

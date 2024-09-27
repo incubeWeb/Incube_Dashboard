@@ -15,27 +15,40 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
   const [clickedCompany,setclickedCompany]=useState(false)
   const [selectedTab, setSelectedTab] = useState("View All");
   
+  const [assingedtodeals,setassignedtodeals]=useState([])
 
 
-
-  const Navigate=useNavigate()
-  const getAllDeals=async()=>{
-   const response= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTeams`,{
-      assignedBy:localStorage.getItem('email'),
-      mainorganization:"Organization1"
-    })
-    
-   setassignedDeals(response.data.data)
-  }
+ 
   useEffect(()=>{
+    const getAllDeals=async()=>{
+      const response= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTeams`,{
+         assignedBy:localStorage.getItem('email'),
+         mainorganization:localStorage.getItem("organization")
+       })
+       const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`,{
+        member:localStorage.getItem('email'),
+        mainorganization:localStorage.getItem("organization")
+      })
+      const filteredArray = response2.data.data.filter(
+        obj1 => !response.data.data.some(obj2 => JSON.stringify(obj1) === JSON.stringify(obj2))
+      );
+      setassignedtodeals(filteredArray)
+      setassignedDeals(response.data.data)
+     }
+
     getAllDeals()
+    
   },[])
+  useEffect(()=>{
+    console.log(asignedDeals)
+  },[asignedDeals])
 
   const handleCompany=async(companyname)=>{
     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/searchdealsourcingfiles`,{
       search:companyname,
-      organization:"Organization1"
+      organization:localStorage.getItem('organization')
     })
+
     setOpenViewallGrid(true)
     
     
@@ -79,14 +92,48 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
               <RxCross2 size={14} className='text-black' />
         </div> 
         <div className=' w-[100%] space-y-2 select-noneflex flex-col overflow-y-auto h-[100%]'>
-           <div className='flex flex-col'>
-                <p className='text-[16px]  font-semibold'>Deals Assigned by You:</p>
-                <p className='text-[14px] mb-4'>you have assigned total {asignedDeals.length} deals</p>
-            </div>
            {
+            localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin' ?
+            <div className='flex flex-col'>
+                <p className='text-[16px]  font-semibold'>Deals Assigned by You:</p>
+                <p className='text-[14px] mb-4'>You have assigned total {asignedDeals.length} deals</p>
+            </div>
+            :
+            <></>
+           }
+           { localStorage.getItem('role')=='team lead' || localStorage.getItem('role')=='user'?
+            <div className='flex flex-col'>
+                <p className='text-[16px]  font-semibold'>Related Deals:</p>
+                <p className='text-[14px] mb-4'>Your have total {[...assingedtodeals,...asignedDeals].filter(val=>val.member!=localStorage.getItem('email')).length} deals</p>
+            </div>
+            :
+            <></>
+           }
+           {
+            localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin' || localStorage.getItem('role')=='team lead'?
             (asignedDeals||[]).map(doc=>
+              doc.member!=localStorage.getItem('email')?
               <div onClick={()=>{handleCompany(doc.organization)}} key={doc._id} className='cursor-pointer w-[100%] h-[18%] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
-                <p className='text-[14px] w-[80%] tracking-wide '>{doc.organization} has been assigned to {doc.member} at {convertTime(doc.time)} </p>
+                <p className='text-[14px] w-[80%] tracking-wide '> You have assinged <span className='font-bold'>{doc.organization}</span> to {doc.member} at {convertTime(doc.time)} </p>
+                <div className='w-[20%] pr-2 flex items-center justify-end'>
+                  <div className='w-[16px] h-[16px] c'>
+                    <FaExternalLinkAlt size={16} className='text-gray-500'/>
+                  </div>
+                </div>
+                
+            </div>
+            :
+            <></>
+            )
+            :
+            <></> 
+           }
+
+{
+            localStorage.getItem('role')=='team lead' || localStorage.getItem('role')=='user'?
+            (assingedtodeals||[]).map(doc=>
+              <div onClick={()=>{handleCompany(doc.organization)}} key={doc._id} className='cursor-pointer w-[100%] h-[18%] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
+                <p className='text-[14px] w-[80%] tracking-wide '><span className='font-bold'>{doc.organization}</span> has been assigned to you at {convertTime(doc.time)} </p>
                 <div className='w-[20%] pr-2 flex items-center justify-end'>
                   <div className='w-[16px] h-[16px] c'>
                     <FaExternalLinkAlt size={16} className='text-gray-500'/>
@@ -95,6 +142,8 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
             </div>
 
             )
+            :
+            <></> 
            }
         </div>
     <div>

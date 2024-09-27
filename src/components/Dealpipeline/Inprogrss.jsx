@@ -6,7 +6,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import axios from 'axios';
 import { Bars } from 'react-loader-spinner';
 
-function Inprogrss({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,hidenavbar, filter, selectedTab, fetchCompanyData, setActiveField,realtimetabchats }) {
+function Inprogrss({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,realtimetabchats,hidenavbar, filter, selectedTab, fetchCompanyData, setActiveField }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [compData,setcompData]=useState([])
@@ -38,6 +38,7 @@ function Inprogrss({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
         
           const morefilteredData=filteredData.filter(val=>val.TeamLead_status=='In Progress' && val.completed=='incomplete')
           setcompData(morefilteredData);
+          
         }
 
 
@@ -47,6 +48,7 @@ function Inprogrss({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
       setloading(false)
     },1000)
   },[])
+
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
@@ -125,6 +127,8 @@ function Inprogrss({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
                 hidenavbar={hidenavbar}
                 realtimetabchats={realtimetabchats}
                 realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo}
+                realtimeDealpipelinetabs={realtimeDealpipelinetabs}
+                filesadded={filesadded}
               /> 
           )
         }

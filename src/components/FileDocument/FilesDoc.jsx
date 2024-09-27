@@ -4,7 +4,7 @@ import { BsFileEarmarkPdfFill } from "react-icons/bs";
 import { BsFiletypePng } from "react-icons/bs";
 import { BsFiletypeJpg } from "react-icons/bs";
 import { CiFileOn } from "react-icons/ci";
-const FilesDoc = ({ currentTab,CompanyName,itsfrom }) => {
+const FilesDoc = ({filesadded, currentTab,CompanyName,itsfrom }) => {
     const [uploadFile, setUploadFile] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -49,6 +49,9 @@ const FilesDoc = ({ currentTab,CompanyName,itsfrom }) => {
             console.error('Error fetching uploaded files', error);
         }
     };
+    useEffect(()=>{
+        fetchUploadedFiles();
+    },[filesadded])
 
     useEffect(() => {
         fetchUploadedFiles();
@@ -56,7 +59,7 @@ const FilesDoc = ({ currentTab,CompanyName,itsfrom }) => {
 
     return (
         <div className="w-[100%] h-[100%]">
-            <div className="p-[16px] w-[100%] h-[65%] rounded-md shadow-md border-[1px] border-gray-300 md:flex md:flex-col space-y-4">
+            <div className="p-[16px] w-[100%] h-[95%] overflow-y-auto rounded-md shadow-md border-[1px] border-gray-300 md:flex md:flex-col space-y-4">
                 <div className="h-[20%] w-[100%] border-b-[1px] border-gray-300 flex flex-row items-center">
                     <div className="w-[50%] pl-[7px]">
                         <p className="text-[14px] font-inter font-semibold">Files</p>

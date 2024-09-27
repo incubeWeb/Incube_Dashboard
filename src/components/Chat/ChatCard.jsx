@@ -19,11 +19,13 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
             const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization})
             
             doc.data.data.map(d=>
-                {let chat=JSON.parse(d.chats)
+                {
+                let chat=JSON.parse(d.chats)
                 
                 setChat(chat)
                 }
             )
+            
             
         }
         fun()
@@ -45,9 +47,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
         fun()
     },[chat])
 
-    useEffect(()=>{
-        setChat([])
-    },[currentTab])
+    
 
 
     const handleChat=()=>{
@@ -74,7 +74,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
                     {
                         (chat||[]).map(c=>
                             <div key={c.id} className='w-full'>
-  <div className={`${c.sender === localStorage.getItem('email') ? 'items-end' : 'items-start'} mb-2 flex-col rounded-md pr-7 flex`}>
+                                <div className={`${c.sender === localStorage.getItem('email') ? 'items-end' : 'items-start'} mb-2 flex-col rounded-md pr-7 flex`}>
  
 
 

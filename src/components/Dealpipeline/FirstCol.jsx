@@ -8,7 +8,7 @@ import Inprogrss from './Inprogrss';
 import Unassigned from './Unassigned';
 import Completed from './Completed';
 
-function FirstCol({realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,realtimetabchats,realtimedealpipelinecompany}) {
+function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,realtimetabchats,realtimeDealpipelinetabs,realtimedealpipelinecompany}) {
   const [selectedTab, setSelectedTab] = useState("View All");
   const [companyData, setCompanyData] = useState([]);
   const [filter, setFilter] = useState([]);
@@ -25,6 +25,9 @@ function FirstCol({realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,rea
     fetchCompanyData();
 
   }, []);
+
+ 
+
   
 
   const fetchCompanyData = async () => {
@@ -44,7 +47,7 @@ function FirstCol({realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,rea
     
       setCompanyData(filteredData);
     } catch (error) {
-      
+      console.log("server error")
     }
   };
 
@@ -71,6 +74,8 @@ function FirstCol({realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,rea
       },
     });
   };
+
+  
 
   return (
     <div className={`${hidenavbar?'ml-[2%] w-[100%]':'ml-[20%] w-[80%]'}flex flex-col  font-roboto space-y-3 text-gray-700 pr-[47px]`}>
@@ -139,16 +144,16 @@ function FirstCol({realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,rea
       </div>
 
       {
-        selectedTab === 'View All' ? <Viewall realtimedealpipelinecompany={realtimedealpipelinecompany} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
+        selectedTab === 'View All' ? <Viewall filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimetabchats={realtimetabchats} realtimedealpipelinecompany={realtimedealpipelinecompany} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
       {
-        selectedTab === 'In Progress' ? <Inprogrss realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
+        selectedTab === 'In Progress' ? <Inprogrss filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
       {
-        selectedTab === 'Unassigned' ? <Unassigned realtimedealpipelinecompany={realtimedealpipelinecompany} hidenavbar={hidenavbar} filter={filter} setSelectedTab={setSelectedTab} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
+        selectedTab === 'Unassigned' ? <Unassigned  realtimedealpipelinecompany={realtimedealpipelinecompany} hidenavbar={hidenavbar} filter={filter} setSelectedTab={setSelectedTab} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
       {
-        selectedTab === 'Completed' ? <Completed realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
+        selectedTab === 'Completed' ? <Completed  realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
       {
         createNew ? <CreateNew  setCreateNew={setCreateNew} hidenavbar={hidenavbar} fetchCompanyData={fetchCompanyData} /> : null
