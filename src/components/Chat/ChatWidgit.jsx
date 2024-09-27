@@ -201,7 +201,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
         setopenChat(false)
     }
     
-
+   
     
     
   return (
@@ -228,7 +228,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
       : (
         <div className={`${[...sendedMsg, ...receivedMsg].length > 7 ? '' : 'justify-end'} w-[100%] h-[100%] flex flex-col space-y-2`}>
           {
-            ([...sendedMsg, ...receivedMsg].sort((a, b) => a.time - b.time) || []).map(msg =>
+            [...sendedMsg, ...receivedMsg].sort((a, b) => new Date(parseInt(a.time)) - new Date(parseInt(b.time))).map(msg =>
               (msg.sender === localStorage.getItem('email'))
                 ? <div key={msg._id} className='w-full'>
                   <div className='text-[12px] flex justify-end mb-4 mr-3 font-inter font-semibold'>
