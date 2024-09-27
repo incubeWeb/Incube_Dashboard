@@ -334,7 +334,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     <div className='w-[100%] h-[80%] space-y-2 rounded-md border-gray-200  bg-white flex flex-col p-4'>
     <div className='w-[100%] h-[40px] mb-4 flex flex-row space-x-2 items-center'>
     <p className='text-[18px] font-semibold ml-1 font-inter flex items-center w-[45%]'> 
-        Google Drive Documents <img src={Google_Drive} className='ml-2 h-[40px] w-[40px]' /></p>
+        Google Drive Documents <img src={Google_Drive} className='ml-2 h-[30px] w-[30px]' /></p>
          {/* Added margin-left to image */}
   
 

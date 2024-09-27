@@ -152,6 +152,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
       let email=localStorage.getItem('email')
       const organization=localStorage.getItem('organization')
       let checkDb=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`,{email:email,organization:organization})
+
       
 
       
@@ -247,7 +248,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
 
         if(boxes.length>0)
         {
-         await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addDashboardData`,{email:email,positions:position,organization:organization}) 
+          await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addDashboardData`,{email:email,positions:position,organization:organization})
         }
        
         
@@ -323,31 +324,19 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
   </div>
 </div>
 
-      <div className='flex flex-col items-center oveflow-y-auto '>
+      <div className=' w=[80%] h-full flex flex-col items-center oveflow-y-auto '>
         {(boxes||[]).map((box,index) => (
          <Rnd
     key={box.id}
     className='border-gray-300 bg-white border-[0.5px] rounded-lg p-4 pt-7'
     size={{ width: box.width, height: box.height }}
     position={{ x: box.x, y: box.y }}
-    
-    
-    onDragStop={(e, data) => {
-      const parentWidth = e.target.parentElement.offsetWidth;
-      const maxX = (parentWidth * 0.8) - box.width; 
+    bounds='parent'
 
-     
-      if (data.x > maxX) {
-        data.x = maxX;
-      } else if (data.x < 0) {
-        data.x = 0; 
-      }
-
-      setPosition(box.id, { x: data.x, y: data.y });
-    }}
-
-    onResizeStop={(e, direction, ref, delta, position) => setSize(box.id, ref, position)}
-  >
+    onDragStop={(e, direction) => setPosition(box.id, direction)}
+            onResizeStop={(e, direction, ref, delta, position) => setSize(box.id, ref, position)}
+            
+          >
           
             {(() => {
             try {

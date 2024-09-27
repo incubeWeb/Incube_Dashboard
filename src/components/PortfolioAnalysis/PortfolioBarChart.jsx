@@ -115,11 +115,22 @@ const fieldConversions = {
       ];
       const yAxisTickFormatter = (value) => value; 
   return (
-    <div style={{ width: '100%', height: '100%' }} className='mt-8 pr-10 '>
-        <div style={{ width: '100%', height: '100%' }}>
-
+    <div style={{ width: '100%', height: '90%' }} className='mt-2 pr-10 '>
+     { chartDatatypeX=='string' && chartDatatypeY=='integer'?   
+      <div className='pl-4' style={{ paddingBottom: '12px' }}>
+      <p className='text-[16px] font-bold font-inter -mt-6'>Vertical Bar Chart</p>
+    </div> 
+    : 
+    <div  className='pl-4 -pt-4'  style={{ paddingBottom: '12px' }} >
+      <p className='text-[16px] font-bold font-inter -mt-6'>Horizontal Bar Chart</p>
+    </div>
+     
+     }
+        <div style={{ width: '100%', height: '95%' }}>
+      
         {
           chartDatatypeX=='string' && chartDatatypeY=='integer'?
+          
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data}>
               <XAxis dataKey="name" tick={true} stroke="#8884d8" />

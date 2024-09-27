@@ -2,6 +2,7 @@ import React from 'react'
 import { FaImages } from 'react-icons/fa'
 import { IoMdImage } from 'react-icons/io'
 import { IoArrowBackSharp } from 'react-icons/io5'
+import { BsBuildings } from "react-icons/bs";
 
 const PortfolioHistory = ({setportfolioHistory,sheetKeys,sheetJson,selectedImageFiled}) => {
   return (
@@ -37,7 +38,7 @@ const PortfolioHistory = ({setportfolioHistory,sheetKeys,sheetJson,selectedImage
                                                 <td className='' colSpan={index=='0'?'2':'1'} key={k._id}>
                                                    <div className='flex flex-row space-x-4 items-center'>
                                                     {index==0?
-                                                            <td className='w-[35px] rounded-md h-[35px] flex items-center justify-center'><img className='w-[25px] rounded-md h-[25px] object-fit' src={val[selectedImageFiled]}/></td>
+                                                            <td className='w-[35px] rounded-md h-[35px] flex items-center justify-center'> <BsBuildings size={24} /></td>
                                                             :
                                                             <></>
                                                         }

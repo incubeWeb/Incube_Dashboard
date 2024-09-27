@@ -58,8 +58,19 @@ const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfi
     };
 
     return (
-        <div style={{ width: '100%', height: '100%' }} className='mt-8 pr-10'>
-            <div style={{ width: '100%', height: '100%' }}>
+        <div style={{ width: '100%', height: '90%' }} className='mt-8 pr-10'>
+             { chartDatatypeX=='string' && chartDatatypeY=='integer'?   
+      <div className='pl-4' style={{ paddingBottom: '12px' }}>
+      <p className='text-[16px] font-bold font-inter -mt-6'>Vertical Line Chart</p>
+    </div> 
+    : 
+    <div  className='pl-4 -pt-4'  style={{ paddingBottom: '12px' }} >
+      <p className='text-[16px] font-bold font-inter -mt-6'>Horizontal Line Chart</p>
+    </div>
+     
+     }
+
+            <div style={{ width: '100%', height: '95%' }}>
                 <ResponsiveContainer width="100%" height="100%">
                     {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ? (
                         // Standard layout: String on X-axis, Integer on Y-axis
