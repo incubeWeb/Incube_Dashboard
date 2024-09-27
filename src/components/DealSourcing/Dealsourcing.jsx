@@ -37,12 +37,7 @@ const Dealsourcing = ({hidenavbar}) => {
       
   }
 
-  useEffect(()=>{
-
-
-
-
-  },[companies])
+ 
 
  
 
@@ -51,7 +46,7 @@ const Dealsourcing = ({hidenavbar}) => {
   // },[searchValue])
 
   const ClearInput=()=>{
-    document.getElementById('search').value=''
+    
     setSearchVal('')
   }
 
@@ -76,20 +71,22 @@ const Dealsourcing = ({hidenavbar}) => {
     
     try {
      
-      const res = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/scrape/companyData`, { "company": `${searchValue}` });
-      
+      const res = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/scrape/companyData`,{"company": `${searchValue}`});
       const data = res.data.data;
       console.log(JSON.stringify(res.data.data))
     
       setCompanies(data); // Store fetched companies
     } catch (err) {
-      setError("Failed to fetch data. Please try again.");
+      console.log("Failed to fetch data. Please try again.");
     } finally {
-      setLoading(false); // Stop loading after fetching is complete
+      setLoading(false);
+      ClearInput()
+       // Stop loading after fetching is complete
     }
   };
 
   useEffect(() => {
+    try{
     if (companies[0]?.Similar_Names) {
       const ProcessData = companies[0].Similar_Names.map((v, index) => {
 
@@ -99,8 +96,8 @@ const Dealsourcing = ({hidenavbar}) => {
 
       // Set the length of ProcessData in state
       setProcessDataLength(ProcessData.length);
-    } else {
-     
+    }} catch {
+      console.log("server error..")
     }
   }, [companies]); // This effect runs when 'companies' changes
 
@@ -118,7 +115,25 @@ const Dealsourcing = ({hidenavbar}) => {
     setMoreFilters(!moreFilters)
   }
 
+  let name, photo, funding, LinkedIn_url, Locality, Country;
 
+  try {
+    name = companies[2].LinkedIn.jsonLD.name;
+    photo = companies[1].Company_Info.image_url;
+    funding = companies[1].Company_Info.discription[0]['Total Funding'];
+    LinkedIn_url = companies[2].LinkedIn.jsonLD.url;
+    Locality = companies[2].LinkedIn.jsonLD.address.addressLocality;
+    Country = companies[2].LinkedIn.jsonLD.address.addressCountry;
+  } catch (error) {
+    console.error("Error accessing company data", error);
+    // Provide default values or handle the error gracefully
+    name = "Unknown Company";
+    photo = "default_image_url";
+    funding = "N/A";
+    LinkedIn_url = "#";
+    Locality = "Unknown";
+    Country = "Unknown";
+  }
   
 
   
@@ -234,7 +249,7 @@ const Dealsourcing = ({hidenavbar}) => {
           {/* Additional content here */}
             <div className='w-[90%] h-[65%] flex flex-row'>
               <div className='border-y-[1px] rounded-l-md border-gray-300 border-l-[1px] flex justify-center items-center w-[28px] text-gray-500'><FiSearch size={16} /></div>
-                <input  value={searchValue}  onChange={handleSearchInputChange} className='outline-none rounded-r-md border-gray-300 border-y-[1px] border-r-[1px] w-[100%] text-[14px] text-gray-500 placeholder:text-[15px]' placeholder='Search'/>
+                <input onKeyPress={(e)=>{if(e.key=='Enter'){handleSearch()}}}  value={searchValue}  onChange={handleSearchInputChange} className='outline-none rounded-r-md border-gray-300 border-y-[1px] border-r-[1px] w-[100%] text-[14px] text-gray-500 placeholder:text-[15px]' placeholder='Search'/>
             </div>
             <div className='flex flex-row h-[65%] space-x-2'>
                   <div className='shadow-md border h-[100%] w-[70px] border-gray-300 rounded-md items-center flex justify-center cursor-pointer' onClick={ClearInput}>
@@ -261,17 +276,14 @@ const Dealsourcing = ({hidenavbar}) => {
 
    {  companies.length>0?  
      <CompanyTemplate2
-      name={companies[2].LinkedIn.jsonLD.name}
-      photo={companies[1].
-        Company_Info.image_url}
-        funding={companies[1].Company_Info.discription[0]['Total Funding']}
-      LinkedIn_url={companies[2].LinkedIn.jsonLD.url}
-      Locality={companies[2].LinkedIn.jsonLD.address.addressLocality}
-      Country={companies[2].LinkedIn.jsonLD.address.addressCountry}
-        length={processDataLength}
-
-      
-    />
+     name={name}
+     photo={photo}
+     funding={funding}
+     LinkedIn_url={LinkedIn_url}
+     Locality={Locality}
+     Country={Country}
+     length={processDataLength}
+   />
      :
      <>
      {Loading ? (
@@ -296,7 +308,7 @@ const Dealsourcing = ({hidenavbar}) => {
                     
                   <CompanyTemplate 
              key={index} 
-            name={val.companyname} 
+             name={val.companyname} 
             
         
     />

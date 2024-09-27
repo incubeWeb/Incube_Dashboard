@@ -15,6 +15,7 @@ import { FaPlus } from "react-icons/fa";
 
 
 const CompanyTemplate2 = ({name,description,photo,LinkedIn_url, Locality, Country,funding,length}) => {
+  
   return (
     <div>
     <div className='font-roboto w-[100%] h-[100%] rounded-md space-x-3 shadow-md border-gray-300 border-[1px] flex flex-row p-[23px]'>
