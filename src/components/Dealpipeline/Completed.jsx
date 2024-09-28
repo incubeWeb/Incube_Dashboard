@@ -13,6 +13,50 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
   
   const [compData,setcompData]=useState([])
   const totalPages = Math.ceil(compData.length / itemsPerPage);
+  const [error,seterror]=useState(false)
+
+  useEffect(()=>{
+    const fetchcompanydata=async()=>{
+      
+      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+        {
+          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+   
+          const filteredData=response.data.data.filter(val=>val.completed=='completed')
+          setcompData(filteredData)
+        }
+        else{
+          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+          const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
+            member: localStorage.getItem('email'),
+            mainorganization:localStorage.getItem('organization')
+          });
+          const organizationNames=[]
+          
+          Teamresponse.data.data.map(val=>{
+            organizationNames.push(val.organization)
+          })
+          const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
+
+          const morefilteredData=filteredData.filter(val=>val.completed=='completed')
+         
+          setcompData(morefilteredData);
+        }
+
+
+
+    }
+    try{
+    fetchcompanydata()
+    setTimeout(()=>{  
+      setloading(false)
+    },1000)
+  }catch(e)
+  {
+    seterror(false)
+  }
+  },[])
+
   useEffect(()=>{
     const fetchcompanydata=async()=>{
       
@@ -48,7 +92,7 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
     setTimeout(()=>{  
       setloading(false)
     },1000)
-  },[])
+  },[error])
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
@@ -82,7 +126,13 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
     
   },[realtimedealpipelinecompany])
 
+  useEffect(()=>{
+    console.log("this",compData)
+  },[])
 
+  useEffect(()=>{
+    console.log("this",compData)
+  },[compData])
 
   const handlePageChange = (page) => {
     if (page <= 0) {

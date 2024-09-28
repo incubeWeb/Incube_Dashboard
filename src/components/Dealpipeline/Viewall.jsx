@@ -12,13 +12,15 @@ function Viewall({filesadded,realtimeDealpipelinetabs,realtimetabchats,realtimed
   const [compData,setcompData]=useState([])
   const totalPages = Math.ceil(compData.length / itemsPerPage);
   const [loading,setloading]=useState(true)
+  const [error,seterror]=useState(false)
+
+
   useEffect(()=>{
     const fetchcompanydata=async()=>{
       if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
         {
           const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
-        
-          
+      
           setcompData(response.data.data)
         }
         else{
@@ -38,11 +40,51 @@ function Viewall({filesadded,realtimeDealpipelinetabs,realtimetabchats,realtimed
           setcompData(filteredData);
         }
     }
+    try{
     fetchcompanydata()
     setTimeout(()=>{  
       setloading(false)
     },1000)
+  }catch(e)
+  {
+    seterror(true)
+  }
   },[])
+
+  useEffect(()=>{
+    const fetchcompanydata=async()=>{
+      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+        {
+          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+      
+          setcompData(response.data.data)
+        }
+        else{
+          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+          const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
+            member: localStorage.getItem('email'),
+            mainorganization:localStorage.getItem('organization')
+          });
+          const organizationNames=[]
+          
+          Teamresponse.data.data.map(val=>{
+            organizationNames.push(val.organization)
+          })
+          
+          const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
+       
+          setcompData(filteredData);
+        }
+    }
+  
+    fetchcompanydata()
+    setTimeout(()=>{  
+      setloading(false)
+    },1000)
+  
+  },[error])
+
+
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
@@ -91,7 +133,7 @@ function Viewall({filesadded,realtimeDealpipelinetabs,realtimetabchats,realtimed
   const currentData = compData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   
   
-  {try{
+  
   return (
     <div>
       {
@@ -130,9 +172,7 @@ function Viewall({filesadded,realtimeDealpipelinetabs,realtimetabchats,realtimed
       }
     </div>
       );
-  }catch(e){
-    <></>
-  }}
+  
 }
 
 export default Viewall;

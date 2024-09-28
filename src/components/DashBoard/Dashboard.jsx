@@ -287,7 +287,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
 
   const setPosition = (id, direction) => {
     
-    if(parseInt(direction.x)<parseInt(window.innerWidth/2)-100)
+    if(parseInt(direction.x)<parseInt(window.innerWidth/2)+100)
     {
     setBoxes(boxes.map(box =>
       box.id === id ? { ...box, x: direction.x, y: direction.y } : box
@@ -295,7 +295,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
     }
     else{
       setBoxes(boxes.map(box =>
-        box.id === id ? { ...box, x: 499, y: direction.y } : box
+        box.id === id ? { ...box, x: parseInt(window.innerWidth/2)+100, y: direction.y } : box
       ));
     }
   };

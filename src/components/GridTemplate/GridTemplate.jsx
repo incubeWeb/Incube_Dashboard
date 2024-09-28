@@ -13,6 +13,8 @@ function GridTemplate({filesadded,realtimeDealpipelinetabs,realtimedealpipelinec
     const[openViewallGrid,setOpenViewallGrid]=useState(false)
     const [assignedList,setassignedList]=useState([])
 
+    const [slowinternet,setslowinternet]=useState(false)
+
     useEffect(()=>{
         const getAssignedTeam=async()=>{
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTeams`,{
