@@ -43,7 +43,7 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
             const data= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getOpenedTabs`,{companyname:companyName,organization:localStorage.getItem('organization')})
             let count=1
             data.data.data.map(tabVal =>{
-              count=tabVal.count
+              count=parseInt(tabVal.count)
               
             })
             setTabCount(count) 
@@ -94,7 +94,7 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
            const data= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getOpenedTabs`,{companyname:companyName,organization:localStorage.getItem('organization')})
            let count=1
            data.data.data.map(tabVal =>{
-             count=tabVal.count
+             count=parseInt(tabVal.count)
            })
            setTabCount(count)
            for(let i=1;i<=count;i++)
@@ -140,7 +140,7 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
     const addTabs=async()=>{
         const tabis=parseInt(TabCount)+1
         setTabs(tabs=>[...tabs,{id:parseInt(TabCount)+1,Tab:`Tab${tabis}`}])
-        setTabCount(prev=>prev+1)
+        setTabCount(prev=>parseInt(prev)+1)
         const tabscount=parseInt(TabCount)+1
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setopenedTabs`,{companyname:companyName,count:tabscount,organization:localStorage.getItem('organization')})
        
@@ -220,7 +220,7 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
                                 
                             )}
                             
-                            <div className='md:w-[75px] w-[60px] h-[80%] text-blue-600 rounded-md bg-white flex items-center justify-center shadow-lg' onClick={addTabs} >
+                            <div className='md:w-[75px] w-[60px] h-[80%] text-blue-600 rounded-md bg-white flex items-center justify-center shadow-lg' onClick={()=>addTabs()} >
                                 <p className='text-[12px] font-semibold font-inter'>Add new</p>
                             </div>
                             
