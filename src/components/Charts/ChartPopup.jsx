@@ -277,7 +277,7 @@ const ChartPopup = ({
         id: lastBox ? lastBox.id + 1 : 1,
         width: '40%',
         height: '230px',
-        x: 10,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
       try{
@@ -306,12 +306,15 @@ const ChartPopup = ({
       {
         setareachartcount(prev=>[...prev,{values:[...data01,...xAxisValues.map((val,index)=>({pv:val,uv:parseInt(yAxisValues[index])}))]}])
       }
+
+      
+
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
         width: '40%',
         height: '230px',
-        x: 10,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
       try{
@@ -380,7 +383,7 @@ const ChartPopup = ({
         id: lastBox ? lastBox.id + 1 : 1,
         width: '40%',
         height: '230px',
-        x: 10,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
       setBoxes([...boxes, { ...newBox, type : "Piechart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, piechartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName }]);
@@ -407,7 +410,7 @@ const ChartPopup = ({
         id: lastBox ? lastBox.id + 1 : 1,
         width: '40%',
         height: '230px',
-        x: 10,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
       setBoxes([...boxes, { ...newBox, type : "Piechart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, piechartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetchart:false,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis, }]);
@@ -433,7 +436,7 @@ const ChartPopup = ({
         id: lastBox ? lastBox.id + 1 : 1,
         width: '40%',
         height: '230px',
-        x: 10,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
       setBoxes([...boxes, { ...newBox, type : "Areachart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, areachartCount:data01 ,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName,}]);
@@ -462,7 +465,7 @@ const ChartPopup = ({
         id: lastBox ? lastBox.id + 1 : 1,
         width: '40%',
         height: '230px',
-        x: 10,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
       setBoxes([...boxes, { ...newBox, type : "Areachart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, areachartCount:data01 ,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:false,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName}]);
@@ -489,7 +492,7 @@ const ChartPopup = ({
       id: lastBox ? lastBox.id + 1 : 1,
       width: '40%',
       height: '230px',
-      x: 10,
+      x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
       y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
     };
     setBoxes([...boxes, { ...newBox, type : "BarChart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, barchartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName }]);
@@ -516,7 +519,7 @@ const ChartPopup = ({
       id: lastBox ? lastBox.id + 1 : 1,
       width: '40%',
       height: '230px',
-      x: 10,
+      x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
       y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
     };
     setBoxes([...boxes, { ...newBox, type : "BarChart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, barchartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:false,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName }]);
@@ -544,7 +547,7 @@ const ChartPopup = ({
         id: lastBox ? lastBox.id + 1 : 1,
         width: '40%',
         height: '230px',
-        x: 10,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
       setBoxes([...boxes, { ...newBox, type : "Piechart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, piechartCount:[...data01,...xAxisValues.map((val,index)=>({name:val,value:parseInt(yAxisValues[index])}))]}]);
@@ -567,7 +570,7 @@ const ChartPopup = ({
         id: lastBox ? lastBox.id + 1 : 1,
         width: '30%',
         height: '430px',
-        x: 10,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
     setBoxes([...boxes, { ...newBox, type : "AssignedDeals" }]);
@@ -583,7 +586,7 @@ const ChartPopup = ({
         id: lastBox ? lastBox.id + 1 : 1,
         width: '20%',
         height: '430px',
-        x: 10,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
     setBoxes([...boxes, { ...newBox, type : "chat" }]);
@@ -599,7 +602,7 @@ const ChartPopup = ({
         id: lastBox ? lastBox.id + 1 : 1,
         width: '25%',
         height: '430px',
-        x: 10,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
     setBoxes([...boxes, { ...newBox, type : "calendarwidgit" }]);
@@ -616,7 +619,7 @@ const ChartPopup = ({
         id: lastBox ? lastBox.id + 1 : 1,
         width: '40%',
         height: '230px',
-        x: 10,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
     setBoxes([...boxes, { ...newBox, type : "timeline" }]);
@@ -632,7 +635,7 @@ const ChartPopup = ({
         id: lastBox ? lastBox.id + 1 : 1,
         width: '420',
         height: '400px',
-        x: 10,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
     setBoxes([...boxes, { ...newBox, type : "news" }]);
@@ -650,7 +653,7 @@ const ChartPopup = ({
         id: lastBox ? lastBox.id + 1 : 1,
         width: '20%',
         height: '230px',
-        x: 10,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
       setBoxes([...boxes, { ...newBox, type : "portfoliocard" , portfoliowidgitcount:{id:boxes.length +1,labelname:"Enter Label",showValue:"$0"}}]);

@@ -285,7 +285,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
   
 
 
-  const setPosition = (id, direction,width) => {
+  const setPosition = (id, direction) => {
     
     if(parseInt(direction.x)<parseInt(window.innerWidth/2)-100)
     {
