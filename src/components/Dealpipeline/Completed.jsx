@@ -161,6 +161,8 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
         </div>
       ):
     <div>
+     {
+      currentData.length>0?
       <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
       {
           currentData.map(company => 
@@ -181,6 +183,11 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
           
         }
       </div>
+      :
+      <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
+        Nothing to show
+        </div>
+     }
       <div className='cursor-pointer flex flex-row w-[100%] h-[40px] mt-[35px] items-center justify-center space-x-2'>
         <div className='md:w-[30px] md:h-[35px] flex justify-center rounded-md items-center hover:bg-white md:hover:shadow-md' onClick={() => { setCurrentPage(1) }}>
           <IoPlaySkipBackOutline size={17} className='md:w-[30px]' />

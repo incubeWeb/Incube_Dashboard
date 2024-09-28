@@ -52,6 +52,10 @@ function Viewall({filesadded,realtimeDealpipelinetabs,realtimetabchats,realtimed
   },[])
 
   useEffect(()=>{
+    
+  },[])
+
+  useEffect(()=>{
     const fetchcompanydata=async()=>{
       if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
         {
@@ -142,6 +146,7 @@ function Viewall({filesadded,realtimeDealpipelinetabs,realtimetabchats,realtimed
           <Bars color="#8884d8" height={80} width={80} /> </div>
       ):
       <div>
+        {currentData.length>0?
        <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
         {currentData.map(company => (
           
@@ -149,6 +154,11 @@ function Viewall({filesadded,realtimeDealpipelinetabs,realtimetabchats,realtimed
           
         ))}
         </div>
+        :
+        <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
+          Nothing to show
+        </div>
+        }
         <div className='cursor-pointer flex flex-row w-[100%] h-[40px] mt-[35px] items-center justify-center space-x-2'>
           <div className='md:w-[30px] md:h-[35px] flex justify-center rounded-md items-center hover:bg-white md:hover:shadow-md' onClick={() => { setCurrentPage(1) }}>
             <IoPlaySkipBackOutline size={17} className='md:w-[30px]' />
