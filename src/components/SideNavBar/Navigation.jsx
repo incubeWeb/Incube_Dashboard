@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link,  useLocation, useNavigate } from 'react-router-dom';
 import { FiAlignJustify } from "react-icons/fi";
 import {gsap} from 'gsap'
 import Incubelogo from '../Icons/Incubelogo.svg'
@@ -19,7 +19,7 @@ import { AiOutlineClose } from 'react-icons/ai';  // Close icon
 const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,hidenavbar,sethidenavbar}) => {
   
     const location=useLocation()
-    
+    const Navigate=useNavigate()
 
     const [showgoogleconnected,setshowgoogleconnected]=useState(false)
     const [loading,setloading]=useState(false)
@@ -98,8 +98,19 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
     }
 
     useEffect(()=>{
-        setActiveField(window.location.pathname)
-    },[activeField])
+        console.log(location.pathname)
+        if(location.pathname!="/")
+        {
+            setActiveField(location.pathname)
+            Navigate(location.pathname)
+        }
+        else{
+            Navigate(activeField)
+        }
+    },[activeField,location.pathname])
+
+    
+
 
    
 
