@@ -47,8 +47,11 @@ function Inprogrss({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecomp
         },1000)
 
     }
+    try{
     fetchcompanydata()
-    
+    }catch(e){
+      seterror(!error)
+    }
   },[error])
 
 
@@ -88,9 +91,8 @@ function Inprogrss({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecomp
     fetchcompanydata()
   
     }catch(e)
-    {
-      setloading(true)
-      seterror(true)
+    { 
+      seterror(!error)
     }
   },[])
 
@@ -123,7 +125,11 @@ function Inprogrss({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecomp
         }
 
     }
+    try{
     fetchcompanydata()
+    }catch(e){
+      seterror(!error)
+    }
   },[realtimedealpipelinecompany])
 
   const handlePageChange = (page) => {

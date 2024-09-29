@@ -51,7 +51,7 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
   }catch(e)
   {
     setloading(true)
-    seterror(true)
+    seterror(!error)
   }
   },[])
 
@@ -86,7 +86,12 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
         setloading(false)
       },1000)
     }
+    try{
     fetchcompanydata()
+    }catch(e)
+    {
+      seterror(!error)
+    }
     
   },[error])
 
@@ -117,8 +122,11 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
           setcompData(morefilteredData);
         }
     }
+    try{
     fetchcompanydata()
-    
+    }catch(e){
+      seterror(!error)
+    }
   },[realtimedealpipelinecompany])
 
   const handlePageChange = (page) => {

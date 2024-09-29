@@ -49,14 +49,12 @@ function Viewall({filesadded,realtimeDealpipelinetabs,realtimetabchats,realtimed
     
   }catch(e)
   {
-    seterror(true)
+    seterror(!error)
     setloading(true)
   }
   },[])
 
-  useEffect(()=>{
-    
-  },[])
+  
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
@@ -86,9 +84,12 @@ function Viewall({filesadded,realtimeDealpipelinetabs,realtimetabchats,realtimed
           setloading(false)
         },1000)
     }
-  
+    try{
     fetchcompanydata()
-    
+    }catch(e)
+    {
+      seterror(!error)
+    }
   
   },[error])
 
@@ -120,7 +121,10 @@ function Viewall({filesadded,realtimeDealpipelinetabs,realtimetabchats,realtimed
       setcompData(filteredData);
     }
     }
+    try{
     fetchcompanydata()
+    }catch(e)
+    {seterror(!error)}
   },[realtimedealpipelinecompany])
 
   const handlePageChange = (page) => {

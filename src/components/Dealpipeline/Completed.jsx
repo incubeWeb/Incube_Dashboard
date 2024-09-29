@@ -52,8 +52,7 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
     
   }catch(e)
   {
-    setloading(true)
-    seterror(true)
+    seterror(!error)
   }
   },[])
 
@@ -87,11 +86,13 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
         setTimeout(()=>{  
           setloading(false)
         },1000)
-
-
     }
+    try{
     fetchcompanydata()
-    
+    }catch(e)
+    {
+      seterror(!error)
+    }
   },[error])
 
   useEffect(()=>{
@@ -122,8 +123,12 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
           setcompData(morefilteredData);
         }
     }
+    try{
     fetchcompanydata()
-    
+    }catch(e)
+    {
+      seterror(!error)
+    }
   },[realtimedealpipelinecompany])
 
   useEffect(()=>{
