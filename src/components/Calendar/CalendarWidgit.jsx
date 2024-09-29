@@ -84,6 +84,7 @@ const CalendarWidgit = ({id,setBoxes,boxes}) => {
             frameBorder="0"
             scrolling="no"
             className='h-[100%] w-[100%]'
+            allowFullScreen
           ></iframe>
         }
           

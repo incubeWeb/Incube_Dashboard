@@ -215,7 +215,7 @@ const ChartPopup = ({
   const handleselectDatabase=async(e)=>{
     e.stopPropagation();
     setclickedGoogle(false)
-    setClickedDatabase((prev)=>!prev)
+    setClickedDatabase(true)
     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
    
     setpresentSheets(response.data.data)
@@ -232,7 +232,7 @@ const ChartPopup = ({
     
 
     e.stopPropagation();
-    setClickedDatabase((prev)=>!prev)
+    setClickedDatabase(true)
     setclickedGoogle(true)
     const response3=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-drivesheets`,{
       email:localStorage.getItem('email'),
@@ -259,7 +259,7 @@ const ChartPopup = ({
   }
   const handleSheetData=(e)=>{
     e.stopPropagation()
-    setUploadSheetwindow((prev)=>!prev)
+    setUploadSheetwindow(true)
   }
 
   const handleCreateBarchart=()=>{
@@ -564,7 +564,7 @@ const ChartPopup = ({
    const handleAssignedDealswidgit=(e)=>{
     e.stopPropagation()
     settypeofchart('AssignedDeals')
-    setchatwidgit((prev)=>!prev)
+    setchatwidgit(false)
     const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
@@ -580,7 +580,7 @@ const ChartPopup = ({
   const handlechatwidgit=(e)=>{
     e.stopPropagation()
     settypeofchart('chat')
-    setchatwidgit((prev)=>!prev)
+    setchatwidgit(true)
     const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
@@ -596,7 +596,7 @@ const ChartPopup = ({
   const handlecalendarwidgit=(e)=>{
     e.stopPropagation()
     settypeofchart('calendarwidgit')
-    setchatwidgit((prev)=>!prev)
+    setchatwidgit(false)
     const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
@@ -662,15 +662,84 @@ const ChartPopup = ({
 
   const handleClickedPie = (e) => {
     e.stopPropagation(); // Prevent triggering the outer div's onClick
-    setClickedPie((prev) => !prev);
+    setClickedPie(true);
+    setClickedManual(false)
+    setClickedDatabase(false)
+    setCreatepiechart(false)
+    setCreateareachart(false)
+    setCreatebarchart(false)
+    setUploadSheetwindow(false)
+    setSelectedFile(null)
+    setupload(false)
+    setdbsheetrows(false)
+    setclickedSheetname('')
+    setdbCompanyName('')
+    setclickedGoogle(false)
+
+  
+    setDbSheetIntRows([])
+  setdbsheetdata([])
+  setselectedSheetxAxis('')
+  setselectedSheetYaxis('')
+
+  setselectedDbsheet(false)
+  setpresentSheets([])  
+  setselectedsheetfromdbname('')
+  
   };
   const handleClickedArea = (e) => {
     e.stopPropagation(); // Prevent triggering the outer div's onClick
-    setClickedArea((prev) => !prev);
+    setClickedArea(true);
+    
+    setClickedManual(false)
+    setClickedDatabase(false)
+    setCreatepiechart(false)
+    setCreateareachart(false)
+    setCreatebarchart(false)
+    setUploadSheetwindow(false)
+    setSelectedFile(null)
+    setupload(false)
+    setdbsheetrows(false)
+    setclickedSheetname('')
+    setdbCompanyName('')
+    setclickedGoogle(false)
+
+  
+    setDbSheetIntRows([])
+  setdbsheetdata([])
+  setselectedSheetxAxis('')
+  setselectedSheetYaxis('')
+
+  setselectedDbsheet(false)
+  setpresentSheets([])  
+  setselectedsheetfromdbname('')
   };
   const handleClickedBar = (e) => {
     e.stopPropagation(); // Prevent triggering the outer div's onClick
-    setClickedBar((prev) => !prev);
+    setClickedBar(true);
+    setClickedManual(false)
+    setClickedDatabase(false)
+    setCreatepiechart(false)
+    setCreateareachart(false)
+    setCreatebarchart(false)
+    setUploadSheetwindow(false)
+    setSelectedFile(null)
+    setupload(false)
+    setdbsheetrows(false)
+    setclickedSheetname('')
+    setdbCompanyName('')
+    setclickedGoogle(false)
+
+  
+    setDbSheetIntRows([])
+  setdbsheetdata([])
+  setselectedSheetxAxis('')
+  setselectedSheetYaxis('')
+
+  setselectedDbsheet(false)
+  setpresentSheets([])  
+  setselectedsheetfromdbname('')
+
   };
 
   const handleXaxisValues = (index, value) => {
@@ -691,7 +760,7 @@ const ChartPopup = ({
 
   const handleManualCreation = (e) => {
     e.stopPropagation(); // Prevent triggering the outer div's onClick
-    setClickedManual((prev) => !prev);
+    setClickedManual(true);
   };
 
   const handleXaxis = (e) => {
@@ -718,7 +787,7 @@ const ChartPopup = ({
           <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] rounded-lg absolute bg-white top-0 left-0">
             <div className="w-[100%] flex justify-end">
               <div className="flex w-[80%]">
-                <FaArrowLeftLong className="cursor-pointer mt-2" size={20} onClick={() => setClickedPie(!clickedPie)} />
+                <FaArrowLeftLong className="cursor-pointer mt-2" size={20} onClick={() => setClickedPie(false)} />
               </div>
               <div className="flex w-[20%] justify-end ">
                 <RxCross2 size={24} className="cursor-pointer  ml-15 bg-gray-100 rounded-full" onClick={showlist} />
@@ -768,7 +837,7 @@ const ChartPopup = ({
           <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute rounded-xl bg-white top-0 left-0">
             <div className="w-[100%] flex justify-end">
               <div className="flex w-[80%]">
-                <FaArrowLeftLong className="cursor-pointer mt-2" size={20} onClick={() => setClickedArea(!clickedArea)} />
+                <FaArrowLeftLong className="cursor-pointer mt-2" size={20} onClick={() => setClickedArea(false)} />
               </div>
               <div className="flex w-[20%] justify-end">
                 <RxCross2 size={24} className="cursor-pointer mt-2 bg-gray-100 rounded-full" onClick={showlist} />
@@ -819,7 +888,7 @@ const ChartPopup = ({
           <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute rounded-xl bg-white top-0 left-0">
             <div className="w-[100%] flex justify-end">
               <div className="flex w-[80%]">
-                <FaArrowLeftLong className="cursor-pointer mt-2" size={20} onClick={() => setClickedBar(!clickedBar)} />
+                <FaArrowLeftLong className="cursor-pointer mt-2" size={20} onClick={() => setClickedBar(false)} />
               </div>
               <div className="flex w-[20%] justify-end">
                 <RxCross2 size={24} className="cursor-pointer mt-2 bg-gray-100 rounded-full" onClick={showlist} />
@@ -1020,7 +1089,7 @@ const ChartPopup = ({
           <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white top-0 left-0">
           <div className="w-[100%] flex justify-end">
             <div className="flex w-[80%]">
-              <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedPie(!clickedPie)} />
+              <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedPie(false)} />
             </div>
             <div className="flex w-[20%] justify-end">
               <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
@@ -1147,7 +1216,7 @@ const ChartPopup = ({
                 <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white top-0 left-0">
                                 <div className="w-[100%] flex justify-end">
                                   <div className="flex w-[80%]">
-                                    <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedPie(!clickedPie)} />
+                                    <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedPie(false)} />
                                   </div>
                                   <div className="flex w-[20%] justify-end">
                                     <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
@@ -1254,7 +1323,7 @@ const ChartPopup = ({
          <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white top-0 left-0">
          <div className="w-[100%] flex justify-end">
            <div className="flex w-[80%]">
-             <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedArea(!clickedArea)} />
+             <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedArea(false)} />
            </div>
            <div className="flex w-[20%] justify-end">
              <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
@@ -1377,7 +1446,7 @@ const ChartPopup = ({
                 <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white top-0 left-0">
                                 <div className="w-[100%] flex justify-end">
                                   <div className="flex w-[80%]">
-                                    <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedArea(!clickedArea)} />
+                                    <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedArea(false)} />
                                   </div>
                                   <div className="flex w-[20%] justify-end">
                                     <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
@@ -1585,7 +1654,7 @@ const ChartPopup = ({
         <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white top-0 left-0">
         <div className="w-[100%] flex justify-end">
           <div className="flex w-[80%]">
-            <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedBar(!clickedBar)} />
+            <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedBar(false)} />
           </div>
           <div className="flex w-[20%] justify-end">
             <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
@@ -1712,7 +1781,7 @@ const ChartPopup = ({
                 <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white top-0 left-0">
                                 <div className="w-[100%] flex justify-end">
                                   <div className="flex w-[80%]">
-                                    <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedBar(!clickedBar)} />
+                                    <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedBar(false)} />
                                   </div>
                                   <div className="flex w-[20%] justify-end">
                                     <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
