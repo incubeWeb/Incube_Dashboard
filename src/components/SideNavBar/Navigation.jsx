@@ -16,7 +16,7 @@ import { AiOutlineClose } from 'react-icons/ai';  // Close icon
 
 
 
-const Navigation = ({googleaccountconnected,activeField,setActiveField,hidenavbar,sethidenavbar}) => {
+const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,hidenavbar,sethidenavbar}) => {
   
     const location=useLocation()
     
@@ -25,6 +25,7 @@ const Navigation = ({googleaccountconnected,activeField,setActiveField,hidenavba
     const [loading,setloading]=useState(false)
 
     const handleLogout=()=>{
+          setlogin(false)
           localStorage.clear() 
     }
     const NavbarRef=useRef(null)
@@ -97,8 +98,10 @@ const Navigation = ({googleaccountconnected,activeField,setActiveField,hidenavba
     }
 
     useEffect(()=>{
-        setActiveField(location.pathname)
+        setActiveField(window.location.pathname)
     },[activeField])
+
+   
 
 
     const handleRemoveGoogleConnect=async()=>{

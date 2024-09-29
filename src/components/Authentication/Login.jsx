@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { IoSettingsOutline } from "react-icons/io5";
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const Login = ({ setLoginIn }) => {
+const Login = ({ setLoginIn,login }) => {
   const [showError, setShowError] = useState(false);
   const [createorg,setcreateorg]=useState(false)
   const [org_name,setorg_name]=useState('')
@@ -14,11 +14,19 @@ const Login = ({ setLoginIn }) => {
   const [org_pass,setorg_pass]=useState('')
   const [org_web,setorg_web]=useState('')
   const Navigate=useNavigate()
+  const location=useLocation()
 
 
   const setloginfun=()=>{
     setcreateorg(false)
   }
+
+
+  useEffect(()=>{
+    if(!login){
+      Navigate('/')
+    }
+  },[])
 
   const CreateOrganizationFun=async()=>{
     const name=org_name
@@ -44,8 +52,9 @@ const Login = ({ setLoginIn }) => {
       localStorage.setItem("role","super admin")
       localStorage.setItem("organization",name)
       setLoginIn(true);
+      
       Navigate('/dashboard')
-      window.location.reload()
+      
       setcreateorg(false)
     }
     else
@@ -54,6 +63,7 @@ const Login = ({ setLoginIn }) => {
           alert("something went wrong ...")
     }
   }
+
   const CreateOrganization=()=>{
     setcreateorg(true)
   }
@@ -77,7 +87,7 @@ const Login = ({ setLoginIn }) => {
         localStorage.setItem("organization",response.data.organization)
         setLoginIn(true);
         Navigate('/dashboard')
-        window.location.reload()
+       
       } 
       if(status==-200)
       {

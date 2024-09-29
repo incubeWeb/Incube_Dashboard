@@ -14,6 +14,7 @@ import { addTimeline } from "./states/timelinestate";
 import AddInvestment from "./components/Add_Investments/AddInvestment";
 import Portfolio from "./components/PortfolioAnalysis/Portfolio";
 import Viewsheet from "./components/ViewSheet/Viewsheet";
+import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 
 
 
@@ -126,21 +127,7 @@ function App() {
       }
   },[])
 
- 
 
-
-
-  useEffect(() => {
-    const func = () => {
-      const val = localStorage.getItem('activeField');
-      if (val !== null) {
-        setActiveField(val);
-      } else {
-        setActiveField('dashboard');
-      }
-    };
-    func();
-  }, []);
 
   useEffect(() => {
     localStorage.setItem('activeField', activeField);
@@ -155,41 +142,27 @@ function App() {
   }, []);
 
 
-
-  const [pathname, setPathname] = useState(window.location.pathname);
-  useEffect(() => {
-    const handlePopState = () => {
-      setPathname(window.location.pathname);
-    };
-
-    window.addEventListener('popstate', handlePopState);
-
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, []);
-  
-
   return (
     <BrowserRouter>
-      {login ? (
-        <>
-          {pathname !== '/' && <Navigation googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />}
+          {login? <Navigation setlogin={setLoginIn} googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />:<></>}
           <Routes>
-            <Route path="/" element={<Login setLoginIn={setLoginIn}/>} />
-            <Route path="/dashboard" element={<Dashboard setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/>} />
-            <Route path="/dealpipeline" element={<FirstCol filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>} />
-            <Route path="/dealsourcing" element={<Dealsourcing hidenavbar={hidenavbar}/>} />
-            <Route path="/adduser" element={<Addusers setActiveField={setActiveField} hidenavbar={hidenavbar}/>}/>
-            <Route path="/allDocs" element={<Alldocs realtimedocumentvisibility={realtimedocumentvisibility} filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar}/>} />
-            <Route path="/investment" element={<AddInvestment hidenavbar={hidenavbar}/>}/>
-            <Route path='/portfolio' element={<Portfolio realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited} hidenavbar={hidenavbar} />}/>
+            <Route path="/" element={!login?<Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn}/>:<></>} />
+            <Route path="/dashboard" element={
+              <ProtectedRoute login={login}><Dashboard setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
+            <Route path="/dealpipeline" element={
+              <ProtectedRoute login={login}>
+              <FirstCol filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>
+              </ProtectedRoute>} />
+            <Route path="/dealsourcing" element={
+              <ProtectedRoute login={login}><Dealsourcing hidenavbar={hidenavbar}/></ProtectedRoute>} />
+            <Route path="/adduser" element={<ProtectedRoute login={login}><Addusers setActiveField={setActiveField} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
+            <Route path="/allDocs" element={<ProtectedRoute login={login}><Alldocs realtimedocumentvisibility={realtimedocumentvisibility} filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar}/></ProtectedRoute>} />
+            <Route path="/investment" element={<ProtectedRoute login={login}><AddInvestment hidenavbar={hidenavbar}/></ProtectedRoute>}/>
+            <Route path='/portfolio' element={<ProtectedRoute login={login}><Portfolio realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited} hidenavbar={hidenavbar} /></ProtectedRoute>}/>
             
           </Routes>
-        </>
-      ) : (
-        <Login setLoginIn={setLoginIn}  />
-      )}
+      
+      
     </BrowserRouter>
   );
 }
