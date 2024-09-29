@@ -5,6 +5,7 @@ import { IoPlaySkipForwardOutline } from "react-icons/io5";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import axios from 'axios';
 import { Bars } from 'react-loader-spinner';
+import { GrAlert } from 'react-icons/gr';
 
 function Inprogrss({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,realtimetabchats,hidenavbar, filter, selectedTab, fetchCompanyData, setActiveField }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -41,13 +42,13 @@ function Inprogrss({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecomp
           setcompData(morefilteredData);
           
         }
-
+        setTimeout(()=>{  
+          setloading(false)
+        },1000)
 
     }
     fetchcompanydata()
-    setTimeout(()=>{  
-      setloading(false)
-    },1000)
+    
   },[error])
 
 
@@ -79,16 +80,17 @@ function Inprogrss({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecomp
           
         }
 
-
+        setTimeout(()=>{  
+          setloading(false)
+        },1000)
     }
     try{
     fetchcompanydata()
-    setTimeout(()=>{  
-      setloading(false)
-    },1000)
+  
     }catch(e)
     {
-      seterror(false)
+      setloading(true)
+      seterror(true)
     }
   },[])
 
@@ -181,9 +183,16 @@ function Inprogrss({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecomp
 
       </div>
       :
-      <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
-        Nothing to show
+      <div className='overflow-y-auto flex flex-col md:h-[449px] h-[354px] w-[100%] '>
+      <div className='w-[100%] space-y-3 h-[100%] flex flex-col items-center justify-center'>
+          <div className='w-[100%] h-[10%] flex items-center justify-center'>
+            <GrAlert size={60}/>
+          </div>
+          <div className='text-[15px] font-noto w-[100%] items-center justify-center flex'>
+            <p>No New Company Present</p>
+          </div>
       </div>
+    </div>
       }
       <div className='cursor-pointer flex flex-row w-[100%] h-[40px] mt-[35px] items-center justify-center space-x-2'>
         <div className='md:w-[30px] md:h-[35px] flex justify-center rounded-md items-center hover:bg-white md:hover:shadow-md' onClick={() => { setCurrentPage(1) }}>
