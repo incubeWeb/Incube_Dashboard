@@ -44,8 +44,8 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
             }
             else if(localStorage.getItem('role')=='team lead'){
                 const filteredData= usersData.filter(val=>val.role!='super admin' && val.role !='admin' && val.role!='team lead')
-                const filter_=usersData.filter(val=>val.email==localStorage.getItem('email'))
-                const newFilteredData=[...filter_,...filteredData]
+                
+                const newFilteredData=[...filteredData]
                 setAllUsers(newFilteredData)
             }
             else{
@@ -74,12 +74,6 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
         const settingRoles = async () => {
             const selectedUsers = users.filter(user => selects[user._id]);
             await Promise.all(selectedUsers.map(async (user) => {
-                await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateuser`, {
-                    email: user.email,
-                    password: user.password,
-                    role: roles[user._id],
-                    organization:localStorage.getItem('organization')
-                });
                 
                     const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addTeam`, {
                         organization: companyName,
@@ -132,6 +126,43 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
     const handleApplyChanges = async () => {
         setApply(!apply);
     };
+    const handleAssignChanges=async()=>{
+        if(localStorage.getItem('role')=='super admin' || localStorage.getItem('role')=='admin')
+        {
+            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addTeam`, {
+                organization: companyName,
+                member:  localStorage.getItem('email'),
+                position:localStorage.getItem('role'),
+                assignedBy:localStorage.getItem('email'),
+                mainorganization:localStorage.getItem('organization')
+            });
+            const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanystatus`, {
+                company: companyName,
+                status: 'In Progress',
+                organization:localStorage.getItem('organization')
+            });
+            if(response.data.status==200 && response2.data.status==200)
+            {
+                alert("Company Assinged to you")
+                handleOpenGrid()
+            }
+        }
+        if(localStorage.getItem('role')=='team lead')
+        {
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanyTeamLeadstatus`, {
+                company: companyName,
+                TeamLead_status: 'In Progress',
+                organization:localStorage.getItem('organization')
+            });
+
+            if(response.data.status==200)
+            {
+                alert("Company Assinged to you")
+                handleOpenGrid()
+            }
+        }
+        
+    }
 
     const MainDiv = useRef(null);
     useGSAP(() => {
@@ -190,8 +221,13 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                             </div>
                         ))}
                     </div>
-                    <div className='w-[100%] h-[8%] flex justify-end'>
-                        <button className='w-[14%] rounded-md h-[40px] bg-blue-600 font-inter font font-semibold text-white text-[14px]' onClick={handleApplyChanges}>Apply Changes</button>
+                    <div className='w-[100%] space-x-2 h-[8%] justify-start flex flex-row'>
+                            <div className=' w-[14%] h-[100%] flex justify-end'>
+                                <button className='w-[100%] rounded-md h-[40px] bg-blue-600 font-inter font font-semibold text-white text-[14px]' onClick={handleAssignChanges}>Assign to me</button>
+                            </div>
+                            <div className='w-[14%] h-[100%] flex justify-end'>
+                                <button className='w-[100%] rounded-md h-[40px] bg-blue-600 font-inter font font-semibold text-white text-[14px]' onClick={handleApplyChanges}>Apply Changes</button>
+                            </div>
                     </div>
                 </div>
             </div>
