@@ -231,7 +231,7 @@ const Timeline = ({id,boxes,setBoxes}) => {
   
 {   try{
     return (
-   <div className="flex z-0 flex-col w-full max-h-screen h-[100%] overflow-y-auto">
+   <div className="flex z-0 flex-col scrollbar-hide w-full max-h-screen h-[100%] overflow-y-auto">
   {changes.map((item) =>
     provideData(item) !== "notshow" ? (
       <div
