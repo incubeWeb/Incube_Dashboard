@@ -10,6 +10,11 @@ import { IoMdArrowBack } from 'react-icons/io'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import PortfolioTop from './PortfolioTop'
 import { Bars } from 'react-loader-spinner'
+<<<<<<< Updated upstream
+=======
+import GoogleSheetDatabaseSheets from './GoogleSheetDatabaseSheets'
+import { HiDotsVertical } from "react-icons/hi";
+>>>>>>> Stashed changes
 
 const Portfolio = ({hidenavbar,sheetedited}) => {
     const [sheetmethod,setsheetmethod]=useState('')

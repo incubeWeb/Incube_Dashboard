@@ -309,6 +309,7 @@ const Navigation = ({activeField,setActiveField,hidenavbar,sethidenavbar}) => {
             </div>
            
 
+<<<<<<< Updated upstream
             <div className='w-[100%] h-[20%] flex items-center justify-center border-t mb-10 border-gray-400 '>
             
 >>>>>>> Stashed changes
@@ -317,6 +318,18 @@ const Navigation = ({activeField,setActiveField,hidenavbar,sethidenavbar}) => {
                     
                          <div><IoLogOut size={20} className='cursor-pointer' onClick={handleLogout}/></div>
                          <div><p className='text-[14px] cursor-pointer text-gray-500' onClick={handleLogout}>Logout</p></div>
+=======
+            <div className='w-[100%] h-[20%]  items-center justify-center border-t mt-5 border-gray-400 '>
+            
+            <div>
+                       <p className='pr-3 font-inter font-bold text-[16px]'>{localStorage.getItem('email')}</p>
+                       </div>
+                    <a href='/' className='w-[40%] h-[40%] flex items-center justify-center'> 
+                     <div className='flex flex-row w-[100%]  h-[40%] items-center justify-center  space-x-2 ' > 
+                    
+                         <div><p className='text-[14px] font-inter cursor-pointer text-gray-500 ' onClick={handleLogout}>Logout</p></div>
+                         <div className=''><img src={Logout} className='cursor-pointer' onClick={handleLogout}/></div>
+>>>>>>> Stashed changes
                     </div>
                     </a>
             </div>

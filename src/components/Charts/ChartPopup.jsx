@@ -1628,7 +1628,22 @@ const ChartPopup = ({
         <div className="w-[100%]  flex justify-end pr-3">
           <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
         </div>
+<<<<<<< Updated upstream
         <ul className="mt-10 space-y-3 p-4 overflow-y-auto ">
+=======
+       
+
+
+<ul
+    style={{
+        overflowY: 'auto',
+        scrollbarWidth: 'none',  
+        msOverflowStyle: 'none', 
+      
+    }}
+    className="mt-10 font-inter space-y-3 p-4 hide-scrollbar"
+>
+>>>>>>> Stashed changes
           <div
               onClick={handletimelinewidgit}
               className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"

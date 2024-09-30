@@ -254,9 +254,24 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
 
 
   const setPosition = (id, direction) => {
+<<<<<<< Updated upstream
     setBoxes(boxes.map(box =>
       box.id === id ? { ...box, x: direction.x, y: direction.y } : box
     ));
+=======
+    
+    if(parseInt(direction.x)<parseInt(window.innerWidth/2)-100)
+    {
+    setBoxes(boxes.map(box =>
+      box.id === id ? { ...box, x: direction.x, y: direction.y } : box
+    ));
+    }
+    else{
+      setBoxes(boxes.map(box =>
+        box.id === id ? { ...box, x: 499, y: direction.y } : box
+      ));
+    }
+>>>>>>> Stashed changes
   };
 
   const setSize = (id, ref, position) => {
@@ -290,7 +305,11 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
     className='absolute top-[20px] right-[20px] flex flex-row w-[120px] h-[33px] rounded-md bg-gradient-to-r from-blue-600 to-blue-300 text-[14px] items-center justify-center text-white cursor-pointer'
     onClick={handleShowPopup}
   >
+<<<<<<< Updated upstream
     <p>Widgets</p>
+=======
+    <p> <span className='text-[20px] font-bold mt-5'>+</span>  Add widgets</p>
+>>>>>>> Stashed changes
   </div>
 </div>
 

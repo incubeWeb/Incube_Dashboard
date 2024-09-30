@@ -232,6 +232,7 @@ const Timeline = ({id,boxes,setBoxes}) => {
   
 {   try{
     return (
+<<<<<<< Updated upstream
     <div className='flex z-0  overflow-y-auto flex-col w-[100%] h-[100%]  justify-end '>
           
         {
@@ -270,6 +271,68 @@ const Timeline = ({id,boxes,setBoxes}) => {
               <RxCross2 size={14} className='text-black'/>
         </div>   
     </div>
+=======
+      <div 
+      className="flex z-0 flex-col w-full max-h-screen h-[100%] overflow-y-auto hide-scrollbar"
+      style={{
+          overflowY: 'auto',
+          scrollbarWidth: 'none',  // For Firefox
+          msOverflowStyle: 'none', // For Internet Explorer and Edge
+          
+      }}
+   >
+  {changes.map((item) =>
+    provideData(item) !== "notshow" ? (
+      <div
+        key={item.key || item._id}
+        className="flex w-[100%] h-auto flex-row space-x-2 items-center"
+      >
+       
+        <div className="w-[100px] flex-col h-auto flex items-center bg-white">
+          <div className="w-[100%] h-[100%] flex flex-row space-x-2">
+   
+            <div className="w-[100%] h-auto flex items-start justify-center">
+              <p className="w-[100%] h-auto text-[12px] font-sans flex items-center mt-3 justify-start">
+                {DateData(item)}
+              </p>
+            </div>
+
+            <div className="w-[20%] h-auto flex flex-col pr-12 items-center">
+              <div className="w-[2px] h-[100%] bg-gray-500"></div>
+              <MdDonutLarge size={50} className="text-blue-600" />
+              <div className="w-[2px] h-[100%] bg-gray-500"></div>
+            </div>
+          </div>
+        </div>
+
+       
+        <div className="flex-grow h-auto mt-4 mb-4 flex flex-row items-start space-x-2 mr-4">
+          <div className="w-[60%] h-auto">
+         
+            <p className="text-[12px] font-sans leading-4 break-words mr-2 mt-1">
+              {provideData(item)}
+            </p>
+          </div>
+
+       
+          <div className="w-[40%] h-auto flex items-center justify-end pr-4">
+            <p className="text-[12px]">{timeData(item)}</p>
+          </div>
+        </div>
+      </div>
+    ) : null
+  )}
+  
+
+  <div
+    className="z-[10] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px] bg-gray-100 mt-4 mr-3 fixed right-[-10px] top-[-15px]"
+    onClick={deleteWidgit}
+  >
+    <RxCross2 size={14} className="text-black" />
+  </div>
+</div>
+
+>>>>>>> Stashed changes
   )}catch(e){
     console.log("erroe",e)
     return(

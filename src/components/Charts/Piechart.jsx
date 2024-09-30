@@ -4,24 +4,18 @@ import { Bars } from 'react-loader-spinner';
 import axios from 'axios';
 import { RxCross2 } from 'react-icons/rx';
 
+<<<<<<< Updated upstream
 const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setClickedPie, fromApi, setFromApi, chartDatatypeX, chartDatatypeY, chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [loading, setLoading] = useState(true);
   const [mydata, setmydata] = useState([]);
   const [selectedValueAxis,setselectedvalueaxis]=useState('');
   const [itsfromDatabase,setitsfromdatabase]=useState(false);
+=======
+>>>>>>> Stashed changes
 
-  function extractValue(input) {
-    const continuousDigitsPattern = /^\D*(\d+)\D*$/;
-    const str = String(input);
-    const match = str.match(continuousDigitsPattern);
-  
-    if (match && !/[a-zA-Z]+/.test(input)) {
-      return parseInt(match[1], 10);
-    } else {
-      return 0;
-    }
-  }
+import { AccumulationChartComponent, AccumulationSeriesCollectionDirective, AccumulationSeriesDirective, AccumulationLegend, PieSeries, AccumulationDataLabel, Inject, AccumulationTooltip } from '@syncfusion/ej2-react-charts';
 
+<<<<<<< Updated upstream
   const deleteWidgit=async()=>{
     const email=localStorage.getItem('email');
     const organization=localStorage.getItem('organization');
@@ -37,44 +31,60 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       }
     }
   };
+=======
+>>>>>>> Stashed changes
 
-  function convertDataTypes(array, fieldConversions) {
-    return array.map(obj => {
-      let newObj = { ...obj };
+const CutomChart = ({id = 'doughnut-chart',  legendVisiblity=true, height='400px'}) => {
+  const pieChartData = [
+     { x: 'Labour', y: 18, text: '18%' },
+     { x: 'Legal', y: 8, text: '8%' },
+     { x: 'Production', y: 15, text: '15%' },
+     { x: 'License', y: 11, text: '11%' },
+     { x: 'Facilities', y: 18, text: '18%' },
+     { x: 'Taxes', y: 14, text: '14%' },
+     { x: 'Insurance', y: 16, text: '16%' },
+   ];
+   
 
-      Object.keys(fieldConversions).forEach(field => {
-        const conversionType = fieldConversions[field];
 
-        switch (conversionType) {
-          case 'integer':
-            if (field === 'value') {
-              newObj[field] = extractValue(obj[field]);
-            } else {
-              newObj[field] = obj[field]; 
-            }
-            break;
-          case 'string':
-            newObj[field] = String(obj[field]);
-            break;
-          default:
-            break;
-        }
-      });
 
-      return newObj;
-    });
-  }
+ return (
 
-  const fieldConversionsNormal = {
-    name: chartDatatypeX,
-    value: chartDatatypeY
-  };
-  
-  const fieldConversionsApi = {
-    name: chartDatatypeFromApiX,
-    value: chartDatatypeFromApiY
-  };
+   <AccumulationChartComponent
+   id={id}
+   legendSettings={{ visible: legendVisiblity, background: 'white' }}
+   height={height}
+   
+   tooltip={{ enable: true }}
+ >
+   <Inject services={[AccumulationLegend, PieSeries, AccumulationDataLabel, AccumulationTooltip]} />
+   <AccumulationSeriesCollectionDirective>
+     <AccumulationSeriesDirective
+       name="Sale"
+       dataSource={pieChartData}
+       xName="x"
+       yName="y"
+       innerRadius="40%"
+       startAngle={0}
+       endAngle={360}
+       radius="70%"
+       explode
+       explodeOffset="10%"
+       explodeIndex={2}
+       dataLabel={{
+         visible: true,
+         name: 'text',
+         position: 'Inside',
+         font: {
+           fontWeight: '600',
+           color: '#fff',
+         },
+       }}
+     />
+   </AccumulationSeriesCollectionDirective>
+ </AccumulationChartComponent>
 
+<<<<<<< Updated upstream
   useEffect(() => {
     const fun = async () => {
       const dashboard_response = await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/getDashboardData', { email: localStorage.getItem('email'),organization:localStorage.getItem('organization') });
@@ -246,3 +256,9 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
 };
 
 export default Piechart;
+=======
+)
+}
+
+export default CutomChart
+>>>>>>> Stashed changes

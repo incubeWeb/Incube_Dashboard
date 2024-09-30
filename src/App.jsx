@@ -14,6 +14,7 @@ import { addTimeline } from "./states/timelinestate";
 import AddInvestment from "./components/Add_Investments/AddInvestment";
 import Portfolio from "./components/PortfolioAnalysis/Portfolio";
 import Viewsheet from "./components/ViewSheet/Viewsheet";
+import Navbar from "./components/Navbar/Navbar";
 
 function App() {
   const [activeField, setActiveField] = useState('/dashboard');
@@ -129,6 +130,7 @@ function App() {
         <>
           {pathname !== '/' && <Navigation activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />}
           <Routes>
+          <Route path='/Navbar'  element={<Navbar/>}  /> 
             <Route path="/" element={<Login setLoginIn={setLoginIn}/>} />
             <Route path="/dashboard" element={<Dashboard realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/>} />
             <Route path="/dealpipeline" element={<FirstCol setActiveField={setActiveField} hidenavbar={hidenavbar}/>} />

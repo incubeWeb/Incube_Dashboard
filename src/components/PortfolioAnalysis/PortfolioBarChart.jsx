@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import React, { useEffect, useState } from 'react';
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell } from 'recharts';
 
-const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldselectedX,sheetfieldselectedY}) => {
-    const [data,setdata]=useState([])
+const PortfolioBarChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfieldselectedX, sheetfieldselectedY }) => {
+    const [data, setData] = useState([]);
+    const [hoveredIndex, setHoveredIndex] = useState(null);  // State to track the hovered bar
 
+<<<<<<< Updated upstream
     useEffect(()=>{
       const settingValuesofData=async()=>{
             const mydata=[]
@@ -31,50 +33,66 @@ const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldse
         }
         settingValuesofData()
     },[])
+=======
+    useEffect(() => {
+        const settingValuesofData = async () => {
+            const myData = sheetJson.map(val => ({
+                name: val[sheetfieldselectedX],
+                uv: val[sheetfieldselectedY]
+            }));
+
+            const convertedData = convertDataTypes(myData, fieldConversions);
+            setData(convertedData);
+        };
+        settingValuesofData();
+    }, [sheetJson, sheetfieldselectedX, sheetfieldselectedY, chartDatatypeX, chartDatatypeY]);
+>>>>>>> Stashed changes
 
     function extractValue(input) {
-        // Regex to match a string with continuous digits
         const continuousDigitsPattern = /^\D*(\d+)\D*$/;
-        const str=String(input)
+        const str = String(input);
         const match = str.match(continuousDigitsPattern);
-      
+
         if (match && !/[a-zA-Z]+/.test(input)) {
-            // If input matches the pattern and does not contain interspersed letters, return the captured group
             return parseInt(match[1], 10);
         } else {
-            // If input does not match the pattern or contains interspersed letters, return 0
             return 0;
         }
-      }
-      
-  function convertDataTypes(array, fieldConversions) {
-    return array.map(obj => {
-        let newObj = { ...obj };
+    }
 
-        Object.keys(fieldConversions).forEach(field => {
-            const conversionType = fieldConversions[field];
+    function convertDataTypes(array, fieldConversions) {
+        return array.map(obj => {
+            let newObj = { ...obj };
 
-            switch (conversionType) {
-                case 'integer':
-                    newObj[field] = extractValue(obj[field]);
-                    break;
-                case 'string':
-                    newObj[field] = String(obj[field]);
-                    break;
-                default:
-                    break;
-            }
+            Object.keys(fieldConversions).forEach(field => {
+                const conversionType = fieldConversions[field];
+
+                switch (conversionType) {
+                    case 'integer':
+                        newObj[field] = extractValue(obj[field]);
+                        break;
+                    case 'string':
+                        newObj[field] = String(obj[field]);
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            return newObj;
         });
+    }
 
-        return newObj;
-    });
-}
+    const fieldConversions = {
+        name: chartDatatypeX,
+        uv: chartDatatypeY
+    };
 
-const fieldConversions = {
-    name: chartDatatypeX,  // Convert 'name' field to number
-    uv: chartDatatypeY  // Convert 'value' field to string
-  };
+    const handleMouseEnter = (index) => {
+        setHoveredIndex(index);  // Set the hovered bar
+    };
 
+<<<<<<< Updated upstream
     const sampledata = [
         {
           name: 'Page A',
@@ -135,9 +153,109 @@ const fieldConversions = {
               <Bar dataKey="uv" fill="#8884d8" barSize={30} />
             </BarChart>
           </ResponsiveContainer>
-        </div>
-    </div>
-  )
-}
+=======
+    const handleMouseLeave = () => {
+        setHoveredIndex(null);  // Reset the hovered bar when the mouse leaves
+    };
 
-export default PortfolioBarChart
+    const barColor = (index) => {
+        return index === hoveredIndex ? '#FF8042' : '#2970FF';  // Change color on hover
+    };
+
+    return (
+        <div style={{ width: '95%', height: '90%' }} className='mt-2 pr-10 ml-8 '>
+            {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ?
+                <div className='pl-4' style={{ paddingBottom: '20px' }}>
+                    <p className='text-[18px] font-bold font-inter -mt-4'>Vertical Bar Chart</p>
+                </div>
+                :
+                <div className='pl-4 -pt-4' style={{ paddingBottom: '20px' }}>
+                    <p className='text-[18px] font-bold font-inter -mt-4'>Horizontal Bar Chart</p>
+                </div>
+            }
+
+            <div style={{ width: '100%', height: '90%' }}>
+                {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ?
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={data}>
+                            <XAxis dataKey="name" stroke="#8884d8"
+                                tick={{ fontSize: 16, fontFamily: 'Inter', fill: '#8884d8' }}
+                            />
+                            <YAxis dataKey='uv' tickCount={4} tickMargin={-1}
+                                tick={{ fontSize: 14, fontFamily: 'Inter', fill: '#8884d8' }}
+                            />
+                            <Tooltip
+                                contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
+                                itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+                                labelStyle={{ color: '#ccc' }}
+                            />
+                            <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
+                            <Bar dataKey="uv" barSize={30}>
+                                {data.map((entry, index) => (
+                                    <Cell
+                                        key={`cell-${index}`}
+                                        fill={barColor(index)}
+                                        onMouseEnter={() => handleMouseEnter(index)}  // Set hovered bar on mouse enter
+                                        onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
+                                    
+                                        radius={[10, 10, 0, 0]}
+                                    />
+                                ))}
+                            </Bar>
+                        </BarChart>
+                    </ResponsiveContainer>
+                    :
+                    chartDatatypeX === 'integer' && chartDatatypeY === 'string' ?
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart layout="vertical" data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                                <XAxis type="number" tick={true} stroke="#8884d8" />
+                                <YAxis dataKey="uv" type="category" tick={true} />
+                                <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
+                                <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
+                                <Bar dataKey="name" barSize={30}>
+                                    {data.map((entry, index) => (
+                                        <Cell
+                                            key={`cell-${index}`}
+                                            fill={barColor(index)}
+                                            onMouseEnter={() => handleMouseEnter(index)}  // Set hovered bar on mouse enter
+                                            onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
+                                            radius={[0, 10, 10, 0]}
+
+                                        />
+                                    ))}
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
+                        :
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={data}>
+                                <XAxis dataKey="name" tick={true} stroke="#8884d8" />
+                                <YAxis dataKey='uv' tick={true} tickCount={4} tickMargin={-1} />
+                                <Tooltip
+                                    contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
+                                    itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+                                    labelStyle={{ color: '#ccc' }}
+                                />
+                                <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
+                                <Bar dataKey="uv" barSize={30}>
+                                    {data.map((entry, index) => (
+                                        <Cell
+                                            key={`cell-${index}`}
+                                            fill={barColor(index)}
+                                            onMouseEnter={() => handleMouseEnter(index)}  // Set hovered bar on mouse enter
+                                            onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
+                                            radius={[0, 10, 0, 0]}
+
+                                        />
+                                    ))}
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
+                }
+            </div>
+>>>>>>> Stashed changes
+        </div>
+    );
+};
+
+export default PortfolioBarChart;
