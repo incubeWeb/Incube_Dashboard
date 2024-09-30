@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid, ResponsiveContainer, Cell } from 'recharts';
 import { Bars } from 'react-loader-spinner'; // Correct import for the loader component
 import axios from 'axios';
 import { RxCross2 } from 'react-icons/rx';
@@ -216,53 +216,115 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
     fun();
   }, [investmentchange]);
 
+  const [hoveredIndex, setHoveredIndex] = useState(null); 
+
   const yAxisTickFormatter = (value) => value; 
+
+  const handleMouseEnter = (index) => {
+    setHoveredIndex(index);  // Set the hovered bar
+};
+
+const handleMouseLeave = () => {
+    setHoveredIndex(null);  // Reset the hovered bar when the mouse leaves
+};
+
+const barColor = (index) => {
+    return index === hoveredIndex ? '#FF8042' : '#2970FF';  // Change color on hover
+};
   return (
     <div style={{ width: '100%', height: '95%' ,paddingBottom:'15px'}} className='mt-8  pr-10'>
       
-      <div style={{ width: '100%', height: '100%' }}>
-      {
-          mydatatypex=='string' && mydatatypey=='integer'?
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={mydata}>
-              <XAxis dataKey="name" tick={true} stroke="#8884d8" />
-              <YAxis dataKey='uv' tick={true}  tickCount={4}/>
-            
-              <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
-              
-           
-              <CartesianGrid stroke="#ccc"   horizontal={true} vertical={false}  />
-              <Bar dataKey="uv" fill="#2970FF" barSize={30} />
-            </BarChart>
-          </ResponsiveContainer>
-          :
-          mydatatypex=='integer' && mydatatypey=='string'?
-          <ResponsiveContainer width="100%" height="100%">
+      <div style={{ width: '95%', height: '90%' }} className='mt-2 pr-10 ml-8 '>
+    {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ?
+        <div className='pl-4' style={{ paddingBottom: '20px' }}>
+            <p className='text-[18px] font-bold font-inter -mt-4'>Vertical Bar Chart</p>
+        </div>
+        :
+        <div className='pl-4 -pt-4' style={{ paddingBottom: '20px' }}>
+            <p className='text-[18px] font-bold font-inter -mt-4'>Horizontal Bar Chart</p>
+        </div>
+    }
+
+    <div style={{ width: '100%', height: '90%' }}>
+        {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ?
+            <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={mydata}>
+                    <XAxis dataKey="name" stroke="#8884d8"
+                        tick={{ fontSize: 16, fontFamily: 'Inter', fill: '#8884d8' }}
+                    />
+                    <YAxis dataKey='uv' tickCount={4} tickMargin={-1}
+                        tick={{ fontSize: 14, fontFamily: 'Inter', fill: '#8884d8' }}
+                    />
+                    <Tooltip
+                        contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
+                        itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+                        labelStyle={{ color: '#ccc' }}
+                    />
+                    <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
+                    <Bar dataKey="uv" barSize={30}>
+                        {mydata.map((entry, index) => (
+                            <Cell
+                                key={`cell-${index}`}
+                                fill={barColor(index)}
+                                onMouseEnter={() => handleMouseEnter(index)}  // Set hovered bar on mouse enter
+                                onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
+                            
+                                radius={[10, 10, 0, 0]}
+                            />
+                        ))}
+                    </Bar>
+                </BarChart>
+            </ResponsiveContainer>
+            :
+            chartDatatypeX === 'integer' && chartDatatypeY === 'string' ?
+                <ResponsiveContainer width="100%" height="100%">
                     <BarChart layout="vertical" data={mydata} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                        {/* XAxis now handles the 'uv' values (which are numerical) */}
                         <XAxis type="number" tick={true} stroke="#8884d8" />
-                        {/* YAxis now handles the 'name' values (which are categorical/strings) */}
-                        <YAxis dataKey="uv" type="category" tickFormatter={yAxisTickFormatter} tick={true} />
+                        <YAxis dataKey="uv" type="category" tick={true} />
                         <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
                         <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                        <Bar dataKey="name" fill="#2970FF" barSize={30} />
+                        <Bar dataKey="name" barSize={30}>
+                            {mydata.map((entry, index) => (
+                                <Cell
+                                    key={`cell-${index}`}
+                                    fill={barColor(index)}
+                                    onMouseEnter={() => handleMouseEnter(index)}  // Set hovered bar on mouse enter
+                                    onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
+                                    radius={[0, 10, 10, 0]}
+
+                                />
+                            ))}
+                        </Bar>
                     </BarChart>
                 </ResponsiveContainer>
-          :
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={mydata}>
-              <XAxis dataKey="name" tick={true} stroke="#8884d8" />
-              <YAxis dataKey='uv' tick={true}  tickCount={4}/>
-            
-              <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
-              
-           
-              <CartesianGrid stroke="#ccc"   horizontal={true} vertical={false}  />
-              <Bar dataKey="uv" fill="#2970FF" barSize={30} />
-            </BarChart>
-          </ResponsiveContainer>
-          }
-      </div>
+                :
+                <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={mydata}>
+                        <XAxis dataKey="name" tick={true} stroke="#8884d8" />
+                        <YAxis dataKey='uv' tick={true} tickCount={4} tickMargin={-1} />
+                        <Tooltip
+                            contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
+                            itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+                            labelStyle={{ color: '#ccc' }}
+                        />
+                        <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
+                        <Bar dataKey="uv" barSize={30}>
+                            {mydata.map((entry, index) => (
+                                <Cell
+                                    key={`cell-${index}`}
+                                    fill={barColor(index)}
+                                    onMouseEnter={() => handleMouseEnter(index)}  // Set hovered bar on mouse enter
+                                    onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
+                                    radius={[0, 10, 0, 0]}
+
+                                />
+                            ))}
+                        </Bar>
+                    </BarChart>
+                </ResponsiveContainer>
+        }
+    </div>
+</div>
 
       {
               itsfromDatabase &&!isitfromDrive?

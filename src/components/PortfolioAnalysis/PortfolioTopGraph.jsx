@@ -44,50 +44,84 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
     const RefreshSheets=()=>{
         setavailableDatabaseSheets()
     }
+    
 
-    useEffect(()=>
-    {
-        const updateRealtimevalue=async()=>{
+    // useEffect(()=>
+    // {
+    //     const updateRealtimevalue=async()=>{
+    //         const organization=`${localStorage.getItem('organization')}_ShownGraph`
+    //         const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
+    //         const data=response.data.data
+    //         const stateValues=JSON.parse(data)||{}
+    //         const sheetid=stateValues.sheetclicked
+    //         const response1=await axios.post('http://localhost:8999/sheetfromdb',{id:sheetid,organization:localStorage.getItem('organization')})
+    //         const sheetdata=JSON.parse(response1.data.data)
+    //         const stateJson={showBarchart:stateValues.showBarchart,showPiechart:stateValues.showPiechart,showLinechart:stateValues.showLinechart,chartDatatypeX:stateValues.chartDatatypeX,chartDatatypeY:stateValues.chartDatatypeY,sheetJson:sheetdata,sheetfieldselectedX:stateValues.sheetfieldselectedX,sheetfieldselectedY:stateValues.sheetfieldselectedY,sheetclicked:stateValues.sheetclicked}
+    //         if((stateValues.showBarchart || stateValues.showPiechart || stateValues.showLinechart)&&sheetdata!=[])
+    //         {
+    //             await axios.post('http://localhost:8999/setportfoliostate',{
+    //                 organization:organization,
+    //                 portfolioState:JSON.stringify(stateJson)
+    //             })
+    //         }
+    //         setshowBarchart(stateValues.showBarchart)
+    //         setshowPiechart(stateValues.showPiechart)
+    //         setshowLinechart(stateValues.showLinechart)
+    //         setchartDatatypeX(stateValues.chartDatatypeX)
+    //         setchartDatatypeY(stateValues.chartDatatypeY)
+    //         setsheetJson(sheetdata)
+    //         setsheetfieldselectedX(stateValues.sheetfieldselectedX)
+    //         setsheetfieldselectedY(stateValues.sheetfieldselectedY)
+    //         setsheetClicked(stateValues.sheetclicked)
+
+
+    //     }
+    //     updateRealtimevalue()
+    // },[sheetedited])
+
+    useEffect(()=>{
+        const setGraphValues=async()=>{
             const organization=`${localStorage.getItem('organization')}_ShownGraph`
             const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
-            const data=response.data.data
+           console.log("here",response.data.data)
+            const data=response.data.data 
+            const status=response.data.status
             const stateValues=JSON.parse(data)||{}
-            const sheetid=stateValues.sheetclicked
-            const response1=await axios.post('http://localhost:8999/sheetfromdb',{id:sheetid,organization:localStorage.getItem('organization')})
-            const sheetdata=JSON.parse(response1.data.data)
-            const stateJson={showBarchart:stateValues.showBarchart,showPiechart:stateValues.showPiechart,showLinechart:stateValues.showLinechart,chartDatatypeX:stateValues.chartDatatypeX,chartDatatypeY:stateValues.chartDatatypeY,sheetJson:sheetdata,sheetfieldselectedX:stateValues.sheetfieldselectedX,sheetfieldselectedY:stateValues.sheetfieldselectedY,sheetclicked:stateValues.sheetclicked}
-            if((stateValues.showBarchart || stateValues.showPiechart || stateValues.showLinechart)&&sheetdata!=[])
+            
+            if(status==200)
             {
-                await axios.post('http://localhost:8999/setportfoliostate',{
-                    organization:organization,
-                    portfolioState:JSON.stringify(stateJson)
-                })
-            }
             setshowBarchart(stateValues.showBarchart)
             setshowPiechart(stateValues.showPiechart)
             setshowLinechart(stateValues.showLinechart)
             setchartDatatypeX(stateValues.chartDatatypeX)
             setchartDatatypeY(stateValues.chartDatatypeY)
-            setsheetJson(sheetdata)
+            setsheetJson(stateValues.sheetJson)
             setsheetfieldselectedX(stateValues.sheetfieldselectedX)
             setsheetfieldselectedY(stateValues.sheetfieldselectedY)
             setsheetClicked(stateValues.sheetclicked)
-
-
+            setTimeout(()=>{
+                setloading(false)
+            },1000)
+            }
+            else{
+                setTimeout(()=>{
+                    setloading(false)
+                },1000)
+            }
         }
-        updateRealtimevalue()
-    },[sheetedited,realtimeportfoliostate])
+        setGraphValues()
+    },[realtimeportfoliostate])
 
 
     useEffect(()=>{
         const setGraphValues=async()=>{
             const organization=`${localStorage.getItem('organization')}_ShownGraph`
             const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
-           
+           console.log("here",response.data.data)
             const data=response.data.data 
             const status=response.data.status
             const stateValues=JSON.parse(data)||{}
-        
+            
             if(status==200)
             {
             setshowBarchart(stateValues.showBarchart)

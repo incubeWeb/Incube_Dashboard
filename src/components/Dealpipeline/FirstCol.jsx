@@ -78,7 +78,7 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
   
 
   return (
-    <div className={`${hidenavbar?'ml-[2%] w-[100%]':'ml-[20%] w-[80%]'}flex flex-col  font-roboto space-y-3 text-gray-700 pr-[47px]`}>
+    <div className={`${hidenavbar?'ml-[3%] w-[100%]':'ml-[20%] w-[80%]'}flex flex-col pt-[17px]  font-roboto space-y-3 text-gray-700 pr-[47px]`}>
       
       <div className='w-[100%] h-[100%]'>
         
@@ -88,10 +88,10 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
           <p className='md:text-[14px] text-[12px]  text-inter   text-[#475467]'>Search or go through startups looking to raise fresh rounds.</p>
         </div>
         <div className='md:w-[100%] md:h-[100%] md:flex md:items-center md:justify-end md:mr-[20px]'>
-          <div className='flex flex-row w-[280px] h-[28px] items-center md:flex md:flex-row md:items-center md:w-[280px] md:h-[38px] rounded-md border-gray-400 border-2 border-solid space-x-3 hover:shadow-md hover:duration-150'>
+          {/* <div className='mt-[17px] flex flex-row w-[280px] h-[28px] items-center md:flex md:flex-row md:items-center md:w-[280px] md:h-[38px] rounded-md border-gray-400 border-2 border-solid space-x-3 hover:shadow-md hover:duration-150'>
             <FiSearch className='font-thin ml-3 text-gray-400' size={20} />
-            <input type='text' placeholder='Search' className=' w-full text-[13px] h-full outline-none rounded-md border-l-0 md:text-[15px] text-gray-600' />
-          </div>
+            <input type='text' placeholder='Search' className=' w-full text-[13px]  h-full outline-none rounded-md border-l-0 md:text-[15px] text-gray-600' />
+          </div> */}
         </div>
       </div>
 
@@ -122,9 +122,9 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
               localStorage.getItem('role')!='admin'&&localStorage.getItem('role')!='super admin'?
             <></>
             :
-            <div className='border-[1px] border-blue-600 w-[180px]  h-[100%] rounded-md md:flex md:items-center md:space-x-2 select-none cursor-pointer hover:bg-gray-300' onClick={() => { setCreateNew(!createNew) }}>
+            <div className='border-[1px] border-blue-200 w-[140px] hover:border-0  h-[35px] rounded-md md:flex md:items-center md:space-x-2 select-none cursor-pointer hover:bg-gray-300' onClick={() => { setCreateNew(!createNew) }}>
                 <div className='basis-3/12 md:flex md:justify-end md:items-center h-[100%]'><FiPlus size={16} className='text-blue-600' /></div>
-                <div className='md:flex md:items-center h-[100%]'><p className='md:h-[100%] md:flex md:items-center text-[14px]  text-blue-600 font-bold' >Add new</p></div>
+                <div className='md:flex md:items-center h-[100%]'><p className=' flex items-center text-[14px]  text-blue-600 font-bold' >Add new</p></div>
               </div>
             }
           </div>

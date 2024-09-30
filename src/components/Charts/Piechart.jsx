@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { PieChart, Pie, ResponsiveContainer ,Tooltip,Legend} from 'recharts';
+import React, { useEffect, useRef, useState } from 'react';
+import { PieChart, Pie, ResponsiveContainer ,Tooltip,Legend, Cell} from 'recharts';
 import { Bars } from 'react-loader-spinner';
 import axios from 'axios';
 import { RxCross2 } from 'react-icons/rx';
+import { VscArrowDown, VscArrowUp } from 'react-icons/vsc';
 
 const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setClickedPie, fromApi, setFromApi, chartDatatypeX, chartDatatypeY, chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [loading, setLoading] = useState(true);
@@ -342,6 +343,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
     };
     fun();
   }, [investmentchange]);
+
   const legendFormatter = (value, entry) => {
     const { name, value: val } = entry.payload;
     return `${name}: ${val}`;
@@ -349,6 +351,46 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
 
   // Custom label function to display name and value
   const renderCustomLabel = ({ name, value }) => `${name}: ${value}`;
+
+  const [activeIndex, setActiveIndex] = useState(null); // Track the clicked segment
+    const [hoveredIndex, setHoveredIndex] = useState(null); // Track the hovered segment
+    const [scrollPosition, setScrollPosition] = useState(0); // Track the scroll position
+    const legendRef = useRef(null); // Ref to track the legend container
+
+
+        // Handle pie segment click
+        const onPieClick = (_, index) => {
+            setActiveIndex(index);
+        };
+    
+        // Handle hover state for each segment
+        const onPieMouseEnter = (_, index) => {
+            setHoveredIndex(index);
+        };
+    
+        const onPieMouseLeave = () => {
+            setHoveredIndex(null);
+        };
+     // Scroll handling for the legend
+     const scrollLegend = (direction) => {
+        if (legendRef.current) {
+            const scrollAmount = direction === 'up' ? -30 : 30;
+            legendRef.current.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+            setScrollPosition(legendRef.current.scrollTop);
+        }
+    };
+
+
+    // Check if legend content overflows
+    const isScrollable = () => {
+        if (legendRef.current) {
+            return legendRef.current.scrollHeight > legendRef.current.clientHeight;
+        }
+        return false;
+    };
+    const BASE_BLUE = '#528BFF';
+    const GRADIENT_BLUE = ['#528BFF', '#85AFFF', '#A1C2FF', '#C3D6FF']; // Gradient shades
+
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
@@ -359,32 +401,120 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       ) : (
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
-            <defs>
-              <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="3%" stopColor="#4A90E2" stopOpacity={0.8}  />
-                <stop offset="80%" stopColor="#007AFF"   stopOpacity={0.8} />
-              </linearGradient>
-            </defs>
-            <Pie
-              dataKey="value"
-              isAnimationActive={false}
-              data={mydata}
-              cx="50%"
-              cy="50%"
-              outerRadius={90}
-              fill="url(#blueGradient)" // Apply the gradient
-             
-            />
-             <Legend
-                        layout="vertical"
-                        align="right"
-                        verticalAlign="middle"
-                        formatter={legendFormatter}
-                        wrapperStyle={{ paddingLeft: '20px', lineHeight: '30px' }}
-                    />
-            <Tooltip />
-       
-          </PieChart>
+                        <Pie
+                            dataKey="value"
+                            isAnimationActive={false}
+                            data={mydata}
+                            cx="50%"
+                            cy="50%"
+                            outerRadius="85%" // Outer radius for doughnut
+                            innerRadius="45%" // Inner radius for the doughnut effect
+                            fill={BASE_BLUE}
+                            activeIndex={activeIndex}
+                            onClick={onPieClick} // Trigger effect on click
+                            onMouseEnter={onPieMouseEnter} // Trigger hover effect
+                            onMouseLeave={onPieMouseLeave} // Reset hover effect
+                        >
+                            {mydata.map((entry, index) => {
+                                const fillColor =
+                                    hoveredIndex === index || activeIndex === index
+                                        ? '#FF8042'  // Apply gradient on hover/click
+                                        : '#528BFF';  // Default to base blue color
+
+                                return (
+                                    <Cell
+                                        key={`cell-${index}`}
+                                        fill={fillColor}
+                                        onMouseEnter={() => setHoveredIndex(index)} // Trigger hover effect on the segment
+                                        onMouseLeave={() => setHoveredIndex(null)} // Reset hover effect when leaving segment
+                                        style={{ transition: 'fill 0.2s ease-out' }} // Smooth color transition
+                                    />
+                                );
+                            })}
+                        </Pie>
+                        <Tooltip
+                            formatter={(value) => `${value}`} // Converts value to string for display
+                            contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
+                            itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+                            labelStyle={{ color: '#ccc' }}
+                        />
+                        
+                        <Legend
+                            layout="vertical"
+                            align="right"
+                            verticalAlign="middle"
+                            formatter={legendFormatter}
+                            content={props => {
+                                const { payload } = props;
+                                return (
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+                                        {/* Scroll Up Arrow */}
+                                        {isScrollable() && (
+                                            <button
+                                                style={{
+                                                    background: 'none',
+                                                    border: 'none',
+                                                    cursor: 'pointer',
+                                                    color: 'black',
+                                                    fontSize: '20px',
+                                                    marginBottom: '15px',
+                                                    paddingRight:'10px'
+                                                    
+                                                }}
+                                                onClick={() => scrollLegend('up')}
+                                            >
+                                                <VscArrowUp size={24}/>
+
+                                            </button>
+                                        )}
+                                        <ul
+                                            ref={legendRef}
+                                            style={{
+                                                listStyleType: 'none',
+                                                paddingLeft: 0,
+                                                fontFamily: 'Inter',
+                                                fontWeight: 600,
+                                                maxHeight: '150px', // Fixed height for scroll
+                                                overflowY: 'auto',
+                                                scrollbarWidth: 'none', // For Firefox
+                                                msOverflowStyle: 'none',
+                                                position: 'relative',
+                                            }}
+                                            className="hide-scrollbar"
+                                        >
+                                            {payload.map((entry, index) => (
+                                                <li key={`item-${index}`} style={{ color: '#8884d8', fontSize: '14px' }}>
+                                                    {`${entry.value}: ${entry.payload.value}`}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        {/* Scroll Down Arrow */}
+                                        {isScrollable() && (
+                                            <button
+                                                style={{
+                                                    background: 'none',
+                                                    border: 'none',
+                                                    cursor: 'pointer',
+                                                    color: 'black',
+                                                    fontSize: '20px',
+                                                    marginTop: '10px',
+                                                    paddingRight:'10px'
+                                                    
+                                                    
+                                                }}
+                                                onClick={() => scrollLegend('down')}
+                                             
+                                            >
+                                                <VscArrowDown   size={24}/>
+
+                                            </button>
+                                        )}
+                                    </div>
+                                );
+                            }}
+                            wrapperStyle={{ paddingLeft: '20px', lineHeight: '60px' }}
+                        />
+                    </PieChart>
           {/* <div className='fixed right-5 top-3 flex flex-row items-center space-x-2'>
             <div className='w-[10px] h-[10px] bg-violet-600 mt-3'></div> 
             <p className='text-[13px] text-gray-07 font-noto text-gray-700'>{selectedValueAxis}</p>

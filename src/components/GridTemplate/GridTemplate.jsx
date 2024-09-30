@@ -12,6 +12,7 @@ function GridTemplate({filesadded,realtimeDealpipelinetabs,realtimedealpipelinec
     const [openCompleteGrid,setOpenCompleteGrid]=useState(false)
     const[openViewallGrid,setOpenViewallGrid]=useState(false)
     const [assignedList,setassignedList]=useState([])
+    const [imgsrc,setimgsrc]=useState(logo)
 
     const [slowinternet,setslowinternet]=useState(false)
 
@@ -52,6 +53,9 @@ function GridTemplate({filesadded,realtimeDealpipelinetabs,realtimedealpipelinec
         return assignedList.some(val=>val.mainorganization==localStorage.getItem('organization') && val.organization==Title)
     }
 
+    const handleImageError=()=>{
+        setimgsrc('https://i.pinimg.com/originals/ec/d9/c2/ecd9c2e8ed0dbbc96ac472a965e4afda.jpg')
+    }
    
   return (
     <div className='shadow-md md:shadow-none  h-[200px]  md:h-[233px] border-[1px] border-gray-200 rounded-md flex flex-col md:hover:shadow-xl duration-75 md:hover:border-0 select-none cursor-pointer ml-2 md:ml-0 mr-2 md:mr-2' onClick={handleOpenGrid}>
@@ -61,7 +65,7 @@ function GridTemplate({filesadded,realtimeDealpipelinetabs,realtimedealpipelinec
         <div className='flex flex-col w-[100%] h-[76%] pl-3 pr-3 pt-5 space-y-7'>
             <div className='flex flex-row w-[100%] h-[34%] space-x-3'>
                 <div className='w-[15%] h-[100%] -mt-4 flex items-center'>
-                    <img src={logo} className='rounded-md'/>
+                    <img src={imgsrc} onError={handleImageError} className='rounded-md'/>
                 </div>
          
                 <div className='flex flex-col justify-center md:h-[100%]'>

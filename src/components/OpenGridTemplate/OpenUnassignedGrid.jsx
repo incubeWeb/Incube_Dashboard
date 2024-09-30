@@ -4,6 +4,7 @@ import { gsap } from 'gsap/gsap-core';
 import { useGSAP } from '@gsap/react';
 import { RiExchangeFundsFill } from "react-icons/ri";
 import axios from 'axios';
+import { Bars } from 'react-loader-spinner';
 
 function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, companyName, description, handleOpenGrid }) {
     const [users, setAllUsers] = useState([]);
@@ -12,17 +13,12 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
     const [apply, setApply] = useState(false);
     const [selectAll, setSelectAll] = useState(false);
     const [selects, setSelects] = useState({});
+    const [loading,setloading]=useState(true)
 
     const handleBubbling = (e) => {
         e.stopPropagation();
     };
 
-    const handleRoleChange = (userId, newRole) => {
-        setRoles((prevRoles) => ({
-            ...prevRoles,
-            [userId]: newRole,
-        }));
-    };
 
     const handleCheckboxChange = (userId) => {
         setSelects((prevSelects) => ({
@@ -37,15 +33,13 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
             const usersData = response.data.data;
             if(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')
             {
-                const filteredData= usersData.filter(val=>val.role!='super admin' &&val.role!='admin')
+                const newFilteredData= usersData.filter(val=>val.role!='super admin' &&val.role!='admin')
                 
-                const newFilteredData=[...filteredData]
                 setAllUsers(newFilteredData)
             }
             else if(localStorage.getItem('role')=='team lead'){
-                const filteredData= usersData.filter(val=>val.role!='super admin' && val.role !='admin' && val.role!='team lead')
+                const newFilteredData= usersData.filter(val=>val.role!='super admin' && val.role !='admin' && val.role!='team lead')
                 
-                const newFilteredData=[...filteredData]
                 setAllUsers(newFilteredData)
             }
             else{
@@ -66,6 +60,9 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                 return acc;
             }, {});
             setSelects(initialSelects);
+            setTimeout(()=>{
+                setloading(false)
+            },100)
         };
         setUsers();
     }, []);
@@ -164,21 +161,12 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
         
     }
 
-    const MainDiv = useRef(null);
-    useGSAP(() => {
-        gsap.to(MainDiv.current, {
-            x: -1900,
-            duration: 1,
-            delay: 0.2,
-            overflow: 'hidden',
-            opacity: 0,
-        });
-    });
+    
 
 
     return (
-        <div className={`${hidenavbar?' w-[100%] pl-[54px]':'ml-[20%] w-[80%]'} pt-[50px] h-screen z-50 space-y-7 bg-white absolute top-0 right-0 overflow-hidden p-[23px] flex flex-col cursor-default`} onClick={handleBubbling}>
-            <div ref={MainDiv} className='bg-white w-[100%] h-screen fixed'></div>
+        <div className={` ${hidenavbar?'ml-[2%] w-[97%]':'ml-[20%] w-[80%]'} h-screen z-50 space-y-7 bg-white absolute top-0 right-0 overflow-hidden p-[23px] pt-[17px] md:flex md:flex-col cursor-default`} onClick={handleBubbling}>
+            
             <div className='flex flex-row h-[40px] w-[100%] mt-[20px]'>
                 <div className='flex flex-row items-center justify-center'>
                     <p className='text-gray-500 text-[16px] cursor-pointer hover:text-gray-600 hover:underline hover:underline-offset-2 font-inter font-semibold' onClick={handleOpenGrid}>Deal Pipeline</p>
@@ -204,6 +192,16 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                             <p className='text-[16px] font-inter font-semibold'>Role</p>
                         </div>
                     </div>
+                    {
+                        loading?
+                        <div className='w-[100%] h-[100%] overflow-y-auto space-y-7'>
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                <Bars color="#8884d8" height={80} width={80} />
+                            </div>
+                        </div>
+                        :
+                    
+
                     <div className='text-gray-500 flex flex-col overflow-y-auto space-y-2 h-[93%]'>
                         {users.map(user => (
                             <div key={user._id} className='flex border-gray-100 hover:border-gray-300 border-[1px] space-x-7 shadow-sm shadow-gray-200 hover:shadow-gray-300 hover:shadow-md p-2 rounded-md flex-row w-[100%] h-[50px] justify-center pt-3'>
@@ -221,6 +219,7 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                             </div>
                         ))}
                     </div>
+                        }
                     <div className='w-[100%] space-x-2 h-[8%] justify-start flex flex-row'>
                             <div className=' w-[14%] h-[100%] flex justify-end'>
                                 <button className='w-[100%] rounded-md h-[40px] bg-blue-600 font-inter font font-semibold text-white text-[14px]' onClick={handleAssignChanges}>Assign to me</button>
