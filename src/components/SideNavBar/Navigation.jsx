@@ -72,8 +72,8 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
                 
             })
             gsap.to(settingBtnRef.current,{
-                x:'-1400%',
-                rotation:'360',
+                x:'-100%',
+                
                 duration:0.4,
                 onComplete:()=>{
                     sethidenavbar(true)
@@ -87,7 +87,7 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
             })
             gsap.to(settingBtnRef.current,{
                 x:'0%',
-                rotation:'-360',
+                
                 duration:0.4,
                 onComplete:()=>{
                     sethidenavbar(false)
@@ -212,13 +212,11 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
                         <div>
                         <div className='w-[120%] cursor-pointer mt-4 flex items-center justify-center h-[100%] '>
                           
-                            <button onClick={()=>{setShowPopup1(true); setShowPopup(false);}}  class=" h-[110%] -mt-2 flex items-center justify-between mr-6 bg-white  shadow-md rounded-md p-2 hover:bg-gray-100 transition duration-200">
-                <div class="relative">
-                 <div class="absolute inset-0"></div>
-                        </div>
-             <div class="flex items-center space-x-2">
-                 <div class="w-6 h-6">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" class="w-full h-full">
+                            <button onClick={()=>{setShowPopup1(true); setShowPopup(false);}}  className=" h-[110%] -mt-2 flex items-center justify-between mr-6 bg-white  shadow-md rounded-md p-2 hover:bg-gray-100 transition duration-200">
+                
+             <div className="flex items-center space-x-2">
+                 <div className="w-6 h-6">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" className="w-full h-full">
                   <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
                     <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
                     <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
@@ -226,7 +224,7 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
                  <path fill="none" d="M0 0h48v48H0z"></path>
         </svg>
             </div>
-            <span class="text-gray-700  text-[12px] font-inter font-bold pr-3">Disconnect to google</span>
+            <span className="text-gray-700  text-[12px] font-inter font-bold pr-3">Disconnect to google</span>
             </div>
             
             </button>
@@ -264,13 +262,13 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
                           
                                 
             
-                            <button onClick={() => {setShowPopup(true); setShowPopup1(false);}}  class=" h-[110%] -mt-2 flex items-center justify-between mr-6 bg-white  shadow-md rounded-md p-2 hover:bg-gray-100 transition duration-200">
-                <div class="relative">
-                 <div class="absolute inset-0"></div>
+                            <button onClick={() => {setShowPopup(true); setShowPopup1(false);}}  className=" h-[110%] -mt-2 flex items-center justify-between mr-6 bg-white  shadow-md rounded-md p-2 hover:bg-gray-100 transition duration-200">
+                <div className="relative">
+                 <div className="absolute inset-0"></div>
                         </div>
-             <div class="flex items-center space-x-2">
-                 <div class="w-6 h-6">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" class="w-full h-full">
+             <div className="flex items-center space-x-2">
+                 <div className="w-6 h-6">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" className="w-full h-full">
                   <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
                     <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
                     <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
@@ -278,7 +276,7 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
                  <path fill="none" d="M0 0h48v48H0z"></path>
         </svg>
             </div>
-            <span class="text-gray-700  text-[12px] font-inter font-bold pr-3">Connect to google</span>
+            <span className="text-gray-700  text-[12px] font-inter font-bold pr-3">Connect to google</span>
             </div>
             
             </button>
@@ -339,8 +337,8 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
        
     </div>
 
-        <div className='ml-20  cursor-pointer left-[-20px] z-[90] fixed w-[16%] top-[50px]  flex justify-end items-start '>
-                <div ref={settingBtnRef}>
+        <div  ref={settingBtnRef} className='ml-20  cursor-pointer left-[-20px] z-[90] fixed w-[16%] top-[50px]  flex justify-end items-start '>
+                <div>
                     <FiAlignJustify  className='text-gray-500' size={20} onClick={hideNav}/>
                 </div>
         </div>
