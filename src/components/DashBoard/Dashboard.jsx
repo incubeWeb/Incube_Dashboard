@@ -182,13 +182,14 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
         setBoxes(val)
         setFromApi(true)
         
+        
       }
+      setTimeout(()=>{  
+        setloading(false)
+      },1000)
       
     }
-    checkBoxValues()
-    setTimeout(()=>{  
-      setloading(false)
-    },1000)
+    checkBoxValues() 
     
   },[])
 
@@ -228,12 +229,13 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
         setFromApi(true)
         
       }
+      setTimeout(()=>{  
+        setloading(false)
+      },1000)
       
     }
     checkBoxValues()
-    setTimeout(()=>{  
-      setloading(false)
-    },1000)
+    
     
   },[retry])
   

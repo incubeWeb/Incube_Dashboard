@@ -110,7 +110,7 @@ const PortfolioPieChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfie
         
         <div style={{ width: '90%', height: '90%' }} className='-mt-10 pr-10'>
         <div style={{ width: '100%', height: '100%', display: 'flex' }}>
-            <p className='pt-4  font-inter text-[18px] font-bold'>Doughnut Chart</p>
+            <p className='pt-4  font-inter text-[18px] font-bold'>Pie Chart</p>
             <div style={{ flex: 1 }}>
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart>

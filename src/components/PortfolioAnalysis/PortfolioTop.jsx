@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { IoAddSharp } from 'react-icons/io5'
+import { IoAddSharp, IoPeople } from 'react-icons/io5'
 import { LuPencil } from 'react-icons/lu'
 import { PiCards } from 'react-icons/pi'
 import { RiFundsLine } from 'react-icons/ri'
@@ -7,6 +7,8 @@ import PortfolioCards from './PortfolioCards'
 import axios from 'axios'
 import PortfolioTopGraph from './PortfolioTopGraph'
 import { Bars } from 'react-loader-spinner'
+import { BsBox, BsCurrencyDollar } from 'react-icons/bs'
+import { HiChartBar } from 'react-icons/hi'
 
 const PortfolioTop = ({realtimeportfoliostate,hidenavbar,sheetedited,selectedSheetId}) => {
     const [valueid,setvalueid]=useState([{id:1,labelname:'Total fund',showValue:'$0'},{id:2,labelname:'Fund utilized',showValue:'$0'},{id:3,labelname:'Funds remaining',showValue:'$0'},{id:4,labelname:'ROI',showValue:'$0'}])
@@ -59,10 +61,10 @@ const PortfolioTop = ({realtimeportfoliostate,hidenavbar,sheetedited,selectedShe
         
         <div className='grid grid-cols-4 gap-6'> 
            
-            <PortfolioCards selectedSheetId={selectedSheetId}  sheetedited={sheetedited} id={1} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-green-300 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
-            <PortfolioCards selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={2} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-violet-400 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
-            <PortfolioCards selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={3} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-pink-300 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
-            <PortfolioCards selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={4} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-sky-400 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
+            <PortfolioCards component={ <BsCurrencyDollar  size={24} className='text-white'/>} selectedSheetId={selectedSheetId}  sheetedited={sheetedited} id={1} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-green-300 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
+            <PortfolioCards component={<BsBox size={24} className='text-white'/>} selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={2} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-violet-400 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
+            <PortfolioCards component={<HiChartBar size={24} className='text-white' />} selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={3} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-pink-300 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
+            <PortfolioCards component={<IoPeople size={24} className='text-white' />} selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={4} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-sky-400 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
                 
             
         </div>

@@ -15,6 +15,7 @@ import AddInvestment from "./components/Add_Investments/AddInvestment";
 import Portfolio from "./components/PortfolioAnalysis/Portfolio";
 import Viewsheet from "./components/ViewSheet/Viewsheet";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
+import Apikeys from "./components/ApiKeys/Apikeys";
 
 
 
@@ -44,7 +45,7 @@ function App() {
 
   const [realtimeDealpipelinetabs,setrealtimedealpipelinetabs]=useState([])
   
-  
+  const [realtimecheckAPikeys,setrealtimecheckapikeys]=useState([])
 
 
   useEffect(()=>{
@@ -103,6 +104,10 @@ function App() {
           {
             setrealtimedealpipelinetabs(change)
           }
+          if(change.ns.coll=='Apikeys')
+          {
+            setrealtimecheckapikeys(change)
+          }
 
         })
         socket.on('chats',(chat)=>{
@@ -159,6 +164,7 @@ function App() {
             <Route path="/allDocs" element={<ProtectedRoute login={login}><Alldocs realtimedocumentvisibility={realtimedocumentvisibility} filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar}/></ProtectedRoute>} />
             <Route path="/investment" element={<ProtectedRoute login={login}><AddInvestment hidenavbar={hidenavbar}/></ProtectedRoute>}/>
             <Route path='/portfolio' element={<ProtectedRoute login={login}><Portfolio realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited} hidenavbar={hidenavbar} /></ProtectedRoute>}/>
+            <Route path='/keys' element={<ProtectedRoute login={login}><Apikeys realtimecheckAPikeys={realtimecheckAPikeys} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
             
           </Routes>
       

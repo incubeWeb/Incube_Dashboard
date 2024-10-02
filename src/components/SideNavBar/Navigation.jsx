@@ -4,7 +4,7 @@ import { FiAlignJustify } from "react-icons/fi";
 import {gsap} from 'gsap'
 import Incubelogo from '../Icons/Incubelogo.svg'
 import { HiOutlineUserAdd } from "react-icons/hi";
-import { IoDocumentOutline } from "react-icons/io5";
+import { IoDocumentOutline, IoKeySharp } from "react-icons/io5";
 import Logout from '../Icons/Logout.svg'
 import { RiHome6Line } from "react-icons/ri";
 import { HiOutlineChartBarSquare } from "react-icons/hi2";
@@ -197,6 +197,12 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
                     <div className='text-[14px] font-inter font-semibold'><p>Documents</p></div>
                 </div>
                 </Link>
+                <Link to='/keys'>
+                <div className={`${activeField=='/keys'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/keys')}>
+                    <div><IoKeySharp   className={`${activeField=='/keys'?' text-white ':'text-[#667085]'} `} size={24}/></div>
+                    <div className='text-[14px] font-inter font-semibold'><p>Api Keys</p></div>
+                </div>
+                </Link>
             </div>
 
             <div className='w-[100%] h-[60px] flex items-center justify-center'>
@@ -324,14 +330,14 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
 
             <div className='w-[100%] h-[20%] flex flex-col items-center justify-center border-t mt-5 border-gray-400 '>
                     <div className='text-[14px] text-gray-500'>
-                        <p>{localStorage.getItem('email')}</p>
+                        <p className='font-bold'>{localStorage.getItem('email')}</p>
                     </div>
-                    <a href='/' className='w-[40%] h-[40%] flex items-center justify-center'> 
-                     <div className='flex flex-row w-[100%]  h-[40%] items-center justify-center  space-x-2 ' > 
+                    <a href='/' className='w-[50%] h-[40%] flex items-center justify-center'> 
+                     <div className='flex flex-row w-[120%]  h-[40%] items-center justify-center  space-x-2 ' > 
                     
-                         
-                         <div><p className='text-[14px] font-inter cursor-pointer text-gray-500 ' onClick={handleLogout}>Logout</p></div>
-                         <div className=''><img src={Logout} className='cursor-pointer' onClick={handleLogout}/></div>
+                         <p className='font-bold text-[20px] bg-gray-100 border-gray-300 border-[1px] rounded-full w-[50px] pl-2'>{localStorage.getItem('email')?.[0]}</p>
+                         <div><p className='text-[14px] font-inter cursor-pointer text-gray-500 font-semibold' onClick={handleLogout}>  Logout</p></div>
+                         <div className=''><img src={Logout  } className='cursor-pointer h-[25px] w-[25px]' onClick={handleLogout}/></div>
                     </div>
                     </a>
             </div>

@@ -8,9 +8,9 @@ import { LuPencil } from 'react-icons/lu'
 import { RiFundsLine } from 'react-icons/ri'
 import { RxCross2 } from 'react-icons/rx'
 import { Bars } from 'react-loader-spinner'
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { AiOutlineFileAdd, AiOutlineLoading3Quarters } from "react-icons/ai";
 
-const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid,setvalueid,changevalue,setchangevalue}) => {
+const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavbar,valueid,setvalueid,changevalue,setchangevalue}) => {
     const [editLabel,seteditLabel]=useState(false)
     const [labelname,setlablename]=useState('')
     const [hover,sethover]=useState(false)
@@ -247,9 +247,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
         setValues()
     },[clickedSheetId])
 
-    useEffect(()=>{
-
-    },[])
+    
 
 
     const handleGooglesheetclicked=async (id,name)=>{
@@ -301,7 +299,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
 
 
   return (
-   <div>
+    <div>
     <div className='flex flex-col space-y-4 bg-white p-3 w-[100%] h-[160px] rounded-xl '>
                  {
         loading?
@@ -313,7 +311,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
     
                 <div>
                 <div className={style}>
-                    <RiFundsLine size={28} className='text-white'/>
+                {component}
                 </div>
                 {
                     sheetClicked?
@@ -415,7 +413,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
                 }
 
 
-                <div className='w-[100%] flex flex-row items-center justify-start space-x-2'>
+                <div className='w-[100%] flex flex-row items-center justify-start mt-2 space-x-2'>
                     {
                         !editLabel?
                         <p className='text-[15px] text-gray-700 flex items-center h-[30px] tracking-wider font-inter font-semibold'>{labelname}</p>
@@ -430,7 +428,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
                 <div className='w-[100%] flex flex-row'>
                     <div className='w-[70%] '>
                         <div className='flex h-[100%] items-center justify-start'>
-                            <p className='text-[20px] font-inter text-gray-500'>{showValue}</p>
+                            <p className='text-[20px] font-inter font-semibold text-gray-700'>{showValue}</p>
                         </div>
                     </div>
                     <div className='w-[30%] flex items-center justify-end'>
@@ -439,7 +437,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
             <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
           ) : localStorage.getItem('role')=='super admin' || localStorage.getItem('role')=='admin'?(
                         <div className='h-[20px] cursor-pointer'  onClick={handlePlusClick}>
-                            <FaCirclePlus className='text-gray-500 h-[20px] w-[20px]' />
+                            <AiOutlineFileAdd  size={24} className='' />
                         </div>
                ):<></>}
                     </div>
@@ -454,5 +452,6 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
             </div>
   )
 }
+
 
 export default PortfolioCards

@@ -69,91 +69,91 @@ const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfi
     };
     return (
         <div style={{ width: '95%', height: '90%' }} className='mt-8 pr-10'>
-            { chartDatatypeX === 'string' && chartDatatypeY === 'integer' ?   
-                <div className='pl-8' style={{ paddingBottom: '30px' }}>
-                    <p className='text-[18px] font-bold font-inter -mt-8'>Vertical Line Chart</p>
-                </div> 
-                : 
-                <div className='pl-8 -pt-4' style={{ paddingBottom: '30px' }}>
-                    <p className='text-[18px] font-bold font-inter -mt-8'>Horizontal Line Chart</p>
-                </div>
-            }
-
-            <div style={{ width: '100%', height: '90%' }}>
-                <ResponsiveContainer width="100%" height="100%">
-                    {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ? (
-                        <AreaChart
-                            data={data}
-                            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                        >
-                            <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                            <XAxis dataKey="pv" tickCount={4}
-                                tick={{ fontSize: 16, fontFamily: 'Inter', fill: '#8884d8' }}
-                            />
-                            <YAxis tickCount={4}
-                                tick={{ fontSize: 14, fontFamily: 'Inter', fill: '#8884d8' }} 
-                            />
-                            <Tooltip
-                                contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
-                                itemStyle={{ color: '#fff', fontWeight: 'bold' }}
-                                labelStyle={{ color: '#ccc' }}
-                            />
-                            <Area
-                                type="monotone"
-                                dataKey="uv"
-                                stroke="#82ca9d"
-                                fill="#82ca9d"
-                                fillOpacity={0.3}
-                                activeDot={{ r: 8 }}
-                            >
-                                {data.map((entry, index) => (
-                                    <Cell
-                                        key={`cell-${index}`}
-                                        fill={areaColor(index)}
-                                        onMouseEnter={() => handleMouseEnter(index)}  // Set hovered data point on mouse enter
-                                        onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
-                                    />
-                                ))}
-                            </Area>
-                        </AreaChart>
-                    ) : (
-                        <AreaChart
-                            layout="vertical"
-                            data={data}
-                            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                        >
-                            <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                            <XAxis type="number" dataKey="pv" />
-                            <YAxis type="category" dataKey="uv" tickCount={4} />
-                            <Tooltip
-                                contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
-                                itemStyle={{ color: '#fff', fontWeight: 'bold' }}
-                                labelStyle={{ color: '#ccc' }}
-                            />
-                            <Area
-                                type="monotone"
-                                dataKey="uv"
-                                stroke="#82ca9d"
-                                fill="#82ca9d"
-                                fillOpacity={0.3}
-                                activeDot={{ r: 8 }}
-                            >
-                                {data.map((entry, index) => (
-                                    <Cell
-                                        key={`cell-${index}`}
-                                        fill={areaColor(index)}
-                                        onMouseEnter={() => handleMouseEnter(index)}  // Set hovered data point on mouse enter
-                                        onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
-                                    />
-                                ))}
-                            </Area>
-                        </AreaChart>
-                    )}
-                </ResponsiveContainer>
+        { chartDatatypeX === 'string' && chartDatatypeY === 'integer' ?   
+            <div className='pl-8' style={{ paddingBottom: '30px' }}>
+                <p className='text-[18px] font-bold font-inter -mt-8'>Vertical Line Chart</p>
+            </div> 
+            : 
+            <div className='pl-8 -pt-4' style={{ paddingBottom: '30px' }}>
+                <p className='text-[18px] font-bold font-inter -mt-8'>Horizontal Line Chart</p>
             </div>
-        </div>
+        }
 
-    );
+        <div style={{ width: '100%', height: '90%' }}>
+            <ResponsiveContainer width="100%" height="100%">
+                {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ? (
+                    <AreaChart
+                        data={data}
+                        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                    >
+                        <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
+                        <XAxis dataKey="pv" tickCount={4}
+                            tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black' }}
+                        />
+                        <YAxis tickCount={4}
+                            tick={{ fontSize: 14, fontFamily: 'Inter', fill: 'black' }} 
+                        />
+                        <Tooltip
+                            contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
+                            itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+                            labelStyle={{ color: '#ccc' }}
+                        />
+                        <Area
+                            type="monotone"
+                            dataKey="uv"
+                            stroke="#82ca9d"
+                            fill="#82ca9d"
+                            fillOpacity={0.3}
+                            activeDot={{ r: 8 }}
+                        >
+                            {data.map((entry, index) => (
+                                <Cell
+                                    key={`cell-${index}`}
+                                    fill={areaColor(index)}
+                                    onMouseEnter={() => handleMouseEnter(index)}  // Set hovered data point on mouse enter
+                                    onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
+                                />
+                            ))}
+                        </Area>
+                    </AreaChart>
+                ) : (
+                    <AreaChart
+                        layout="vertical"
+                        data={data}
+                        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                    >
+                        <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
+                        <XAxis type="number" dataKey="pv" />
+                        <YAxis type="category" dataKey="uv" tickCount={4} />
+                        <Tooltip
+                            contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
+                            itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+                            labelStyle={{ color: '#ccc' }}
+                        />
+                        <Area
+                            type="monotone"
+                            dataKey="uv"
+                         
+                            fill="#82ca9d"
+                            fillOpacity={0.3}
+                            activeDot={{ r: 8 }}
+                        >
+                            {data.map((entry, index) => (
+                                <Cell
+                                    key={`cell-${index}`}
+                                    fill={areaColor(index)}
+                                    onMouseEnter={() => handleMouseEnter(index)}  // Set hovered data point on mouse enter
+                                    onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
+                                />
+                            ))}
+                        </Area>
+                    </AreaChart>
+                )}
+            </ResponsiveContainer>
+        </div>
+    </div>
+
+);
 }
 
 export default PortfolioLineChart;

@@ -142,11 +142,11 @@ const fieldConversions = {
         {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ?
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data}>
-                    <XAxis dataKey="name" stroke="#8884d8"
-                        tick={{ fontSize: 16, fontFamily: 'Inter', fill: '#8884d8' }}
+                    <XAxis dataKey="name" 
+                        tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black' }}
                     />
                     <YAxis dataKey='uv' tickCount={4} tickMargin={-1}
-                        tick={{ fontSize: 14, fontFamily: 'Inter', fill: '#8884d8' }}
+                        tick={{ fontSize: 14, fontFamily: 'Inter', fill: 'black' }}
                     />
                     <Tooltip
                         contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
@@ -159,10 +159,11 @@ const fieldConversions = {
                             <Cell
                                 key={`cell-${index}`}
                                 fill={barColor(index)}
-                                onMouseEnter={() => handleMouseEnter(index)}  // Set hovered bar on mouse enter
-                                onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
+                                onMouseEnter={() => handleMouseEnter(index)}  
+                                onMouseLeave={handleMouseLeave}  
                             
                                 radius={[10, 10, 0, 0]}
+                                
                             />
                         ))}
                     </Bar>
@@ -172,8 +173,8 @@ const fieldConversions = {
             chartDatatypeX === 'integer' && chartDatatypeY === 'string' ?
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart layout="vertical" data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                        <XAxis type="number" tick={true} stroke="#8884d8" />
-                        <YAxis dataKey="uv" type="category" tick={true} />
+                        <XAxis type="number" tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black'}}  />
+                        <YAxis dataKey="uv" type="category" tick={{ fontSize: 14, fontFamily: 'Inter', fill: 'black'}} />
                         <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
                         <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
                         <Bar dataKey="name" barSize={30}>
@@ -184,7 +185,7 @@ const fieldConversions = {
                                     onMouseEnter={() => handleMouseEnter(index)}  // Set hovered bar on mouse enter
                                     onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
                                     radius={[0, 10, 10, 0]}
-
+                                    
                                 />
                             ))}
                         </Bar>
@@ -193,8 +194,8 @@ const fieldConversions = {
                 :
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={data}>
-                        <XAxis dataKey="name" tick={true} stroke="#8884d8" />
-                        <YAxis dataKey='uv' tick={true} tickCount={4} tickMargin={-1} />
+                        <XAxis dataKey="name"  tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black'}}  />
+                        <YAxis dataKey='uv'   tick={{ fontSize: 14, fontFamily: 'Inter', fill: 'black'}} tickCount={4} tickMargin={-1} />
                         <Tooltip
                             contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
                             itemStyle={{ color: '#fff', fontWeight: 'bold' }}
@@ -206,8 +207,8 @@ const fieldConversions = {
                                 <Cell
                                     key={`cell-${index}`}
                                     fill={barColor(index)}
-                                    onMouseEnter={() => handleMouseEnter(index)}  // Set hovered bar on mouse enter
-                                    onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
+                                    onMouseEnter={() => handleMouseEnter(index)}  
+                                    onMouseLeave={handleMouseLeave} 
                                     radius={[0, 10, 0, 0]}
 
                                 />
