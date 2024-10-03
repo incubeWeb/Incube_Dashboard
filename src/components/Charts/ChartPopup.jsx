@@ -130,7 +130,7 @@ const ChartPopup = ({
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/uploadsheetFile`, formData);
 
             const data=JSON.parse(response.data.data)
-            
+           // console.log("mydata1",data)
             setdbsheetdata(data)
             setDbSheetIntRows(Object.keys(data[0]))
          
@@ -152,11 +152,12 @@ const ChartPopup = ({
   },[dbSheetIntRows])
 
   
+  
 
   const selectedSheetFromDatabase=async(e)=>{
     e.stopPropagation()
     setselectedDbsheet(!selectedDbSheet)
-
+    //console.log('mydata2',selectedsheetfromdbname)
     
     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
     if(response.data.status==200)
@@ -166,15 +167,13 @@ const ChartPopup = ({
       const dbcompanyname=response.data.CompanyName
       setclickedSheetname(name)
       setdbCompanyName(dbcompanyname)
-      
+     // console.log("mydata2",data)
       setdbsheetdata(data)
       setDbSheetIntRows(Object.keys(data[0]))
       setSelectedFile(null);
     }
     else{
-      const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetfromdbname,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
-            
-            
+      const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetfromdbname,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})  
             if(response2.data.status==200)
             {
                 const allJson=response2.data.data
@@ -195,6 +194,7 @@ const ChartPopup = ({
                 const dbcompanyname='Google sheet'
                 setclickedSheetname(name)
                 setdbCompanyName(dbcompanyname)
+               // console.log("mydata3",data)
                 setdbsheetdata(data)
                 setDbSheetIntRows(Object.keys(data[0]))
           
@@ -205,6 +205,7 @@ const ChartPopup = ({
                 const dbcompanyname='Google sheet'
                 setclickedSheetname(name)
                 setdbCompanyName(dbcompanyname)
+                
                 setdbsheetdata([])
                 setDbSheetIntRows(['none'])
                 setSelectedFile(null);  
@@ -342,9 +343,11 @@ const ChartPopup = ({
     e.stopPropagation()
     
   }
+
+  
  
   useEffect(()=>{
-    setdata01([]);
+    
     if(clickedPie)
     {
       sheetdbdata.map((val)=>
@@ -373,6 +376,7 @@ const ChartPopup = ({
         })
         
       }
+      setdata01([]);
   },[selectedSheetXaxis,selectedSheetYaxis,sheetdbdata,setdata01,clickedPie,clickedArea,clickedBar])
 
   const handleSheetCreatePiechartDB=()=>{

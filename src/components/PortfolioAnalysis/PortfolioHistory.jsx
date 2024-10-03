@@ -10,8 +10,8 @@ const PortfolioHistory = ({setportfolioHistory,sheetKeys,sheetJson,selectedImage
 
     useEffect(() => {
         const initialImageUrls = {};
-        (sheetJson || []).forEach((val) => {
-            initialImageUrls[val._id] = val[selectedImageFiled] || ''; // Initialize state with image URL
+        (sheetJson || []).forEach((val,index) => {
+            initialImageUrls[index] = val[selectedImageFiled] || ''; // Initialize state with image URL
         });
         setImageUrls(initialImageUrls);
     }, [sheetJson, selectedImageFiled]);
@@ -51,16 +51,16 @@ const PortfolioHistory = ({setportfolioHistory,sheetKeys,sheetJson,selectedImage
                                     <tr key={val._id} className={` h-[70px] ${index==0?'':''}`}>
                                         {
                                             
-                                            sheetKeys.map((k,index)=>
+                                            sheetKeys.map((k,i)=>
                                                 
-                                                <td className='' colSpan={index=='0'?'2':'1'} key={k._id}>
+                                                <td className='' colSpan={i=='0'?'2':'1'} key={k._id}>
                                                    <div className='flex flex-row space-x-4 items-center'>
-                                                    {index==0?
+                                                    {i==0?
                                                             <td className='w-[35px] rounded-md h-[35px] flex items-center justify-center'> 
                                                             <img
-                                                            onError={(e) => handleError(e, val._id)} // Pass the id to handleError
+                                                            onError={(e) => handleError(e, index)} // Pass the id to handleError
                                                             className='w-[25px] rounded-md h-[25px] object-fit'
-                                                            src={imageUrls[val._id]} // Use the image URL from state
+                                                            src={imageUrls[index]} // Use the image URL from state
                                                             alt='Portfolio'
                                                         /></td>
                                                             :
