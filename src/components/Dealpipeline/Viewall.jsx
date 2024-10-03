@@ -21,7 +21,7 @@ function Viewall({hidenavbar,filesadded,realtimeDealpipelinetabs,realtimetabchat
       if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
         {
           const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
-      
+          
           setcompData(response.data.data)
         }
         else{
@@ -125,6 +125,7 @@ function Viewall({hidenavbar,filesadded,realtimeDealpipelinetabs,realtimetabchat
     fetchcompanydata()
     }catch(e)
     {seterror(!error)}
+
   },[realtimedealpipelinecompany])
 
   const handlePageChange = (page) => {
@@ -154,9 +155,9 @@ function Viewall({hidenavbar,filesadded,realtimeDealpipelinetabs,realtimetabchat
           <Bars color="#8884d8" height={80} width={80} /> </div>
       ):
       <div>
-        {currentData.length>0?
+        {currentData?.length>0?
        <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
-        {currentData.map(company => (
+        {(currentData||[]).map(company => (
           
           <GridTemplate hidenavbar={hidenavbar} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimetabchats={realtimetabchats} completed={company.completed} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
           

@@ -159,7 +159,7 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
       ):
     <div>
       {
-        currentData.length>0?
+        currentData?.length>0?
         <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
         {
           localStorage.getItem('role')=='team lead' || localStorage.getItem('role')=='user'?
