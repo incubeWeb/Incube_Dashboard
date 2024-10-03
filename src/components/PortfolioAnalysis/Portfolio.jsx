@@ -297,6 +297,28 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         
     },[selectedSheetId,sheetedited])
 
+    const handleGooglesheet=async()=>{
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{
+            email:localStorage.getItem('email'),
+            organization:localStorage.getItem('organization')
+          })  
+          if(response.data.status==400)
+          {
+              alert('Google Session Ended')
+              return
+          }
+          else if(response.data.status==200 && response.data.msg=="no refresh token found")
+          {
+            alert('Google account not connected')
+            return
+          }
+          else if(response.data.status==-200)
+          {
+            alert('Google account not connectd')
+            return
+          }
+    }
+
   return (
     <div className={`${hidenavbar?'pl-[4%] w-[100%]':'pl-[21%] w-[100%]'} p-4 font-noto  flex flex-col space-y-4 bg-gray-100`}>
         <div className='w-[100%]  flex flex-col'>{/*Portfolio content */}
@@ -310,7 +332,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                     <div className=' w-[75%]  flex flex-row justify-end '>
                         {
                             clickedDots && showHistory?
-                            <div className='border-[1px] w-[160px] p-3  h-[120px] z-[40]  bg-white border-gray-300 rounded-md'>
+                            <div className='border-[1px] w-[180px] p-3  h-[120px] z-[40]  bg-white border-gray-300 rounded-md'>
                                 <div onClick={()=>{setsheetmethod('Database'); setselectfield(false);setclickedDots(false);}} className={`${sheetmethod=='Database'?'bg-white':''} p-1 hover:bg-blue-400 flex items-center rounded-md text-[14px] font-roboto`}>
                                                 <FaDatabase className='text-gray-700'/>
                                                 <p className='p-2 cursor-pointer font-inter'>Database</p>

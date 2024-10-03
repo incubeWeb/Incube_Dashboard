@@ -32,7 +32,7 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
     const settingBtnRef=useRef(null)
     const [showPopup, setShowPopup] = useState(false); 
     const [showPopup1, setShowPopup1] = useState(false);  
-      
+
     useEffect(()=>
     {
         const checkGoogleLogin=async()=>{
@@ -43,6 +43,15 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
             if(response.data.status==200 &&response.data.msg=="Valid Refresh token")
             {
                 setshowgoogleconnected(true)
+            }
+            else if(response.data.status==400)
+            {
+                alert('Google Session Ended')
+                setshowgoogleconnected(false)
+            }
+            else 
+            {
+                setshowgoogleconnected(false)
             }
         }
         checkGoogleLogin()
@@ -58,6 +67,14 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
                 if(response.data.status==200 &&response.data.msg=="Valid Refresh token")
                 {
                     setshowgoogleconnected(true)
+                }
+                else if(response.data.status==400)
+                {
+                    alert('Google Session Ended')
+                    setshowgoogleconnected(false)
+                }
+                else{
+                    setshowgoogleconnected(false)
                 }
             }
             checkGoogleLogin()

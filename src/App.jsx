@@ -137,9 +137,9 @@ function App() {
       }
       fun()
       
-      return ()=>{
-          socket.disconnect()
-      }
+      // return ()=>{
+      //     socket.disconnect()
+      // }
   },[])
 
 

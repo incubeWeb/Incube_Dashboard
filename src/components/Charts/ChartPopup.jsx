@@ -230,9 +230,26 @@ const ChartPopup = ({
   }
 
   const handleGoogleFunctionality=async(e)=>{
-    
-
     e.stopPropagation();
+    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{
+      email:localStorage.getItem('email'),
+      organization:localStorage.getItem('organization')
+    })  
+    if(response.data.status==400)
+    {
+        alert('Google Session Ended')
+        return
+    }
+    else if(response.data.status==200 && response.data.msg=="no refresh token found")
+    {
+      alert('Google account not connected')
+      return
+    }
+    else if(response.data.status==-200)
+    {
+      alert('Google account not connectd')
+      return
+    }
     setClickedDatabase(true)
     setclickedGoogle(true)
     const response3=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-drivesheets`,{
