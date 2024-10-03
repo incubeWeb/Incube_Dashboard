@@ -269,7 +269,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
                 
             </div>
         <div className='w-[100%] pt-[33px] h-[300px] flex flex-col'>
-                <div className='text-[16px] pl-5 font-bold'>
+                <div className='text-[16px] font-inter pl-5 font-bold'>
                     <p>Available Keys</p>
                 </div>
                 {
@@ -278,7 +278,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
                 {
                     availablekeys.map(val=>
                     
-                        <div key={val._id} className='text-[14px] flex flex-row space-x-3'>
+                        <div key={val._id} className='text-[14px] font-inter flex flex-row space-x-3'>
                             <div><p className='font-bold'>{val.Type}</p></div>
                             <div><p>{val.Api_value}</p></div>
                             <div><p>created by {val.Creator}</p></div>
@@ -288,24 +288,25 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
                     
                     )
                 }
-                <div className=' w-[100%] h-[50px] flex flex-row space-x-2'>
-                    <div onClick={handleActiveKey} className='w-[120px] h-[30px] text-[14px] bg-blue-500 text-white flex items-center justify-center'>
+                <div className=' w-[100%] h-[50px] mt-4 flex flex-row space-x-2'>
+                    <div onClick={handleActiveKey} className='w-[120px] h-[30px] mt-2 font-semibold font-inter text-[14px] bg-blue-500 text-white rounded-l flex items-center justify-center'>
                         <p>Active key</p>
                     </div>
-                    <div onClick={handleDefaultActiveKey} className='w-[120px] h-[30px] text-[14px] bg-blue-500 text-white flex items-center justify-center'>
+                    <div onClick={handleDefaultActiveKey} className='w-[120px] h-[30px] mt-2 font-semibold
+                     font-inter text-[14px] bg-blue-500 text-white rounded-l  flex items-center justify-center'>
                         <p>Set to Incubes</p>
                     </div>
                 </div>
                 </div>
                 :
-                <div  className='space-y-2 w-[100%] flex overflow-y-auto flex-col h-[130px] p-5'>
+                <div  className='space-y-2 w-[100%] flex overflow-y-auto font-inter flex-col h-[130px] p-5'>
                     No avaible key
                 </div>
                 }
             </div>
 
             <div className='w-[100%] pt-[33px] h-[300px]  flex flex-col'>
-                <div className='text-[16px] pl-5 font-bold'>
+                <div className='text-[16px] font-inter pl-5 font-bold'>
                     <p>Added Keys</p>
                 </div>
                 <div className='w-[100%] flex overflow-y-auto flex-col space-y-2 h-[110px] p-5'>
@@ -333,7 +334,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
                         </div>
                         )
                         :
-                        <div className='text-[14px]'>
+                        <div className='text-[14px] font-inter'>
                             <p>0 added keys</p>
                         </div>
                     }
@@ -344,14 +345,14 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
             </div>
 
             <div className='h-[500px] p-5 flex flex-col space-y-2'>
-                <div className='w-[100%] flex space-y-2 font-bold'>
+                <div className='w-[100%] flex space-y-2 font-inter font-bold'>
                     <p>Create/Edit Keys</p>
                 </div>
                 <div className='h-[100px] overflow-y-auto flex-col flex space-y-3'>
                 {
                     addField.filter(val=>val.Member==localStorage.getItem('email')&& val.Creator==localStorage.getItem('email')).map(val=>
-                        <div key={val.uniqueid} className='flex flex-row space-x-2 h-[30px]'>
-                                <select onChange={(e)=>handleApitype(val.uniqueid,e.target.value)} className='border-[1px] border-gray-100 text-[14px]'>
+                        <div key={val.uniqueid} className='flex flex-row space-x-2  h-[30px]'>
+                                <select onChange={(e)=>handleApitype(val.uniqueid,e.target.value)} className='border-[1px] border-gray-100 font-inter  text-[14px]'>
                                     <option>Gemini</option>
                                     <option>Google</option>
                                 </select>
@@ -369,12 +370,12 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
                                 }
                                 <div className='w-[80px] space-x-2  rounded-md justify-center items-center flex flex-row h-[30px]'>
                                     <input name={`security-${val.uniqueid}`} onChange={(e)=>handlesecurityChange(val.uniqueid,e.target.value)} checked={val.security=='private'} value='private' type='radio' />
-                                    <p className='text-[14px]'>private</p>
+                                    <p className='text-[14px] font-semibold font-inter '>private</p>
                                 </div>
 
                                 <div className='w-[80px] space-x-2  rounded-md justify-center items-center flex flex-row h-[30px]'>
                                     <input name={`security-${val.uniqueid}`}  onChange={(e)=>handlesecurityChange(val.uniqueid,e.target.value)} value='public' checked={val.security=='public'} type='radio'/>
-                                    <p className='text-[14px]'>public</p>
+                                    <p className='text-[14px] font-semibold font-inter'>public</p>
                                 </div>
 
                         </div>
@@ -383,10 +384,10 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
                 </div>
                 <div onClick={handlenewfield} className='cursor-pointer w-[100px] items-center justify-center space-x-2 h-[35px] flex flex-row bg-white ' style={{boxShadow: '0px 0px 4px #D1D5DB'}}>
                     <div className='text-blue-500'><FaPlus className='text-[14px]' /></div>
-                    <div className='text-[14px] text-blue-500'><p>Add Field</p></div>
+                    <div className='text-[14px] text-blue-500 font-bold font-inter'><p>Add Field</p></div>
                 </div>
-                <div onClick={handleSave} className='flex flex-row h-[120px]  items-center'>
-                        <div className='w-[60px] flex items-center justify-center rounded-md h-[30px] bg-blue-500 text-white'>
+                <div onClick={handleSave} className='flex flex-row h-[120px] ml-1 items-center'>
+                        <div className='w-[60px] flex items-center justify-center rounded-md h-[30px] bg-blue-500 font-bold font-inter text-white'>
                             <p>Save</p>
                         </div>
                 </div>

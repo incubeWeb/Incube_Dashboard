@@ -405,11 +405,17 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                     <div className='w-[100%] h-[40%]  flex flex-row'>
                         <div className='w-[70%] '>
                             <div className='flex h-[100%] items-center justify-start'>
-                                <p className='text-[22px] font-inter font-bold text-gray-700 mt-2 ml-2'>{showValue}</p>
+                                <p className='text-[22px] font-inter mt-9 font-bold text-gray-700 ml-2'>{showValue}</p>
                             </div>
                         </div>
-                        <div className='w-[100%] h-[100%] flex items-center justify-center mt-6'>
-
+                        <div className='w-[100%] h-[100%] flex items-center justify-end mt-6'>
+                        {loading1 ? (
+            <AiOutlineLoading3Quarters className="animate-spin  text-[14px]" />
+          ) : (
+                        <div className='h-[20px] cursor-pointer'  onClick={handlePlusClick}>
+                            {/* <AiOutlineFileAdd  size={24} className='' /> */}
+                        </div>
+               )}
 </div>
                     </div>
                 </div>

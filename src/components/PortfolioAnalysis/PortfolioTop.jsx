@@ -61,11 +61,12 @@ const PortfolioTop = ({realtimeportfoliostate,hidenavbar,sheetedited,selectedShe
         
         <div className='grid grid-cols-4 gap-6'> 
            
-            <PortfolioCards component={ <BsCurrencyDollar  size={24} className='text-white'/>} selectedSheetId={selectedSheetId}  sheetedited={sheetedited} id={1} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-green-300 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
-            <PortfolioCards component={<BsBox size={24} className='text-white'/>} selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={2} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-violet-400 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
-            <PortfolioCards component={<HiChartBar size={24} className='text-white' />} selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={3} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-pink-300 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
-            <PortfolioCards component={<IoPeople size={24} className='text-white' />} selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={4} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-sky-400 rounded-[50%]' valueid={valueid} setvalueid={setvalueid}/>
+        <PortfolioCards selectedSheetId={selectedSheetId}  sheetedited={sheetedited} id={1} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-yellow-400 rounded-[50%] shadow-[0_0_15px_rgba(255,255,0,1)]' valueid={valueid} setvalueid={setvalueid} component={ <BsCurrencyDollar  size={24} className='text-white'/>}/>
+            <PortfolioCards selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={2} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] h-[40px] flex items-center justify-center bg-violet-500 rounded-[50%] shadow-[0_0_15px_rgba(138,43,226,1)]' valueid={valueid} setvalueid={setvalueid} component={<BsBox size={24} className='text-white'/>}/>
+            <PortfolioCards selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={3} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] h-[40px] flex items-center justify-center bg-pink-400 rounded-[50%] shadow-[0_0_15px_rgba(255,20,147,1)]' valueid={valueid} setvalueid={setvalueid} component={<HiChartBar size={24} className='text-white' />}/>
+            <PortfolioCards selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={4} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] h-[40px] flex items-center justify-center bg-sky-400 rounded-[50%] shadow-[0_0_15px_rgba(135,206,235,1)]' valueid={valueid} setvalueid={setvalueid} component={<IoPeople size={24} className='text-white' />}/>
                 
+            
             
         </div>
         

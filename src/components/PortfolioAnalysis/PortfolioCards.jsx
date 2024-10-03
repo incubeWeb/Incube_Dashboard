@@ -8,9 +8,19 @@ import { LuPencil } from 'react-icons/lu'
 import { RiFundsLine } from 'react-icons/ri'
 import { RxCross2 } from 'react-icons/rx'
 import { Bars } from 'react-loader-spinner'
-import { AiOutlineFileAdd, AiOutlineLoading3Quarters } from "react-icons/ai";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { AiOutlineFileAdd } from "react-icons/ai";
+import { RiBarChartFill, RiPieChart2Line } from 'react-icons/ri'; 
+import { HiOutlineDotsVertical } from 'react-icons/hi'
+import { AiOutlineClose } from 'react-icons/ai';
 
-const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavbar,valueid,setvalueid,changevalue,setchangevalue}) => {
+
+import { PiMoney } from "react-icons/pi";
+import { FaPeopleGroup } from "react-icons/fa6";
+import { LuTriangle } from "react-icons/lu";
+
+
+const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid,setvalueid,changevalue,setchangevalue,component}) => {
     const [editLabel,seteditLabel]=useState(false)
     const [labelname,setlablename]=useState('')
     const [hover,sethover]=useState(false)
@@ -22,6 +32,12 @@ const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavb
     const [loading1,setLoading1]=useState(false)
     const [loading2,setLoading2]=useState(true)
     const [googlesheetfiles,setgoogledriveSheets]=useState([])
+    const [selectedIcon, setSelectedIcon] = useState(null);
+    const [icon, setIcon] = useState(<RiBarChartFill size={28} className="text-white" />); 
+    const [showPopup, setShowPopup] = useState(false);
+    const [iconname,seticonname]=useState('')
+    // State for filter pop-up
+    const [selectedFilter, setSelectedFilter] = useState(''); // Selected filter
 
     const handleEdit=()=>{
         seteditLabel(true)
@@ -32,6 +48,53 @@ const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavb
             }
         },100)
     }
+    const uniqueIconKey = `selectedIcon-${id}`;
+       
+    useEffect(()=>{
+      
+    },[iconname])
+
+    const handleIconClick = (iconName) => {
+     // localStorage.setItem(uniqueIconKey, iconName); 
+      seticonname(iconName)
+      setIcon(getIconComponent(iconName)); 
+      setShowPopup(false); 
+    };
+    const handleFilterSelection = (filter) => {
+      setSelectedFilter(filter);
+   
+      setshowFilterMenu(false); // Close filter menu
+      // Open sorting menu
+  };
+    const getValue=(selectedFilter)=>{
+        switch(selectedFilter){
+          case "Change Icon":
+          return setShowPopup(!showPopup)
+          case "Edit Label":
+          return handleEdit()
+          default:
+          return handlePlusClick()
+        
+        }
+       
+      }
+    const getIconComponent = (iconName) => {
+        switch (iconName) {
+          case "RiFundsLine":
+            return <RiFundsLine size={28} className="text-white" />;
+          case "RiBarChartFill":
+            return <RiBarChartFill size={28} className="text-white" />;
+          case "PiMoney":
+            return <PiMoney size={28} className="text-white" />;
+          case "FaPeopleGroup":
+            return <FaPeopleGroup size={28} className="text-white" />;
+          case "LuTriangle":
+            return <LuTriangle size={28} className="text-white" />;
+          default:
+            return <RiBarChartFill size={28} className="text-white" />; // Default icon
+        }
+      };
+
 
     useEffect(()=>
     {
@@ -43,7 +106,7 @@ const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavb
            
             const JsonData=data1
             const filterdata=JsonData.filter(val=>val.id!=id)
-            const new_data=[{id:id,showValue:showValue,labelname:labelname}]
+            const new_data=[{id:id,showValue:showValue,labelname:labelname, portfolioicon: iconname}]
             const final_data=[...filterdata,...new_data]
 
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
@@ -53,11 +116,11 @@ const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavb
             
 
         }
-        if(showValue!='$0' || labelname!='')
+        if(showValue!='$0' || labelname!='' || iconname!='')
         {
                 fun()
         }
-    },[showValue,editLabel])
+    },[showValue,editLabel,iconname])
 
     const [sheets,setallsheets]=useState([])
     const [sheetpopup,setsheetpopup]=useState(false)
@@ -65,6 +128,9 @@ const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavb
     const [sheetClicked,setsheetClicked]=useState(false)
     const [sheetname,setsheetname]=useState('')
     const [sheetfieldselected,setsheetfieldselected]=useState('')
+    const[showFilterMenu,setshowFilterMenu]=useState(false)
+    
+    
     
 
     useEffect(()=>
@@ -76,18 +142,18 @@ const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavb
                 if (exists) {
                   return prev.map(val =>
                     val.id === id
-                      ? { ...val, showValue: showValue, labelname: labelname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected } // Update the existing object
+                      ? { ...val, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected } // Update the existing object
                       : val
                   );
                 } else {
                   // Insert new object if id is not found
-                  return [...prev, { id: id, showValue: showValue, labelname: labelname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected }];
+                  return [...prev, { id: id, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected }];
                 }
               });
         }
         
         
-    },[editLabel,showValue])
+    },[editLabel,showValue,iconname])
 
     useEffect(()=>
     {
@@ -132,7 +198,7 @@ const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavb
                 if (exists) {
                   return prev.map(val =>
                     val.id === id
-                      ? { ...val, showValue: value, labelname: key,sheetId:sheetid } // Update the existing object
+                      ? { ...val, showValue: value, labelname: key,sheetId:sheetid ,portfolioicon:iconname} // Update the existing object
                       : val
                   );
                 } 
@@ -153,6 +219,8 @@ const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavb
                 {
                     setlablename(val.labelname)
                     setshowvalue(val.showValue)
+                    seticonname(val.portfolioicon)
+                    setIcon(getIconComponent(val.portfolioicon))
                     setTimeout(()=>{
                         setloading(false)
                     },1000)
@@ -247,7 +315,9 @@ const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavb
         setValues()
     },[clickedSheetId])
 
-    
+    useEffect(()=>{
+
+    },[])
 
 
     const handleGooglesheetclicked=async (id,name)=>{
@@ -299,20 +369,46 @@ const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavb
 
 
   return (
-    <div>
-    <div className='flex flex-col space-y-4 bg-white p-3 w-[100%] h-[160px] rounded-xl '>
+   <div>
+   
+    <div className='flex flex-col  bg-white p-3 w-[100%] h-[160px] rounded-xl relative'>
+   
+        {showFilterMenu && (
+    <div className='absolute top-0 right-0 w-[150px] bg-white p-3 border-gray-300 border-[1px] rounded-md z-50'>
+    <RxCross2 onClick={()=>{setshowFilterMenu(false)}} className=' cursor-ponter' />
+        <div
+            className='p-1 hover:bg-blue-400  flex items-center rounded-md  text-[12px] font-semibold font-inter cursor-pointer'
+            onClick={() => {setShowPopup(!showPopup);setshowFilterMenu(false) }}>
+            <p className='p-1 '>Change Icon</p>
+        </div>
+        <div
+            className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-inter font-semibold cursor-pointer'
+            onClick={() =>{handleEdit();setshowFilterMenu(false)}}>
+            <p className='p-1'>Edit Label</p>
+        </div>
+        <div
+            className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-inter h-[40px] font-semibold cursor-pointer'
+            onClick={() =>{  handlePlusClick() ;setshowFilterMenu(false)} }>
+            <p className='p-1'>Add Sheet</p>
+        </div>
+    </div>
+)}
                  {
         loading?
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
           <Bars color="#8884d8" height={80} width={80} />
         </div>
         :
-        
+      
     
                 <div>
+                <div className=' cursor-pointer flex justify-end h-[10px] relative '  ><HiOutlineDotsVertical onClick={()=>{setshowFilterMenu(true)}} size={20}/></div>
                 <div className={style}>
-                {component}
+                
+                {icon}
                 </div>
+            
+    
                 {
                     sheetClicked?
                     <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
@@ -411,7 +507,37 @@ const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavb
                     :
                     <></>
                 }
+                {showPopup && (
+        <div className=" absolute top-0 right-0 w-[200px] bg-white shadow-md p-4 z-50 rounded-lg">
+          <div className="flex justify-between items-center">
+            <h3 className="text-[14px] font-semibold">Select an Icon</h3>
+            <AiOutlineClose
+              size={20}
+              className="cursor-pointer"
+              onClick={() => setShowPopup(false)} // Close popup on close icon click
+            />
+          </div>
 
+          {/* Icon selection grid */}
+          <div className="grid grid-cols-3 gap-2 mt-2">
+            <div onClick={() => handleIconClick("RiFundsLine")} className="cursor-pointer">
+              <RiFundsLine size={28} className="text-gray-700 hover:text-blue-500" />
+            </div>
+            <div onClick={() => handleIconClick("RiBarChartFill")} className="cursor-pointer">
+              <RiBarChartFill size={28} className="text-gray-700 hover:text-blue-500" />
+            </div>
+            <div onClick={() => handleIconClick("PiMoney")} className="cursor-pointer">
+              <PiMoney size={28} className="text-gray-700 hover:text-blue-500" />
+            </div>
+            <div onClick={() => handleIconClick("FaPeopleGroup")} className="cursor-pointer">
+              <FaPeopleGroup size={28} className="text-gray-700 hover:text-blue-500" />
+            </div>
+            <div onClick={() => handleIconClick("LuTriangle")} className="cursor-pointer">
+              <LuTriangle size={28} className="text-gray-700 hover:text-blue-500" />
+            </div>
+          </div>
+        </div>
+      )}
 
                 <div className='w-[100%] flex flex-row items-center justify-start mt-2 space-x-2'>
                     {
@@ -420,10 +546,7 @@ const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavb
                         :
                         <input ref={inputRef} value={labelname} onChange={(e)=>{setlablename(e.target.value) }} onKeyPress={(e)=>e.key=='Enter'?seteditLabel(false):seteditLabel(true)} className='w-[90px] h-[30px] text-[13px] pl-1 outline-none border-[1px] border-gray-300 rounded-md'/>
                     }
-                    
-                    <div onClick={()=>handleEdit()}>
-                        <LuPencil className='text-gray-500'/>
-                    </div>
+                  
                 </div>
                 <div className='w-[100%] flex flex-row'>
                     <div className='w-[70%] '>
@@ -437,7 +560,7 @@ const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavb
             <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
           ) : localStorage.getItem('role')=='super admin' || localStorage.getItem('role')=='admin'?(
                         <div className='h-[20px] cursor-pointer'  onClick={handlePlusClick}>
-                            <AiOutlineFileAdd  size={24} className='' />
+                            {/* <AiOutlineFileAdd  size={24} className='' /> */}
                         </div>
                ):<></>}
                     </div>
@@ -452,6 +575,5 @@ const PortfolioCards = ({id,component,sheetedited,selectedSheetId,style,hidenavb
             </div>
   )
 }
-
 
 export default PortfolioCards

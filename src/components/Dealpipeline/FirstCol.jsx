@@ -100,21 +100,21 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
           <div ref={bgRef} className="absolute  bg-white shadow-md rounded-md flex items-center justify-center" style={{ pointerEvents: "none", zIndex: 1 }}>
             <p className="text-[14px]"></p>
           </div>
-          <div ref={viewRef} className={`${selectedTab=='View All'?'text-gray-200':''}md:text-[14px] md:w-[120px]  rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("View All"); }}>
+          <div ref={viewRef} className={`${selectedTab=='View All'?'text-gray-200':''}md:text-[14px] md:w-[150px]  rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("View All"); }}>
             <p className='md:flex md:items-center md:justify-center md:h-full  md:text-[13px]'>View All</p>
           </div>
-          <div ref={inProgressRef} className={`${selectedTab=='In Progress'?'text-gray-200':''} md:text-[14px] md:w-[120px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("In Progress"); }}>
+          <div ref={inProgressRef} className={`${selectedTab=='In Progress'?'text-gray-200':''} md:text-[14px] md:w-[150px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("In Progress"); }}>
             <p className='md:flex md:items-center md:justify-center md:h-full md:text-[13px]'>In Progress</p>
           </div>
           {
             localStorage.getItem('role')!='user'?
-            <div ref={unAssignedRef} className={`${selectedTab=='Unassigned'?'text-gray-200':''} md:text-[14px] md:w-[120px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("Unassigned"); }}>
+            <div ref={unAssignedRef} className={`${selectedTab=='Unassigned'?'text-gray-200':''} md:text-[14px] md:w-[150px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("Unassigned"); }}>
               <p className='md:flex md:items-center md:justify-center md:h-full md:text-[13px]'>Unassigned</p>
             </div>
             :
             <></>
           }
-          <div ref={completedRef} className={`${selectedTab=='Completed'?'text-gray-200':''} md:text-[14px] md:w-[120px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("Completed"); }}>
+          <div ref={completedRef} className={`${selectedTab=='Completed'?'text-gray-200':''} md:text-[14px] md:w-[150px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("Completed"); }}>
             <p className='md:flex md:items-center md:justify-center md:h-full md:text-[13px]'>Completed</p>
           </div>
           <div className='md:w-[100%] md:flex md:items-center md:justify-end'>

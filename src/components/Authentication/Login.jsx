@@ -123,7 +123,7 @@ const Login = ({ setLoginIn,login }) => {
   return (
     <div className='font-roboto w-[100%] h-screen bg-gray-200 flex items-center justify-center'>
                 
-      <div className='flex relative flex-row w-[70%] h-[80%] bg-white rounded-xl border-gray-300 borddr-[1px] shadow-md'>
+      <div className='flex relative flex-row w-[70%] h-[90%] bg-white rounded-xl border-gray-300 borddr-[1px] shadow-md'>
         <div className='space-y-3 z-40 flex-col absolute w-[50%] h-[100%] bg-blue-500 rounded-r-xl shadow-lg shadow-gray-400 border-r-[1px] border-gray-300 flex items-center justify-center text-white'>
           <p className='text-[25px] tracking-wider font-inter font-bold  fade-in'>Incube Web Login</p>
           <div className='flex flex-row h-[5%] w-[100%] items-center justify-center'>

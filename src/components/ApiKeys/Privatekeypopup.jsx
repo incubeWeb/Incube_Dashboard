@@ -72,14 +72,14 @@ const Privatekeypopup = ({Type,uniqueid,apikeyvalue,hidenavbar,setpopup,realtime
                   <RxCross2 size={16} className='text-black'/>
                 </div>
           </div>
-          <div className='w-[100%] h-[80%] overflow-y-auto space-y-1'>
+          <div className='w-[100%] h-[80%] overflow-y-auto space-y-1 font-inter font-semibold mb-2'>
               
             {
               organziationUsers.map(val=>
                 val.email!=localStorage.getItem('email')?
                 <div key={val._id} className='w-[100%] p-2 h-[40px] border-[1px] border-gray-200 flex flex-row space-x-2'>
                     <div className='flex w-[50%] items-center justify-start'><p className='text-[14px]'>{val.email}</p></div>
-                    <div className='w-[50%] flex items-center justify-end'>
+                    <div className='w-[50%] flex items-center justify-end font-inter '>
                         <input type='checkbox' onChange={()=>handleCheckboxchange(val.email)} checked={checkedUsers[val.email]}/>
                     </div>
                 </div>
@@ -90,9 +90,9 @@ const Privatekeypopup = ({Type,uniqueid,apikeyvalue,hidenavbar,setpopup,realtime
                             
           </div>
 
-          <div className='w-[100%] h-[40px] flex space-x-2'>
-              <div onClick={handlesharenow} className='w-[130px] cursor-pointer select-none h-[35px] bg-gradient-to-r from-blue-400 text-white flex items-center justify-center rounded-md to-sky-500'>
-                  <p className='text-[13px]'>Share now</p>
+          <div className='w-[100%] h-[40px] flex space-x-2 justify-center'>
+              <div onClick={handlesharenow} className='w-[130px] cursor-pointer select-none h-[35px] bg-gradient-to-r from-blue-500 text-white flex items-center justify-center rounded-md to-sky-500'>
+                  <p className='text-[13px] font-inter font-bold'>Share now</p>
               </div>
           </div>
       </div>
