@@ -57,6 +57,100 @@ function App() {
   
   const [realtimecheckAPikeys,setrealtimecheckapikeys]=useState([])
 
+  const [error,seterror]=useState(false)
+
+  useEffect(()=>{
+    const fun=async()=>{
+      if(localStorage.getItem('email')!='')
+      {
+        setLoginIn(true)
+      }
+     
+      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/gettimeline`,{organization:localStorage.getItem('organization')})
+      
+      if(response.data.data.length>0)
+      {
+        response.data.data.map(item=>
+          
+          dispatch(addTimeline(item))
+        )
+      }
+
+      socket2.on('Googleconnected',(change)=>{
+        
+        setgoogleaccountconnected(change)
+      })
+
+      
+      socket.on('databaseChange',(change)=>{
+          const key=changes.length-1
+          const newCol={key:key,updateInColl: change.ns.coll,updateIs: JSON.stringify(change)}
+        dispatch(addTimeline(newCol))
+        if(change.ns.coll=='UploadedFiles')
+        {
+          setfilesadded(change)
+        }
+        if(change.ns.coll=='TabChats')
+        {
+          setrealtimetabchats(change)
+        }
+        if(change.ns.coll=='DealPipelineCompany')
+        {
+          setrealtimedealpipelinecompany(change)
+        }
+        if(change.ns.coll=='AddNewDetailDealPipeline')
+        {
+          setrealtimedealpipelinecompanyInfo(change)
+        }
+        if(change.ns.coll=='DocsVisibility')
+        {
+          setrealtimedocumentvisibility(change)
+        }
+        if(change.ns.coll=='PortfolioState')
+        {
+          
+          setrealtimeportfoliostate(change)
+        }
+        if(change.ns.coll=='DealpipelineTabs')
+        {
+          setrealtimedealpipelinetabs(change)
+        }
+        if(change.ns.coll=='Apikeys')
+        {
+          setrealtimecheckapikeys(change)
+        }
+
+      })
+      socket.on('chats',(chat)=>{
+        
+        setrealtimeChat(chat)
+      })
+
+      socket.on('investments',(data)=>{
+        setinvestmentchange(data)
+      })
+
+      socket.on('sheetedited',(data)=>{
+    
+        setsheetedited(data)
+      })
+    
+    }
+    try{
+    fun()
+    return ()=>{
+      socket.disconnect()
+    }
+    }catch(e)
+    {
+      setTimeout(()=>{
+        seterror(!error)
+      },1000)
+    }
+    
+},[error])
+
+
 
   useEffect(()=>{
       const fun=async()=>{
@@ -135,11 +229,17 @@ function App() {
         })
       
       }
-      fun()
+      try{
+        fun()
+        return ()=>{
+            socket.disconnect()
+        }
+        }
+      catch(e)
+        {
+          seterror(!error)
+        }
       
-      // return ()=>{
-      //     socket.disconnect()
-      // }
   },[])
 
 

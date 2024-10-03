@@ -91,6 +91,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
       let dbCompanyName='';
       let fromdrive='';
       let selectedsheetidfordrive=''
+      let selectedsheetfromdbname=''
       
       entireData.map((m,index)=>{
         if(index==id)
@@ -107,6 +108,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
           fromdrive=m.fromdrive
           setisitfromdrive(fromdrive)
           selectedsheetidfordrive=m.selectedsheetfromdbname
+          selectedsheetfromdbname=m.selectedsheetfromdbname
         }
       });
 
@@ -151,8 +153,9 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
             }
           }
           else{
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
         setitsfromdatabase(true);
-        let dt=JSON.parse(Sheet_response.data.data); 
+        let dt=JSON.parse(response.data.data); 
         let filteredDt = [];
         dt.map(d => filteredDt.push({name: d[selectedXaxis], uv: d[selectedYaxis]}));
         const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
@@ -193,8 +196,9 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
             }
           }
           else{
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
         setitsfromdatabase(true);
-        let dt = JSON.parse(Sheet_response.data.data);
+        let dt = JSON.parse(response.data.data);
         let filteredDt = [];
         dt.map(d => filteredDt.push({ name: d[selectedXaxis], uv: d[selectedYaxis] }));
         const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);

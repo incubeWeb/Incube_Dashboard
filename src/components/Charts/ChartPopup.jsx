@@ -213,20 +213,21 @@ const ChartPopup = ({
     }
 
   }
+
+  useEffect(()=>{
+    console.log("here",selectedsheetfromdbname)
+  },[selectedsheetfromdbname])
+
   const handleselectDatabase=async(e)=>{
     e.stopPropagation();
     setclickedGoogle(false)
     setClickedDatabase(true)
     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
-   
+   // const filteredData=response.data.data.filter(val=>val.fileType=='xlsx')
+   // console.log("my fileted data",response.data.data)
     setpresentSheets(response.data.data)
     setLoading1(false);
-    response.data.data.map((val,index)=>
-      {if(index==0)
-      {
-      setselectedsheetfromdbname(val._id)
-      }}
-    )
+   
   }
 
   const handleGoogleFunctionality=async(e)=>{
@@ -262,7 +263,7 @@ const ChartPopup = ({
       const files=response3.data.data
       setpresentSheets(files)
      
-      setselectedsheetfromdbname(response3.data.data[0].id)
+      
         
       
   }
@@ -1084,10 +1085,8 @@ const ChartPopup = ({
 ):
 (
   presentSheets.map(sheet=>
-    sheet.fileType=='xlsx'?
   <option key={sheet._id} value={sheet._id}>{sheet.name}</option>
-  :
-  <></>
+  
 )
 )
   
@@ -1131,7 +1130,7 @@ const ChartPopup = ({
   ) : (
                     
                     dbSheetIntRows.map(val=>
-                      <option key={val.id}>{val}</option>
+                      <option value={val.id} key={val.id}>{val}</option>
                     )
          ) }
                 </select>
@@ -1322,10 +1321,9 @@ const ChartPopup = ({
 :
 (
   presentSheets.map(sheet=>
-    sheet.fileType.toLowerCase()=='xlsx'?
-  <option key={sheet._id} value={sheet._id}>{sheet.name}</option>
-  :
-  <></>
+    
+    <option key={sheet._id} value={sheet._id}>{sheet.name}</option>
+  
 )
 )
   }
@@ -1650,10 +1648,8 @@ const ChartPopup = ({
 :
 (
   presentSheets.map(sheet=>
-    sheet.fileType=='xlsx'?
   <option key={sheet._id} value={sheet._id}>{sheet.name}</option>
-  :
-  <></>
+  
 )
 )
   
