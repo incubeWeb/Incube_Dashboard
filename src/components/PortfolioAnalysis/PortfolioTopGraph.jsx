@@ -82,7 +82,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
     useEffect(()=>{
         const setGraphValues=async()=>{
             const organization=`${localStorage.getItem('organization')}_ShownGraph`
-            const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{organization:organization})
            console.log("here",response.data.data)
             const data=response.data.data 
             const status=response.data.status
@@ -116,7 +116,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
     useEffect(()=>{
         const setGraphValues=async()=>{
             const organization=`${localStorage.getItem('organization')}_ShownGraph`
-            const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{organization:organization})
            console.log("here",response.data.data)
             const data=response.data.data 
             const status=response.data.status
@@ -151,8 +151,8 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
         setchartselectpopup(true)
     }
     const setavailableDatabaseSheets=async()=>{
-        const response=await axios.post('http://localhost:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
-        const response2=await axios.post('http://localhost:8999/get-document-visibility',{
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
+        const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
             email:localStorage.getItem('email'),
             organization:localStorage.getItem('organization')
         })
@@ -161,7 +161,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
         const filteredSet1=response.data.data.filter(doc=>!set2DocsIds.includes(doc._id))
         const tosetdata=[...response2.data.data,...filteredSet1]
 
-        const response3=await axios.post('http://localhost:1222/get-drivesheets',{
+        const response3=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-drivesheets`,{
             email:localStorage.getItem('email'),
             organization:localStorage.getItem("organization")
         })
@@ -180,7 +180,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
     const handleGooglesheetclicked=async (id,name)=>{
        
         setsheetClicked(id)
-        const response=await axios.post('http://localhost:1222/get-google-sheet-json',{sheetId:id,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:id,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
         
         const allJson=response.data.data
         const keys=allJson[0].data
@@ -214,7 +214,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
 
     const handlesheetclicked=async (id)=>{
             setsheetClicked(id)
-            const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:id,organization:localStorage.getItem('organization')})
                 const data=JSON.parse(response.data.data)
               
                 setsheetJson(data)
@@ -235,7 +235,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                 setLoading1(false) 
     }
     const handlesheetclickedPie=async (id)=>{
-        const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:id,organization:localStorage.getItem('organization')})
             const data=JSON.parse(response.data.data)
             setsheetJson(data)
             const key=Object.keys(data[0])
@@ -255,7 +255,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
             setLoading1(false) 
     }
     const handlesheetclickedLine=async (id)=>{
-        const response=await axios.post('http://localhost:8999/sheetfromdb',{id:id,organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:id,organization:localStorage.getItem('organization')})
             const data=JSON.parse(response.data.data)
             setsheetJson(data)
             const key=Object.keys(data[0])
@@ -284,7 +284,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
 
         const organization=`${localStorage.getItem('organization')}_ShownGraph`
             const stateJson={showBarchart:true,showPiechart:false,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
-            await axios.post('http://localhost:8999/setportfoliostate',{
+            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
                 organization:organization,
                 portfolioState:JSON.stringify(stateJson)
             })
@@ -302,7 +302,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
 
         const organization=`${localStorage.getItem('organization')}_ShownGraph`
             const stateJson={showBarchart:false,showPiechart:true,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
-            await axios.post('http://localhost:8999/setportfoliostate',{
+            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
                 organization:organization,
                 portfolioState:JSON.stringify(stateJson)
             })
@@ -318,7 +318,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
 
         const organization=`${localStorage.getItem('organization')}_ShownGraph`
             const stateJson={showBarchart:false,showPiechart:false,showLinechart:true,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
-            await axios.post('http://localhost:8999/setportfoliostate',{
+            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
                 organization:organization,
                 portfolioState:JSON.stringify(stateJson)
             })

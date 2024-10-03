@@ -345,7 +345,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                                     </div>
 
                                     {/* Filter options pop-up */}
-                                    {showFilterMenu && (
+                                    {/* {showFilterMenu && (
                                         <div className='absolute right-0 mt-2 w-[200px] p-3 bg-white border-gray-300 border-[1px] rounded-md z-50'>
                                             <div
                                                 className='p-1 hover:bg-blue-500 flex items-center rounded-md text-[12px] font-semibold font-inter cursor-pointer'
@@ -363,7 +363,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                                                 <p className='p-2'>Total Invested Amount</p>
                                             </div>
                                         </div>
-                                    )}
+                                    )} */}
 
                                     {/* Sorting options pop-up */}
                                     {showSortMenu && (
