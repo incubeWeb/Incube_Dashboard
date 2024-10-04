@@ -119,7 +119,10 @@ const fieldConversionsApi={
     if(fromApi&&!isSheetchart)
     { 
       console.log("chartdatatye",chartDatatypeFromApiX,chartDatatypeFromApiY)
-        const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
+        const convertedData = convertDataTypes(data01[0], {
+          pv:chartDatatypeFromApiX,
+          uv:chartDatatypeFromApiY
+        });
         console.log("data01",convertedData)
         
         console.log('daat tyep',chartDatatypeX,chartDatatypeY)
@@ -154,7 +157,10 @@ const fieldConversionsApi={
               let filteredDt = [];
               dt.map(d => filteredDt.push({ pv: d[selectedXaxis], uv: d[selectedYaxis] }));
   
-              const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+              const convertedData = convertDataTypes(filteredDt, {
+                pv:chartDatatypeFromApiX,
+                uv:chartDatatypeFromApiY
+              });
               setmydata(convertedData);
               setFromApi(false);
             }
@@ -167,7 +173,10 @@ const fieldConversionsApi={
         filteredDt.push({pv:d[selectedXaxis],uv:d[selectedYaxis]})
        )
       
-        const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+        const convertedData = convertDataTypes(filteredDt, {
+          pv:chartDatatypeFromApiX,
+          uv:chartDatatypeFromApiY
+        });
        
           setmydata(convertedData)
           setFromApi(false)
@@ -201,7 +210,10 @@ const fieldConversionsApi={
                 let filteredDt = [];
                 dt.map(d => filteredDt.push({ pv: d[selectedXaxis], uv: d[selectedYaxis] }));
     
-                const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+                const convertedData = convertDataTypes(filteredDt, {
+                  pv:chartDatatypeFromApiX,
+                  uv:chartDatatypeFromApiY
+                });
                 setmydata(convertedData);
                 setFromApi(false);
               }
@@ -212,7 +224,10 @@ const fieldConversionsApi={
         let filteredDt = [];
         dt.map(d => filteredDt.push({ pv: d[selectedXaxis], uv: d[selectedYaxis] }));
   
-        const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+        const convertedData = convertDataTypes(filteredDt, {
+          pv:chartDatatypeFromApiX,
+          uv:chartDatatypeFromApiY
+        });
         setmydata(convertedData);
         setFromApi(false);
             }

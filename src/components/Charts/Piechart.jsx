@@ -11,6 +11,8 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
   const [selectedValueAxis,setselectedvalueaxis]=useState('');
   const [itsfromDatabase,setitsfromdatabase]=useState(false);
   const [isitfromDrive,setisitfromdrive]=useState(false)
+  const [datatypex,setdatatypex]=useState('')
+  const [datatypey,setdatatypey]=useState('')
 
   function extractValue(input) {
     const continuousDigitsPattern = /^\D*(\d+)\D*$/;
@@ -73,8 +75,8 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
   };
   
   const fieldConversionsApi = {
-    name: chartDatatypeFromApiX,
-    value: chartDatatypeFromApiY
+    name: datatypex,
+    value: datatypey
   };
 
   useEffect(() => {
@@ -105,6 +107,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
           setisitfromdrive(fromdrive)
           selectedsheetidfordrive=m.selectedsheetfromdbname
           selectedsheetfromdbname=m.selectedsheetfromdbname
+          
         }
       });
 
@@ -112,7 +115,8 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       const Sheet_response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/investmentsheetfromdb`,{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
       if (fromApi && !isSheetchart) {
       
-        const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
+        const convertedData = convertDataTypes(data01[0], {name: chartdatatypex,
+          value: chartdatatypey});
         setmydata(convertedData);
         setFromApi(false);
       } else if (fromApi && isSheetchart && clickedsheetname.length > 0) {
@@ -141,7 +145,8 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
               let filteredDt = [];
               dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
   
-              const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+              const convertedData = convertDataTypes(filteredDt, {name: chartdatatypex,
+                value: chartdatatypey});
               setmydata(convertedData);
               setFromApi(false);
             }
@@ -153,7 +158,8 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
               let filteredDt = [];
               dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
               
-              const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+              const convertedData = convertDataTypes(filteredDt, {name: chartdatatypex,
+                value: chartdatatypey});
               setmydata(convertedData);
               setFromApi(false);
             }
@@ -184,27 +190,31 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
               let filteredDt = [];
               dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
   
-              const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+              const convertedData = convertDataTypes(filteredDt, {name: chartdatatypex,
+                value: chartdatatypey});
               setmydata(convertedData);
               setFromApi(false);
             }
           }
             else{
+              console.log("here")
               const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
         setitsfromdatabase(true);
         let dt = JSON.parse(response.data.data);
         let filteredDt = [];
         dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
 
-        const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+        const convertedData = convertDataTypes(filteredDt, {name: chartdatatypex,
+          value: chartdatatypey});
         setmydata(convertedData);
         setFromApi(false);
             }
       } else if (isSheetchart && clickedsheetname.length <= 0) {
-       
+        
         const convertedData = convertDataTypes(data01[0], {name:chartdatatypex,value:chartdatatypey});
         setmydata(convertedData);
       } else {
+        
         const convertedData = convertDataTypes(data01[0], fieldConversionsNormal);
         setmydata(convertedData);
       }
@@ -240,6 +250,8 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
           selectedsheetfromdbname=m.selectedsheetfromdbname
           setisitfromdrive(fromdrive)
           selectedsheetidfordrive=m.selectedsheetfromdbname
+          setdatatypex(chartdatatypex)
+          setdatatypey(chartdatatypey)
         }
       });
 
@@ -247,7 +259,8 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       const Sheet_response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/investmentsheetfromdb`,{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
       if (fromApi && !isSheetchart) {
   
-        const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
+        const convertedData = convertDataTypes(data01[0], {name: chartdatatypex,
+          value: chartdatatypey});
         setmydata(convertedData);
         setFromApi(false);
       } else if (fromApi && isSheetchart && clickedsheetname.length > 0) {
@@ -276,7 +289,8 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
             let filteredDt = [];
             dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
 
-            const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+            const convertedData = convertDataTypes(filteredDt, {name: chartdatatypex,
+              value: chartdatatypey});
             setmydata(convertedData);
             setFromApi(false);
           }
@@ -307,7 +321,8 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
                 let filteredDt = [];
                 dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
     
-                const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+                const convertedData = convertDataTypes(filteredDt, {name: chartdatatypex,
+                  value: chartdatatypey});
                 setmydata(convertedData);
                 setFromApi(false);
               }
@@ -318,7 +333,8 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         let filteredDt = [];
         dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
 
-        const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+        const convertedData = convertDataTypes(filteredDt, {name: chartdatatypex,
+          value: chartdatatypey});
         setmydata(convertedData);
         setFromApi(false);
             }
@@ -331,7 +347,8 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         let filteredDt = [];
         dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
 
-        const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+        const convertedData = convertDataTypes(filteredDt, {name: chartdatatypex,
+          value: chartdatatypey});
         setmydata(convertedData);
         setFromApi(false);
       } else if (isSheetchart && clickedsheetname.length <= 0) {

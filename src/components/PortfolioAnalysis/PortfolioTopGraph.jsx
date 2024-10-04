@@ -13,7 +13,7 @@ import PortfolioMeter from './PortfolioMeter'
 import { Bars } from 'react-loader-spinner'
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
+const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited,realtimeportfoliostate}) => {
     const [chartselectpopup,setchartselectpopup]=useState(false)
     const [clickedBar,setclickedBar]=useState(false)
     const [clickedPie,setclickedPie]=useState(false)
@@ -80,9 +80,31 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
     // },[sheetedited])
 
     useEffect(()=>{
+        setloading(true)
+    },[selectedTab])
+
+    useEffect(()=>{
         const setGraphValues=async()=>{
             const organization=`${localStorage.getItem('organization')}_ShownGraph`
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{organization:organization})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization})
+            console.log("chjasdf",response.data.data)
+            if(response.data.status==-200 || response.data.data==undefined)
+            {
+
+                setshowBarchart(false)
+                setshowPiechart(false)
+                setshowLinechart(false)
+                setchartDatatypeX('')
+                setchartDatatypeY('')
+                setsheetJson([])
+                setsheetfieldselectedX('')
+                setsheetfieldselectedY('')
+                setsheetClicked(false)
+                setTimeout(()=>{
+                    setloading(false)
+                },1000)
+            }
+
            console.log("here",response.data.data)
             const data=response.data.data 
             const status=response.data.status
@@ -110,14 +132,19 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
             }
         }
         setGraphValues()
-    },[realtimeportfoliostate])
+    },[realtimeportfoliostate,selectedTab])
 
 
     useEffect(()=>{
         const setGraphValues=async()=>{
             const organization=`${localStorage.getItem('organization')}_ShownGraph`
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{organization:organization})
-           console.log("here",response.data.data)
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization})
+            if(response.data.status==-200)
+                {
+                    setTimeout(()=>{
+                        setloading(false)
+                    },1000)
+                }
             const data=response.data.data 
             const status=response.data.status
             const stateValues=JSON.parse(data)||{}
@@ -285,6 +312,8 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
         const organization=`${localStorage.getItem('organization')}_ShownGraph`
             const stateJson={showBarchart:true,showPiechart:false,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
+                email:localStorage.getItem('email'),
+                security:portfoliosecurity,
                 organization:organization,
                 portfolioState:JSON.stringify(stateJson)
             })
@@ -303,6 +332,8 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
         const organization=`${localStorage.getItem('organization')}_ShownGraph`
             const stateJson={showBarchart:false,showPiechart:true,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
+                email:localStorage.getItem('email'),
+            security:portfoliosecurity,
                 organization:organization,
                 portfolioState:JSON.stringify(stateJson)
             })
@@ -319,6 +350,8 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
         const organization=`${localStorage.getItem('organization')}_ShownGraph`
             const stateJson={showBarchart:false,showPiechart:false,showLinechart:true,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
+                email:localStorage.getItem('email'),
+                security:portfoliosecurity,
                 organization:organization,
                 portfolioState:JSON.stringify(stateJson)
             })
@@ -771,7 +804,7 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                                 <></>
                         }
                         {
-                            (showBarchart ||showPiechart || showLinechart) && (localStorage.getItem('role')=='super admin' || localStorage.getItem('role')=='admin')
+                            (showBarchart ||showPiechart || showLinechart) && (localStorage.getItem('email')==selectedTab)
                             ?
                                 <div className='cursor-pointer' onClick={()=>setchangeChart(!changeChart)}>
                                     <HiOutlineDotsVertical size={17}/>
@@ -798,11 +831,14 @@ const PortfolioTopGraph = ({hidenavbar,sheetedited,realtimeportfoliostate}) => {
                     showLinechart &&!loading?
                     <PortfolioLineChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY}/>
                     :
+                    selectedTab==localStorage.getItem('email')?
                     <div onClick={handleChartSelectPopup} className='w-[150px] h-[40px] bg-gradient-to-r from-blue-500 to-blue-800 rounded-xl text-white'>
                         <div className='flex items-center select-none cursor-pointer justify-center h-[100%] '>
                                 <VscGraphLine size={20}/>
                         </div>
                     </div>
+                    :
+                    <></>
                 }
             </div>
         </div>

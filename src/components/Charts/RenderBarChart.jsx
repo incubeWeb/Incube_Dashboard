@@ -116,7 +116,10 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
       
       if(fromApi && !isSheetchart) { 
        
-        const convertedData = convertDataTypes(data01[0], fieldConversionsApi);
+        const convertedData = convertDataTypes(data01[0], {
+          name:chartDatatypeFromApiX,
+          uv:chartDatatypeFromApiY
+        });
         setmydata(convertedData);
         setFromApi(false);
       }
@@ -147,7 +150,10 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
               let filteredDt = [];
               dt.map(d => filteredDt.push({ name: d[selectedXaxis], uv: d[selectedYaxis] }));
   
-              const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+              const convertedData = convertDataTypes(filteredDt, {
+                name:chartDatatypeFromApiX,
+                uv:chartDatatypeFromApiY
+              });
               setmydata(convertedData);
               setFromApi(false);
             }
@@ -158,7 +164,10 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
         let dt=JSON.parse(response.data.data); 
         let filteredDt = [];
         dt.map(d => filteredDt.push({name: d[selectedXaxis], uv: d[selectedYaxis]}));
-        const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+        const convertedData = convertDataTypes(filteredDt, {
+          name:chartDatatypeFromApiX,
+          uv:chartDatatypeFromApiY
+        });
         setmydata(convertedData);
         setFromApi(false);
           }
@@ -190,7 +199,10 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
               let filteredDt = [];
               dt.map(d => filteredDt.push({ name: d[selectedXaxis], uv: d[selectedYaxis] }));
   
-              const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+              const convertedData = convertDataTypes(filteredDt, {
+                name:chartDatatypeFromApiX,
+                uv:chartDatatypeFromApiY
+              });
               setmydata(convertedData);
               setFromApi(false);
             }
@@ -201,7 +213,10 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
         let dt = JSON.parse(response.data.data);
         let filteredDt = [];
         dt.map(d => filteredDt.push({ name: d[selectedXaxis], uv: d[selectedYaxis] }));
-        const convertedData = convertDataTypes(filteredDt, fieldConversionsApi);
+        const convertedData = convertDataTypes(filteredDt, {
+          name:chartDatatypeFromApiX,
+          uv:chartDatatypeFromApiY
+        });
         setmydata(convertedData);
         setFromApi(false);
           }

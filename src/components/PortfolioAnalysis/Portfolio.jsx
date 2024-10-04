@@ -11,6 +11,10 @@ import { BsThreeDotsVertical } from 'react-icons/bs'
 import PortfolioTop from './PortfolioTop'
 import { Bars } from 'react-loader-spinner'
 import GoogleSheetDatabaseSheets from './GoogleSheetDatabaseSheets'
+import { CiShare2 } from 'react-icons/ci'
+import PortfolioShared from './PortfolioShared'
+import PortfolioRemoveSharedUsers from './PortfolioRemoveSharedUsers'
+import { MdGroupRemove } from 'react-icons/md'
 
 const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     const [sheetmethod,setsheetmethod]=useState('')
@@ -29,6 +33,20 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     const [showSortMenu, setShowSortMenu] = useState(false); // State for sorting pop-up
     const [selectedSort, setSelectedSort] = useState(''); // Ascending or Descending
 
+    const [portfoliocardsdata,setportfoliocardsdata]=useState([])
+    const [sharedwithusers,setsharedwithusers]=useState([])
+
+//Tabs variables
+    const [selectedTab,setselectedTab]=useState(localStorage.getItem('email'))
+    
+    const [allportfoliotabs,setallportfoliotabs]=useState([])
+
+    const [portfoliosecurity,setportfoliosecurity]=useState('private')
+    const [clickedportfolioshared,setclickedPortfolioShared]=useState(false)
+  const [clickedportfolioremoveshared,setclickedportfolioremoveshared]=useState(false)
+
+
+    
     // Function to toggle filter menu visibility
     const toggleFilterMenu = () => {
         setShowFilterMenu(!showFilterMenu);
@@ -51,14 +69,24 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         setShowSortMenu(false); // Close sorting menu after selection
     };
     
-
+    useEffect(()=>{
+        setloading(true)
+    },[selectedTab])
 
     useEffect(()=>{
         const setStateValues=async()=>{
            const organization=localStorage.getItem('organization')
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{organization:organization})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization})
+            if(response.data.status==-200)
+            {
+                setTimeout(()=>{
+                    setloading(false)
+                },1000)
+                return
+            }
             const data=response.data.data
-
+            setportfoliosecurity(response.data.security)
+            console.log("status",stateValues)
            // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
            const stateValues=JSON.parse(data)||[]
             if(stateValues.length>0)
@@ -74,23 +102,46 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 setshowimagePopup(val.showimagepopup)
                 setsheetname(val.sheetname)
                 setselectfield(val.selectfield)
-                setTimeout(()=>{
-                    setloading(false)
-                },1000)
+                
+                
                 })
             }
+            setTimeout(()=>{
+                setloading(false)
+            },1000)
         }
         setStateValues()
     },[])
 
+
     useEffect(()=>{
         const setStateValues=async()=>{
            const organization=localStorage.getItem('organization')
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{organization:organization})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization})
+            console.log("so the response is ",response.data.data)
+            if(response.data.status==-200 || response.data.data==undefined)
+            {
+                setsheetmethod('')
+                setallSheets([])
+                setselectedSheetId('')
+                setsheetJson([])
+                setsheetKeys([])
+                setselectedImageField('')
+                setshowHistory(false)
+                setshowimagePopup(false)
+                setsheetname('')
+                setselectfield('')
+                setTimeout(()=>{
+                    setloading(false)
+                },1000)
+                return
+            }
+            
             const data=response.data.data
-
+            setportfoliosecurity(response.data.security)
            // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
            const stateValues=JSON.parse(data)||[]
+           console.log("status",stateValues)
             if(stateValues.length>0)
             {
                 stateValues.map(val=>{
@@ -104,14 +155,15 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 setshowimagePopup(val.showimagepopup)
                 setsheetname(val.sheetname)
                 setselectfield(val.selectfield)
-                setTimeout(()=>{
-                    setloading(false)
-                },1000)
+                
                 })
             }
+            setTimeout(()=>{
+                setloading(false)
+            },1000)
         }
         setStateValues()
-    },[realtimeportfoliostate])
+    },[realtimeportfoliostate,selectedTab])
 
     
 
@@ -119,6 +171,8 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         
         const constructPortfolioState=[{sheetmethod:'',allSheets:allSheets,selectedSheetId:selectedSheetId,sheetJson:sheetJson,sheetKeys:sheetKeys,selectedImageFiled:selectedImageFiled,showHistory:true,showimagepopup:!showimagepopup,sheetname:sheetname,selectfield:selectfield}]
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
+            email:localStorage.getItem('email'),
+            security:portfoliosecurity,
             organization:localStorage.getItem('organization'),
             portfolioState:JSON.stringify(constructPortfolioState)
         })
@@ -319,10 +373,134 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
           }
     }
 
+    const handleselectedportfoliotab=(email)=>{
+        setselectedTab(email)
+      }
+    
+
+    
+
+    const settingupTabs=async()=>{
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-public-portfoliostate`,{organization:localStorage.getItem('organization')})
+            const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-shared-portfoliostate`,{
+                organization:localStorage.getItem('organization'),
+                email:localStorage.getItem('email')
+            })
+            let publicdata=[]
+            let privatedata=[]
+            if(response.data.status==200)
+            {
+                if(response.data.data.length>0)
+                {
+                    publicdata=response.data.data
+                    
+                }
+            }
+            if(response2.data.status==200)
+            {
+                if(response2.data.data.length>0)
+                {
+                    privatedata=response2.data.data
+                }
+            }
+            const mydata=[{email:localStorage.getItem('email')}]
+            const combined=[...mydata,...publicdata,...privatedata]
+            const uniqueCombined = combined.filter(
+                (value, index, self) =>
+                  index === self.findIndex((obj) => obj.email === value.email)
+              );
+            setallportfoliotabs(uniqueCombined)
+        }
+
+    useEffect(()=>{
+        settingupTabs()
+
+    },[])
+    useEffect(()=>{
+        
+        settingupTabs()
+
+    },[realtimeportfoliostate])
+
+    const handlesavestate=async()=>{
+            const organization=`${localStorage.getItem('organization')}_Topcards`
+            const organization1=localStorage.getItem('organization')
+            const organization2=`${localStorage.getItem('organization')}_ShownGraph`
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
+                email:localStorage.getItem('email'),
+                organization:organization,
+                portfolioState:JSON.stringify(portfoliocardsdata),
+                security:portfoliosecurity,
+                sharedwith:JSON.stringify(sharedwithusers),
+                organization1:organization1,
+                organization2:organization2
+            })
+            if(response.data.status==200){
+                alert("State Saved")
+            }
+        
+    }
+
   return (
     <div className={`${hidenavbar?'pl-[4%] w-[100%]':'pl-[21%] w-[100%]'} p-4 font-noto  flex flex-col space-y-4 bg-gray-100`}>
+        <div className=' h-[60px] p-2 w-[100%] flex flex-row rounded-md'>
+            <div className='w-[90%] space-x-2 flex items-center justify-start'>
+                <p className='text-[30px] tracking-wider font-inter font-semibold '>
+                    Portfolio
+                </p>
+                {/*div for portfolio tabs */}
+                <div className=' w-[80%] scrollbar-hide space-x-2 items-end p-2 pb-2 overflow-x-auto h-[50px] bg-gray-400 rounded-md flex flex-row '>
+                    
+                    {
+                        allportfoliotabs?.length>0?
+                        allportfoliotabs.map(val=>
+                            
+                            <div onClick={()=>handleselectedportfoliotab(val.email)} key={val.id} className={`${selectedTab==val.email?'bg-white':'bg-gray-100'} w-[140px] cursor-pointer p-2 rounded-md h-[30px]  flex flex-row items-center justify-center`}>
+                                <p className='text-[11px]'>{val.email}</p>
+                            </div>
+                            
+                        )
+                        :
+                        <></>
+                    }
+                    
+                </div>
+
+
+            </div>
+            <div className='w-[20%] flex items-center justify-end space-x-2'>
+                {
+                    selectedTab==localStorage.getItem('email')?
+                    <div className='flex flex-row space-x-2 items-center justify-center'>
+                    {
+                        portfoliosecurity=='private'?
+                            <div className='flex flex-row space-x-2'>
+                                <div onClick={()=>setclickedPortfolioShared(true)} className='w-[20px] h-[20px] '>
+                                <CiShare2 size={20}/>
+                            </div>
+                            <div onClick={()=>setclickedportfolioremoveshared(true)} className='w-[20px] h-[20px] '>
+                                <MdGroupRemove size={20}/>
+                            </div>
+                        </div>
+                    :
+                    <></>
+                    }
+                    <select className='h-[30px] text-[14px] rounded-md' value={portfoliosecurity} onChange={(e)=>{setportfoliosecurity(e.target.value)}}>
+                        <option value='public'>public</option>
+                        <option value='private'>private</option>
+                    </select>
+                    <div onClick={handlesavestate} className='cursor-pointer w-[120px] h-[30px] bg-blue-500 rounded-md text-white items-center justify-center'>
+                        <p className='w-[100%] h-[100%] flex items-center justify-center'>Save state</p>
+                    </div>
+                </div>
+                :
+                <></>
+                }
+                
+            </div>
+        </div>
         <div className='w-[100%]  flex flex-col'>{/*Portfolio content */}
-            <PortfolioTop realtimeportfoliostate={realtimeportfoliostate} selectedSheetId={selectedSheetId} hidenavbar={hidenavbar} sheetedited={sheetedited}/>
+            <PortfolioTop selectedTab={selectedTab} setportfoliocardsdata={setportfoliocardsdata} portfoliosecurity={portfoliosecurity} realtimeportfoliostate={realtimeportfoliostate} selectedSheetId={selectedSheetId} hidenavbar={hidenavbar} sheetedited={sheetedited}/>
         </div>
 
         <div className='tracking-wider    select-none mt-[20px] w-[100%] bg-white rounded-xl p-4 flex flex-col space-y-2 font-noto'>
@@ -345,7 +523,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                             :<></>
                         }
                         {
-                            showHistory && (localStorage.getItem('role')=='super admin' || localStorage.getItem('role')=='admin')?
+                            showHistory && selectedTab==localStorage.getItem("email")?
                             <div className='h-[30px] flex items-center' onClick={()=>{setclickedDots(!clickedDots)}}>
                                 <BsThreeDotsVertical className='cursor-pointer'/>
                             </div>
@@ -408,8 +586,15 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 </div>
                 <div className={`w-[100%] flex justify-center items-center ${showHistory?'':'h-[150px]'} `}>
                     {
-                        !showHistory?
-                        <></>
+                        !showHistory && !loading && localStorage.getItem('email')==selectedTab?
+                        <div className='w-[100%] h-[100%] space-y-2 items-center justify-center flex flex-col'>
+                            <div onClick={()=>{setsheetmethod('Database'); setselectfield(false)}} className='cursor-pointer flex flex-col w-[130px] h-[50px] bg-blue-500 text-[14px] rounded-md text-white items-center p-2 justify-center'>
+                                <p>Select sheet from Database</p>
+                            </div>
+                            <div onClick={()=>{setsheetmethod('Google Sheet'); setselectfield(false)}} className='cursor-pointer flex flex-col w-[130px] h-[50px] bg-blue-500 text-[14px] rounded-md text-white items-center p-2 justify-center'>
+                                <p>Select sheet from Google</p>
+                            </div>
+                        </div>
                       :
                     <></>
                     }
@@ -592,8 +777,25 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
         </div>
         
- 
+        
         </div>
+
+        {
+            clickedportfolioshared?
+            <div className='fixed left-0 w-[100%] top-[-20px] h-[100%] bg-white bg-opacity-80'>
+                <PortfolioShared realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar} setclickedPortfolioShared={setclickedPortfolioShared}/>
+            </div>
+            :
+            <></>
+        }
+        {
+            clickedportfolioremoveshared?
+            <div className='fixed left-0 w-[100%] top-[-20px] h-[100%] bg-white bg-opacity-80'>
+                <PortfolioRemoveSharedUsers realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar} setclickedPortfolioShared={setclickedportfolioremoveshared} />
+            </div>
+            :
+            <></>
+        }
         
     </div>
   )

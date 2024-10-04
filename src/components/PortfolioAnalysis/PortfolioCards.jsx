@@ -20,7 +20,7 @@ import { FaPeopleGroup } from "react-icons/fa6";
 import { LuTriangle } from "react-icons/lu";
 
 
-const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid,setvalueid,changevalue,setchangevalue,component}) => {
+const PortfolioCards = ({selectedTab,id,portfoliosecurity,sheetedited,selectedSheetId,style,hidenavbar,valueid,setvalueid,changevalue,setchangevalue,component}) => {
     const [editLabel,seteditLabel]=useState(false)
     const [labelname,setlablename]=useState('')
     const [hover,sethover]=useState(false)
@@ -48,36 +48,40 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
             }
         },100)
     }
-    const uniqueIconKey = `selectedIcon-${id}`;
-       
-    useEffect(()=>{
-      
-    },[iconname])
 
-    const handleIconClick = (iconName) => {
+    const handleIconClick = (iName) => {
      // localStorage.setItem(uniqueIconKey, iconName); 
-      seticonname(iconName)
-      setIcon(getIconComponent(iconName)); 
+      seticonname(iName)
+      setIcon(getIconComponent(iName)); 
       setShowPopup(false); 
     };
-    const handleFilterSelection = (filter) => {
-      setSelectedFilter(filter);
    
-      setshowFilterMenu(false); // Close filter menu
-      // Open sorting menu
-  };
-    const getValue=(selectedFilter)=>{
-        switch(selectedFilter){
-          case "Change Icon":
-          return setShowPopup(!showPopup)
-          case "Edit Label":
-          return handleEdit()
-          default:
-          return handlePlusClick()
-        
-        }
-       
-      }
+    
+    useEffect(()=>
+        {
+           const fun=()=>{
+            if(!editLabel && labelname!='' )
+                {
+                    setvalueid(prev => {
+                        const exists = prev.some(val => val.id === id); // Check if the id exists
+                        if (exists) {
+                          return prev.map(val =>
+                            val.id === id
+                              ? { ...val, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected } // Update the existing object
+                              : val
+                          );
+                        } else {
+                          // Insert new object if id is not found
+                          return [...prev, { id: id, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected }];
+                        }
+                      });
+                }
+           }
+           fun()
+            
+            
+        },[editLabel,showValue,iconname])
+   
     const getIconComponent = (iconName) => {
         switch (iconName) {
           case "RiFundsLine":
@@ -96,31 +100,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
       };
 
 
-    useEffect(()=>
-    {
-        const fun=async()=>{
-            const organization=`${localStorage.getItem('organization')}_Topcards`
-            
-            const response1=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{organization:organization})
-            const data1=JSON.parse(response1.data.data)
-           
-            const JsonData=data1
-            const filterdata=JsonData.filter(val=>val.id!=id)
-            const new_data=[{id:id,showValue:showValue,labelname:labelname, portfolioicon: iconname}]
-            const final_data=[...filterdata,...new_data]
 
-            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
-                organization:organization,
-                portfolioState:JSON.stringify(final_data)
-            })
-            
-
-        }
-        if(showValue!='$0' || labelname!='' || iconname!='')
-        {
-                fun()
-        }
-    },[showValue,editLabel,iconname])
 
     const [sheets,setallsheets]=useState([])
     const [sheetpopup,setsheetpopup]=useState(false)
@@ -132,83 +112,11 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
     
     
     
+    useEffect(()=>{
+        setloading(true)
+    },[selectedTab])
 
-    useEffect(()=>
-    {
-        if(!editLabel && clickedSheetId!="")
-        {
-            setvalueid(prev => {
-                const exists = prev.some(val => val.id === id); // Check if the id exists
-                if (exists) {
-                  return prev.map(val =>
-                    val.id === id
-                      ? { ...val, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected } // Update the existing object
-                      : val
-                  );
-                } else {
-                  // Insert new object if id is not found
-                  return [...prev, { id: id, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected }];
-                }
-              });
-        }
-        
-        
-    },[editLabel,showValue,iconname])
-
-    useEffect(()=>
-    {
-        const applyRealchanges=async()=>{
-         
-            const organization=`${localStorage.getItem('organization')}_Topcards`
-            
-            const response1=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{organization:organization})
-            const data1=JSON.parse(response1.data.data)
-            let key=''
-            let sheetid=''
-
-            data1.map(val=>{
-                if(val.id==id){
-                    key=val.sheetfieldselected
-                    sheetid=val.sheetId
-                }
-            })
-            
-       
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetid,organization:localStorage.getItem('organization')})
-            const data=JSON.parse(response.data.data)
-            
-            //let value=data[0][key]
-
-            let value=''
-            try{
-                value=parseInt(data[0][key]) 
-                
-                if(isNaN(data[0][key]))
-                {
-                    value='$0'
-                }
-            }
-            catch(e)
-            {
-                value='$0'
-            }
-            
-            setvalueid(prev => {
-                const exists = prev.some(val => val.id === id); // Check if the id exists
-                if (exists) {
-                  return prev.map(val =>
-                    val.id === id
-                      ? { ...val, showValue: value, labelname: key,sheetId:sheetid ,portfolioicon:iconname} // Update the existing object
-                      : val
-                  );
-                } 
-              });
-
-    
-        }
-        applyRealchanges()
-
-    },[sheetedited])
+   
 
     useEffect(()=>{
         const getTopCardsValues=async()=>{
@@ -229,7 +137,7 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
         }
         getTopCardsValues()
         
-    },[valueid])
+    },[valueid,selectedTab])
 
 
     const handlePlusClick=async()=>{
@@ -402,7 +310,17 @@ const PortfolioCards = ({id,sheetedited,selectedSheetId,style,hidenavbar,valueid
       
     
                 <div>
-                <div className=' cursor-pointer flex justify-end h-[10px] relative '  ><HiOutlineDotsVertical onClick={()=>{setshowFilterMenu(true)}} size={20}/></div>
+                    {selectedTab==localStorage.getItem('email')?
+                    <div className=' cursor-pointer flex justify-end h-[10px] relative '  >
+                        
+                        
+                        <HiOutlineDotsVertical onClick={()=>{setshowFilterMenu(true)}} size={20}/>
+                        
+                        </div>
+                        :
+                        <div className='  flex justify-end h-[10px] relative '  >
+                            </div>
+                        }
                 <div className={style}>
                 
                 {icon}
