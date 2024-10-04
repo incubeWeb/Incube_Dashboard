@@ -69,7 +69,7 @@ const Viewsheet = ({ viewdDoc, jsonData, id, setclickedview, clickedview, hidena
         }, {})
       );
 
-    console.log('Updated JSON:', updatedJson);
+    
   }
 };
 

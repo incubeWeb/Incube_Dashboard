@@ -34,9 +34,7 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
         setTotalCards(data)
     }
 
-    useEffect(()=>{
-        console.log("hi tabs addede")
-    },[realtimeDealpipelinetabs])
+   
 
     useEffect(()=>{
         const fun=async()=>{
@@ -99,7 +97,7 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
            setTabCount(count)
            for(let i=1;i<=count;i++)
             {
-                console.log("this",{id:i,Tab:`Tab${i}`})
+                
                 setTabs(prev => {
                     const isIdPresent = prev.some(tab => tab.id === i); // Check if id already exists
                     if (isIdPresent) {

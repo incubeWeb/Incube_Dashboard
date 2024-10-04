@@ -39,9 +39,7 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
     getAllDeals()
     
   },[])
-  useEffect(()=>{
-    console.log(asignedDeals)
-  },[asignedDeals])
+ 
 
   const handleCompany=async(companyname)=>{
     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/searchdealsourcingfiles`,{

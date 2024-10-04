@@ -86,7 +86,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             }
             const data=response.data.data
             setportfoliosecurity(response.data.security)
-            console.log("status",stateValues)
+            
            // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
            const stateValues=JSON.parse(data)||[]
             if(stateValues.length>0)
@@ -118,7 +118,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         const setStateValues=async()=>{
            const organization=localStorage.getItem('organization')
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization})
-            console.log("so the response is ",response.data.data)
+           
             if(response.data.status==-200 || response.data.data==undefined)
             {
                 setsheetmethod('')
@@ -141,7 +141,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             setportfoliosecurity(response.data.security)
            // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
            const stateValues=JSON.parse(data)||[]
-           console.log("status",stateValues)
+          
             if(stateValues.length>0)
             {
                 stateValues.map(val=>{

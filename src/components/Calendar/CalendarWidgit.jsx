@@ -16,7 +16,7 @@ const CalendarWidgit = ({id,setBoxes,boxes}) => {
     {
       const setCalender=async()=>{
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-mycalender-details`,{email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
-        console.log(response)
+      
         if(response.data.status==200 && typeof(response.data.message)=='undefined')
         {
           setcalid(response.data.calId)

@@ -73,7 +73,7 @@ const Dealsourcing = ({hidenavbar}) => {
      
       const res = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/scrape/companyData`,{"company": `${searchValue}`});
       const data = res.data.data;
-      console.log(JSON.stringify(res.data.data))
+     
     
       setCompanies(data); // Store fetched companies
     } catch (err) {

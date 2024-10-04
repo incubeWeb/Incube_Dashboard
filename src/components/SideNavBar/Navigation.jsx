@@ -115,7 +115,7 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
     }
 
     useEffect(()=>{
-        console.log(location.pathname)
+        
         if(location.pathname!="/")
         {
             setActiveField(location.pathname)

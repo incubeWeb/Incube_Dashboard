@@ -197,7 +197,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
             }
           }
             else{
-              console.log("here")
+            
               const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
         setitsfromdatabase(true);
         let dt = JSON.parse(response.data.data);

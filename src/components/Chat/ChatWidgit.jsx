@@ -159,12 +159,10 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
 
 
   const handleOpenchatbar=(username)=>{
-    console.log("------------------------")
-    console.log('username',username)
+    
     setopenuser(username)
     setopenChat(true)
     dispatch(addUser({id:id,name:username,msg:''}))
-    console.log("------------------------")
   }
 
 

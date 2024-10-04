@@ -113,7 +113,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
             })
             const data1=response1.data.data
             const data2=response2.data.data
-            console.log(data1,data2)
+          
             const merged=[...data1,...data2]
             const lenactive=merged.filter(val=>
                 val.active=='yes'
@@ -207,7 +207,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
         const updatedData = availablekeys.map(item => 
             item.Api_value === value.Api_value ? { ...item, active: 'yes' } : {...item,active:'no'}
           );
-          console.log(updatedData)
+         
         const filter = getUniqueActiveValues(updatedData)
         setavailablekeys(filter)
     }

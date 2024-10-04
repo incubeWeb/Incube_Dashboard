@@ -214,9 +214,7 @@ const ChartPopup = ({
 
   }
 
-  useEffect(()=>{
-    console.log("here",selectedsheetfromdbname)
-  },[selectedsheetfromdbname])
+ 
 
   const handleselectDatabase=async(e)=>{
     e.stopPropagation();

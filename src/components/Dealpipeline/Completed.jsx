@@ -131,13 +131,9 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
     }
   },[realtimedealpipelinecompany])
 
-  useEffect(()=>{
-    console.log("this",compData)
-  },[])
+  
 
-  useEffect(()=>{
-    console.log("this",compData)
-  },[compData])
+  
 
   const handlePageChange = (page) => {
     if (page <= 0) {

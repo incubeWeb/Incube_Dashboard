@@ -31,8 +31,7 @@ const Areachart = ({investmentchange,id,data01,clickedArea,setClickedArea,fromAp
     const email=localStorage.getItem('email')
     const organization=localStorage.getItem('organization')
     const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
-    console.log(boxes)
-    console.log("id",id)
+    
     if(boxes.length===0)
     {
       await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization})
@@ -118,14 +117,12 @@ const fieldConversionsApi={
    // const Sheet_response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/ `,{organization:organization,CompanyName:dbCompanyName})  
     if(fromApi&&!isSheetchart)
     { 
-      console.log("chartdatatye",chartDatatypeFromApiX,chartDatatypeFromApiY)
+      
         const convertedData = convertDataTypes(data01[0], {
           pv:chartDatatypeFromApiX,
           uv:chartDatatypeFromApiY
         });
-        console.log("data01",convertedData)
-        
-        console.log('daat tyep',chartDatatypeX,chartDatatypeY)
+       
         setmydata(convertedData)
         setFromApi(false)
 
@@ -136,7 +133,7 @@ const fieldConversionsApi={
           {
             setitsfromdatabase(true)
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
-              console.log(response,"mysterious")
+         
   
               if(response.data.status==200)
               {
@@ -189,7 +186,7 @@ const fieldConversionsApi={
             {
               setitsfromdatabase(true)
               const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
-                console.log(response,"mysterious")
+         
     
                 if(response.data.status==200)
                 {
@@ -235,7 +232,7 @@ const fieldConversionsApi={
       else if(isSheetchart&&clickedsheetname.length<=0)
         {
           const convertedData = convertDataTypes(data01[0], {pv:chartdatatypex,uv:chartdatatypey});
-          console.log(convertedData)
+         
           setmydata(convertedData);
         }
         else
