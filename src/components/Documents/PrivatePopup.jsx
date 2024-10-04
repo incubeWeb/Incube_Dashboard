@@ -108,7 +108,7 @@ const PrivatePopup = ({hidenavbar,setfileprivate,docId}) => {
               organziationUsers.map(val=>
                 val.email!=localStorage.getItem('email')?
                 <div key={val._id} className='w-[100%] p-2 h-[40px] border-[1px] border-gray-200 flex flex-row space-x-2'>
-                    <div className='flex w-[50%] items-center justify-start'><p className='text-[14px]'>{val.email}</p></div>
+                    <div className='flex w-[50%] items-center justify-start'><p className='text-[14px ] font-inter text-[14px] font-semibold mb-2'>{val.email}</p></div>
                     <div className='w-[50%] flex items-center justify-end'>
                         <input type='checkbox' onChange={()=>handleCheckboxchange(val._id)} checked={checkedUsers[val._id]}/>
                     </div>
@@ -122,12 +122,12 @@ const PrivatePopup = ({hidenavbar,setfileprivate,docId}) => {
 
 
 
-          <div className='w-[100%] h-[40px] flex space-x-2'>
-              <div onClick={handlesharenow} className='w-[130px] cursor-pointer select-none h-[35px] bg-gradient-to-r from-blue-400 text-white flex items-center justify-center rounded-md to-sky-500'>
-                  <p className='text-[13px]'>Private Share </p>
+          <div className=' w-[100%] h-[40px] flex justify-center space-x-2'>
+              <div onClick={handlesharenow} className='w-[130px] cursor-pointer select-none h-[35px] bg-gradient-to-r from-blue-500 text-white flex items-center justify-center rounded-md to-sky-400'>
+                  <p className='text-[13px] font-inter font-bold'> Share </p>
               </div>
-              <div onClick={handlesharenow} className='w-[170px] cursor-pointer select-none h-[35px] bg-gradient-to-r from-red-400 text-white flex items-center justify-center rounded-md to-red-500'>
-                  <p className='text-[13px]'>Just make it private  </p>
+              <div onClick={handlesharenow} className='w-[170px] cursor-pointer select-none h-[35px] bg-gradient-to-r from-gray-300 text-blue-500 flex items-center justify-center rounded-md to-gray-100'>
+                  <p className='text-[13px] font-inter font-bold'>Only for me  </p>
               </div>
           </div>
           

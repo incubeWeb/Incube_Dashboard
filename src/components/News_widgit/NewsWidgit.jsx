@@ -43,7 +43,12 @@ const NewsWidgit = ({ id, boxes, setBoxes }) => {
     return (
         <div className='w-[100%] h-[100%] flex flex-col font-sans'>
             {/* Header with Red Background and Diagonal Effect */}
-            <div className='w-[100%] h-[40px] relative bg-sky-500 flex items-center justify-between px-4'>
+            <div className='w-[100%] h-[40px] relative  flex items-center justify-between px-4'
+            
+            style={{
+                     background: 'linear-gradient(90deg, #1e3a8a, #2563eb)', // Blue gradient
+                 }}>
+            
                 <p className='text-white text-[19px] tracking-wider font-sans font-bold'>News</p>
                 {/* Diagonal effect */}
                 <div

@@ -54,9 +54,7 @@ const MeterComponent = ({ value }) => {
         .meter-svg {
           max-width: 400px;  // Increase max width to accommodate larger meter
         }
-        svg {
-          filter: drop-shadow(0 3px 6px rgba(0,0,0,0.16));
-        }
+        
       `}</style>
     </div>
   );

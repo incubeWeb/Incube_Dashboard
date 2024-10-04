@@ -510,7 +510,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                     <div className=' w-[75%]  flex flex-row justify-end '>
                         {
                             clickedDots && showHistory?
-                            <div className='border-[1px] w-[180px] p-3  h-[120px] z-[40]  bg-white border-gray-300 rounded-md'>
+                            <div className='border-[1px] mr-52 mt-8 w-[180px] p-3  h-[120px] z-[40]  bg-white border-gray-300 rounded-md'>
                                 <div onClick={()=>{setsheetmethod('Database'); setselectfield(false);setclickedDots(false);}} className={`${sheetmethod=='Database'?'bg-white':''} p-1 hover:bg-blue-400 flex items-center rounded-md text-[14px] font-roboto`}>
                                                 <FaDatabase className='text-gray-700'/>
                                                 <p className='p-2 cursor-pointer font-inter'>Database</p>
@@ -524,7 +524,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                         }
                         {
                             showHistory && selectedTab==localStorage.getItem("email")?
-                            <div className='h-[30px] flex items-center' onClick={()=>{setclickedDots(!clickedDots)}}>
+                            <div className='h-[30px] flex items-center absolute right-56 mt-2' onClick={()=>{setclickedDots(!clickedDots)}}>
                                 <BsThreeDotsVertical className='cursor-pointer'/>
                             </div>
                             :
@@ -539,11 +539,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                          */}
 
                          <div className='relative'>
-                                    <div className='w-[90px] text-[14px] rounded-md space-x-2 h-[30px] border-[1px] border-gray-300 items-center justify-center font-inter font-semibold flex flex-row cursor-pointer'
-                                        onClick={toggleFilterMenu}>
-                                        <RiFilter3Line size={15} />
-                                        <p>Filters</p>
-                                    </div>
+                                    
 
                                     {/* Filter options pop-up */}
                                     {/* {showFilterMenu && (

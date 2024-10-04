@@ -182,14 +182,13 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
         setBoxes(val)
         setFromApi(true)
         
-        
       }
-      setTimeout(()=>{  
-        setloading(false)
-      },1000)
       
     }
-    checkBoxValues() 
+    checkBoxValues()
+    setTimeout(()=>{  
+      setloading(false)
+    },1000)
     
   },[])
 
@@ -229,13 +228,12 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
         setFromApi(true)
         
       }
-      setTimeout(()=>{  
-        setloading(false)
-      },1000)
       
     }
     checkBoxValues()
-    
+    setTimeout(()=>{  
+      setloading(false)
+    },1000)
     
   },[retry])
   
@@ -289,7 +287,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
 
   const setPosition = (id, direction) => {
     
-    if(parseInt(direction.x)<parseInt(window.innerWidth/2)-190)
+    if(parseInt(direction.x)<parseInt(window.innerWidth/1.5)-0)
     {
     setBoxes(boxes.map(box =>
       box.id === id ? { ...box, x: direction.x, y: direction.y } : box
@@ -297,7 +295,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
     }
     else{
       setBoxes(boxes.map(box =>
-        box.id === id ? { ...box, x: parseInt(window.innerWidth/2), y: direction.y } : box
+        box.id === id ? { ...box, x: 600, y: direction.y } : box
       ));
     }
   };
@@ -383,8 +381,6 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
                      capturingPortfoliowidgitvalues={capturingPortfoliowidgitvalues}
                      setcapturingPortfoliowidgitvalues={setcapturingPortfoliowidgitvalues}
                      
-                    
-
                      />
 
                   )
