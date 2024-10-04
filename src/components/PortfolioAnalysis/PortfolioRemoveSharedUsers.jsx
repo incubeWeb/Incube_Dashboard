@@ -73,15 +73,15 @@ const PortfolioRemoveSharedUsers = ({realtimeportfoliostate,setclickedPortfolioS
                 
               )
               :
-              <div>
+              <div className='font-inter font-semibold'>
                 No user added in this
               </div>
             }
                              
           </div>
           <div className='w-[100%] h-[40px] flex space-x-2 justify-center'>
-              <div onClick={handledone} className='w-[130px] cursor-pointer select-none h-[35px] bg-gradient-to-r from-blue-500 text-white flex items-center justify-center rounded-md to-sky-500'>
-                  <p className='text-[13px] font-inter font-bold'>Done</p>
+              <div onClick={handledone} className='w-[130px] cursor-pointer select-none h-[35px] bg-gradient-to-r from-blue-500 text-white flex items-center justify-center rounded-md to-blue-700'>
+                  <p className='text-[14px] font-inter font-bold'>Done</p>
               </div>
             </div> 
         </div>

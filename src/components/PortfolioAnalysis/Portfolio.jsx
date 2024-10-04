@@ -15,7 +15,7 @@ import { CiShare2 } from 'react-icons/ci'
 import PortfolioShared from './PortfolioShared'
 import PortfolioRemoveSharedUsers from './PortfolioRemoveSharedUsers'
 import { MdGroupRemove } from 'react-icons/md'
-
+import { TbCircleDotFilled } from "react-icons/tb";
 const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     const [sheetmethod,setsheetmethod]=useState('')
     const [allSheets,setallSheets]=useState([])
@@ -86,7 +86,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             }
             const data=response.data.data
             setportfoliosecurity(response.data.security)
-            
+          
            // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
            const stateValues=JSON.parse(data)||[]
             if(stateValues.length>0)
@@ -118,7 +118,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         const setStateValues=async()=>{
            const organization=localStorage.getItem('organization')
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization})
-           
+            
             if(response.data.status==-200 || response.data.data==undefined)
             {
                 setsheetmethod('')
@@ -449,15 +449,21 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                     Portfolio
                 </p>
                 {/*div for portfolio tabs */}
-                <div className=' w-[80%] scrollbar-hide space-x-2 items-end p-2 pb-2 overflow-x-auto h-[50px] bg-gray-400 rounded-md flex flex-row '>
+                <div className=' w-[80%] scrollbar-hide space-x-2 items-end pb-1 pl-2 mt-1 overflow-x-auto h-[40px] bg-gray-300 rounded-lg flex flex-row '>
                     
                     {
                         allportfoliotabs?.length>0?
                         allportfoliotabs.map(val=>
                             
-                            <div onClick={()=>handleselectedportfoliotab(val.email)} key={val.id} className={`${selectedTab==val.email?'bg-white':'bg-gray-100'} w-[140px] cursor-pointer p-2 rounded-md h-[30px]  flex flex-row items-center justify-center`}>
-                                <p className='text-[11px]'>{val.email}</p>
+                            <div onClick={()=>handleselectedportfoliotab(val.email)} key={val.id} className={`${selectedTab==val.email?'bg-white' :'bg-gray-100'} w-[150px] cursor-pointer p-2 rounded-lg  h-[30px]  flex flex-row items-center justify-center`}>
+                                <p className='text-[10px] font-inter font-semibold'>{val.email}</p>
+                                {selectedTab === val.email && (
+          <p className=' text-green-600 ml-1 mt-0.5'>
+          <TbCircleDotFilled size={12}/>
+          </p>
+        )}
                             </div>
+                            
                             
                         )
                         :
@@ -474,23 +480,24 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                     <div className='flex flex-row space-x-2 items-center justify-center'>
                     {
                         portfoliosecurity=='private'?
-                            <div className='flex flex-row space-x-2'>
-                                <div onClick={()=>setclickedPortfolioShared(true)} className='w-[20px] h-[20px] '>
-                                <CiShare2 size={20}/>
+                            <div className='flex flex-row space-x-2 w-[60px]'>
+                                <div onClick={()=>setclickedPortfolioShared(true)} className='w-[20px] h-[20px] mr-2 cursor-pointer'>
+                                <CiShare2 size={22} />
+                               
                             </div>
-                            <div onClick={()=>setclickedportfolioremoveshared(true)} className='w-[20px] h-[20px] '>
-                                <MdGroupRemove size={20}/>
+                            <div onClick={()=>setclickedportfolioremoveshared(true)} className='w-[20px] h-[20px]  '>
+                            <MdGroupRemove size={20} className='mr-12 cursor-pointer'/>
                             </div>
                         </div>
                     :
                     <></>
                     }
-                    <select className='h-[30px] text-[14px] rounded-md' value={portfoliosecurity} onChange={(e)=>{setportfoliosecurity(e.target.value)}}>
-                        <option value='public'>public</option>
-                        <option value='private'>private</option>
+                    <select className='h-[30px]  font-inter font-bold text-[12px] rounded-md' value={portfoliosecurity} onChange={(e)=>{setportfoliosecurity(e.target.value)}}>
+                        <option value='public'>Public</option>
+                        <option value='private'>Private</option>
                     </select>
-                    <div onClick={handlesavestate} className='cursor-pointer w-[120px] h-[30px] bg-blue-500 rounded-md text-white items-center justify-center'>
-                        <p className='w-[100%] h-[100%] flex items-center justify-center'>Save state</p>
+                    <div onClick={handlesavestate} className='cursor-pointer w-[120px] h-[30px] bg-gradient-to-r from-blue-500 to-blue-700 rounded-md text-white items-center justify-center'>
+                        <p className='w-[100%] h-[100%] text-[12px] font-inter font-bold flex items-center justify-center'>Save state</p>
                     </div>
                 </div>
                 :
@@ -583,11 +590,11 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 <div className={`w-[100%] flex justify-center items-center ${showHistory?'':'h-[150px]'} `}>
                     {
                         !showHistory && !loading && localStorage.getItem('email')==selectedTab?
-                        <div className='w-[100%] h-[100%] space-y-2 items-center justify-center flex flex-col'>
-                            <div onClick={()=>{setsheetmethod('Database'); setselectfield(false)}} className='cursor-pointer flex flex-col w-[130px] h-[50px] bg-blue-500 text-[14px] rounded-md text-white items-center p-2 justify-center'>
+                        <div className='w-[500px] h-[100%] space-x-4 items-center justify-center flex mt-8'>
+                            <div onClick={()=>{setsheetmethod('Database'); setselectfield(false)}} className='cursor-pointer flex flex-col w-[130px] h-[50px] bg-gradient-to-r font-inter font-bold from-blue-500 to-blue-700 text-[14px] rounded-md text-white items-center p-2 justify-center'>
                                 <p>Select sheet from Database</p>
                             </div>
-                            <div onClick={()=>{setsheetmethod('Google Sheet'); setselectfield(false)}} className='cursor-pointer flex flex-col w-[130px] h-[50px] bg-blue-500 text-[14px] rounded-md text-white items-center p-2 justify-center'>
+                            <div onClick={()=>{setsheetmethod('Google Sheet'); setselectfield(false)}} className='cursor-pointer flex flex-col w-[130px] h-[50px] bg-gradient-to-r   font-inter font-bold from-blue-500 to-blue-700 text-[14px] rounded-md text-white items-center p-2 justify-center'>
                                 <p>Select sheet from Google</p>
                             </div>
                         </div>
