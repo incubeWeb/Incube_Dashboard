@@ -79,7 +79,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
                 />
 
 {showChatModal && (
-        <div className="fixed inset-0 bg-gray-300 z-50 flex items-center justify-end  ">
+        <div className="fixed inset-0 bg-white z-50 flex items-center justify-end  ">
           {/* Chat modal */}
           <div className=" h-[100%] w-[80%]  bg-white rounded-md shadow-lg p-4 relative z-10">
             <div className="w-[100%] h-[100%] rounded-md shadow-md border-[1px] border-gray-300 md:flex md:flex-col  space-y-4">

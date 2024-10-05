@@ -12,6 +12,7 @@ import { HiOutlineDotsVertical } from 'react-icons/hi'
 import PortfolioMeter from './PortfolioMeter'
 import { Bars } from 'react-loader-spinner'
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { BsBarChartFill } from "react-icons/bs";
 
 const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited,realtimeportfoliostate}) => {
     const [chartselectpopup,setchartselectpopup]=useState(false)
@@ -131,7 +132,12 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                 },1000)
             }
         }
+        try{
         setGraphValues()
+        }catch(e)
+        {
+            setGraphValues()
+        }
     },[realtimeportfoliostate,selectedTab])
 
 
@@ -172,8 +178,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
         }
         try{
         setGraphValues()
-        }catch(e)
-        {
+        }catch(e){
             setGraphValues()
         }
     },[])
@@ -387,20 +392,20 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                 
                                 <div onClick={()=>{setclickedBar(true);setclickedLine(false);setclickedPie(false);setchartselectpopup(false)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
                                     <p className='w-[50%]'>Bar chart</p>
-                                    <div className='w-[50%] flex text-blue-800 items-center justify-end'>
-                                            <IoBarChart className=''/>
+                                    <div className='w-[50%] flex text-blue-700 items-center justify-end'>
+                                            <IoBarChart size={18}/>
                                     </div>
                                 </div>
                                 <div onClick={()=>{setclickedPie(true);setclickedBar(false);setclickedLine(false);setchartselectpopup(false)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
                                     <p className='w-[50%]'>Pie chart</p>
-                                    <div className='w-[50%] flex text-blue-800 items-center justify-end'>
-                                            <FaChartPie />
+                                    <div className='w-[50%] flex text-blue-700 items-center justify-end'>
+                                            <FaChartPie size={18}/>
                                     </div>
                                 </div>
                                 <div onClick={()=>{setclickedLine(true);setclickedBar(false);setclickedPie(false);setchartselectpopup(false)}}  className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
                                     <p className='w-[50%]'>Line chart</p>
-                                    <div className='w-[50%] flex text-blue-800 items-center justify-end'>
-                                            <FaChartLine />
+                                    <div className='w-[50%] flex text-blue-700 items-center justify-end'>
+                                            <FaChartLine size={18}/>
                                     </div>
                                 </div>
                             </div>
@@ -786,19 +791,19 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                     
                                 
                                         <div onClick={()=>{setclickedBar(true);setclickedLine(false);setclickedPie(false);setchartselectpopup(false);setchangeChart(false)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
-                                            <p className='w-[50%]'>Bar chart</p>
-                                            <div className='w-[50%] flex text-blue-800 items-center justify-end'>
+                                            <p className='w-[50%] font-inter'>Bar chart</p>
+                                            <div className='w-[50%]  flex text-blue-800 items-center justify-end'>
                                                     <IoBarChart/>
                                             </div>
                                         </div>
                                         <div onClick={()=>{setclickedPie(true);setclickedBar(false);setclickedBar(false);setchartselectpopup(false);setchangeChart(false)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
-                                            <p className='w-[50%]'>Pie chart</p>
+                                            <p className='w-[50%] font-inter'>Pie chart</p>
                                             <div className='w-[50%] flex text-blue-800 items-center justify-end'>
                                                     <FaChartPie />
                                             </div>
                                         </div>
                                         <div onClick={()=>{setclickedLine(true);setclickedBar(false);setclickedPie(false);setchartselectpopup(false);setchangeChart(false)}}  className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
-                                            <p className='w-[50%]'>Line chart</p>
+                                            <p className='w-[50%] font-inter'>Line chart</p>
                                             <div className='w-[50%] flex text-blue-800 items-center justify-end'>
                                                     <FaChartLine />
                                             </div>
@@ -837,9 +842,11 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                     <PortfolioLineChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY}/>
                     :
                     selectedTab==localStorage.getItem('email')?
-                    <div onClick={handleChartSelectPopup} className='w-[150px] h-[40px] bg-gradient-to-r from-blue-500 to-blue-800 rounded-xl text-white'>
+                    <div onClick={handleChartSelectPopup} className='w-[150px] h-[40px] bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl text-white'>
                         <div className='flex items-center select-none cursor-pointer justify-center h-[100%] '>
-                                <VscGraphLine size={20}/>
+                        <p className="font-inter font-bold text-[14px] pr-3">Create chart</p>
+
+                        <BsBarChartFill size={22} />
                         </div>
                     </div>
                     :

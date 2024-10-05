@@ -45,7 +45,6 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     const [clickedportfolioshared,setclickedPortfolioShared]=useState(false)
   const [clickedportfolioremoveshared,setclickedportfolioremoveshared]=useState(false)
 
-
     
     // Function to toggle filter menu visibility
     const toggleFilterMenu = () => {
@@ -86,7 +85,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             }
             const data=response.data.data
             setportfoliosecurity(response.data.security)
-          
+            
            // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
            const stateValues=JSON.parse(data)||[]
             if(stateValues.length>0)
@@ -122,7 +121,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         const setStateValues=async()=>{
            const organization=localStorage.getItem('organization')
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization})
-            
+           
             if(response.data.status==-200 || response.data.data==undefined)
             {
                 setsheetmethod('')
@@ -167,10 +166,10 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             },1000)
         }
         try{
-        setStateValues()
-        }catch(e){
             setStateValues()
-        }
+           }catch(e){
+               setStateValues()
+           }
     },[realtimeportfoliostate,selectedTab])
 
     
@@ -241,8 +240,8 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 {
                     setavailableGoogleDatabaseSheets()
                 }
-        }
-        catch(e){
+        }catch(e)
+        {
             if(sheetmethod=='Database')
                 {
                     setavailableDatabaseSheets()
@@ -297,8 +296,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 {
                     setavailableGoogleDatabaseSheets()
                 }
-        }
-        catch(e){
+        }catch(e){
             if(sheetmethod=='Database')
                 {
                     setavailableDatabaseSheets()
@@ -371,8 +369,6 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         }
         
         }
-
-
         try{
             if(sheetmethod=='Database')
                 {
@@ -384,13 +380,13 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 }
         }catch(e){
             if(sheetmethod=='Database')
-            {
-                setJSon()
-            }
-            if(sheetmethod=='Google Sheet')
-            {
-                googleSheetJson()
-            }
+                {
+                    setJSon()
+                }
+                if(sheetmethod=='Google Sheet')
+                {
+                    googleSheetJson()
+                }
         }
         
         
@@ -460,18 +456,18 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     useEffect(()=>{
         try{
         settingupTabs()
-        }catch(e){
+        }catch(e)
+        {
             settingupTabs()
         }
-
     },[])
     useEffect(()=>{
         try{
+        settingupTabs()
+        }catch(e)
+        {
             settingupTabs()
-            }catch(e){
-                settingupTabs()
-            }
-
+        }
     },[realtimeportfoliostate])
 
     const handlesavestate=async()=>{
@@ -495,19 +491,24 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
   return (
     <div className={`${hidenavbar?'pl-[4%] w-[100%]':'pl-[21%] w-[100%]'} p-4 font-noto  flex flex-col space-y-4 bg-gray-100`}>
-        <div className=' h-[60px] p-2 w-[100%] flex flex-row rounded-md'>
-            <div className='w-[90%] space-x-2 flex items-center justify-start'>
-                <p className='text-[30px] tracking-wider font-inter font-semibold '>
-                    Portfolio
-                </p>
-                {/*div for portfolio tabs */}
-                <div className=' w-[80%] scrollbar-hide space-x-2 items-end pb-1 pl-2 mt-1 overflow-x-auto h-[40px] bg-gray-300 rounded-lg flex flex-row '>
+        <div className=' w-[100%] scrollbar-hide  items-end pb-1 pl-2 mt-1 overflow-x-auto h-[40px] bg-white rounded-lg flex flex-row '>
                     
                     {
                         allportfoliotabs?.length>0?
-                        allportfoliotabs.map(val=>
+                        allportfoliotabs.map((val, index)=>
                             
-                            <div onClick={()=>handleselectedportfoliotab(val.email)} key={val.id} className={`${selectedTab==val.email?'bg-white' :'bg-gray-100'} w-[150px] cursor-pointer p-2 rounded-lg  h-[30px]  flex flex-row items-center justify-center`}>
+                            <div onClick={()=>handleselectedportfoliotab(val.email)} key={val.id} className={`cursor-pointer p-2 h-[30px] w-[200px] flex items-center justify-center 
+          ${selectedTab === val.email ? 'bg-gray-100  rounded-lg' : 'bg-white boder-l border-r border-gray-300'}
+          ${selectedTab === val.email && index > 0 ? '' : ''}
+          ${selectedTab === val.email && index <  allportfoliotabs.length - 1 ? '' : ''}
+          ${selectedTab !== val.email && selectedTab ===  allportfoliotabs[index - 1] ? 'border-l-0' : ''}
+          ${selectedTab !== val.email && selectedTab ===  allportfoliotabs[index + 1] ? 'border-r-0' : ''}`}
+          style={{
+            zIndex: selectedTab === val.email ? 10 : 1, // Raise the selected tab
+          }}
+
+
+        >
                                 <p className='text-[10px] font-inter font-semibold'>{val.email}</p>
                                 {selectedTab === val.email && (
           <p className=' text-green-600 ml-1 mt-0.5'>
@@ -523,6 +524,14 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                     }
                     
                 </div>
+        <div className=' h-[60px] p-2 w-[100%] flex  flex-row rounded-md'>
+        
+            <div className='w-[90%] space-x-2 flex items-center justify-start'>
+                <p className='text-[30px]  tracking-wider font-inter font-semibold '>
+                    Portfolio
+                </p>
+                {/*div for portfolio tabs */}
+                
 
 
             </div>
