@@ -22,11 +22,21 @@ const PortfolioShared = ({realtimeportfoliostate,setsharedwithusers,setclickedPo
   
     }
     useEffect(()=>{
+      try{
       setUsers()
+      }catch(e)
+      {
+        setUsers()
+      }
     },[])
 
     useEffect(()=>{
-      setUsers()
+      try{
+        setUsers()
+        }catch(e)
+        {
+          setUsers()
+        }
     },[realtimeportfoliostate])
   
    

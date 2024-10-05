@@ -72,8 +72,12 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
   
 
     useEffect(()=>{
-        
+        try{
         GetDriveSheets()
+        }catch(e)
+        {
+            GetDriveSheets()
+        }
     },[])
 
     useEffect(()=>{
@@ -85,7 +89,12 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
       
 
         }
+        try{
         file()
+        }catch(e)
+        {
+            file()
+        }
 
     },[])
 

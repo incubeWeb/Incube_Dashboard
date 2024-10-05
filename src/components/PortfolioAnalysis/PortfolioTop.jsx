@@ -39,7 +39,12 @@ const PortfolioTop = ({selectedTab,setportfoliocardsdata,portfoliosecurity,realt
            const stateValues=JSON.parse(data)||[]
            setvalueid(stateValues)
         }
+        try{
         getTopCardsValues()
+        }catch(e)
+        {
+          getTopCardsValues()
+        }
 
     },[sheetedited,realtimeportfoliostate,selectedTab])
 
@@ -59,7 +64,11 @@ const PortfolioTop = ({selectedTab,setportfoliocardsdata,portfoliosecurity,realt
        setvalueid(stateValues)
      
     }
+    try{
     getTopCardsValues()
+    }catch(e){
+      getTopCardsValues()
+    }
   },[])
 
   

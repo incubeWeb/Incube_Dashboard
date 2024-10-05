@@ -15,7 +15,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 
 
-function OpenViewallGrid({hidenavbar,setActiveField,companyName,description,handleOpenGrid}) {
+function OpenViewallGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,companyName,description,handleOpenGrid}) {
     const [AddNewWindow,setAddnewWindow]=useState(false)
     const [TotalCards,setTotalCards]=useState([])
     const [Tabs,setTabs]=useState([{id:1,Tab:"Tab1"}])
@@ -58,7 +58,7 @@ function OpenViewallGrid({hidenavbar,setActiveField,companyName,description,hand
             setTotalCards(doc.data.data)
         }
         InitialVal()
-    },[TotalCards])
+    },[realtimedealpipelinecompanyInfo])
 
     useEffect(()=>{
         const fun=async()=>{

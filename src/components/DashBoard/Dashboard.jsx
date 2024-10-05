@@ -183,12 +183,16 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
         setFromApi(true)
         
       }
-      
+      setTimeout(()=>{  
+        setloading(false)
+      },1000)
     }
+   try{
     checkBoxValues()
-    setTimeout(()=>{  
-      setloading(false)
-    },1000)
+    
+   }catch(e){
+    checkBoxValues()
+   }
     
   },[])
 

@@ -170,7 +170,12 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                 },1000)
             }
         }
+        try{
         setGraphValues()
+        }catch(e)
+        {
+            setGraphValues()
+        }
     },[])
 
 

@@ -220,12 +220,15 @@ const PortfolioCards = ({selectedTab,id,portfoliosecurity,sheetedited,selectedSh
             setsheetKeys(fileteredKey)
             setLoading2(false)
         }
+        try{
         setValues()
+        }catch(e)
+        {
+            setValues()
+        }
     },[clickedSheetId])
 
-    useEffect(()=>{
-
-    },[])
+   
 
 
     const handleGooglesheetclicked=async (id,name)=>{

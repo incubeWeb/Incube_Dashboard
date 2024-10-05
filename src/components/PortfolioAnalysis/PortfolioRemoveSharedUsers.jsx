@@ -17,7 +17,12 @@ const PortfolioRemoveSharedUsers = ({realtimeportfoliostate,setclickedPortfolioS
         }
         
       }
+      try{
       settingusers()
+      }catch(e)
+      {
+        settingusers()
+      }
     },[])
   
     useEffect(()=>{
@@ -29,7 +34,12 @@ const PortfolioRemoveSharedUsers = ({realtimeportfoliostate,setclickedPortfolioS
         }
         
       }
+      try{
       settingusers()
+      }catch(e)
+      {
+        settingusers()
+      }
     },[realtimeportfoliostate])
 
     const handlecancel=()=>{

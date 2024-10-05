@@ -112,6 +112,7 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
         fun()
     },[])
    
+   
 
 
     useEffect(()=>{
@@ -128,7 +129,7 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
             
         }
         InitialVal()
-    },[TotalCards,realtimedealpipelinecompanyInfo])
+    },[realtimedealpipelinecompanyInfo])
 
     const handleBubbling=(e)=>{
         e.stopPropagation()

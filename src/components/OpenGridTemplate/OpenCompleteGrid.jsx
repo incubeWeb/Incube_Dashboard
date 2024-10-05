@@ -106,7 +106,7 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
             },1000)
         }
         InitialVal()
-    },[TotalCards,realtimedealpipelinecompanyInfo])
+    },[realtimedealpipelinecompanyInfo])
 
     useEffect(()=>{
         const fun=async()=>{

@@ -193,6 +193,7 @@ function App() {
           if(change.ns.coll=='AddNewDetailDealPipeline')
           {
             setrealtimedealpipelinecompanyInfo(change)
+            
           }
           if(change.ns.coll=='DocsVisibility')
           {

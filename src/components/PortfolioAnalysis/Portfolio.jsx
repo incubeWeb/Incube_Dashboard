@@ -110,7 +110,11 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 setloading(false)
             },1000)
         }
-        setStateValues()
+        try{
+         setStateValues()
+        }catch(e){
+            setStateValues()
+        }
     },[])
 
 
@@ -162,7 +166,11 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 setloading(false)
             },1000)
         }
+        try{
         setStateValues()
+        }catch(e){
+            setStateValues()
+        }
     },[realtimeportfoliostate,selectedTab])
 
     
@@ -224,13 +232,25 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
         }
         
-        if(sheetmethod=='Database')
-        {
-            setavailableDatabaseSheets()
+        try{
+            if(sheetmethod=='Database')
+                {
+                    setavailableDatabaseSheets()
+                }
+                else if(sheetmethod=='Google Sheet')
+                {
+                    setavailableGoogleDatabaseSheets()
+                }
         }
-        else if(sheetmethod=='Google Sheet')
-        {
-            setavailableGoogleDatabaseSheets()
+        catch(e){
+            if(sheetmethod=='Database')
+                {
+                    setavailableDatabaseSheets()
+                }
+                else if(sheetmethod=='Google Sheet')
+                {
+                    setavailableGoogleDatabaseSheets()
+                }
         }
     },[])
 
@@ -268,13 +288,25 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         }
     
 
-        if(sheetmethod=='Database')
-        {
-            setavailableDatabaseSheets()
+        try{
+            if(sheetmethod=='Database')
+                {
+                    setavailableDatabaseSheets()
+                }
+                else if(sheetmethod=='Google Sheet')
+                {
+                    setavailableGoogleDatabaseSheets()
+                }
         }
-        else if(sheetmethod=='Google Sheet')
-        {
-            setavailableGoogleDatabaseSheets()
+        catch(e){
+            if(sheetmethod=='Database')
+                {
+                    setavailableDatabaseSheets()
+                }
+                else if(sheetmethod=='Google Sheet')
+                {
+                    setavailableGoogleDatabaseSheets()
+                }
         }
     },[sheetmethod])
 
@@ -339,13 +371,26 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         }
         
         }
-        if(sheetmethod=='Database')
-        {
-            setJSon()
-        }
-        if(sheetmethod=='Google Sheet')
-        {
-            googleSheetJson()
+
+
+        try{
+            if(sheetmethod=='Database')
+                {
+                    setJSon()
+                }
+                if(sheetmethod=='Google Sheet')
+                {
+                    googleSheetJson()
+                }
+        }catch(e){
+            if(sheetmethod=='Database')
+            {
+                setJSon()
+            }
+            if(sheetmethod=='Google Sheet')
+            {
+                googleSheetJson()
+            }
         }
         
         
@@ -413,12 +458,19 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         }
 
     useEffect(()=>{
+        try{
         settingupTabs()
+        }catch(e){
+            settingupTabs()
+        }
 
     },[])
     useEffect(()=>{
-        
-        settingupTabs()
+        try{
+            settingupTabs()
+            }catch(e){
+                settingupTabs()
+            }
 
     },[realtimeportfoliostate])
 

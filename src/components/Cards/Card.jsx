@@ -18,11 +18,14 @@ function Card({id,CompanyName,Title,Description,Tab,itsfrom}) {
     let organization=localStorage.getItem('organization')
     await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deleteNewDetails`,{id:id,organization:organization})
   }
+  
   return (
     <div ref={mycard} className='flex space-y-4 flex-col p-[24px] border-[1px] border-gray-300 h-[290px] rounded-md shadow-md '>
         <div className='flex flex-row border-b-[1px] items-center h-[13%]'>
             <div className='basis-1/2'><p className='text-[18px] text-gray-800 pb-5 font-sans font-bold'>{Title}</p></div>
-            {itsfrom!='completed'?<div className='basis-1/2 flex justify-end space-x-3' onClick={handleEdit}> <p className='text-[14px] text-blue-600 cursor-pointer font-inter font-semibold pb-5'>Edit</p><p className='text-[14px] text-red-600 pb-5 font-inter font-semibold cursor-pointer' onClick={handleDelete}>Delete</p></div>:<></>}
+            {itsfrom!='completed'?<div className='basis-1/2 flex justify-end space-x-3' > 
+            <p className='text-[14px] text-blue-600 cursor-pointer font-inter font-semibold pb-5' onClick={handleEdit}>Edit</p>
+            <p className='text-[14px] text-red-600 pb-5 font-inter font-semibold cursor-pointer' onClick={handleDelete}>Delete</p></div>:<></>}
            
         </div>
         <div className='h-[87%] w-[100%] overflow-x-auto'>

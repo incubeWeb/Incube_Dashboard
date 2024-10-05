@@ -16,7 +16,11 @@ const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldse
            
             setdata(converteddata)
     }
-    settingValuesofData()
+    try{
+        settingValuesofData()
+    }catch(e){
+        settingValuesofData()
+    }
     },[sheetJson,sheetfieldselectedX,sheetfieldselectedY,chartDatatypeX,chartDatatypeY])
 
     useEffect(()=>{
@@ -30,7 +34,11 @@ const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldse
             
                 setdata(converteddata)
         }
-        settingValuesofData()
+        try{
+            settingValuesofData()
+        }catch(e){
+            settingValuesofData()
+        }
     },[])
 
     function extractValue(input) {

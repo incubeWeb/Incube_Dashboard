@@ -96,7 +96,12 @@ const Addusers = ({setActiveField,hidenavbar}) => {
             setAllusers(response.data.data)
             
         }
+        try{
         getUser()
+        }catch(e)
+        {
+            getUser()
+        }
     },[])
   return (
     <div className={`${hidenavbar?' ml-[2%] w-[97%] ':'ml-[20%] w-[80%]'} pt-[5%] pl-[25px] bg-gray-100 flex flex-col items-center justify-start space-y-4  w-[100%] p-[20px] font-roboto`}>
