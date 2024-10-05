@@ -11,7 +11,6 @@ import { io } from "socket.io-client";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { addTimeline } from "./states/timelinestate";
-import AddInvestment from "./components/Add_Investments/AddInvestment";
 import Portfolio from "./components/PortfolioAnalysis/Portfolio";
 import Viewsheet from "./components/ViewSheet/Viewsheet";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
@@ -272,7 +271,6 @@ function App() {
               <ProtectedRoute login={login}><Dealsourcing hidenavbar={hidenavbar}/></ProtectedRoute>} />
             <Route path="/adduser" element={<ProtectedRoute login={login}><Addusers setActiveField={setActiveField} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
             <Route path="/allDocs" element={<ProtectedRoute login={login}><Alldocs realtimedocumentvisibility={realtimedocumentvisibility} filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar}/></ProtectedRoute>} />
-            <Route path="/investment" element={<ProtectedRoute login={login}><AddInvestment hidenavbar={hidenavbar}/></ProtectedRoute>}/>
             <Route path='/portfolio' element={<ProtectedRoute login={login}><Portfolio realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited} hidenavbar={hidenavbar} /></ProtectedRoute>}/>
             <Route path='/keys' element={<ProtectedRoute login={login}><Apikeys realtimecheckAPikeys={realtimecheckAPikeys} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
             
