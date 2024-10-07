@@ -4,10 +4,16 @@ import { BsFileEarmarkPdfFill } from "react-icons/bs";
 import { BsFiletypePng } from "react-icons/bs";
 import { BsFiletypeJpg } from "react-icons/bs";
 import { CiFileOn } from "react-icons/ci";
+import { jwtDecode } from 'jwt-decode';
 const FilesDoc = ({filesadded, currentTab,CompanyName,itsfrom }) => {
     const [uploadFile, setUploadFile] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [uploadedFiles, setUploadedFiles] = useState([]);
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -27,10 +33,14 @@ const FilesDoc = ({filesadded, currentTab,CompanyName,itsfrom }) => {
             formData.append('files', selectedFile);
             formData.append('tab', `Tab${currentTab}`);
             formData.append('CompanyName',CompanyName);
-            formData.append('uploadedBy',localStorage.getItem('email'))
-            formData.append('organization',localStorage.getItem('organization'))
+            formData.append('uploadedBy',Logemail)
+            formData.append('organization',Logorganization)
             try {
-                const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/uploadFile`, formData);
+                const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/uploadFile`, formData,{
+                    headers:{
+                      "Authorization":`Bearer ${token}`
+                    }
+                  });
                
                 setSelectedFile(null);
                 fetchUploadedFiles(); // Clear selected file after upload
@@ -43,7 +53,11 @@ const FilesDoc = ({filesadded, currentTab,CompanyName,itsfrom }) => {
 
     const fetchUploadedFiles = async () => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getfiles`, { CompanyName:CompanyName,tab: `Tab${currentTab}`,organization:localStorage.getItem('organization') });
+            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getfiles`, { CompanyName:CompanyName,tab: `Tab${currentTab}`,organization:Logorganization },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              });
             setUploadedFiles(response.data.data);
         } catch (error) {
             console.error('Error fetching uploaded files', error);

@@ -3,20 +3,30 @@ import React, { useEffect, useRef, useState } from 'react'
 import {gsap} from 'gsap'
 import EditCard from './EditCard'
 import { GoPencil } from "react-icons/go";
+import { jwtDecode } from 'jwt-decode';
 
 
 
 function Card({id,CompanyName,Title,Description,Tab,itsfrom}) {
   const mycard=useRef()
   const [edit,setEdit]=useState(false)
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
   const handleEdit=()=>{
     setEdit(!edit)
   }
 
   const handleDelete=async()=>{
-    let organization=localStorage.getItem('organization')
-    await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deleteNewDetails`,{id:id,organization:organization})
+    let organization=Logorganization
+    await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deleteNewDetails`,{id:id,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
   }
   
   return (

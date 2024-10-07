@@ -18,9 +18,16 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { PiMoney } from "react-icons/pi";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuTriangle } from "react-icons/lu";
+import { jwtDecode } from 'jwt-decode'
 
 
 const PortfolioCards = ({selectedTab,id,portfoliosecurity,sheetedited,selectedSheetId,style,hidenavbar,valueid,setvalueid,changevalue,setchangevalue,component}) => {
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
+   
     const [editLabel,seteditLabel]=useState(false)
     const [labelname,setlablename]=useState('')
     const [hover,sethover]=useState(false)
@@ -109,6 +116,7 @@ const PortfolioCards = ({selectedTab,id,portfoliosecurity,sheetedited,selectedSh
     const [sheetname,setsheetname]=useState('')
     const [sheetfieldselected,setsheetfieldselected]=useState('')
     const[showFilterMenu,setshowFilterMenu]=useState(false)
+   
     
     
     
@@ -142,20 +150,32 @@ const PortfolioCards = ({selectedTab,id,portfoliosecurity,sheetedited,selectedSh
 
     const handlePlusClick=async()=>{
         setLoading1(true)
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
-            email:localStorage.getItem('email'),
-            organization:localStorage.getItem('organization')
-        })
+            email:Logemail,
+            organization:Logorganization
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         const set2DocsIds=response2.data.allfiles.map(doc=>doc.Document_id)
         
         const filteredSet1=response.data.data.filter(doc=>!set2DocsIds.includes(doc._id))
         const tosetdata=[...response2.data.data,...filteredSet1]
 
         const response3=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-drivesheets`,{
-            email:localStorage.getItem('email'),
-            organization:localStorage.getItem("organization")
-        })
+            email:Logemail,
+            organization:Logorganization
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response3.data.status==200 && response3.data.message!="no refresh token found")
         {
             const files=response3.data.data
@@ -201,7 +221,11 @@ const PortfolioCards = ({selectedTab,id,portfoliosecurity,sheetedited,selectedSh
 
     useEffect(()=>{
         const setValues=async()=>{
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:clickedSheetId,organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:clickedSheetId,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             const data=JSON.parse(response.data.data)
             setsheetJson(data)
             const key=Object.keys(data[0])
@@ -236,7 +260,11 @@ const PortfolioCards = ({selectedTab,id,portfoliosecurity,sheetedited,selectedSh
         setsheetClicked(true)
         setsheetpopup(false)
         
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:id,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:id,email:Logemail,organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response.data.status==200)
         {
         const allJson=response.data.data
@@ -313,7 +341,7 @@ const PortfolioCards = ({selectedTab,id,portfoliosecurity,sheetedited,selectedSh
       
     
                 <div>
-                    {selectedTab==localStorage.getItem('email')?
+                    {selectedTab==Logemail?
                     <div className=' cursor-pointer flex justify-end h-[10px] relative '  >
                         
                         
@@ -479,7 +507,7 @@ const PortfolioCards = ({selectedTab,id,portfoliosecurity,sheetedited,selectedSh
     
                     {loading1 ? (
             <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
-          ) : localStorage.getItem('role')=='super admin' || localStorage.getItem('role')=='admin'?(
+          ) : Logrole=='super admin' || Logrole=='admin'?(
                         <div className='h-[20px] cursor-pointer'  onClick={handlePlusClick}>
                             {/* <AiOutlineFileAdd  size={24} className='' /> */}
                         </div>

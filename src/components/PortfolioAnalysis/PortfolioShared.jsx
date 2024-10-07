@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { jwtDecode } from 'jwt-decode'
 import React, { useEffect, useState } from 'react'
 import { RxCross2 } from 'react-icons/rx'
 
@@ -8,11 +9,19 @@ const PortfolioShared = ({realtimeportfoliostate,setsharedwithusers,setclickedPo
     const handlecancel=()=>{
         setclickedPortfolioShared(false)
     }
-    
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
     const setUsers=async()=>{
-      let organization=localStorage.getItem('organization')
+      let organization=Logorganization
       const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/fetchallusers`,{
         organization:organization
+      },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
       })
       setorganizationusers(response.data.data)
       response.data.data.map(val=>{  
@@ -71,7 +80,7 @@ const PortfolioShared = ({realtimeportfoliostate,setsharedwithusers,setclickedPo
                 
               {
                 organziationUsers.map(val=>
-                  val.email!=localStorage.getItem('email')?
+                  val.email!=Logemail?
                   <div key={val._id} className='w-[100%] p-2 h-[40px] border-[1px] border-gray-200 flex flex-row space-x-2'>
                       <div className='flex w-[50%] items-center justify-start '><p className='text-[14px]'>{val.email}</p></div>
                       <div className='w-[50%] flex items-center justify-end font-inter '>

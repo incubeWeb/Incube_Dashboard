@@ -1,8 +1,15 @@
 import React from 'react';
 import axios from 'axios';
 import { RxCross2 } from "react-icons/rx";
+import { jwtDecode } from 'jwt-decode';
+import ChatBot from '../GenaiBox/ChatBot';
 
 function CreateNew({ setCreateNew, fetchCompanyData,hidenavbar }) {
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
   const saveDetails = async () => {
     let title = document.getElementById('title').value;
     let description = document.getElementById('description').value;
@@ -12,7 +19,11 @@ function CreateNew({ setCreateNew, fetchCompanyData,hidenavbar }) {
       title: title,
       piclink: profilelink,
       Description: description,
-      organization:localStorage.getItem('organization')
+      organization:Logorganization
+    },{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
     });
    
 
@@ -45,6 +56,7 @@ function CreateNew({ setCreateNew, fetchCompanyData,hidenavbar }) {
           <button className='bg-blue-600 w-[95px] text-[14px] rounded-md font-inter font-semibold h-[35px] text-white' onClick={saveDetails}>Save</button>
         </div>
       </div>
+      <ChatBot/>
     </div>
   );
 }

@@ -8,11 +8,17 @@ import { TiTick } from 'react-icons/ti';
 import { RxCross2 } from 'react-icons/rx';
 import { ImCross } from 'react-icons/im';
 import { HyperFormula } from 'hyperformula';
+import { jwtDecode } from 'jwt-decode';
 
 const Viewsheet = ({ viewdDoc, jsonData, id, setclickedview, clickedview, hidenavbar }) => {
   const hotRef = useRef(null);
   const [hotInstance, setHotInstance] = useState(null);
   const initialData = [Object.keys(jsonData[0] || {}), ...jsonData.map((row) => Object.values(row))];
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
   const handleAfterChange = (changes, source) => {
     if (source === 'edit') {
       const hotInstance = hotRef.current.hotInstance;
@@ -127,10 +133,14 @@ const Viewsheet = ({ viewdDoc, jsonData, id, setclickedview, clickedview, hidena
       await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateSheetFromJson`, {
         id: id,
         updatedJson: updatedJson,
-        organization: localStorage.getItem('organization'),
-        editedby:localStorage.getItem('email'),
+        organization: Logorganization,
+        editedby:Logemail,
         task:'updating sheet',
 
+      },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
       });
 
 

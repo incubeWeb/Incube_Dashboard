@@ -1,23 +1,33 @@
 import axios from 'axios'
+import { jwtDecode } from 'jwt-decode'
 import React, { useEffect, useState } from 'react'
 import { RxCross2 } from 'react-icons/rx'
 
 const Privatekeypopup = ({Type,uniqueid,apikeyvalue,hidenavbar,setpopup,realtimecheckAPikeys}) => {
   const [organziationUsers,setorganizationusers]=useState([])
   const [checkedUsers,setcheckedUsers]=useState([])
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
   const handlecancel=()=>{
     setpopup(false)
   }
   const handlesharenow=async()=>{
 
     const filteredData=checkedUsers.filter(val=>val.value==true)
-    const organization=localStorage.getItem('organization')
+    const organization=Logorganization
         const Members=filteredData
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/save-apikeys`,{
             organization:organization,
             Members:Members,
             
-        })
+        },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
         if(response.data.status==200)
         {    
             
@@ -31,13 +41,17 @@ const Privatekeypopup = ({Type,uniqueid,apikeyvalue,hidenavbar,setpopup,realtime
   }
 
   const setUsers=async()=>{
-    let organization=localStorage.getItem('organization')
+    let organization=Logorganization
     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/fetchallusers`,{
       organization:organization
+    },{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
     })
     setorganizationusers(response.data.data)
     response.data.data.map(val=>{  
-      setcheckedUsers(prev=>[...prev,{id:val.email,uniqueid:uniqueid,Creator:localStorage.getItem('email'),member:val.email,security:'private',Api_value:apikeyvalue,Type:Type,active:'no',value:false}])
+      setcheckedUsers(prev=>[...prev,{id:val.email,uniqueid:uniqueid,Creator:Logemail,member:val.email,security:'private',Api_value:apikeyvalue,Type:Type,active:'no',value:false}])
     })
  
 
@@ -59,7 +73,7 @@ const Privatekeypopup = ({Type,uniqueid,apikeyvalue,hidenavbar,setpopup,realtime
     })
     const new_temp_val=!temp_val
     const new2_list=checkedUsers.filter(val=>val.email!=id)
-    const new3_list=[{id:id,value:new_temp_val,uniqueid:uniqueid,Creator:localStorage.getItem('email'),member:id,security:'private',Api_value:apikeyvalue,Type:Type,active:'no'}]
+    const new3_list=[{id:id,value:new_temp_val,uniqueid:uniqueid,Creator:Logemail,member:id,security:'private',Api_value:apikeyvalue,Type:Type,active:'no'}]
     const val=[...new2_list,...new3_list]
     setcheckedUsers(val)
   }
@@ -76,7 +90,7 @@ const Privatekeypopup = ({Type,uniqueid,apikeyvalue,hidenavbar,setpopup,realtime
               
             {
               organziationUsers.map(val=>
-                val.email!=localStorage.getItem('email')?
+                val.email!=Logemail?
                 <div key={val._id} className='w-[100%] p-2 h-[40px] border-[1px] border-gray-200 flex flex-row space-x-2'>
                     <div className='flex w-[50%] items-center justify-start'><p className='text-[14px]'>{val.email}</p></div>
                     <div className='w-[50%] flex items-center justify-end font-inter '>

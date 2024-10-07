@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { jwtDecode } from 'jwt-decode'
 import React, { useEffect, useState } from 'react'
 import { FaMinus } from 'react-icons/fa'
 import { RxCross2 } from 'react-icons/rx'
@@ -6,16 +7,24 @@ import { RxCross2 } from 'react-icons/rx'
 const ShareKeysWith = ({realtimecheckAPikeys,hidenavbar,setsharedwithpopup,Api_value,Type}) => {
     
     const [organziationUsers,setorganizationusers]=useState([])
-    
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
     useEffect(()=>{
         const getMember=async()=>{
             
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/get-members-of-apikey`,{
-                organization:localStorage.getItem('organization'),
+                organization:Logorganization,
                 Api_value:Api_value,
                 Type:Type,
-                Creator:localStorage.getItem('email')
-            })
+                Creator:Logemail
+            },{
+            headers:{
+            "Authorization":`Bearer ${token}`
+            }
+        })
             if(response.data.status==200)
             {
                 setorganizationusers(response.data.data)
@@ -28,11 +37,15 @@ const ShareKeysWith = ({realtimecheckAPikeys,hidenavbar,setsharedwithpopup,Api_v
         const getMember=async()=>{
             
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/get-members-of-apikey`,{
-                organization:localStorage.getItem('organization'),
+                organization:Logorganization,
                 Api_value:Api_value,
                 Type:Type,
-                Creator:localStorage.getItem('email')
-            })
+                Creator:Logemail
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             if(response.data.status==200)
             {
                 setorganizationusers(response.data.data)
@@ -47,12 +60,16 @@ const ShareKeysWith = ({realtimecheckAPikeys,hidenavbar,setsharedwithpopup,Api_v
     }
     const handleremoveUser=async(email)=>{
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/delete-member-of-apikey`,{
-            organization:localStorage.getItem('organization'),
+            organization:Logorganization,
             Api_value:Api_value,
             Type:Type,
-            Creator:localStorage.getItem('email'),
+            Creator:Logemail,
             Member:email  
-        })
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response.data.status==200)
         {
             alert('removed key access')
@@ -72,7 +89,7 @@ const ShareKeysWith = ({realtimecheckAPikeys,hidenavbar,setsharedwithpopup,Api_v
               
             {
               organziationUsers.length>0?
-              organziationUsers.filter(val=>val.Member!=localStorage.getItem('email')).map(val=>
+              organziationUsers.filter(val=>val.Member!=Logemail).map(val=>
                 
                 <div key={val._id} className='w-[100%] p-2 h-[40px] border-[1px] border-gray-200 flex flex-row space-x-2'>
                     <div className='flex w-[50%] items-center justify-start'><p className='text-[14px] font-inter font-semibold mb-2'>{val.Member}</p></div>

@@ -6,6 +6,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import axios from 'axios';
 import { Bars } from 'react-loader-spinner';
 import { GrAlert } from 'react-icons/gr';
+import { jwtDecode } from 'jwt-decode';
 
 function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTab, selectedTab,fetchCompanyData,setActiveField }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,20 +15,37 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
   const totalPages = Math.ceil(compData.length / itemsPerPage);
   const [loading,setloading]=useState(true)
   const [error,seterror]=useState(false)
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+      if(Logrole=='admin' || Logrole=='super admin')
       {
-        const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+        const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        });
    
         const filteredData=response.data.data.filter(val=>val.status=="Unassigned")
         setcompData(filteredData)
       }
       else{
-        const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+        const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        });
         const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
-          member: localStorage.getItem('email'),
-          mainorganization:localStorage.getItem('organization')
+          member: Logemail,
+          mainorganization:Logorganization
+        },{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
         });
         const organizationNames=[]
         
@@ -57,18 +75,30 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+      if(Logrole=='admin' || Logrole=='super admin')
       {
-        const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+        const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        });
    
         const filteredData=response.data.data.filter(val=>val.status=="Unassigned")
         setcompData(filteredData)
       }
       else{
-        const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+        const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        });
         const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
-          member: localStorage.getItem('email'),
-          mainorganization:localStorage.getItem('organization')
+          member: Logemail,
+          mainorganization:Logorganization
+        },{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
         });
         const organizationNames=[]
         
@@ -97,18 +127,30 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+      if(Logrole=='admin' || Logrole=='super admin')
         {
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          });
        
           const filteredData=response.data.data.filter(val=>val.status=="Unassigned")
           setcompData(filteredData)
         }
         else{
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          });
           const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
-            member: localStorage.getItem('email'),
-            mainorganization:localStorage.getItem('organization')
+            member: Logemail,
+            mainorganization:Logorganization
+          },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
           });
           const organizationNames=[]
           
@@ -162,7 +204,7 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
         currentData?.length>0?
         <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
         {
-          localStorage.getItem('role')=='team lead' || localStorage.getItem('role')=='user'?
+          Logrole=='team lead' || Logrole=='user'?
           currentData.map(company => ( 
 
             

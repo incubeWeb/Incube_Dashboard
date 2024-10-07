@@ -7,6 +7,7 @@ import CreateNew from '../CreateNew/CreateNew';
 import Inprogrss from './Inprogrss';
 import Unassigned from './Unassigned';
 import Completed from './Completed';
+import { jwtDecode } from 'jwt-decode';
 
 function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,realtimetabchats,realtimeDealpipelinetabs,realtimedealpipelinecompany}) {
   const [selectedTab, setSelectedTab] = useState("View All");
@@ -19,6 +20,11 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
   const completedRef = useRef(null);
   const [createNew, setCreateNew] = useState(false);
   const [loading,setloading]=useState(true)
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
   useEffect(() => {
 
@@ -32,10 +38,18 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
 
   const fetchCompanyData = async () => {
     try {
-      const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+      const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      });
       const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
-        member: localStorage.getItem('email'),
-        mainorganization:localStorage.getItem('organization')
+        member: Logemail,
+        mainorganization:Logorganization
+      },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
       });
       const organizationNames=[]
       
@@ -107,7 +121,7 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
             <p className='md:flex md:items-center md:justify-center md:h-full md:text-[13px]'>In Progress</p>
           </div>
           {
-            localStorage.getItem('role')!='user'?
+            Logrole!='user'?
             <div ref={unAssignedRef} className={`${selectedTab=='Unassigned'?'text-gray-200':''} md:text-[14px] md:w-[150px] rounded-md cursor-pointer select-none`} onClick={() => { setSelectedTab("Unassigned"); }}>
               <p className='md:flex md:items-center md:justify-center md:h-full md:text-[13px]'>Unassigned</p>
             </div>
@@ -119,7 +133,7 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
           </div>
           <div className='md:w-[100%] md:flex md:items-center md:justify-end'>
             {
-              localStorage.getItem('role')!='admin'&&localStorage.getItem('role')!='super admin'?
+              Logrole!='admin'&&Logrole!='super admin'?
             <></>
             :
             <div className='border-[1px] border-blue-200 w-[140px] hover:border-0  h-[35px] rounded-md md:flex md:items-center md:space-x-2 select-none cursor-pointer hover:bg-gray-300' onClick={() => { setCreateNew(!createNew) }}>
@@ -160,6 +174,7 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
       }
       
       </div>
+      
     </div>
   );
 }

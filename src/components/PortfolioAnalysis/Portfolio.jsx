@@ -16,7 +16,15 @@ import PortfolioShared from './PortfolioShared'
 import PortfolioRemoveSharedUsers from './PortfolioRemoveSharedUsers'
 import { MdGroupRemove } from 'react-icons/md'
 import { TbCircleDotFilled } from "react-icons/tb";
+import { jwtDecode } from 'jwt-decode'
 const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
+
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
+
     const [sheetmethod,setsheetmethod]=useState('')
     const [allSheets,setallSheets]=useState([])
     const [selectedSheetId,setselectedSheetId]=useState([])
@@ -37,13 +45,14 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     const [sharedwithusers,setsharedwithusers]=useState([])
 
 //Tabs variables
-    const [selectedTab,setselectedTab]=useState(localStorage.getItem('email'))
+    const [selectedTab,setselectedTab]=useState(Logemail)
     
     const [allportfoliotabs,setallportfoliotabs]=useState([])
 
     const [portfoliosecurity,setportfoliosecurity]=useState('private')
     const [clickedportfolioshared,setclickedPortfolioShared]=useState(false)
   const [clickedportfolioremoveshared,setclickedportfolioremoveshared]=useState(false)
+ 
 
     
     // Function to toggle filter menu visibility
@@ -74,8 +83,12 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
     useEffect(()=>{
         const setStateValues=async()=>{
-           const organization=localStorage.getItem('organization')
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization})
+           const organization=Logorganization
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             if(response.data.status==-200)
             {
                 setTimeout(()=>{
@@ -119,8 +132,12 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
     useEffect(()=>{
         const setStateValues=async()=>{
-           const organization=localStorage.getItem('organization')
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization})
+           const organization=Logorganization
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
            
             if(response.data.status==-200 || response.data.data==undefined)
             {
@@ -178,11 +195,15 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         
         const constructPortfolioState=[{sheetmethod:'',allSheets:allSheets,selectedSheetId:selectedSheetId,sheetJson:sheetJson,sheetKeys:sheetKeys,selectedImageFiled:selectedImageFiled,showHistory:true,showimagepopup:!showimagepopup,sheetname:sheetname,selectfield:selectfield}]
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
-            email:localStorage.getItem('email'),
+            email:Logemail,
             security:portfoliosecurity,
-            organization:localStorage.getItem('organization'),
+            organization:Logorganization,
             portfolioState:JSON.stringify(constructPortfolioState)
-        })
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response.data.status==200)
         {
             setshowHistory(true)
@@ -196,11 +217,20 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
     useEffect(()=>{
         const setavailableDatabaseSheets=async()=>{
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
+              
             const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
-                email:localStorage.getItem('email'),
-                organization:localStorage.getItem('organization')
-            })
+                email:Logemail,
+                organization:Logorganization
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             const set2DocsIds=response2.data.allfiles.map(doc=>doc.Document_id)
             
             const filteredSet1=response.data.data.filter(doc=>!set2DocsIds.includes(doc._id))
@@ -214,9 +244,13 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
         const setavailableGoogleDatabaseSheets=async()=>{
             const response3=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-drivesheets`,{
-                email:localStorage.getItem('email'),
-                organization:localStorage.getItem("organization")
-            })
+                email:Logemail,
+                organization:Logorganization
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             if(response3.data.status==200 && response3.data.message!="no refresh token found")
             {
                 const files=response3.data.data
@@ -255,11 +289,19 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
     useEffect(()=>{
         const setavailableDatabaseSheets=async()=>{
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
-                email:localStorage.getItem('email'),
-                organization:localStorage.getItem('organization')
-            })
+                email:Logemail,
+                organization:Logorganization
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             const set2DocsIds=response2.data.allfiles.map(doc=>doc.Document_id)
             
             const filteredSet1=response.data.data.filter(doc=>!set2DocsIds.includes(doc._id))
@@ -271,9 +313,13 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
         const setavailableGoogleDatabaseSheets=async()=>{
             const response3=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-drivesheets`,{
-                email:localStorage.getItem('email'),
-                organization:localStorage.getItem("organization")
-            })
+                email:Logemail,
+                organization:Logorganization
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             if(response3.data.status==200 && response3.data.message!="no refresh token found")
             {
                 const files=response3.data.data
@@ -311,7 +357,11 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     useEffect(()=>{
      
         const setJSon=async()=>{
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedSheetId,organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedSheetId,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             const data=JSON.parse(response.data.data)
           
             setsheetJson(data)
@@ -331,7 +381,11 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             setsheetKeys(fileteredKey)
         }
         const googleSheetJson=async()=>{
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedSheetId,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedSheetId,email:Logemail,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
         
 
             if(response.data.status==200)
@@ -394,8 +448,12 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
     const handleGooglesheet=async()=>{
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{
-            email:localStorage.getItem('email'),
-            organization:localStorage.getItem('organization')
+            email:Logemail,
+            organization:Logorganization
+          },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
           })  
           if(response.data.status==400)
           {
@@ -422,11 +480,19 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     
 
     const settingupTabs=async()=>{
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-public-portfoliostate`,{organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-public-portfoliostate`,{organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-shared-portfoliostate`,{
-                organization:localStorage.getItem('organization'),
-                email:localStorage.getItem('email')
-            })
+                organization:Logorganization,
+                email:Logemail
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             let publicdata=[]
             let privatedata=[]
             if(response.data.status==200)
@@ -444,7 +510,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                     privatedata=response2.data.data
                 }
             }
-            const mydata=[{email:localStorage.getItem('email')}]
+            const mydata=[{email:Logemail}]
             const combined=[...mydata,...publicdata,...privatedata]
             const uniqueCombined = combined.filter(
                 (value, index, self) =>
@@ -471,23 +537,28 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     },[realtimeportfoliostate])
 
     const handlesavestate=async()=>{
-            const organization=`${localStorage.getItem('organization')}_Topcards`
-            const organization1=localStorage.getItem('organization')
-            const organization2=`${localStorage.getItem('organization')}_ShownGraph`
+            const organization=`${Logorganization}_Topcards`
+            const organization1=Logorganization
+            const organization2=`${Logorganization}_ShownGraph`
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
-                email:localStorage.getItem('email'),
+                email:Logemail,
                 organization:organization,
                 portfolioState:JSON.stringify(portfoliocardsdata),
                 security:portfoliosecurity,
                 sharedwith:JSON.stringify(sharedwithusers),
                 organization1:organization1,
                 organization2:organization2
-            })
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             if(response.data.status==200){
                 alert("State Saved")
             }
         
     }
+    
 
   return (
     <div className={`${hidenavbar?'pl-[4%] w-[100%]':'pl-[21%] w-[100%]'} p-4 font-noto  flex flex-col space-y-4 bg-gray-100`}>
@@ -537,7 +608,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             </div>
             <div className='w-[20%] flex items-center justify-end space-x-2'>
                 {
-                    selectedTab==localStorage.getItem('email')?
+                    selectedTab==Logemail?
                     <div className='flex flex-row space-x-2 items-center justify-center'>
                     {
                         portfoliosecurity=='private'?
@@ -591,7 +662,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                             :<></>
                         }
                         {
-                            showHistory && selectedTab==localStorage.getItem("email")?
+                            showHistory && selectedTab==Logemail?
                             <div className='h-[30px] flex items-center absolute right-56 mt-2' onClick={()=>{setclickedDots(!clickedDots)}}>
                                 <BsThreeDotsVertical className='cursor-pointer'/>
                             </div>
@@ -650,7 +721,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 </div>
                 <div className={`w-[100%] flex justify-center items-center ${showHistory?'':'h-[150px]'} `}>
                     {
-                        !showHistory && !loading && localStorage.getItem('email')==selectedTab?
+                        !showHistory && !loading && Logemail==selectedTab?
                         <div className='w-[500px] h-[100%] space-x-4 items-center justify-center flex mt-8'>
                             <div onClick={()=>{setsheetmethod('Database'); setselectfield(false)}} className='cursor-pointer flex flex-col w-[130px] h-[50px] bg-gradient-to-r font-inter font-bold from-blue-500 to-blue-700 text-[14px] rounded-md text-white items-center p-2 justify-center'>
                                 <p>Select sheet from Database</p>

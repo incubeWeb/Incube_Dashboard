@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { jwtDecode } from 'jwt-decode'
 import React, { useEffect, useState } from 'react'
 import { IoRefresh } from 'react-icons/io5'
 import { RxCross2 } from 'react-icons/rx'
@@ -10,12 +11,21 @@ const PrivatePopup = ({hidenavbar,setfileprivate,docId}) => {
   const [organziationUsers,setorganizationusers]=useState([])
   const [checkedUsers,setcheckedUsers]=useState([])
   const [searchUser,setsearchuser]=useState('')
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
   const handlesharenow=async()=>{
     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/insert-private-Visibility`,{
       emails:JSON.stringify(checkedUsers),
-      organization:localStorage.getItem('organization'),
+      organization:Logorganization,
       Document_id:docId
+    },{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
     })
     if(response.data.status==200)
     {
@@ -36,7 +46,11 @@ const PrivatePopup = ({hidenavbar,setfileprivate,docId}) => {
      else{
       const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/findUsers`,{
         user:searchUser,
-        organization:localStorage.getItem('organization')
+        organization:Logorganization
+      },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
       })
       setorganizationusers(response.data.data)
      }
@@ -46,13 +60,17 @@ const PrivatePopup = ({hidenavbar,setfileprivate,docId}) => {
   
 
   const setUsers=async()=>{
-    let organization=localStorage.getItem('organization')
+    let organization=Logorganization
     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/fetchallusers`,{
       organization:organization
+    },{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
     })
     setorganizationusers(response.data.data)
     response.data.data.map(val=>{
-      if(val.email==localStorage.getItem('email'))
+      if(val.email==Logemail)
       {
         
       setcheckedUsers(prev=>[...prev,{id:val._id,value:true}])
@@ -106,7 +124,7 @@ const PrivatePopup = ({hidenavbar,setfileprivate,docId}) => {
               
             {
               organziationUsers.map(val=>
-                val.email!=localStorage.getItem('email')?
+                val.email!=Logemail?
                 <div key={val._id} className='w-[100%] p-2 h-[40px] border-[1px] border-gray-200 flex flex-row space-x-2'>
                     <div className='flex w-[50%] items-center justify-start'><p className='text-[14px ] font-inter text-[14px] font-semibold mb-2'>{val.email}</p></div>
                     <div className='w-[50%] flex items-center justify-end'>

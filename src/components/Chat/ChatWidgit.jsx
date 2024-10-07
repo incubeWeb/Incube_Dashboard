@@ -11,6 +11,7 @@ import { addMessage } from '../../states/usermessages'
 import { RxCross2 } from 'react-icons/rx'
 import user from '../Icons/user.png'
 import user2 from '../Icons/user2.png'
+import { jwtDecode } from 'jwt-decode'
 
 
 const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeChat,setBoxes,boxes}) => {
@@ -27,6 +28,11 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
   const [receivedMsg,setreceivedMsg]=useState([])
   const [msg,setmsg]=useState('')
 
+  const token=localStorage.getItem('token')
+  const userdata=jwtDecode(token)
+  const Logemail=userdata.userdetails.email
+  const Logorganization=userdata.userdetails.organization
+  const Logrole=userdata.userdetails.role
 
   const handleSearchUser=(e)=>{
     setSearchUser(e.target.value)
@@ -36,7 +42,11 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     const fun=async()=>{
       const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/findUsers`,{
         user:searchUser,
-        organization:localStorage.getItem('organization')
+        organization:Logorganization
+      },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
       })
       const users=response.data.data
    
@@ -51,16 +61,24 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
   },[searchUser])
 
   const deleteWidgit=async()=>{
-    const email=localStorage.getItem('email')
-    const organization=localStorage.getItem('organization')
+    const email=Logemail
+    const organization=Logorganization
     const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
 
     if(boxes.length===0)
     {
-      await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization})
+      await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
       setBoxes([])
     }
-    else{const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization})
+    else{const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization},{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
+    })
     if(response.data.status==200)
     {
       setBoxes(boxes.filter((box,index)=>index!=id))
@@ -71,13 +89,21 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
 
   useEffect(()=>{
     const fetchall=async()=>{
-      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/fetchallusers`,{organization:localStorage.getItem('organization')})
+      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/fetchallusers`,{organization:Logorganization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
       const users=response.data.data
     
       setUsers(users)
       const UserChatpositionRes=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/chatwidgituserpositionvalues`,{
-        email:localStorage.getItem('email')+`${id}`,
-        organization:localStorage.getItem('organization')
+        email:Logemail+`${id}`,
+        organization:Logorganization
+      },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
       })
       if(UserChatpositionRes.data.status==200)
       {
@@ -101,14 +127,22 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     const setChats=async()=>{
 
         let response1=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/readChat`,{
-          sender:localStorage.getItem('email'),
+          sender:Logemail,
           receiver:openuser,
-          organization:localStorage.getItem('organization')
+          organization:Logorganization
+        },{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
         })
         let response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/readChat`,{
-          receiver:localStorage.getItem('email'),
+          receiver:Logemail,
           sender:openuser,
-          organization:localStorage.getItem('organization')
+          organization:Logorganization
+        },{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
         })
         let dataS=[]
         let dataR=[]
@@ -136,11 +170,11 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
   useEffect(()=>{
     const chatingData=()=>{
       
-      if(realtimeChat.fullDocument.sender==localStorage.getItem('email') && realtimeChat.fullDocument.receiver==openuser)
+      if(realtimeChat.fullDocument.sender==Logemail && realtimeChat.fullDocument.receiver==openuser)
         {
           setsendedMsg(prev=>[...prev,{sender:realtimeChat.fullDocument.sender,message:realtimeChat.fullDocument.message,time:realtimeChat.fullDocument.time}])
         }
-        if(realtimeChat.fullDocument.receiver==localStorage.getItem('email') && realtimeChat.fullDocument.sender==openuser)
+        if(realtimeChat.fullDocument.receiver==Logemail && realtimeChat.fullDocument.sender==openuser)
         {
           setreceivedMsg(prev=>[...prev,{sender:realtimeChat.fullDocument.sender,message:realtimeChat.fullDocument.message,time:realtimeChat.fullDocument.time}])
         }
@@ -177,10 +211,14 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
       
       e.stopPropagation()
       const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sendChat`,{
-        sender:localStorage.getItem('email'),
+        sender:Logemail,
         receiver:openuser,
         message:msg,
-        organization:localStorage.getItem('organization')
+        organization:Logorganization
+      },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
       })
       if(response.data.status==200)
       {
@@ -227,7 +265,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
         <div className={`${[...sendedMsg, ...receivedMsg].length > 7 ? '' : 'justify-end'} w-[100%] h-[100%] flex flex-col space-y-2`}>
           {
             [...sendedMsg, ...receivedMsg].sort((a, b) => new Date(parseInt(a.time)) - new Date(parseInt(b.time))).map(msg =>
-              (msg.sender === localStorage.getItem('email'))
+              (msg.sender === Logemail)
                 ? <div key={msg._id} className='w-full'>
                   <div className='text-[12px] flex justify-end mb-4 mr-3 font-inter font-semibold'>
                     <div className='flex justify-end items-end h-[20px] w-[20px] mr-2'>
@@ -303,7 +341,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
               {
                 (users||[]).map(user=>
                
-                user.email!=localStorage.getItem('email')
+                user.email!=Logemail
                     ?
                    <div key={user._id} onClick={()=>setclickeduseremail(prev=>[...prev,{id:user.email}])} className=' w-[100%] flex flex-row' >
                       <div onClick={()=>handleOpenchatbar(user.email)}  className=' cursor-pointer h-[100%] w-[100%] border-[1px] rounded-md shadow-sm shadow-gray-300 border-gray-300 flex flex-row'>

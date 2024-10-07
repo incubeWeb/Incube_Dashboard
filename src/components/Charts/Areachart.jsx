@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { RxCross2 } from 'react-icons/rx';
 import {  Area,  Legend, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart }  from 'recharts';
 import { IoMdClose } from "react-icons/io";
+import { jwtDecode } from 'jwt-decode';
 
 
 
@@ -12,6 +13,11 @@ const Areachart = ({investmentchange,id,data01,clickedArea,setClickedArea,fromAp
   const [mydatatypex,setmydatatypex]=useState(chartDatatypeX)
   const [mydatatypey,setmydatatypey]=useState(chartDatatypeY)
   const [isitfromDrive,setisitfromdrive]=useState(false)
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
   function extractValue(input) {
     // Regex to match a string with continuous digits
     const continuousDigitsPattern = /^\D*(\d+)\D*$/;
@@ -28,16 +34,24 @@ const Areachart = ({investmentchange,id,data01,clickedArea,setClickedArea,fromAp
   }
 
   const deleteWidgit=async()=>{
-    const email=localStorage.getItem('email')
-    const organization=localStorage.getItem('organization')
+    const email=Logemail
+    const organization=Logorganization
     const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
     
     if(boxes.length===0)
     {
-      await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization})
+      await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
       setBoxes([])
     }
-    else{const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization})
+    else{const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization},{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
+    })
     if(response.data.status==200)
     {
       setBoxes(boxes.filter((box,index)=>index!=id))
@@ -80,9 +94,13 @@ const fieldConversionsApi={
 
   useEffect(() => {
     const fun=async()=>{
-      let organization=localStorage.getItem('organization')
+      let organization=Logorganization
       
-        const dashboard_response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`,{email:localStorage.getItem('email'),organization:organization})
+        const dashboard_response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`,{email:Logemail,organization:organization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        })
         const entireData=JSON.parse(dashboard_response.data.data.positions)
         let selectedYaxis=''
         let selectedXaxis=''
@@ -132,7 +150,11 @@ const fieldConversionsApi={
         if(fromdrive)
           {
             setitsfromdatabase(true)
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:Logemail,organization:Logorganization},{
+              headers:{
+                "Authorization":`Bearer ${token}`
+              }
+            })
          
   
               if(response.data.status==200)
@@ -162,7 +184,11 @@ const fieldConversionsApi={
               setFromApi(false);
             }
           }else{
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:Logorganization},{
+              headers:{
+                "Authorization":`Bearer ${token}`
+              }
+            });
         setitsfromdatabase(true)
        let dt=JSON.parse(response.data.data) 
        let filteredDt=[]
@@ -185,7 +211,11 @@ const fieldConversionsApi={
           if(fromdrive)
             {
               setitsfromdatabase(true)
-              const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+              const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:Logemail,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
          
     
                 if(response.data.status==200)
@@ -215,7 +245,11 @@ const fieldConversionsApi={
                 setFromApi(false);
               }
             }else{
-              const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
+              const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              });
           setitsfromdatabase(true)
         let dt = JSON.parse(response.data.data);
         let filteredDt = [];

@@ -4,6 +4,8 @@ import { IoSettingsOutline } from "react-icons/io5";
 import axios from 'axios';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+import {jwtDecode} from 'jwt-decode'
+
 const Login = ({ setLoginIn,login }) => {
   const [showError, setShowError] = useState(false);
   const [createorg,setcreateorg]=useState(false)
@@ -15,6 +17,7 @@ const Login = ({ setLoginIn,login }) => {
   const [org_web,setorg_web]=useState('')
   const Navigate=useNavigate()
   const location=useLocation()
+  
 
 
   const setloginfun=()=>{
@@ -59,9 +62,10 @@ const Login = ({ setLoginIn,login }) => {
     if(response.data.status==200)
     {
       localStorage.setItem('login',true)
-      localStorage.setItem("email", email);
-      localStorage.setItem("role","super admin")
-      localStorage.setItem("organization",name)
+      
+      localStorage.setItem('token',response.data.token)
+      
+      
       setLoginIn(true);
       
       Navigate('/dashboard')
@@ -98,9 +102,10 @@ const Login = ({ setLoginIn,login }) => {
       const status = response.data.status;
       if (status == 200) {
         localStorage.setItem('login',true)
-        localStorage.setItem("email", email);
-        localStorage.setItem("role",response.data.role)
-        localStorage.setItem("organization",response.data.organization)
+        
+        
+        localStorage.setItem('token',response.data.token)
+        
         setLoginIn(true);
         Navigate('/dashboard')
        

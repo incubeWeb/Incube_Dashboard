@@ -3,16 +3,26 @@ import axios from 'axios';
 import { Bars } from 'react-loader-spinner';
 import { IoMdClose } from "react-icons/io";
 import { IoNewspaperOutline } from "react-icons/io5";
+import { jwtDecode } from 'jwt-decode';
 
 const NewsWidgit = ({ id, boxes, setBoxes }) => {
     const [fetchedNews, setFetchedNews] = useState([]);
     const [loading, setLoading] = useState(true);
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
     useEffect(() => {
         const setNews = async () => {
             const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/googlenewssearch`, {
                 search: "latest startup news"
-            });
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              });
             if (response.data.status === 200) {
                 setFetchedNews(response.data.data.Results);
             }
@@ -25,15 +35,23 @@ const NewsWidgit = ({ id, boxes, setBoxes }) => {
     }, []);
 
     const deleteWidgit = async () => {
-        const email = localStorage.getItem('email');
-        const organization = localStorage.getItem('organization');
+        const email = Logemail;
+        const organization = Logorganization;
         const position = JSON.stringify(boxes.filter((box, index) => index !== id));
 
         if (boxes.length === 0) {
-            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`, { email, organization });
+            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`, { email, organization },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              });
             setBoxes([]);
         } else {
-            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`, { email, position, organization });
+            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`, { email, position, organization },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              });
             if (response.data.status === 200) {
                 setBoxes(boxes.filter((box, index) => index !== id));
             }

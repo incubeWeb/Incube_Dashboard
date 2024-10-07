@@ -15,6 +15,7 @@ import Portfolio from "./components/PortfolioAnalysis/Portfolio";
 import Viewsheet from "./components/ViewSheet/Viewsheet";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 import Apikeys from "./components/ApiKeys/Apikeys";
+import { jwtDecode } from "jwt-decode";
 
 
 
@@ -24,6 +25,8 @@ function App() {
   const [realtimeChat,setrealtimeChat]=useState([])
   const changes=useSelector((state)=>state.timelinestate)
   const dispatch=useDispatch()
+
+  
   
   
   
@@ -39,18 +42,7 @@ function App() {
   const [realtimeportfoliostate,setrealtimeportfoliostate]=useState([])
 
   
-  const socket=io(`${import.meta.env.VITE_HOST_URL}8999`, {
-    reconnection: true,           // Enable reconnection
-    reconnectionAttempts: Infinity, // Try reconnecting indefinitely
-    reconnectionDelay: 1000,       // Initial delay before reconnection (2 seconds)
-    reconnectionDelayMax: 5000,    // Maximum delay (5 seconds)
-  })
-  const socket2=io(`${import.meta.env.VITE_HOST_URL}1222`, {
-    reconnection: true,           // Enable reconnection
-    reconnectionAttempts: Infinity, // Try reconnecting indefinitely
-    reconnectionDelay: 1000,       // Initial delay before reconnection (2 seconds)
-    reconnectionDelayMax: 5000,    // Maximum delay (5 seconds)
-  })
+  
 
   const [realtimeDealpipelinetabs,setrealtimedealpipelinetabs]=useState([])
   
@@ -58,107 +50,44 @@ function App() {
 
   const [error,seterror]=useState(false)
 
-  useEffect(()=>{
-    const fun=async()=>{
-      if(localStorage.getItem('email')!='')
-      {
-        setLoginIn(true)
-      }
-     
-      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/gettimeline`,{organization:localStorage.getItem('organization')})
-      
-      if(response.data.data.length>0)
-      {
-        response.data.data.map(item=>
-          
-          dispatch(addTimeline(item))
-        )
-      }
-
-      socket2.on('Googleconnected',(change)=>{
-        
-        setgoogleaccountconnected(change)
-      })
-
-      
-      socket.on('databaseChange',(change)=>{
-          const key=changes.length-1
-          const newCol={key:key,updateInColl: change.ns.coll,updateIs: JSON.stringify(change)}
-        dispatch(addTimeline(newCol))
-        if(change.ns.coll=='UploadedFiles')
-        {
-          setfilesadded(change)
-        }
-        if(change.ns.coll=='TabChats')
-        {
-          setrealtimetabchats(change)
-        }
-        if(change.ns.coll=='DealPipelineCompany')
-        {
-          setrealtimedealpipelinecompany(change)
-        }
-        if(change.ns.coll=='AddNewDetailDealPipeline')
-        {
-          setrealtimedealpipelinecompanyInfo(change)
-        }
-        if(change.ns.coll=='DocsVisibility')
-        {
-          setrealtimedocumentvisibility(change)
-        }
-        if(change.ns.coll=='PortfolioState')
-        {
-          
-          setrealtimeportfoliostate(change)
-        }
-        if(change.ns.coll=='DealpipelineTabs')
-        {
-          setrealtimedealpipelinetabs(change)
-        }
-        if(change.ns.coll=='Apikeys')
-        {
-          setrealtimecheckapikeys(change)
-        }
-
-      })
-      socket.on('chats',(chat)=>{
-        
-        setrealtimeChat(chat)
-      })
-
-      socket.on('investments',(data)=>{
-        setinvestmentchange(data)
-      })
-
-      socket.on('sheetedited',(data)=>{
-    
-        setsheetedited(data)
-      })
-    
-    }
-    try{
-    fun()
-    return ()=>{
-      socket.disconnect()
-    }
-    }catch(e)
-    {
-      setTimeout(()=>{
-        seterror(!error)
-      },1000)
-    }
-    
-},[error])
+  
 
 
 
   useEffect(()=>{
+    const socket=io(`${import.meta.env.VITE_HOST_URL}8999`, {
+      reconnection: true,           // Enable reconnection
+      reconnectionAttempts: Infinity, // Try reconnecting indefinitely
+      reconnectionDelay: 1000,       // Initial delay before reconnection (2 seconds)
+      reconnectionDelayMax: 5000,    // Maximum delay (5 seconds)
+    })
+    const socket2=io(`${import.meta.env.VITE_HOST_URL}1222`, {
+      reconnection: true,           // Enable reconnection
+      reconnectionAttempts: Infinity, // Try reconnecting indefinitely
+      reconnectionDelay: 1000,       // Initial delay before reconnection (2 seconds)
+      reconnectionDelayMax: 5000,    // Maximum delay (5 seconds)
+    })
       const fun=async()=>{
-        if(localStorage.getItem('email')!='')
+        const token=localStorage.getItem('token') || ''
+        const userdata=jwtDecode(token) || ''
+        const Logemail=userdata.userdetails.email || ''
+        const Logorganization=userdata.userdetails.organization || ''
+        const Logrole=userdata.userdetails.role || ''
+        console.log(Logemail,"itn is")
+        if(Logemail=='')
+        {
+          return
+        }
+        if(Logemail!='')
         {
           setLoginIn(true)
         }
        
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/gettimeline`,{organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/gettimeline`,{organization:Logorganization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        })
         
         if(response.data.data.length>0)
         {
@@ -229,16 +158,7 @@ function App() {
         })
       
       }
-      try{
-        fun()
-        return ()=>{
-            socket.disconnect()
-        }
-        }
-      catch(e)
-        {
-          seterror(!error)
-        }
+      fun()
       
   },[])
 
@@ -259,7 +179,7 @@ function App() {
 
   return (
     <BrowserRouter>
-          {login? <Navigation setlogin={setLoginIn} googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />:<></>}
+          {login? <Navigation login={login} setlogin={setLoginIn} googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />:<></>}
           <Routes>
             <Route path="/" element={!login?<Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn}/>:<></>} />
             <Route path="/dashboard" element={

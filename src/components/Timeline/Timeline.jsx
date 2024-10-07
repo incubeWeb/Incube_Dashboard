@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { jwtDecode } from 'jwt-decode'
 import React, { useEffect, useState } from 'react'
 import { MdDonutLarge } from 'react-icons/md'
 import { RxCross2 } from 'react-icons/rx'
@@ -7,18 +8,31 @@ import { useSelector } from 'react-redux'
 
 const Timeline = ({id,boxes,setBoxes}) => {
     const changes=useSelector((state)=>state.timelinestate)
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
     const deleteWidgit=async()=>{
-        const email=localStorage.getItem('email')
-        const organization=localStorage.getItem('organization')
+        const email=Logemail
+        const organization=Logorganization
         const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
      
         if(boxes.length===0)
         {
-          await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization})
+          await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
           setBoxes([])
         }
-        else{const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization})
+        else{const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        })
         if(response.data.status==200)
         {
           setBoxes(boxes.filter((box,index)=>index!=id))

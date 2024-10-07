@@ -6,11 +6,17 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import axios from 'axios';
 import { Bars } from 'react-loader-spinner';
 import { GrAlert } from 'react-icons/gr';
+import { jwtDecode } from 'jwt-decode';
 
 function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,hidenavbar,filter, selectedTab, fetchCompanyData, setActiveField, }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [loading,setloading]=useState(true)
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
   
   const [compData,setcompData]=useState([])
   const totalPages = Math.ceil(compData.length / itemsPerPage);
@@ -19,18 +25,30 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
   useEffect(()=>{
     const fetchcompanydata=async()=>{
       
-      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+      if(Logrole=='admin' || Logrole=='super admin')
         {
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          });
    
           const filteredData=response.data.data.filter(val=>val.completed=='completed')
           setcompData(filteredData)
         }
         else{
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          });
           const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
-            member: localStorage.getItem('email'),
-            mainorganization:localStorage.getItem('organization')
+            member: Logemail,
+            mainorganization:Logorganization
+          },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
           });
           const organizationNames=[]
           
@@ -59,18 +77,30 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
   useEffect(()=>{
     const fetchcompanydata=async()=>{
       
-      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+      if(Logrole=='admin' || Logrole=='super admin')
         {
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          });
    
           const filteredData=response.data.data.filter(val=>val.completed=='completed')
           setcompData(filteredData)
         }
         else{
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          });
           const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
-            member: localStorage.getItem('email'),
-            mainorganization:localStorage.getItem('organization')
+            member: Logemail,
+            mainorganization:Logorganization
+          },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
           });
           const organizationNames=[]
           
@@ -98,18 +128,30 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
   useEffect(()=>{
     const fetchcompanydata=async()=>{
       
-      if(localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')
+      if(Logrole=='admin' || Logrole=='super admin')
         {
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          });
        
           const filteredData=response.data.data.filter(val=> val.completed=='completed')
           setcompData(filteredData)
         }
         else{
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:localStorage.getItem('organization')});
+          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          });
           const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
-            member: localStorage.getItem('email'),
-            mainorganization:localStorage.getItem('organization')
+            member: Logemail,
+            mainorganization:Logorganization
+          },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
           });
           const organizationNames=[]
           

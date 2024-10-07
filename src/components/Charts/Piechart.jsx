@@ -4,6 +4,7 @@ import { Bars } from 'react-loader-spinner';
 import axios from 'axios';
 import { RxCross2 } from 'react-icons/rx';
 import { VscArrowDown, VscArrowUp } from 'react-icons/vsc';
+import { jwtDecode } from 'jwt-decode';
 
 const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setClickedPie, fromApi, setFromApi, chartDatatypeX, chartDatatypeY, chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [loading, setLoading] = useState(true);
@@ -13,6 +14,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
   const [isitfromDrive,setisitfromdrive]=useState(false)
   const [datatypex,setdatatypex]=useState('')
   const [datatypey,setdatatypey]=useState('')
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
   function extractValue(input) {
     const continuousDigitsPattern = /^\D*(\d+)\D*$/;
@@ -27,15 +33,23 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
   }
 
   const deleteWidgit=async()=>{
-    const email=localStorage.getItem('email');
-    const organization=localStorage.getItem('organization');
+    const email=Logemail;
+    const organization=Logorganization;
     const position=JSON.stringify(boxes.filter((box,index)=>index!=id));
     if(boxes.length===0) {
-      await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization});
+      await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      });
       setBoxes([]);
     }
     else {
-      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization});
+      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      });
       if(response.data.status==200) {
         setBoxes(boxes.filter((box,index)=>index!=id));
       }
@@ -81,7 +95,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
 
   useEffect(() => {
     const fun = async () => {
-      const dashboard_response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`, { email: localStorage.getItem('email'),organization:localStorage.getItem('organization') });
+      const dashboard_response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`, { email: Logemail,organization:Logorganization },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      });
       const entireData = JSON.parse(dashboard_response.data.data.positions);
       let selectedYaxis = '';
       let isSheetchart = '';
@@ -112,7 +130,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       });
 
       setselectedvalueaxis(selectedYaxis);
-      const Sheet_response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/investmentsheetfromdb`,{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
+      
       if (fromApi && !isSheetchart) {
       
         const convertedData = convertDataTypes(data01[0], {name: chartdatatypex,
@@ -124,7 +142,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         if(fromdrive)
           {
             setitsfromdatabase(true)
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:Logemail,organization:Logorganization},{
+              headers:{
+                "Authorization":`Bearer ${token}`
+              }
+            })
            
               if(response.data.status==200)
               {
@@ -152,7 +174,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
             }
           }
             else{
-              const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
+              const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              });
               setitsfromdatabase(true);
               let dt = JSON.parse(response.data.data);
               let filteredDt = [];
@@ -168,7 +194,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         if(fromdrive)
           {
             setitsfromdatabase(true)
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:Logemail,organization:Logorganization},{
+              headers:{
+                "Authorization":`Bearer ${token}`
+              }
+            })
           
   
               if(response.data.status==200)
@@ -198,7 +228,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
           }
             else{
             
-              const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
+              const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              });
         setitsfromdatabase(true);
         let dt = JSON.parse(response.data.data);
         let filteredDt = [];
@@ -225,7 +259,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
 
   useEffect(() => {
     const fun = async () => {
-      const dashboard_response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`, { email: localStorage.getItem('email') ,organization:localStorage.getItem('organization')});
+      const dashboard_response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`, { email: Logemail ,organization:Logorganization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      });
       const entireData = JSON.parse(dashboard_response.data.data.positions);
       let selectedYaxis = '';
       let isSheetchart = '';
@@ -256,7 +294,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       });
 
       setselectedvalueaxis(selectedYaxis);
-      const Sheet_response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/investmentsheetfromdb`,{organization:localStorage.getItem('organization'),CompanyName:dbCompanyName});
+      
       if (fromApi && !isSheetchart) {
   
         const convertedData = convertDataTypes(data01[0], {name: chartdatatypex,
@@ -268,7 +306,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         if(fromdrive)
         {
           setitsfromdatabase(true)
-          const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+          const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:Logemail,organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
           
             if(response.data.status==200)
             {
@@ -299,7 +341,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
           if(fromdrive)
             {
               setitsfromdatabase(true)
-              const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+              const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:Logemail,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
            
     
                 if(response.data.status==200)
@@ -327,7 +373,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
                 setFromApi(false);
               }
             }else{
-              const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
+              const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              });
         setitsfromdatabase(true);
         let dt = JSON.parse(response.data.data);
         let filteredDt = [];
@@ -341,7 +391,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         }
       } else if (isSheetchart && clickedsheetname.length > 0) {
        
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:Logorganization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        });
         setitsfromdatabase(true);
         let dt = JSON.parse(response.data.data);
         let filteredDt = [];

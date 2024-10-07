@@ -4,11 +4,17 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
+import ChatBot from '../GenaiBox/ChatBot';
 
 function AddNewDetails({hidenavbar, openAddNewWindow ,CompanyName, handleTotalCards,openedTab}) {
   const [sections, setSections] = useState([{ id: Date.now(), title: '', description: '' }]);
   const MainDiv = useRef(null);
-
+  const token=localStorage.getItem('token')
+  const userdata=jwtDecode(token)
+  const Logemail=userdata.userdetails.email
+  const Logorganization=userdata.userdetails.organization
+  const Logrole=userdata.userdetails.role
   useGSAP(() => {
     gsap.to(MainDiv.current, {
       x: -1900,
@@ -40,18 +46,26 @@ function AddNewDetails({hidenavbar, openAddNewWindow ,CompanyName, handleTotalCa
         Title: section.title,
         Description: section.description,
         Tab:`Tab${openedTab}`,
-        organization:localStorage.getItem('organization')
+        organization:Logorganization
       }));
    
     const output=JSON.stringify(data_, null, 2)
     await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addNewDetail`,{
       data:output,
-      organization:localStorage.getItem('organization')
-    }).then(async()=>{
+      organization:Logorganization
+    },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      }).then(async()=>{
       const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getNewDetails`,{
         CompanyName:CompanyName,
         Tab:"Tab1",
-        organization:localStorage.getItem('organization')
+        organization:Logorganization
+      },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
       })
       handleTotalCards(doc.data.data)
     })
@@ -125,6 +139,7 @@ function AddNewDetails({hidenavbar, openAddNewWindow ,CompanyName, handleTotalCa
           </div>
         </div>
       </div>
+      <ChatBot/>
     </div>
   );
 }

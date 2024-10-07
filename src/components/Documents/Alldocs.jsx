@@ -11,6 +11,7 @@ import { IoRefresh } from 'react-icons/io5'
 import Google_Drive from '../Icons/Google_Drive.svg'
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { CiLock, CiUnlock } from 'react-icons/ci'
+import { jwtDecode } from 'jwt-decode'
 
 const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocumentvisibility}) => {
 
@@ -37,13 +38,22 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     const [loading1,setloading1]=useState(false)
 
     const [googleDrivesheets,setgoogledriveSheets]=useState([])
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
     const GetDriveSheets=async()=>{
         setloading1(true)
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-googledrive-sheets`,{
-            email:localStorage.getItem('email'),
-            organization:localStorage.getItem("organization")
-        })
+            email:Logemail,
+            organization:Logorganization
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response.data.status==200 && response.data.message!="no refresh token found")
         {
             const files=response.data.data
@@ -59,8 +69,12 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     const handlepublicfun=async(id)=>{
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/delete-private-file`,{
             doc_id:id,
-            organization:localStorage.getItem('organization')
-        })
+            organization:Logorganization
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response.data.status==200)
         {
             alert('converted to public')
@@ -83,9 +97,13 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     useEffect(()=>{
         const file=async()=>{
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
-                email:localStorage.getItem('email'),
-                organization:localStorage.getItem('organization')
-            })
+                email:Logemail,
+                organization:Logorganization
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
       
 
         }
@@ -105,10 +123,14 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     }
     const handleGoogleSheetDelete=async(id)=>{
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/delete-drive-file`,{
-            email:localStorage.getItem('email'),
-            organization:localStorage.getItem('organization'),
+            email:Logemail,
+            organization:Logorganization,
             field_id:id
-        })
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
 
         if(response.data.status==200)
         {
@@ -121,15 +143,31 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
 
     const handleDelete=async (id)=>{
        
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deleteUploadedfile`,{id:id,doneBy:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
-        const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/delete-private-file`,{doc_id:id,organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deleteUploadedfile`,{id:id,doneBy:Logemail,organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
+        const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/delete-private-file`,{doc_id:id,organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response.data.status==200 &&response2.data.status==200)
         {
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
-                email:localStorage.getItem('email'),
-                organization:localStorage.getItem('organization')
-            })
+                email:Logemail,
+                organization:Logorganization
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             const set2DocsIds=response2.data.allfiles.map(doc=>doc.Document_id)
             const privatefiles=response2.data.allfiles.map(doc=>doc.Document_id)
                 setprivatefiles(privatefiles)
@@ -142,7 +180,11 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     const handleView=async (id,name)=>{
     
         setid(id)
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:id,organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:id,organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         const data=JSON.parse(response.data.data)
         setjsonData(data)
         setclickedview(!clickedView)
@@ -157,11 +199,19 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         const handle=async()=>{
             if(search.length<=0)
                 {
-                    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
+                    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:Logorganization},{
+                        headers:{
+                          "Authorization":`Bearer ${token}`
+                        }
+                      })
                     const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
-                        email:localStorage.getItem('email'),
-                        organization:localStorage.getItem('organization')
-                    })
+                        email:Logemail,
+                        organization:Logorganization
+                    },{
+                        headers:{
+                          "Authorization":`Bearer ${token}`
+                        }
+                      })
                     const set2DocsIds=response2.data.allfiles.map(doc=>doc.Document_id)
                     const privatefiles=response2.data.allfiles.map(doc=>doc.Document_id)
                      setprivatefiles(privatefiles)
@@ -172,12 +222,20 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
                 else{
                     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/searchFile`,{
                         search:search,
-                        organization:localStorage.getItem('organization')
-                    })
+                        organization:Logorganization
+                    },{
+                        headers:{
+                          "Authorization":`Bearer ${token}`
+                        }
+                      })
                     const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
-                        email:localStorage.getItem('email'),
-                        organization:localStorage.getItem('organization')
-                    })
+                        email:Logemail,
+                        organization:Logorganization
+                    },{
+                        headers:{
+                          "Authorization":`Bearer ${token}`
+                        }
+                      })
                     const set2DocsIds=response2.data.allfiles.map(doc=>doc.Document_id)
                     const privatefiles=response2.data.allfiles.map(doc=>doc.Document_id)
                      setprivatefiles(privatefiles)
@@ -195,11 +253,19 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     useEffect(()=>{
         const setDocsData=async()=>
         {
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
-                email:localStorage.getItem('email'),
-                organization:localStorage.getItem('organization')
-            })
+                email:Logemail,
+                organization:Logorganization
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             const set2DocsIds=response2.data.allfiles.map(doc=>doc.Document_id)
             const privatefiles=response2.data.allfiles.map(doc=>doc.Document_id)
                 setprivatefiles(privatefiles)
@@ -215,11 +281,19 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         const checkIfSelected=async()=>{
             if(activeField=='documents')
             {
-                const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
+                const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:Logorganization},{
+                    headers:{
+                      "Authorization":`Bearer ${token}`
+                    }
+                  })
                 const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
-                    email:localStorage.getItem('email'),
-                    organization:localStorage.getItem('organization')
-                })
+                    email:Logemail,
+                    organization:Logorganization
+                },{
+                    headers:{
+                      "Authorization":`Bearer ${token}`
+                    }
+                  })
                 const set2DocsIds=response2.data.allfiles.map(doc=>doc.Document_id)
                     const privatefiles=response2.data.allfiles.map(doc=>doc.Document_id)
                      setprivatefiles(privatefiles)
@@ -318,12 +392,12 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
                         {
                             !privatefiles.includes(doc._id)?
                             <div onClick={()=>{setfileprivate(true);setdocId(doc._id)}} className='select-none cursor-pointer  h-[35px] mr-[32px] flex items-center justify-cente rounded-md text-black'>
-                            <CiUnlock  size={18}/> <p className='text-[14px] font-inter w-[200px] pl-2 font-[300]'> Public</p>
+                            <CiLock  size={18}/> <p className='text-[14px] font-inter w-[100px] font-[300] pl-2'> Private</p>
                            </div>
                            :
                            <div onClick={()=>handlepublicfun(doc._id)} className='select-none cursor-pointer bg-white     h-[35px] mr-[32px] flex items-center justify-center  rounded-md text-black'>
+                           <CiUnlock  size={18}/> <p className='text-[14px] font-inter w-[200px] pl-2 font-[300]'> Public</p>
                            
-                           <CiLock  size={18}/> <p className='text-[14px] font-inter w-[100px] font-[300] pl-2'> Private</p>
                            </div>
                            }
                         </div>
@@ -430,6 +504,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         :
         <></>
     }
+    
 </div>
   )
 }

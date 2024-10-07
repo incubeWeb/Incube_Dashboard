@@ -10,18 +10,28 @@ import user2 from '../Icons/user2.png'
 import { RxCross2 } from "react-icons/rx";
 import { MdFullscreen } from "react-icons/md";
 import { MdFullscreenExit } from "react-icons/md";
+import { jwtDecode } from 'jwt-decode';
 
 const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
     const [chat,setChat]=useState([])
     const [countChat,setCountChat]=useState(0)
     const [mychat,setmychat]=useState('')
     const [showChatModal, setShowChatModal] = useState(false);
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
     useEffect(()=>{
         const fun=async()=>{
            // console.log(currentTab)
-            let organization=localStorage.getItem('organization')
-            const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization})
+            let organization=Logorganization
+            const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
             
             doc.data.data.map(d=>
                 {
@@ -40,13 +50,17 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
         const fun=async()=>{
             if(chat.length!=0)
             {
-                let organization=localStorage.getItem('organization')
+                let organization=Logorganization
                 await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setTabChats`,{
                     CompanyName:CompanyName,
                     tab:`Tab${currentTab}`,
                     chats:JSON.stringify(chat),
                     organization:organization
-                })
+                    },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
             }
         }
         fun()
@@ -57,7 +71,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
 
     const handleChat=()=>{
 
-        let sender=localStorage.getItem('email')
+        let sender=Logemail
         
         setCountChat(countChat+1)
         setChat(prevChat=>[...prevChat,{id:countChat,chat:mychat,sender:sender,time:Date.now()}])
@@ -103,12 +117,12 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
                     <div key={index} className="w-full">
                       <div
                         className={`${
-                          c.sender === localStorage.getItem('email') ? 'items-end' : 'items-start'
+                          c.sender === Logemail ? 'items-end' : 'items-start'
                         } mb-2  flex-col rounded-md pr-7 flex`}
                       >
                         <p className="text-[12px] flex items-center font-inter font-semibold mb-2">
                           <img
-                            src={c.sender === localStorage.getItem('email') ? user : user2}
+                            src={c.sender === Logemail ? user : user2}
                             className="mr-2 h-[20px] w-[20px]"
                             alt="user-avatar"
                           />
@@ -116,7 +130,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
                         </p>
                         <p
                           className={`text-[12px] p-3 shadow-md max-w-[65%]  ${
-                            c.sender === localStorage.getItem('email')
+                            c.sender === Logemail
                               ? 'bg-blue-500 text-white rounded-lg relative before:content-[""] before:absolute before:top-[-8px] before:right-[10px] before:w-0 before:h-0 before:border-b-[12px] before:border-l-[10px] before:border-r-[0] before:border-b-blue-500 before:border-l-transparent'
                               : 'bg-gray-200 text-black rounded-lg relative before:content-[""] before:absolute before:top-[-8px] before:right-[10px] before:w-0 before:h-0 before:border-b-[12px] before:border-l-[10px] before:border-r-[0] before:border-b-gray-200 before:border-l-transparent'
                           } border-[1px] border-gray-300`}
@@ -126,7 +140,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
                       </div>
                       <div
                         className={`${
-                          c.sender === localStorage.getItem('email') ? 'items-end ' : 'items-start'
+                          c.sender === Logemail ? 'items-end ' : 'items-start'
                         } w-full flex flex-col justify-start pr-2`}
                       >
                         <p className="pl-3 text-[9px] font-inter mr-5 mb-3">{ReadableTime(c.time)}</p>
@@ -165,7 +179,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
                     {
                         (chat||[]).map((c,index)=>
                             <div key={index} className='w-full'>
-                                <div className={`${c.sender === localStorage.getItem('email') ? 'items-end' : 'items-start'} mb-2 flex-col rounded-md pr-7 flex`}>
+                                <div className={`${c.sender === Logemail ? 'items-end' : 'items-start'} mb-2 flex-col rounded-md pr-7 flex`}>
  
 
 
@@ -174,7 +188,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
       
 
       <img 
-                  src={c.sender === localStorage.getItem('email') ? user : user2} 
+                  src={c.sender === Logemail ? user : user2} 
                   className='mr-2 h-[20px] w-[20px]' 
                   alt='user-avatar' 
                 />
@@ -185,7 +199,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
 
 
  
-    <p className={`text-[12px] p-3 shadow-md max-w-[75%] ${c.sender === localStorage.getItem('email') 
+    <p className={`text-[12px] p-3 shadow-md max-w-[75%] ${c.sender === Logemail 
     ? 'bg-blue-500 text-white rounded-lg relative before:content-[""] before:absolute before:top-[-8px] before:right-[10px] before:w-0 before:h-0 before:border-b-[12px] before:border-l-[10px] before:border-r-[0] before:border-b-blue-500 before:border-l-transparent'
     : 'bg-gray-200 text-black rounded-lg relative before:content-[""] before:absolute before:top-[-8px] before:right-[10px] before:w-0 before:h-0 before:border-b-[12px] before:border-l-[10px] before:border-r-[0] before:border-b-gray-200 before:border-l-transparent'} border-[1px] border-gray-300`}>
     {c.chat}
@@ -194,7 +208,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
 
   </div>
   
-  <div className={`${c.sender === localStorage.getItem('email') ? 'items-end ' : 'items-start'} w-full flex flex-col justify-start pr-2`}>
+  <div className={`${c.sender === Logemail ? 'items-end ' : 'items-start'} w-full flex flex-col justify-start pr-2`}>
 
     <p className='pl-3 text-[9px] font-inter mr-5 mb-3'>{ReadableTime(c.time)}</p>
   </div>

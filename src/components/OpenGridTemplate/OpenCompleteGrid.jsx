@@ -14,6 +14,8 @@ import { BiSolidSend } from "react-icons/bi";
 import { Link } from 'react-router-dom';
 import { Bars } from 'react-loader-spinner';
 import { FaDownload } from "react-icons/fa6";
+import { jwtDecode } from 'jwt-decode';
+import ChatBot from '../GenaiBox/ChatBot';
 
 function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,companyName,description,handleOpenGrid}) {
     const [AddNewWindow,setAddnewWindow]=useState(false)
@@ -24,7 +26,11 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
     const [OpenSubbar,setSubbar]=useState(false)
     const [loading,setloading]=useState(true)
 
-
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
     const handleDownloadDealsourcefile=async(e)=>{
         e.stopPropagation();
@@ -32,8 +38,14 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
             const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/createpdf/create-pdf`, {
                 companyname: companyName,
                
-                organization: localStorage.getItem('organization'),
+                organization: Logorganization,
             }, {
+                headers:{
+                    
+                          "Authorization":`Bearer ${token}`
+                       
+                     
+                },
                 responseType: 'blob', // Important for handling binary data
             });
     
@@ -71,7 +83,11 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
     
     useEffect(()=>{
         const fun=async()=>{
-           const data= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getOpenedTabs`,{companyname:companyName,organization:localStorage.getItem('organization')})
+           const data= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getOpenedTabs`,{companyname:companyName,organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
            
            let count=1
            data.data.data.map(tabVal =>{
@@ -97,7 +113,11 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
             const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getNewDetails`,{
                 CompanyName:companyName,
                 Tab:`Tab${currentTab}`,
-                organization:localStorage.getItem('organization')
+                organization:Logorganization
+              },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
               })
             setTotalCards(doc.data.data)
 
@@ -106,11 +126,15 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
             },1000)
         }
         InitialVal()
-    },[realtimedealpipelinecompanyInfo])
+    },[realtimedealpipelinecompanyInfo,currentTab])
 
     useEffect(()=>{
         const fun=async()=>{
-            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setopenedTabs`,{companyname:companyName,count:TabCount,organization:localStorage.getItem('organization')})
+            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setopenedTabs`,{companyname:companyName,count:TabCount,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
         }
         fun()
     },[TabCount])
@@ -253,7 +277,7 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
             </div>
         </div>
 
-
+        <ChatBot/>
     </div>
   )
 }

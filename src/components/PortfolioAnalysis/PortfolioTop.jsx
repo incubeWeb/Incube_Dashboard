@@ -10,11 +10,17 @@ import { Bars } from 'react-loader-spinner'
 import { BsBox, BsCurrencyDollar } from 'react-icons/bs'
 import { HiChartBar } from 'react-icons/hi'
 import { CiShare2 } from 'react-icons/ci'
+import { jwtDecode } from 'jwt-decode'
 
 const PortfolioTop = ({selectedTab,setportfoliocardsdata,portfoliosecurity,realtimeportfoliostate,hidenavbar,sheetedited,selectedSheetId}) => {
     const [valueid,setvalueid]=useState([{id:1,labelname:'Total fund',showValue:'$0'},{id:2,labelname:'Fund utilized',showValue:'$0'},{id:3,labelname:'Funds remaining',showValue:'$0'},{id:4,labelname:'ROI',showValue:'$0'}])
     
     const [changevalue,setchangevalue]=useState(false)
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
     
     useEffect(()=>{
       setportfoliocardsdata(valueid)
@@ -25,8 +31,12 @@ const PortfolioTop = ({selectedTab,setportfoliocardsdata,portfoliosecurity,realt
     useEffect(()=>{
         const getTopCardsValues=async()=>{
             
-            const organization=`${localStorage.getItem('organization')}_Topcards`
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization})
+            const organization=`${Logorganization}_Topcards`
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization},{
+              headers:{
+                "Authorization":`Bearer ${token}`
+              }
+            })
             if(response.data.status==-200)
             {
               setvalueid([{id:1,labelname:'Total fund',showValue:'$0'},{id:2,labelname:'Fund utilized',showValue:'$0'},{id:3,labelname:'Funds remaining',showValue:'$0'},{id:4,labelname:'ROI',showValue:'$0'}])
@@ -50,8 +60,12 @@ const PortfolioTop = ({selectedTab,setportfoliocardsdata,portfoliosecurity,realt
 
   useEffect(()=>{
     const getTopCardsValues=async()=>{
-        const organization=`${localStorage.getItem('organization')}_Topcards`
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization})
+        const organization=`${Logorganization}_Topcards`
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        })
         if(response.data.status==-200)
           {
           //  setvalueid([{id:1,labelname:'Total fund',showValue:'$0'},{id:2,labelname:'Fund utilized',showValue:'$0'},{id:3,labelname:'Funds remaining',showValue:'$0'},{id:4,labelname:'ROI',showValue:'$0'}])

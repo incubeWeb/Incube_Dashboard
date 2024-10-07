@@ -1,23 +1,36 @@
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from 'react'
 import { TbSend2 } from "react-icons/tb";
 
 const DashBoardSingleUserChat = ({receiver,clickUserField,openChatbar}) => {
   const [Messages,setMessages]=useState([])
 
-
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
   useEffect(()=>{
     const ReadMsg=async()=>
       {
         const response1=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/readChat`,{
-          sender:localStorage.getItem('email'),
+          sender:Logemail,
           receiver:receiver,
-          organization:localStorage.getItem('organization')
+          organization:Logorganization
+        },{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
         })
         const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}readChat`,{
           sender:receiver,
-          receiver:localStorage.getItem('email'),
-          organization:localStorage.getItem('organization')
+          receiver:Logemail,
+          organization:Logorganization
+        },{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
         })
         let object1=response1.data.data
         let object2=response2.data.data
@@ -36,14 +49,22 @@ const DashBoardSingleUserChat = ({receiver,clickUserField,openChatbar}) => {
   useEffect(()=>{
       const setMsg=async()=>{
         const response1=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/readChat`,{
-          sender:localStorage.getItem('email'),
+          sender:Logemail,
           receiver:receiver,
-          organization:localStorage.getItem('organization')
+          organization:Logorganization
+        },{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
         })
         const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/readChat`,{
           sender:receiver,
-          receiver:localStorage.getItem('email'),
-          organization:localStorage.getItem('organization')
+          receiver:Logemail,
+          organization:Logorganization
+        },{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
         })
         let object1=response1.data.data
         let object2=response2.data.data
@@ -73,11 +94,15 @@ const DashBoardSingleUserChat = ({receiver,clickUserField,openChatbar}) => {
         if(msg!="")
         {
           const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sendChat`,{
-            sender:localStorage.getItem('email'),
+            sender:Logemail,
             receiver:receiver,
             message:msg,
             time:Date.now(),
-            organization:localStorage.getItem('organization')
+            organization:Logorganization
+          },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
           })
           if(response.data.status==200)
             {
@@ -98,7 +123,7 @@ const DashBoardSingleUserChat = ({receiver,clickUserField,openChatbar}) => {
                 <div className={ ` ${Messages.length>7?'':'justify-end'} w-[100%] h-[100%] flex flex-col space-y-2 `}>
                   {
                     Messages.map(msg=>
-                      msg.sender==localStorage.getItem('email')
+                      msg.sender==Logemail
                         ?
                         <div key={msg.time} className='flex w-[100%] justify-end rounded-sm'><div className='flex bg-gray-300 pl-5 pb-2 pt-3 pr-1 rounded-sm flex-col'><p className='text-[14px] text-gray-800'>{msg.message}</p><div className='flex w-[60px] items-end justify-end text-[9px]'><p>{convertTime(msg.time)}</p></div></div></div>
                         :

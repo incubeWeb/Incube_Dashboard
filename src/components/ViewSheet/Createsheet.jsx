@@ -6,11 +6,17 @@ import { TiTick } from 'react-icons/ti';
 import { ImCross } from 'react-icons/im';
 import axios from 'axios';
 import HyperFormula from 'hyperformula';
+import { jwtDecode } from 'jwt-decode';
 
 const Createsheet = ({ createSheet, setcreateSheet, hidenavbar }) => {
   const hotRef = useRef(null);
   const [saveFilename, setsavefileName] = useState('');
   const [data, setData] = useState(Array.from({ length: 5 }, () => Array(5).fill(''))); // Initialize data state
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
   const handleFilename = (e) => {
     setsavefileName(e.target.value);
@@ -74,9 +80,13 @@ const Createsheet = ({ createSheet, setcreateSheet, hidenavbar }) => {
     //alert(JSON.stringify(filteredData, null, 2)); // Display JSON data of the filled rows only
     const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/convert-to-sheet`, {
       jsonData: JSON.stringify(filteredData, null, 2),
-      organization: localStorage.getItem('organization'),
-      uploadedBy: localStorage.getItem('email'),
+      organization: Logorganization,
+      uploadedBy: Logemail,
       fileName: fileName
+    },{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
     });
     if (response.data.status === 200) {
       alert("sheet created successfully");

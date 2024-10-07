@@ -12,6 +12,8 @@ import { FaAngleDoubleLeft } from "react-icons/fa";
 import { FaAngleDoubleRight } from "react-icons/fa";
 import { BiSolidSend } from "react-icons/bi";
 import { Link, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import ChatBot from '../GenaiBox/ChatBot';
 
 
 
@@ -24,7 +26,11 @@ function OpenViewallGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveFi
     const [OpenSubbar,setSubbar]=useState(false)
     const [pushComplete,setpushComplete]=useState(false)
     const [assignedList,setassignedList]=useState([])
-
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
     const openAddNewWindow=()=>{
         setAddnewWindow(!AddNewWindow)
     }
@@ -36,7 +42,11 @@ function OpenViewallGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveFi
 
     useEffect(()=>{
         const fun=async()=>{
-           const data= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getOpenedTabs`,{organization:localStorage.getItem('organization')})
+           const data= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getOpenedTabs`,{organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
            data.data.data||[].map(tabVal=>{
              let tabs=JSON.parse(tabVal.tabs)
              setTabCount(parseInt(tabVal.TabsCount))
@@ -53,7 +63,11 @@ function OpenViewallGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveFi
             const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getNewDetails`,{
                 CompanyName:companyName,
                 Tab:`Tab${currentTab}`,
-                organization:localStorage.getItem('organization')
+                organization:Logorganization
+              },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
               })
             setTotalCards(doc.data.data)
         }
@@ -63,7 +77,11 @@ function OpenViewallGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveFi
     useEffect(()=>{
         const fun=async()=>{
             
-            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setopenedTabs`,{count:"uniqueIdentifier",tabs:JSON.stringify(Tabs),TabsCount:TabCount,organization:localStorage.getItem('organization')})
+            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setopenedTabs`,{count:"uniqueIdentifier",tabs:JSON.stringify(Tabs),TabsCount:TabCount,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
         }
         fun()
     },[TabCount])
@@ -81,9 +99,13 @@ function OpenViewallGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveFi
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanyCompleteStatus`,{
             completed:'completed',
             title:companyName,
-            pushedby:localStorage.getItem('email'),
-            organization:localStorage.getItem('organization')
-        })
+            pushedby:Logemail,
+            organization:Logorganization
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response.data.status==200)
         {
             alert('pushed')
@@ -220,7 +242,7 @@ function OpenViewallGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveFi
             </div>
         </div>
 
-
+        <ChatBot/>
     </div>
   )
 }

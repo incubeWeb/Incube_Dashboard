@@ -14,6 +14,7 @@ import axios from 'axios';
 import CompanyTemplate2 from './CompanyTemplate2';
 import { FaPlus } from "react-icons/fa";
 import { Bars } from 'react-loader-spinner';
+import { jwtDecode } from 'jwt-decode';
 
 
 
@@ -28,6 +29,11 @@ const Dealsourcing = ({hidenavbar}) => {
 
   const[Loading,setLoading]=useState(false)
   const [processDataLength, setProcessDataLength] = useState(0);
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
 
   const [companies,setCompanies]=useState([])
@@ -71,7 +77,11 @@ const Dealsourcing = ({hidenavbar}) => {
     
     try {
      
-      const res = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/scrape/companyData`,{"company": `${searchValue}`});
+      const res = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/scrape/companyData`,{"company": `${searchValue}`},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      });
       const data = res.data.data;
      
     

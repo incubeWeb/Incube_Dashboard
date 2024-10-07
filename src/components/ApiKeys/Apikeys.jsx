@@ -5,9 +5,16 @@ import { MdDelete } from 'react-icons/md'
 import Privatekeypopup from './Privatekeypopup'
 import axios from 'axios'
 import ShareKeysWith from './ShareKeysWith'
+import { jwtDecode } from 'jwt-decode'
+import ChatBot from '../GenaiBox/ChatBot'
 
 const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
-    const [addField,setaddField]=useState([{uniqueid:1,Type:'Gemini',Api_value:'',security:'private',Creator:localStorage.getItem('email'),Member:localStorage.getItem('email'),active:'no'}])
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
+    const [addField,setaddField]=useState([{uniqueid:1,Type:'Gemini',Api_value:'',security:'private',Creator:Logemail,Member:Logemail,active:'no'}])
     const [popup,setpopup]=useState(false)
     const [availablekeys,setavailablekeys]=useState([])
     const [createdKeys,setcreatedKeys]=useState([])
@@ -15,6 +22,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
     const [uniqueid,setuniqueid]=useState('')
     const [Type,setType]=useState('')
     const [sharewithpopup,setsharedwithpopup]=useState(false)
+    
 
     const [checkisusingownkey,setisusingownkey]=useState(false)
     const getUniqueActiveValues = (arr) => {
@@ -38,15 +46,20 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
 
     useEffect(()=>{
         const fieldadd=async()=>{
-            const organization=localStorage.getItem('organization')
+            const organization=Logorganization
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/get-creator-keys`,{
                 organization:organization,
-                Creator:localStorage.getItem('email')
-            })
+                Creator:Logemail
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
+              console.log(response,"this is respoonse")
             
             if(response.data.data.length<=0)
             {
-                setaddField([{uniqueid:1,Type:'Gemini',Api_value:'',security:'private',Creator:localStorage.getItem('email'),Member:localStorage.getItem('email'),active:'no'}])
+                setaddField([{uniqueid:1,Type:'Gemini',Api_value:'',security:'private',Creator:Logemail,Member:Logemail,active:'no'}])
             }
             else{
                 setaddField(response.data.data)
@@ -57,12 +70,20 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
         
         const availableKeys=async()=>{
             const response1=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/get-public-apikeys`,{
-                organization:localStorage.getItem('organization')
-            })
+                organization:Logorganization
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/get-private-apikeys`,{
-                organization:localStorage.getItem('organization'),
-                Member:localStorage.getItem('email')
-            })
+                organization:Logorganization,
+                Member:Logemail
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             const data1=response1.data.data
             const data2=response2.data.data
             const merged=[...data1,...data2]
@@ -87,15 +108,19 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
 
     useEffect(()=>{
         const fieldadd=async()=>{
-            const organization=localStorage.getItem('organization')
+            const organization=Logorganization
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/get-creator-keys`,{
                 organization:organization,
-                Creator:localStorage.getItem('email')
-            })
+                Creator:Logemail
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             
             if(response.data.data.length<=0)
             {
-                setaddField([{uniqueid:1,Type:'Gemini',Api_value:'',security:'private',Creator:localStorage.getItem('email'),Member:localStorage.getItem('email'),active:'no'}])
+                setaddField([{uniqueid:1,Type:'Gemini',Api_value:'',security:'private',Creator:Logemail,Member:Logemail,active:'no'}])
             }
             else{
                 setaddField(response.data.data)
@@ -105,12 +130,20 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
         }
         const availableKeys=async()=>{
             const response1=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/get-public-apikeys`,{
-                organization:localStorage.getItem('organization')
-            })
+                organization:Logorganization
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/get-private-apikeys`,{
-                organization:localStorage.getItem('organization'),
-                Member:localStorage.getItem('email')
-            })
+                organization:Logorganization,
+                Member:Logemail
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             const data1=response1.data.data
             const data2=response2.data.data
           
@@ -138,16 +171,20 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
     const handlenewfield=()=>{
         const lastIndex=addField[addField.length-1]
         const id=parseInt(lastIndex.uniqueid)+1
-        setaddField(prev=>[...prev,{uniqueid:id,Type:'Gemini',Api_value:'',security:'private',Creator:localStorage.getItem('email'),Member:localStorage.getItem('email'),active:'no'}])
+        setaddField(prev=>[...prev,{uniqueid:id,Type:'Gemini',Api_value:'',security:'private',Creator:Logemail,Member:Logemail,active:'no'}])
     }
     const handledeletefield=async(id,value)=>{
 
-        const organization=localStorage.getItem('organization')
+        const organization=Logorganization
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/delete-apikey`,{
             organization:organization,
-            Member:localStorage.getItem('email'),
+            Member:Logemail,
             Api_value:value
-        })
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response.data.status==200)
         {
             setaddField(addField.filter(val=>val.uniqueid!=id))
@@ -167,7 +204,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
         const fieldwithout=addField.filter(val=>val.uniqueid!=id)
         const key=field[0].Api_value
         const security=field[0].security
-        const newfield=[{uniqueid:id,Type:type,Api_value:key,security:security,Creator:localStorage.getItem('email'),Member:localStorage.getItem('email'),active:'no'}]
+        const newfield=[{uniqueid:id,Type:type,Api_value:key,security:security,Creator:Logemail,Member:Logemail,active:'no'}]
         setaddField([...fieldwithout,...newfield])
     }
 
@@ -176,17 +213,21 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
         const fieldwithout=addField.filter(val=>val.uniqueid!=id)
         const type=field[0].Type
         const security=field[0].security
-        const newfield=[{uniqueid:id,Type:type,Api_value:key,security:security,Creator:localStorage.getItem('email'),Member:localStorage.getItem('email'),active:'no'}]
+        const newfield=[{uniqueid:id,Type:type,Api_value:key,security:security,Creator:Logemail,Member:Logemail,active:'no'}]
         setaddField([...fieldwithout,...newfield])
     }
     const handleSave=async()=>{
-        const organization=localStorage.getItem('organization')
+        const organization=Logorganization
         const Members=addField
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/save-apikeys`,{
             organization:organization,
             Members:Members,
             
-        })
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response.data.status==200)
         {    
             
@@ -212,11 +253,11 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
         setavailablekeys(filter)
     }
     const handleActiveKey=async()=>{
-        const organization=localStorage.getItem('organization')
+        const organization=Logorganization
         const finalVal=    availablekeys.map(item => {
             if (item.security === 'public') {
                 // Update only the Member field for the matched object
-                return { ...item, Member: localStorage.getItem('email') }; // Change 'newMemberValue' to whatever you want
+                return { ...item, Member: Logemail }; // Change 'newMemberValue' to whatever you want
               } else {
                 // Leave the rest of the objects unchanged
                 return item;
@@ -228,7 +269,11 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
             organization:organization,
             Members:Members,
             
-        })
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response.data.status==200)
         {    
             
@@ -244,9 +289,13 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
         
 
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/set-allactivefield-to-no`,{
-            organization:localStorage.getItem('organization'),
-            Member:localStorage.getItem('email')  
-        })
+            organization:Logorganization,
+            Member:Logemail  
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response.data.status==200)
         {
             alert("Default to Incubes Api")
@@ -282,7 +331,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
                             <div><p className='font-bold'>{val.Type}</p></div>
                             <div><p>{val.Api_value}</p></div>
                             <div><p>created by {val.Creator}</p></div>
-                            <div className='flex space-x-2 text-[13px] text-green-500'><input type='radio' checked={val.active=='yes'?true:false} onChange={(e)=>handleActivebtn(e)} value={JSON.stringify({uniqueid:val.uniqueid,Type:val.Type,Api_value:val.Api_value,security:val.security,Creator:val.Creator,Member:localStorage.getItem('email'),active:'yes'})} name='activekey'/> <p>activate</p></div>
+                            <div className='flex space-x-2 text-[13px] text-green-500'><input type='radio' checked={val.active=='yes'?true:false} onChange={(e)=>handleActivebtn(e)} value={JSON.stringify({uniqueid:val.uniqueid,Type:val.Type,Api_value:val.Api_value,security:val.security,Creator:val.Creator,Member:Logemail,active:'yes'})} name='activekey'/> <p>activate</p></div>
                             <div><p className='text-[14px] text-gray-400'>{val.security}</p></div>
                         </div>
                     
@@ -315,7 +364,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
                     </div> */}
                     {
                     createdKeys.length>0?
-                        createdKeys.filter(val=>val.Member==localStorage.getItem('email') && val.Creator==localStorage.getItem('email')).map(val=>
+                        createdKeys.filter(val=>val.Member==Logemail && val.Creator==Logemail).map(val=>
                             <div key={val._id} className='text-[14px] flex flex-row space-x-3'>
                             <div><p className='font-bold'>{val.Type}</p></div>
                             <div><p>{val.Api_value}</p></div>
@@ -350,7 +399,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
                 </div>
                 <div className='h-[100px] overflow-y-auto flex-col flex space-y-3'>
                 {
-                    addField.filter(val=>val.Member==localStorage.getItem('email')&& val.Creator==localStorage.getItem('email')).map(val=>
+                    addField.filter(val=>val.Member==Logemail&& val.Creator==Logemail).map(val=>
                         <div key={val.uniqueid} className='flex flex-row space-x-2  h-[30px]'>
                                 <select onChange={(e)=>handleApitype(val.uniqueid,e.target.value)} className='border-[1px] border-gray-100 font-inter  text-[14px]'>
                                     <option>Gemini</option>
@@ -410,7 +459,6 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
             :
             <></>
         }
-
     </div>
   )
 }

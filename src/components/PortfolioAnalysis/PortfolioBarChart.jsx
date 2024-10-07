@@ -1,9 +1,15 @@
+import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from 'react'
 import { Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldselectedX,sheetfieldselectedY}) => {
     const [data,setdata]=useState([])
     const [hoveredIndex, setHoveredIndex] = useState(null);  // State to 
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
   
     useEffect(()=>{
       const settingValuesofData=async()=>{

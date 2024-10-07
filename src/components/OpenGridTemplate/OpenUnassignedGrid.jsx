@@ -5,6 +5,8 @@ import { useGSAP } from '@gsap/react';
 import { RiExchangeFundsFill } from "react-icons/ri";
 import axios from 'axios';
 import { Bars } from 'react-loader-spinner';
+import { jwtDecode } from 'jwt-decode';
+import ChatBot from '../GenaiBox/ChatBot';
 
 function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, companyName, description, handleOpenGrid }) {
     const [users, setAllUsers] = useState([]);
@@ -14,6 +16,12 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
     const [selectAll, setSelectAll] = useState(false);
     const [selects, setSelects] = useState({});
     const [loading,setloading]=useState(true)
+
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
     const handleBubbling = (e) => {
         e.stopPropagation();
@@ -29,21 +37,25 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
 
     useEffect(() => {
         const setUsers = async () => {
-            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/fetchallusers`,{organization:localStorage.getItem('organization')});
+            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/fetchallusers`,{organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              });
             const usersData = response.data.data;
-            if(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')
+            if(Logrole=='super admin'||Logrole=='admin')
             {
                 const newFilteredData= usersData.filter(val=>val.role!='super admin' &&val.role!='admin')
                 
                 setAllUsers(newFilteredData)
             }
-            else if(localStorage.getItem('role')=='team lead'){
+            else if(Logrole=='team lead'){
                 const newFilteredData= usersData.filter(val=>val.role!='super admin' && val.role !='admin' && val.role!='team lead')
                 
                 setAllUsers(newFilteredData)
             }
             else{
-                const filteredData=usersData.filter(val=>val.email==localStorage.getItem('email'))
+                const filteredData=usersData.filter(val=>val.email==Logemail)
                 setAllUsers(filteredData)
             }
             
@@ -76,21 +88,33 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                         organization: companyName,
                         member:  user.email,
                         position:roles[user._id],
-                        assignedBy:localStorage.getItem('email'),
-                        mainorganization:localStorage.getItem('organization')
-                    });
+                        assignedBy:Logemail,
+                        mainorganization:Logorganization
+                    },{
+                        headers:{
+                          "Authorization":`Bearer ${token}`
+                        }
+                      });
                     await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanystatus`, {
                         company: companyName,
                         status: 'In Progress',
-                        organization:localStorage.getItem('organization')
-                    });
-                    if(localStorage.getItem('role')=='team lead')
+                        organization:Logorganization
+                    },{
+                        headers:{
+                          "Authorization":`Bearer ${token}`
+                        }
+                      });
+                    if(Logrole=='team lead')
                     {
                         await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanyTeamLeadstatus`, {
                             company: companyName,
                             TeamLead_status: 'In Progress',
-                            organization:localStorage.getItem('organization')
-                        });
+                            organization:Logorganization
+                        },{
+                            headers:{
+                              "Authorization":`Bearer ${token}`
+                            }
+                          });
                     }
                     if(response.data.status==200)
                     { 
@@ -103,9 +127,13 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                         organization: companyName,
                         member:  user.email,
                         position:roles[user._id],
-                        assignedBy:localStorage.getItem('email'),
-                        mainorganization:localStorage.getItem('organization')
-                    });
+                        assignedBy:Logemail,
+                        mainorganization:Logorganization
+                    },{
+                        headers:{
+                          "Authorization":`Bearer ${token}`
+                        }
+                      });
                     
                     if(response.data.status==200)
                     { 
@@ -124,33 +152,45 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
         setApply(!apply);
     };
     const handleAssignChanges=async()=>{
-        if(localStorage.getItem('role')=='super admin' || localStorage.getItem('role')=='admin')
+        if(Logrole=='super admin' || Logrole=='admin')
         {
             const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addTeam`, {
                 organization: companyName,
-                member:  localStorage.getItem('email'),
-                position:localStorage.getItem('role'),
-                assignedBy:localStorage.getItem('email'),
-                mainorganization:localStorage.getItem('organization')
-            });
+                member:  Logemail,
+                position:Logrole,
+                assignedBy:Logemail,
+                mainorganization:Logorganization
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              });
             const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanystatus`, {
                 company: companyName,
                 status: 'In Progress',
-                organization:localStorage.getItem('organization')
-            });
+                organization:Logorganization
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              });
             if(response.data.status==200 && response2.data.status==200)
             {
                 alert("Company Assinged to you")
                 handleOpenGrid()
             }
         }
-        if(localStorage.getItem('role')=='team lead')
+        if(Logrole=='team lead')
         {
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanyTeamLeadstatus`, {
                 company: companyName,
                 TeamLead_status: 'In Progress',
-                organization:localStorage.getItem('organization')
-            });
+                organization:Logorganization
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              });
 
             if(response.data.status==200)
             {
@@ -230,6 +270,7 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                     </div>
                 </div>
             </div>
+            <ChatBot/>
         </div>
     );
 }

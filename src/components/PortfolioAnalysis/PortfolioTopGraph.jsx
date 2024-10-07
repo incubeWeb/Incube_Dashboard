@@ -13,6 +13,7 @@ import PortfolioMeter from './PortfolioMeter'
 import { Bars } from 'react-loader-spinner'
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { BsBarChartFill } from "react-icons/bs";
+import { jwtDecode } from 'jwt-decode'
 
 const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited,realtimeportfoliostate}) => {
     const [chartselectpopup,setchartselectpopup]=useState(false)
@@ -41,6 +42,11 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
     const [loading,setloading]=useState(true)
     const[Loading1,setLoading1]=useState(true)
     const [googlesheetfiles,setgooglesheetfiles]=useState([])
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
     const RefreshSheets=()=>{
         setavailableDatabaseSheets()
@@ -50,12 +56,12 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
     // useEffect(()=>
     // {
     //     const updateRealtimevalue=async()=>{
-    //         const organization=`${localStorage.getItem('organization')}_ShownGraph`
+    //         const organization=`${Logorganization}_ShownGraph`
     //         const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
     //         const data=response.data.data
     //         const stateValues=JSON.parse(data)||{}
     //         const sheetid=stateValues.sheetclicked
-    //         const response1=await axios.post('http://localhost:8999/sheetfromdb',{id:sheetid,organization:localStorage.getItem('organization')})
+    //         const response1=await axios.post('http://localhost:8999/sheetfromdb',{id:sheetid,organization:Logorganization})
     //         const sheetdata=JSON.parse(response1.data.data)
     //         const stateJson={showBarchart:stateValues.showBarchart,showPiechart:stateValues.showPiechart,showLinechart:stateValues.showLinechart,chartDatatypeX:stateValues.chartDatatypeX,chartDatatypeY:stateValues.chartDatatypeY,sheetJson:sheetdata,sheetfieldselectedX:stateValues.sheetfieldselectedX,sheetfieldselectedY:stateValues.sheetfieldselectedY,sheetclicked:stateValues.sheetclicked}
     //         if((stateValues.showBarchart || stateValues.showPiechart || stateValues.showLinechart)&&sheetdata!=[])
@@ -86,8 +92,12 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
 
     useEffect(()=>{
         const setGraphValues=async()=>{
-            const organization=`${localStorage.getItem('organization')}_ShownGraph`
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization})
+            const organization=`${Logorganization}_ShownGraph`
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             console.log("chjasdf",response.data.data)
             if(response.data.status==-200 || response.data.data==undefined)
             {
@@ -143,8 +153,12 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
 
     useEffect(()=>{
         const setGraphValues=async()=>{
-            const organization=`${localStorage.getItem('organization')}_ShownGraph`
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization})
+            const organization=`${Logorganization}_ShownGraph`
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             if(response.data.status==-200)
                 {
                     setTimeout(()=>{
@@ -188,20 +202,32 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
         setchartselectpopup(true)
     }
     const setavailableDatabaseSheets=async()=>{
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
-            email:localStorage.getItem('email'),
-            organization:localStorage.getItem('organization')
-        })
+            email:Logemail,
+            organization:Logorganization
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         const set2DocsIds=response2.data.allfiles.map(doc=>doc.Document_id)
         
         const filteredSet1=response.data.data.filter(doc=>!set2DocsIds.includes(doc._id))
         const tosetdata=[...response2.data.data,...filteredSet1]
 
         const response3=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-drivesheets`,{
-            email:localStorage.getItem('email'),
-            organization:localStorage.getItem("organization")
-        })
+            email:Logemail,
+            organization:Logorganization
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response3.data.status==200 && response3.data.message!="no refresh token found")
         {
             const files=response3.data.data
@@ -217,7 +243,11 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
     const handleGooglesheetclicked=async (id,name)=>{
        
         setsheetClicked(id)
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:id,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:id,email:Logemail,organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         
         const allJson=response.data.data
         const keys=allJson[0].data
@@ -251,7 +281,11 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
 
     const handlesheetclicked=async (id)=>{
             setsheetClicked(id)
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:id,organization:localStorage.getItem('organization')})
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:id,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
                 const data=JSON.parse(response.data.data)
               
                 setsheetJson(data)
@@ -272,7 +306,11 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                 setLoading1(false) 
     }
     const handlesheetclickedPie=async (id)=>{
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:id,organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:id,organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
             const data=JSON.parse(response.data.data)
             setsheetJson(data)
             const key=Object.keys(data[0])
@@ -292,7 +330,11 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
             setLoading1(false) 
     }
     const handlesheetclickedLine=async (id)=>{
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:id,organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:id,organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
             const data=JSON.parse(response.data.data)
             setsheetJson(data)
             const key=Object.keys(data[0])
@@ -319,14 +361,18 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
         setshowLinechart(false)
         setshowPiechart(false)
 
-        const organization=`${localStorage.getItem('organization')}_ShownGraph`
+        const organization=`${Logorganization}_ShownGraph`
             const stateJson={showBarchart:true,showPiechart:false,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
-                email:localStorage.getItem('email'),
+                email:Logemail,
                 security:portfoliosecurity,
                 organization:organization,
                 portfolioState:JSON.stringify(stateJson)
-            })
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
            
             setLoading1(false) 
         
@@ -339,14 +385,18 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
         setshowLinechart(false)
         setshowBarchart(false)
 
-        const organization=`${localStorage.getItem('organization')}_ShownGraph`
+        const organization=`${Logorganization}_ShownGraph`
             const stateJson={showBarchart:false,showPiechart:true,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
-                email:localStorage.getItem('email'),
+                email:Logemail,
             security:portfoliosecurity,
                 organization:organization,
                 portfolioState:JSON.stringify(stateJson)
-            })
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             
     }
     const handleSheetCreateLinechart=async()=>{
@@ -357,14 +407,18 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
         setshowPiechart(false)
         setshowBarchart(false)
 
-        const organization=`${localStorage.getItem('organization')}_ShownGraph`
+        const organization=`${Logorganization}_ShownGraph`
             const stateJson={showBarchart:false,showPiechart:false,showLinechart:true,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
-                email:localStorage.getItem('email'),
+                email:Logemail,
                 security:portfoliosecurity,
                 organization:organization,
                 portfolioState:JSON.stringify(stateJson)
-            })
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             
     }
 
@@ -814,7 +868,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                 <></>
                         }
                         {
-                            (showBarchart ||showPiechart || showLinechart) && (localStorage.getItem('email')==selectedTab)
+                            (showBarchart ||showPiechart || showLinechart) && (Logemail==selectedTab)
                             ?
                                 <div className='cursor-pointer' onClick={()=>setchangeChart(!changeChart)}>
                                     <HiOutlineDotsVertical size={17}/>
@@ -841,7 +895,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                     showLinechart &&!loading?
                     <PortfolioLineChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY}/>
                     :
-                    selectedTab==localStorage.getItem('email')?
+                    selectedTab==Logemail?
                     <div onClick={handleChartSelectPopup} className='w-[150px] h-[40px] bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl text-white'>
                         <div className='flex items-center select-none cursor-pointer justify-center h-[100%] '>
                         <p className="font-inter font-bold text-[14px] pr-3">Create chart</p>

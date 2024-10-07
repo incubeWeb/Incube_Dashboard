@@ -13,6 +13,8 @@ import { RiCheckboxMultipleLine } from "react-icons/ri";
 import axios from 'axios';
 import { Bars } from 'react-loader-spinner';
 import { AiOutlineClose } from 'react-icons/ai';  // Close icon
+import { jwtDecode } from 'jwt-decode';
+import ChatBot from '../GenaiBox/ChatBot';
 
 
 
@@ -31,15 +33,40 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
     const NavbarRef=useRef(null)
     const settingBtnRef=useRef(null)
     const [showPopup, setShowPopup] = useState(false); 
-    const [showPopup1, setShowPopup1] = useState(false);  
+    const [showPopup1, setShowPopup1] = useState(false); 
+    const token=localStorage.getItem('token') || ""
+        const userdata=jwtDecode(token) || ""
+        const Logemail=userdata.userdetails.email || ""
+        const Logorganization=userdata.userdetails.organization || ""
+        const Logrole=userdata.userdetails.role || ""
+        if(Logemail=="")
+        {
+            return
+        }
+    
 
     useEffect(()=>
     {
+        
         const checkGoogleLogin=async()=>{
+
+            const token=localStorage.getItem('token') || ""
+        const userdata=jwtDecode(token) || ""
+        const Logemail=userdata.userdetails.email || ""
+        const Logorganization=userdata.userdetails.organization || ""
+        const Logrole=userdata.userdetails.role || ""
+        if(Logemail=="")
+        {
+            return
+        }
            const response= await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{
-                email:localStorage.getItem('email'),
-                organization:localStorage.getItem('organization')
-            })
+                email:Logemail,
+                organization:Logorganization
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             if(response.data.status==200 &&response.data.msg=="Valid Refresh token")
             {
                 setshowgoogleconnected(true)
@@ -59,11 +86,25 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
 
     useEffect(()=>
         {
+           
             const checkGoogleLogin=async()=>{
+                const token=localStorage.getItem('token') || ""
+                const userdata=jwtDecode(token) || ""
+                const Logemail=userdata.userdetails.email || ""
+                const Logorganization=userdata.userdetails.organization || ""
+                const Logrole=userdata.userdetails.role || ""
+                if(Logemail=="")
+                {
+                    return
+                }
                const response= await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{
-                    email:localStorage.getItem('email'),
-                    organization:localStorage.getItem('organization')
-                })
+                    email:Logemail,
+                    organization:Logorganization
+                },{
+                    headers:{
+                      "Authorization":`Bearer ${token}`
+                    }
+                  })
                 if(response.data.status==200 &&response.data.msg=="Valid Refresh token")
                 {
                     setshowgoogleconnected(true)
@@ -115,15 +156,20 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
     }
 
     useEffect(()=>{
-        
-        if(location.pathname!="/")
-        {
-            setActiveField(location.pathname)
-            Navigate(location.pathname)
+       
+        const conditionFun=()=>{
+            
+            if(location.pathname!="/")
+                {
+                    setActiveField(location.pathname)
+                    Navigate(location.pathname)
+                }
+                else{
+                    Navigate(activeField)
+                }
         }
-        else{
-            Navigate(activeField)
-        }
+        conditionFun()
+
     },[activeField,location.pathname])
 
     
@@ -134,12 +180,16 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
 
     const handleRemoveGoogleConnect=async()=>{
         setloading(true)
-        const email=localStorage.getItem('email')
-        const organization=localStorage.getItem("organization")
+        const email=Logemail
+        const organization=Logorganization
         const response= await axios.post(`${import.meta.env.VITE_HOST_URL}1222/logout-google`,{
             email:email
             ,organization:organization
-        })
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response.data.status==200)
         {
             
@@ -153,12 +203,17 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
     const handleGoogleConnect=async()=>
     {
         setloading(true)
-        const email=localStorage.getItem('email')
-        const organization=localStorage.getItem("organization")
+        const email=Logemail
+        const organization=Logorganization
+        
         const response= await axios.post(`${import.meta.env.VITE_HOST_URL}1222/generate-link`,{
             email:email
             ,organization:organization
-        })
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response.data.status==200)
         {
             window.open(response.data.url,'_blank','noopener,noreferrer')
@@ -347,12 +402,12 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
 
             <div className='w-[100%] h-[20%] flex flex-col items-center justify-center border-t mt-5 border-gray-400 '>
                     <div className='text-[14px] text-gray-500'>
-                        <p className='font-bold'>{localStorage.getItem('email')}</p>
+                        <p className='font-bold'>{Logemail}</p>
                     </div>
                     <a href='/' className='w-[50%] h-[40%] flex items-center justify-center'> 
                      <div className='flex flex-row w-[120%]  h-[40%] items-center justify-center  space-x-2 ' > 
                         <div className='font-bold text-[20px] rounded-[100%] items-center bg-gray-100  flex justify-center border-gray-300 border-[1px] w-[40px] h-[30px]'>
-                            <p className='mt-[-3px]'>{localStorage.getItem('email')?.[0]}</p>
+                            <p className='mt-[-3px]'>{Logemail?.[0]}</p>
                         </div>
                         
                          <div><p className='text-[14px] font-inter cursor-pointer text-gray-500 font-semibold' onClick={handleLogout}>  Logout</p></div>
@@ -369,6 +424,10 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
                     <FiAlignJustify  className='text-gray-500' size={20} onClick={hideNav}/>
                 </div>
         </div>
+     <div className='z-90' >
+        <ChatBot/>
+     </div>
+
     </div>
 
   )

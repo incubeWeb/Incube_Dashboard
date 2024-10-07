@@ -5,17 +5,27 @@ import { CiCalendar } from "react-icons/ci";
 import { RxCross2 } from 'react-icons/rx';
 import axios from 'axios';
 import { Bars } from 'react-loader-spinner';
+import { jwtDecode } from 'jwt-decode';
 const CalendarWidgit = ({id,setBoxes,boxes}) => {
     const [value, onChange] = useState([new Date()]);
     const [calid,setcalid]=useState('')
     const [caltimezone,setcaltimezone]=useState('')
     const [googlelogincheck,setgooglelogincheck]=useState(false)
     const [loading,setloading]=useState(true)
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
     useEffect(()=>
     {
       const setCalender=async()=>{
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-mycalender-details`,{email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-mycalender-details`,{email:Logemail,organization:Logorganization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
       
         if(response.data.status==200 && typeof(response.data.message)=='undefined')
         {
@@ -34,7 +44,11 @@ const CalendarWidgit = ({id,setBoxes,boxes}) => {
 
     useEffect(()=>{
       const checkgooglelogin=async()=>{
-          const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})
+          const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{email:Logemail,organization:Logorganization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
           if(response.data.status==200)
           {
             setgooglelogincheck(true)
@@ -48,16 +62,24 @@ const CalendarWidgit = ({id,setBoxes,boxes}) => {
     },[])
 
     const deleteWidgit=async()=>{
-      const email=localStorage.getItem('email')
-      const organization=localStorage.getItem('organization')
+      const email=Logemail
+      const organization=Logorganization
       const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
   
       if(boxes.length===0)
       {
-        await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization})
+        await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
         setBoxes([])
       }
-      else{const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization})
+      else{const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
       if(response.data.status==200)
       {
         setBoxes(boxes.filter((box,index)=>index!=id))

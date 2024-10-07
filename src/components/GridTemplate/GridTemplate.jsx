@@ -5,6 +5,7 @@ import OpenCompleteGrid from '../OpenGridTemplate/OpenCompleteGrid'
 import OpenViewallGrid from '../OpenGridTemplate/OpenViewallGrid'
 import axios from 'axios'
 import { FaDownload } from "react-icons/fa6";
+import { jwtDecode } from 'jwt-decode'
 
 function GridTemplate({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompanyInfo,hidenavbar,realtimetabchats,setSelectedTab,selectedTab,setActiveField,Title,description,logo,status,TeamLead_status,pushedby,completed}) {
     const [openGrid,setOpenGrid]=useState(false)
@@ -15,13 +16,22 @@ function GridTemplate({filesadded,realtimeDealpipelinetabs,realtimedealpipelinec
     const [imgsrc,setimgsrc]=useState(logo)
 
     const [slowinternet,setslowinternet]=useState(false)
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
     useEffect(()=>{
         const getAssignedTeam=async()=>{
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTeams`,{
-                assignedBy:localStorage.getItem('email'),
-                mailorganization:localStorage.getItem('organization')
-            })
+                assignedBy:Logemail,
+                mailorganization:Logorganization
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             setassignedList(response.data.data)
         }
         getAssignedTeam()
@@ -46,11 +56,11 @@ function GridTemplate({filesadded,realtimeDealpipelinetabs,realtimedealpipelinec
             }
     }
     const check=()=>{
-        return localStorage.getItem('role')=='team lead' || localStorage.getItem('role')==='user'
+        return Logrole=='team lead' || Logrole==='user'
     }
 
     const checkerforTeam=()=>{
-        return assignedList.some(val=>val.mainorganization==localStorage.getItem('organization') && val.organization==Title)
+        return assignedList.some(val=>val.mainorganization==Logorganization && val.organization==Title)
     }
 
     const handleImageError=()=>{
@@ -84,7 +94,7 @@ function GridTemplate({filesadded,realtimeDealpipelinetabs,realtimedealpipelinec
             </div>
         </div>
         {
-            selectedTab=='View All' && (localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin' && completed!='completed')?
+            selectedTab=='View All' && (Logrole=='admin' || Logrole=='super admin' && completed!='completed')?
             <div className={`${status=='Unassigned'?'text-red-500':'text-sky-500'} w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[14px] md:text-[14px]  font-roboto`}>
                 <p className='cursor-pointer font-inter'>{status}</p>
             </div>
@@ -93,7 +103,7 @@ function GridTemplate({filesadded,realtimeDealpipelinetabs,realtimedealpipelinec
         }
         
         {
-            selectedTab=='View All' && (localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin' && completed=='completed')?
+            selectedTab=='View All' && (Logrole=='admin' || Logrole=='super admin' && completed=='completed')?
             <div className={`text-green-500 w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[14px] md:text-[14px]  font-roboto`}>
                 <p className='cursor-pointer font-inter'>Completed</p>
             </div>
@@ -101,7 +111,7 @@ function GridTemplate({filesadded,realtimeDealpipelinetabs,realtimedealpipelinec
             <></>
         }
         {
-            selectedTab=='View All'&&(localStorage.getItem('role')=='team lead'|| localStorage.getItem('role')=='user') && completed!='completed'?
+            selectedTab=='View All'&&(Logrole=='team lead'|| Logrole=='user') && completed!='completed'?
             <div className={`${TeamLead_status=='Unassigned'?'text-red-500':'text-sky-500'} w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[14px] md:text-[14px]  font-roboto`}>
                 <p className='cursor-pointer font-inter'>{TeamLead_status}</p>
             </div>
@@ -109,7 +119,7 @@ function GridTemplate({filesadded,realtimeDealpipelinetabs,realtimedealpipelinec
             <></>
         }
         {
-            selectedTab=='View All'&&(localStorage.getItem('role')=='team lead'|| localStorage.getItem('role')=='user') && completed=='completed'?
+            selectedTab=='View All'&&(Logrole=='team lead'|| Logrole=='user') && completed=='completed'?
             <div className={` w-[100%] h-[24%] border-t-2 text-green-500 flex items-center pl-3 text-[14px] md:text-[14px]  font-roboto`}>
                 <p className='cursor-pointer font-inter'>Completed</p>
             </div>
@@ -125,7 +135,7 @@ function GridTemplate({filesadded,realtimeDealpipelinetabs,realtimedealpipelinec
             <></>
         }
         {
-            selectedTab=='In Progress' && (localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin')?
+            selectedTab=='In Progress' && (Logrole=='admin' || Logrole=='super admin')?
             <div className={`${status=='Unassigned'?'text-red-500':'text-sky-500'} w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[14px] md:text-[14px]  font-roboto`}>
                 <p className='cursor-pointer font-inter'>{status}</p>
             </div>
@@ -167,29 +177,29 @@ function GridTemplate({filesadded,realtimeDealpipelinetabs,realtimedealpipelinec
         :<></>}
 
         {
-            openViewallGrid &&checkerforTeam() && status=='In Progress' && completed=='incomplete' &&(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+            openViewallGrid &&checkerforTeam() && status=='In Progress' && completed=='incomplete' &&(Logrole=='super admin'||Logrole=='admin')?
             <OpenGrid filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
-            openViewallGrid && status=='In Progress' && completed=='incomplete' &&(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+            openViewallGrid && status=='In Progress' && completed=='incomplete' &&(Logrole=='super admin'||Logrole=='admin')?
             <OpenGrid filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
-            openViewallGrid && status=='In Progress' && completed=='completed' &&(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+            openViewallGrid && status=='In Progress' && completed=='completed' &&(Logrole=='super admin'||Logrole=='admin')?
             <OpenCompleteGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
-            openViewallGrid && status=='Unassigned' && completed=='incomplete' && (localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+            openViewallGrid && status=='Unassigned' && completed=='incomplete' && (Logrole=='super admin'||Logrole=='admin')?
             <OpenUnassignedGrid hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
         <></>
         }
 
         {
-            openViewallGrid && status=='In Progress' && completed=='incomplete' && TeamLead_status=='In Progress' &&(localStorage.getItem('role')=='team lead'||localStorage.getItem('role')=='user')?
+            openViewallGrid && status=='In Progress' && completed=='incomplete' && TeamLead_status=='In Progress' &&(Logrole=='team lead'||Logrole=='user')?
             <OpenGrid filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
-            openViewallGrid && status=='In Progress' && completed=='completed' && TeamLead_status=='In Progress' &&(localStorage.getItem('role')=='team lead'||localStorage.getItem('role')=='user')?
+            openViewallGrid && status=='In Progress' && completed=='completed' && TeamLead_status=='In Progress' &&(Logrole=='team lead'||Logrole=='user')?
             <OpenCompleteGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
-            openViewallGrid && status=='In Progress' && completed=='incomplete' && TeamLead_status=='Unassigned' &&(localStorage.getItem('role')=='team lead'||localStorage.getItem('role')=='user')?
+            openViewallGrid && status=='In Progress' && completed=='incomplete' && TeamLead_status=='Unassigned' &&(Logrole=='team lead'||Logrole=='user')?
             <OpenUnassignedGrid hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
             <></>

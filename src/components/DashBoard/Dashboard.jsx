@@ -25,6 +25,7 @@ import OpenGrid from '../OpenGridTemplate/OpenGrid';
 import OpenCompleteGrid from '../OpenGridTemplate/OpenCompleteGrid';
 import OpenUnassignedGrid from '../OpenGridTemplate/OpenUnassignedGrid';
 import CalendarWidgit from '../Calendar/CalendarWidgit';
+import { jwtDecode } from 'jwt-decode';
 
 
 const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
@@ -44,6 +45,12 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
   const [status,setstatus]=useState('')
   const [TeamLead_status,setTeamLead_status]=useState('')
   const [completed,setcompleted]=useState('')
+
+  const token=localStorage.getItem('token')
+  const userdata=jwtDecode(token)
+  const Logemail=userdata.userdetails.email
+  const Logorganization=userdata.userdetails.organization
+  const Logrole=userdata.userdetails.role
 
 
   const [chartDatatypeFromApiX,setchartDatatypeFromApiX]=useState([])
@@ -144,16 +151,20 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
   }
 
   useEffect(()=>{
-    const email=localStorage.getItem('email')
+    const email=Logemail
     setUseremail(email)
   },[])
 
   useEffect(()=>{
     const checkBoxValues=async()=>{
       
-      let email=localStorage.getItem('email')
-      const organization=localStorage.getItem('organization')
-      let checkDb=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`,{email:email,organization:organization})
+      let email=Logemail
+      const organization=Logorganization
+      let checkDb=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`,{email:email,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
 
       
 
@@ -199,9 +210,14 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
   useEffect(()=>{
     const checkBoxValues=async()=>{
       
-      let email=localStorage.getItem('email')
-      const organization=localStorage.getItem('organization')
-      let checkDb=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`,{email:email,organization:organization})
+      let email=Logemail
+      const organization=Logorganization
+      let checkDb=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`,{email:email,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      
+      })
       
 
       
@@ -246,15 +262,19 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
 
   useEffect(() => {
     const setBoxValues=async ()=>{
-        const email=localStorage.getItem('email')
-        const organization=localStorage.getItem('organization')
+        const email=Logemail
+        const organization=Logorganization
         
         let position=JSON.stringify(boxes)
 
 
         if(boxes.length>0)
         {
-          await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addDashboardData`,{email:email,positions:position,organization:organization})
+          await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addDashboardData`,{email:email,positions:position,organization:organization},{
+            headers:{
+             "Authorization":`Bearer ${token}`
+            }
+          })
         }
        
         
@@ -577,29 +597,29 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
       assigneddealclicked?
       <div className='w-[100%] h-screen fixed left-[-10px] '>
           {
-              assigneddealclicked && status=='In Progress' && completed=='incomplete' &&(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+              assigneddealclicked && status=='In Progress' && completed=='incomplete' &&(Logrole=='super admin'||Logrole=='admin')?
               <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
           :
-              assigneddealclicked && status=='In Progress' && completed=='incomplete' &&(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+              assigneddealclicked && status=='In Progress' && completed=='incomplete' &&(Logrole=='super admin'||Logrole=='admin')?
               <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
           :
-              assigneddealclicked && status=='In Progress' && completed=='completed' &&(localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+              assigneddealclicked && status=='In Progress' && completed=='completed' &&(Logrole=='super admin'||Logrole=='admin')?
               <OpenCompleteGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab="View All" setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
           :
-              assigneddealclicked && status=='Unassigned' && completed=='incomplete' && (localStorage.getItem('role')=='super admin'||localStorage.getItem('role')=='admin')?
+              assigneddealclicked && status=='Unassigned' && completed=='incomplete' && (Logrole=='super admin'||Logrole=='admin')?
               <OpenUnassignedGrid hidenavbar={hidenavbar} setSelectedTab="View All" setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
           :
           <></>
           }
 
           {
-              assigneddealclicked && status=='In Progress' && completed=='incomplete' && TeamLead_status=='In Progress' &&(localStorage.getItem('role')=='team lead'||localStorage.getItem('role')=='user')?
+              assigneddealclicked && status=='In Progress' && completed=='incomplete' && TeamLead_status=='In Progress' &&(Logrole=='team lead'||Logrole=='user')?
               <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
           :
-              assigneddealclicked && status=='In Progress' && completed=='completed' && TeamLead_status=='In Progress' &&(localStorage.getItem('role')=='team lead'||localStorage.getItem('role')=='user')?
+              assigneddealclicked && status=='In Progress' && completed=='completed' && TeamLead_status=='In Progress' &&(Logrole=='team lead'||Logrole=='user')?
               <OpenCompleteGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab="View All" setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
           :
-              assigneddealclicked && status=='In Progress' && completed=='incomplete' && TeamLead_status=='Unassigned' &&(localStorage.getItem('role')=='team lead'||localStorage.getItem('role')=='user')?
+              assigneddealclicked && status=='In Progress' && completed=='incomplete' && TeamLead_status=='Unassigned' &&(Logrole=='team lead'||Logrole=='user')?
               <OpenUnassignedGrid hidenavbar={hidenavbar} setSelectedTab='View All' setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
           :
               <></>
@@ -608,7 +628,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
       :
       <></>
     }
-
+    
     </div>
   );
 };

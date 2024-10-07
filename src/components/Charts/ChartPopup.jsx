@@ -8,6 +8,7 @@ import { BiBorderAll, BiLineChart } from "react-icons/bi";
 import { SiGooglesheets } from "react-icons/si";
 import axios from "axios";
 import { AiOutlineLoading3Quarters } from "react-icons/ai"; // If you're using react-icons
+import { jwtDecode } from "jwt-decode";
 
 const ChartPopup = ({
   
@@ -99,6 +100,11 @@ const ChartPopup = ({
   const [Loading1,setLoading1]=useState(true);
   const[Loading2,setLoading2]=useState(true);
   
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
   
   const handleFileChange = (event) => {
@@ -123,11 +129,15 @@ const ChartPopup = ({
         const formData = new FormData();
         formData.append('files', SelectedFile);
         formData.append('name',`${Date.now()}_${chart}`)
-        formData.append('uploadedBy',localStorage.getItem('email'))
-        formData.append('organization',localStorage.getItem('organization'))
+        formData.append('uploadedBy',Logemail)
+        formData.append('organization',Logorganization)
         formData.append('CompanyName',`DB${Date.now()}_${chart}`)
         try {
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/uploadsheetFile`, formData);
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/uploadsheetFile`, formData,{
+              headers:{
+                "Authorization":`Bearer ${token}`
+              }
+            });
 
             const data=JSON.parse(response.data.data)
            // console.log("mydata1",data)
@@ -159,7 +169,11 @@ const ChartPopup = ({
     setselectedDbsheet(!selectedDbSheet)
     //console.log('mydata2',selectedsheetfromdbname)
     
-    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:localStorage.getItem('organization')});
+    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:Logorganization},{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
+    });
     if(response.data.status==200)
     {
       const data=JSON.parse(response.data.data)
@@ -173,7 +187,11 @@ const ChartPopup = ({
       setSelectedFile(null);
     }
     else{
-      const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetfromdbname,email:localStorage.getItem('email'),organization:localStorage.getItem('organization')})  
+      const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetfromdbname,email:Logemail,organization:Logorganization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })  
             if(response2.data.status==200)
             {
                 const allJson=response2.data.data
@@ -220,7 +238,11 @@ const ChartPopup = ({
     e.stopPropagation();
     setclickedGoogle(false)
     setClickedDatabase(true)
-    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:localStorage.getItem('organization')})
+    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:Logorganization},{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
+    })
    // const filteredData=response.data.data.filter(val=>val.fileType=='xlsx')
    // console.log("my fileted data",response.data.data)
     setpresentSheets(response.data.data)
@@ -231,8 +253,12 @@ const ChartPopup = ({
   const handleGoogleFunctionality=async(e)=>{
     e.stopPropagation();
     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{
-      email:localStorage.getItem('email'),
-      organization:localStorage.getItem('organization')
+      email:Logemail,
+      organization:Logorganization
+    },{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
     })  
     if(response.data.status==400)
     {
@@ -252,8 +278,12 @@ const ChartPopup = ({
     setClickedDatabase(true)
     setclickedGoogle(true)
     const response3=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-drivesheets`,{
-      email:localStorage.getItem('email'),
-      organization:localStorage.getItem("organization")
+      email:Logemail,
+      organization:Logorganization
+  },{
+    headers:{
+      "Authorization":`Bearer ${token}`
+    }
   })
 
   if(response3.data.status==200 && response3.data.message!="no refresh token found")

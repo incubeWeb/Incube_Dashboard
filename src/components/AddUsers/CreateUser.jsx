@@ -1,15 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { RxCross2 } from "react-icons/rx";
+import { jwtDecode } from 'jwt-decode';
 
 function CreateUser({ handleAddUser,setAllusers }) {
  const [option,setOption]=useState('super admin')
  const [companies,setallcompanies]=useState([])
  const [company,setCompany]=useState('none')
+ const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
+
  useEffect(()=>{
   const getCompanies=async()=>{
-    let organization=localStorage.getItem('organization')
-    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:organization})
+    let organization=Logorganization
+    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
     setallcompanies(response.data.data)
   }
   getCompanies()
@@ -20,12 +31,16 @@ function CreateUser({ handleAddUser,setAllusers }) {
   const password=document.getElementById('password').value
   const role=option
   const team=company
-  let organization=localStorage.getItem('organization')
+  let organization=Logorganization
   const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/registerUser`,{
     email:email,
     password:password,
     role:role,
     organization:organization
+  },{
+    headers:{
+      "Authorization":`Bearer ${token}`
+    }
   })
   if(team!='none')
   {
@@ -34,6 +49,10 @@ function CreateUser({ handleAddUser,setAllusers }) {
       member:email,
       position:role,
       mainorganization:organization
+    },{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
     })
   }
   

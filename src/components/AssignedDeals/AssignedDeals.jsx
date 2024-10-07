@@ -7,6 +7,7 @@ import GridOpen from '../Add_Investments/GridOpen'
 import OpenGrid from '../OpenGridTemplate/OpenGrid'
 import OpenCompleteGrid from '../OpenGridTemplate/OpenCompleteGrid'
 import OpenUnassignedGrid from '../OpenGridTemplate/OpenUnassignedGrid'
+import { jwtDecode } from 'jwt-decode'
 
 
 const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcompleted,setOpenViewallGrid,setCompanyName,setcompanyDiscription,openViewallGrid,status,TeamLead_status,completed,setassigneddealclicked,setBoxes,boxes,hidenavbar,realtimetabchats,realtimedealpipelinecompanyInfo}) => {
@@ -14,6 +15,11 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
   
   const [clickedCompany,setclickedCompany]=useState(false)
   const [selectedTab, setSelectedTab] = useState("View All");
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
   
   const [assingedtodeals,setassignedtodeals]=useState([])
 
@@ -22,12 +28,20 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
   useEffect(()=>{
     const getAllDeals=async()=>{
       const response= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTeams`,{
-         assignedBy:localStorage.getItem('email'),
-         mainorganization:localStorage.getItem("organization")
-       })
+         assignedBy:Logemail,
+         mainorganization:Logorganization
+       },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
        const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`,{
-        member:localStorage.getItem('email'),
-        mainorganization:localStorage.getItem("organization")
+        member:Logemail,
+        mainorganization:Logorganization
+      },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
       })
       const filteredArray = response2.data.data.filter(
         obj1 => !response.data.data.some(obj2 => JSON.stringify(obj1) === JSON.stringify(obj2))
@@ -44,7 +58,11 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
   const handleCompany=async(companyname)=>{
     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/searchdealsourcingfiles`,{
       search:companyname,
-      organization:localStorage.getItem('organization')
+      organization:Logorganization
+    },{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
     })
 
     setOpenViewallGrid(true)
@@ -61,17 +79,25 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
   
 
   const deleteWidgit=async()=>{
-    const email=localStorage.getItem('email')
-    const organization=localStorage.getItem('organization')
+    const email=Logemail
+    const organization=Logorganization
     const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
     
  
     if(boxes.length===0)
     {
-      await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization})
+      await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
       setBoxes([])
     }
-    else{const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization})
+    else{const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
     if(response.data.status==200)
     {
       setBoxes(boxes.filter((box,index)=>index!=id))
@@ -91,7 +117,7 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
         </div> 
         <div className=' w-[100%] space-y-2 select-noneflex flex-col overflow-y-auto h-[100%]'>
            {
-            localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin' ?
+            Logrole=='admin' || Logrole=='super admin' ?
             <div className='flex flex-col'>
                 <p className='text-[16px]  font-semibold'>Deals Assigned by You:</p>
                 <p className='text-[14px] mb-4'>You have assigned total {asignedDeals.length} deals</p>
@@ -99,18 +125,18 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
             :
             <></>
            }
-           { localStorage.getItem('role')=='team lead' || localStorage.getItem('role')=='user'?
+           { Logrole=='team lead' || Logrole=='user'?
             <div className='flex flex-col'>
                 <p className='text-[16px]  font-semibold'>Related Deals:</p>
-                <p className='text-[14px] mb-4'>Your have total {[...assingedtodeals,...asignedDeals].filter(val=>val.member!=localStorage.getItem('email')).length} deals</p>
+                <p className='text-[14px] mb-4'>Your have total {[...assingedtodeals,...asignedDeals].filter(val=>val.member!=Logemail).length} deals</p>
             </div>
             :
             <></>
            }
            {
-            localStorage.getItem('role')=='admin' || localStorage.getItem('role')=='super admin' || localStorage.getItem('role')=='team lead'?
+            Logrole=='admin' || Logrole=='super admin' || Logrole=='team lead'?
             (asignedDeals||[]).map(doc=>
-              doc.member!=localStorage.getItem('email')?
+              doc.member!=Logemail?
               <div onClick={()=>{handleCompany(doc.organization)}} key={doc._id} className='cursor-pointer w-[100%] h-[18%] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
                 <p className='text-[14px] w-[80%] tracking-wide '> You have assinged <span className='font-bold'>{doc.organization}</span> to {doc.member} at {convertTime(doc.time)} </p>
                 <div className='w-[20%] pr-2 flex items-center justify-end'>
@@ -128,7 +154,7 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
            }
 
 {
-            localStorage.getItem('role')=='team lead' || localStorage.getItem('role')=='user'?
+            Logrole=='team lead' || Logrole=='user'?
             (assingedtodeals||[]).map(doc=>
               <div onClick={()=>{handleCompany(doc.organization)}} key={doc._id} className='cursor-pointer w-[100%] h-[18%] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
                 <p className='text-[14px] w-[80%] tracking-wide '><span className='font-bold'>{doc.organization}</span> has been assigned to you at {convertTime(doc.time)} </p>

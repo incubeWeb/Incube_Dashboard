@@ -4,13 +4,23 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 function EditCard({handleClose,id}) {
+  const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
   useEffect(()=>{
     const FillField=async()=>{
-      let organization=localStorage.getItem('organization')
-        const RawData=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getSingleDetail`,{id:id,organization:organization})
+      let organization=Logorganization
+        const RawData=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getSingleDetail`,{id:id,organization:organization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        })
         const data=RawData.data.data
         data.map((d)=>
             {document.getElementById('titleText').value=d.Title
@@ -23,8 +33,12 @@ function EditCard({handleClose,id}) {
   const handleUpdate=async()=>{
     const title=document.getElementById('titleText').value
     const des=document.getElementById('descriptionText').value
-    let organization=localStorage.getItem('organization')
-    const res=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/UpdateSingleDetail`,{id:id,title:title,description:des,organization:organization})
+    let organization=Logorganization
+    const res=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/UpdateSingleDetail`,{id:id,title:title,description:des,organization:organization},{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
+    })
     if(res.data.status=='200')
     {
         alert("Updated Successfully")

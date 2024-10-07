@@ -11,6 +11,7 @@ import { GoDotFill } from 'react-icons/go'
 import { MdEmail } from 'react-icons/md'
 import { GrUserAdmin } from 'react-icons/gr'
 import { Bars } from 'react-loader-spinner'
+import { jwtDecode } from 'jwt-decode'
 
 const Addusers = ({setActiveField,hidenavbar}) => {
     const [adduser,setAdduser]=useState(false)
@@ -22,15 +23,24 @@ const Addusers = ({setActiveField,hidenavbar}) => {
     const [searchUser,setSearchUser]=useState('')
     const [showsearch,setshowsearch]=useState(false)
     const [loading,setloading]=useState(true)
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
     useEffect(()=>{
         const setUsers=async()=>{
-            let organization=localStorage.getItem('organization')
+            let organization=Logorganization
             if(searchUser.length<=0)
             {
                 const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/fetchallusers`,{
                     organization:organization
-                })
+                },{
+                    headers:{
+                      "Authorization":`Bearer ${token}`
+                    }
+                  })
                 setAllusers(response.data.data)
                 
             }
@@ -43,7 +53,11 @@ const Addusers = ({setActiveField,hidenavbar}) => {
                 const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/findUsers`,{
                     user:searchUser,
                     organization:organization
-                })
+                },{
+                    headers:{
+                      "Authorization":`Bearer ${token}`
+                    }
+                  })
                 setAllusers(response.data.data)
                 
                 
@@ -60,18 +74,26 @@ const Addusers = ({setActiveField,hidenavbar}) => {
     
 
     const handleDelete=async(email)=>{
-        let organization=localStorage.getItem('organization')
+        let organization=Logorganization
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deleteUser`,{
-            doneBy:localStorage.getItem('email'),
+            doneBy:Logemail,
             email:email,
             organization:organization
-        })
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
         if(response.data.status==200)
         {
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/findUsers`,{
                 user:searchUser,
                 organization:organization
-            })
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             setAllusers(response.data.data)
         }
     }
@@ -91,8 +113,12 @@ const Addusers = ({setActiveField,hidenavbar}) => {
     }
     useEffect(()=>{
         const getUser=async()=>{
-            let organization=localStorage.getItem('organization')
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/fetchallusers`,{organization:organization})
+            let organization=Logorganization
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/fetchallusers`,{organization:organization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
             setAllusers(response.data.data)
             
         }
@@ -210,6 +236,7 @@ const Addusers = ({setActiveField,hidenavbar}) => {
                 
             
         }
+        
     </div>
   )
 }
