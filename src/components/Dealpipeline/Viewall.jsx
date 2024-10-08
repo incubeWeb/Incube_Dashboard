@@ -24,8 +24,7 @@ function Viewall({realtimedealpipelinecompanyInfo,hidenavbar,filesadded,realtime
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      if(Logrole=='admin' || Logrole=='super admin')
-        {
+      
           const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
             headers:{
               "Authorization":`Bearer ${token}`
@@ -33,31 +32,7 @@ function Viewall({realtimedealpipelinecompanyInfo,hidenavbar,filesadded,realtime
           });
           
           setcompData(response.data.data)
-        }
-        else{
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-          const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
-            member: Logemail,
-            mainorganization:Logorganization
-          },{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-          const organizationNames=[]
-          
-          Teamresponse.data.data.map(val=>{
-            organizationNames.push(val.organization)
-          })
-          
-          const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
-       
-          setcompData(filteredData);
-        }
+        
         setTimeout(()=>{  
           setloading(false)
         },1000)
@@ -76,8 +51,7 @@ function Viewall({realtimedealpipelinecompanyInfo,hidenavbar,filesadded,realtime
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      if(Logrole=='admin' || Logrole=='super admin')
-        {
+      
           const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
             headers:{
               "Authorization":`Bearer ${token}`
@@ -85,32 +59,7 @@ function Viewall({realtimedealpipelinecompanyInfo,hidenavbar,filesadded,realtime
           });
       
           setcompData(response.data.data)
-        }
-        else{
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-          const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
-            member: Logemail,
-            mainorganization:Logorganization
-          },{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-          const organizationNames=[]
-          
-          Teamresponse.data.data.map(val=>{
-            organizationNames.push(val.organization)
-          })
-          
-          const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
-       
-          setcompData(filteredData);
-        }
-        setTimeout(()=>{  
+           setTimeout(()=>{  
           setloading(false)
         },1000)
     }
@@ -127,41 +76,19 @@ function Viewall({realtimedealpipelinecompanyInfo,hidenavbar,filesadded,realtime
 
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      if(Logrole=='admin' || Logrole=='super admin')
-        {
+     
           const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
             headers:{
               "Authorization":`Bearer ${token}`
             }
           });
          
+          console.log("chak")
           
           setcompData(response.data.data)
-        }
-        else{
-      const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-        headers:{
-          "Authorization":`Bearer ${token}`
-        }
-      });
-      const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
-        member: Logemail,
-        mainorganization:Logorganization
-      },{
-        headers:{
-          "Authorization":`Bearer ${token}`
-        }
-      });
-      const organizationNames=[]
+        
+        
       
-      Teamresponse.data.data.map(val=>{
-        organizationNames.push(val.organization)
-      })
-      
-      const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
-   
-      setcompData(filteredData);
-    }
     }
     try{
     fetchcompanydata()

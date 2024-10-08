@@ -58,14 +58,14 @@ function App() {
     const socket=io(`${import.meta.env.VITE_HOST_URL}8999`, {
       reconnection: true,           // Enable reconnection
       reconnectionAttempts: Infinity, // Try reconnecting indefinitely
-      reconnectionDelay: 1000,       // Initial delay before reconnection (2 seconds)
-      reconnectionDelayMax: 5000,    // Maximum delay (5 seconds)
+      reconnectionDelay: 100,       // Initial delay before reconnection (2 seconds)
+      reconnectionDelayMax: 300,    // Maximum delay (5 seconds)
     })
     const socket2=io(`${import.meta.env.VITE_HOST_URL}1222`, {
       reconnection: true,           // Enable reconnection
       reconnectionAttempts: Infinity, // Try reconnecting indefinitely
-      reconnectionDelay: 1000,       // Initial delay before reconnection (2 seconds)
-      reconnectionDelayMax: 5000,    // Maximum delay (5 seconds)
+      reconnectionDelay: 100,       // Initial delay before reconnection (2 seconds)
+      reconnectionDelayMax: 300,    // Maximum delay (5 seconds)
     })
       const fun=async()=>{
         const token=localStorage.getItem('token') || ''
@@ -117,10 +117,12 @@ function App() {
           }
           if(change.ns.coll=='DealPipelineCompany')
           {
+            console.log('[Company added]')
             setrealtimedealpipelinecompany(change)
           }
           if(change.ns.coll=='AddNewDetailDealPipeline')
           {
+            
             setrealtimedealpipelinecompanyInfo(change)
             
           }

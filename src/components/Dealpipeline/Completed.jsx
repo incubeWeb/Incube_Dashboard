@@ -42,22 +42,8 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
               "Authorization":`Bearer ${token}`
             }
           });
-          const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
-            member: Logemail,
-            mainorganization:Logorganization
-          },{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-          const organizationNames=[]
           
-          Teamresponse.data.data.map(val=>{
-            organizationNames.push(val.organization)
-          })
-          const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
-
-          const morefilteredData=filteredData.filter(val=>val.completed=='completed')
+          const morefilteredData=response.data.filter(val=>val.completed=='completed')
          
           setcompData(morefilteredData);
         }
@@ -94,22 +80,8 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
               "Authorization":`Bearer ${token}`
             }
           });
-          const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
-            member: Logemail,
-            mainorganization:Logorganization
-          },{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-          const organizationNames=[]
           
-          Teamresponse.data.data.map(val=>{
-            organizationNames.push(val.organization)
-          })
-          const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
-
-          const morefilteredData=filteredData.filter(val=>val.completed=='completed')
+          const morefilteredData=response.data.data.filter(val=>val.completed=='completed')
          
           setcompData(morefilteredData);
         }
@@ -145,23 +117,9 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
               "Authorization":`Bearer ${token}`
             }
           });
-          const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
-            member: Logemail,
-            mainorganization:Logorganization
-          },{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-          const organizationNames=[]
           
-          Teamresponse.data.data.map(val=>{
-            organizationNames.push(val.organization)
-          })
-          
-          const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
         
-          const morefilteredData=filteredData.filter(val=> val.completed=='completed')
+          const morefilteredData=response.data.data.filter(val=> val.completed=='completed')
           setcompData(morefilteredData);
         }
     }
