@@ -212,6 +212,7 @@ function Inprogrss({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecomp
             
               <GridTemplate
                 key={company._id}
+                id={company._id}
                 selectedTab={selectedTab}
                 setActiveField={setActiveField}
                 Title={company.title}

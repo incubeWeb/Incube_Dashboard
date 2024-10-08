@@ -8,7 +8,7 @@ import { Bars } from 'react-loader-spinner';
 import { jwtDecode } from 'jwt-decode';
 import ChatBot from '../GenaiBox/ChatBot';
 
-function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, companyName, description, handleOpenGrid }) {
+function OpenUnassignedGrid({id,hidenavbar, setSelectedTab, setActiveField, companyName, description, handleOpenGrid }) {
     const [users, setAllUsers] = useState([]);
     const [roles, setRoles] = useState({});
     const [rolesAndComp, setRolesAndComp] = useState([]);
@@ -85,6 +85,7 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
             await Promise.all(selectedUsers.map(async (user) => {
                 
                     const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addTeam`, {
+                        id:id,
                         organization: companyName,
                         member:  user.email,
                         position:roles[user._id],
@@ -96,6 +97,7 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                         }
                       });
                     await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanystatus`, {
+                        id:id,
                         company: companyName,
                         status: 'In Progress',
                         organization:Logorganization
@@ -107,6 +109,7 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                     if(Logrole=='team lead')
                     {
                         await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanyTeamLeadstatus`, {
+                            id:id,
                             company: companyName,
                             TeamLead_status: 'In Progress',
                             organization:Logorganization
@@ -124,6 +127,7 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                 if (roles[user._id] =='team lead'){
 
                     const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addTeam`, {
+                        id:id,
                         organization: companyName,
                         member:  user.email,
                         position:roles[user._id],
@@ -155,6 +159,7 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
         if(Logrole=='super admin' || Logrole=='admin')
         {
             const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addTeam`, {
+                id:id,
                 organization: companyName,
                 member:  Logemail,
                 position:Logrole,
@@ -166,6 +171,7 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
                 }
               });
             const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanystatus`, {
+                id:id,
                 company: companyName,
                 status: 'In Progress',
                 organization:Logorganization
@@ -183,6 +189,7 @@ function OpenUnassignedGrid({hidenavbar, setSelectedTab, setActiveField, company
         if(Logrole=='team lead')
         {
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanyTeamLeadstatus`, {
+                id:id,
                 company: companyName,
                 TeamLead_status: 'In Progress',
                 organization:Logorganization

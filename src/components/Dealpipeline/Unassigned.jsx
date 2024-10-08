@@ -208,14 +208,14 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
           currentData.map(company => ( 
 
             
-            <GridTemplate hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
+            <GridTemplate id={company._id} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
             
           ))
           :
           currentData.map(company => ( 
 
             
-            <GridTemplate hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
+            <GridTemplate id={company._id} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
            
           ))
         }

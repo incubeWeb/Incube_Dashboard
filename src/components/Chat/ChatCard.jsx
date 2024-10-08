@@ -12,7 +12,7 @@ import { MdFullscreen } from "react-icons/md";
 import { MdFullscreenExit } from "react-icons/md";
 import { jwtDecode } from 'jwt-decode';
 
-const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
+const ChatCard = ({id,currentTab,CompanyName,itsfrom,realtimetabchats}) => {
     const [chat,setChat]=useState([])
     const [countChat,setCountChat]=useState(0)
     const [mychat,setmychat]=useState('')
@@ -27,7 +27,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
         const fun=async()=>{
            // console.log(currentTab)
             let organization=Logorganization
-            const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization},{
+            const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{id:id,CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization},{
         headers:{
           "Authorization":`Bearer ${token}`
         }
@@ -44,7 +44,32 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
             
         }
         fun()
-    },[currentTab,realtimetabchats])
+    },[realtimetabchats])
+
+    useEffect(()=>{
+      const fun=async()=>{
+        let organization=Logorganization
+            const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{id:id,CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
+            
+            if(doc.data.data.length>0){
+                doc.data.data.map(d=>
+                  {
+                  let chat=JSON.parse(d.chats)
+                  
+                  setChat(chat)
+                  }
+              )
+              console.log(doc.data.data)
+            }else{
+              setChat([])
+            }
+      }
+      fun()
+    },[currentTab])
 
     useEffect(()=>{
         const fun=async()=>{
@@ -52,6 +77,7 @@ const ChatCard = ({currentTab,CompanyName,itsfrom,realtimetabchats}) => {
             {
                 let organization=Logorganization
                 await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setTabChats`,{
+                    id:id,
                     CompanyName:CompanyName,
                     tab:`Tab${currentTab}`,
                     chats:JSON.stringify(chat),

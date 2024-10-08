@@ -7,7 +7,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import ChatBot from '../GenaiBox/ChatBot';
 
-function AddNewDetails({hidenavbar, openAddNewWindow ,CompanyName, handleTotalCards,openedTab}) {
+function AddNewDetails({id,hidenavbar, openAddNewWindow ,CompanyName, handleTotalCards,openedTab}) {
   const [sections, setSections] = useState([{ id: Date.now(), title: '', description: '' }]);
   const MainDiv = useRef(null);
   const token=localStorage.getItem('token')
@@ -42,6 +42,7 @@ function AddNewDetails({hidenavbar, openAddNewWindow ,CompanyName, handleTotalCa
       .filter(section => section.title.trim() !== '')
       .map(section => ({
         _id: section.id,
+        id:id,
         CompanyName:CompanyName,
         Title: section.title,
         Description: section.description,

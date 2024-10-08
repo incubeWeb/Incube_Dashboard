@@ -201,7 +201,7 @@ function Viewall({realtimedealpipelinecompanyInfo,hidenavbar,filesadded,realtime
        <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
         {(currentData||[]).map(company => (
           
-          <GridTemplate realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimetabchats={realtimetabchats} completed={company.completed} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
+          <GridTemplate id={company._id} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimetabchats={realtimetabchats} completed={company.completed} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
           
         ))}
         </div>

@@ -20,7 +20,7 @@ import ChatBot from '../GenaiBox/ChatBot';
 
 
 
-function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,companyName,description,handleOpenGrid,realtimetabchats}) {
+function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,companyName,description,handleOpenGrid,realtimetabchats}) {
     const [AddNewWindow,setAddnewWindow]=useState(false)
     const [TotalCards,setTotalCards]=useState([])
     const [Tabs,setTabs]=useState([{id:1,Tab:"Tab1"}])
@@ -45,7 +45,7 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
 
     useEffect(()=>{
         const fun=async()=>{
-            const data= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getOpenedTabs`,{companyname:companyName,organization:Logorganization},{
+            const data= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getOpenedTabs`,{id:id,companyname:companyName,organization:Logorganization},{
                 headers:{
                   "Authorization":`Bearer ${token}`
                 }
@@ -75,6 +75,7 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
         e.stopPropagation();
         try{
             const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/createpdf/create-pdf`, {
+                id:id,
                 companyname: companyName,
                 organization: Logorganization,
             }, {
@@ -105,7 +106,7 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
     useEffect(()=>{
         const fun=async()=>{
           
-           const data= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getOpenedTabs`,{companyname:companyName,organization:Logorganization},{
+           const data= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getOpenedTabs`,{id:id,companyname:companyName,organization:Logorganization},{
             headers:{
               "Authorization":`Bearer ${token}`
             }
@@ -138,6 +139,7 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
     useEffect(()=>{
         const InitialVal=async()=>{
             const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getNewDetails`,{
+                id:id,
                 CompanyName:companyName,
                 Tab:`Tab${currentTab}`,
                 organization:Logorganization
@@ -168,7 +170,7 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
         setTabs(tabs=>[...tabs,{id:parseInt(TabCount)+1,Tab:`Tab${tabis}`}])
         setTabCount(prev=>parseInt(prev)+1)
         const tabscount=parseInt(TabCount)+1
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setopenedTabs`,{companyname:companyName,count:tabscount,organization:Logorganization},{
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setopenedTabs`,{id:id,companyname:companyName,count:tabscount,organization:Logorganization},{
             headers:{
               "Authorization":`Bearer ${token}`
             }
@@ -181,6 +183,7 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
     }
     const handlePushComplete=async()=>{
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanyCompleteStatus`,{
+            id:id,
             completed:'completed',
             title:companyName,
             pushedby:Logemail,
@@ -266,7 +269,7 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
                     </div>   
             </div>
         </div>
-        {AddNewWindow?<AddNewDetails hidenavbar={hidenavbar} openAddNewWindow={openAddNewWindow} CompanyName={companyName} handleTotalCards={handleTotalCards} openedTab={currentTab}/>:<></>}
+        {AddNewWindow?<AddNewDetails id={id} hidenavbar={hidenavbar} openAddNewWindow={openAddNewWindow} CompanyName={companyName} handleTotalCards={handleTotalCards} openedTab={currentTab}/>:<></>}
         <div className='w-[100%] h-[100%] flex space-x-2 md:flex-row '>
            {
             loading?
@@ -299,14 +302,14 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
                 <div className='w-[100%] h-[50%] '>
                 {
                     
-                        <ChatCard realtimetabchats={realtimetabchats}  currentTab={currentTab} CompanyName={companyName}/>
+                        <ChatCard id={id} realtimetabchats={realtimetabchats} currentTab={currentTab} CompanyName={companyName}/>
                 
                 }
                 </div>
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <FilesDoc filesadded={filesadded} CompanyName={companyName} currentTab={currentTab}/>
+                        <FilesDoc id={id} filesadded={filesadded} CompanyName={companyName} currentTab={currentTab}/>
                 
                 }
                 </div>
@@ -325,14 +328,14 @@ function OpenGrid({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompa
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <ChatCard realtimetabchats={realtimetabchats} currentTab={currentTab} CompanyName={companyName}/>
+                        <ChatCard id={id} realtimetabchats={realtimetabchats} currentTab={currentTab} CompanyName={companyName}/>
                 
                 }
                 </div>
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <FilesDoc filesadded={filesadded} CompanyName={companyName} currentTab={currentTab}/>
+                        <FilesDoc id={id} filesadded={filesadded} CompanyName={companyName} currentTab={currentTab}/>
                 
                 }
                 </div>

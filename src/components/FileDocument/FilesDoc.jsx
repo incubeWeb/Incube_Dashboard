@@ -5,7 +5,7 @@ import { BsFiletypePng } from "react-icons/bs";
 import { BsFiletypeJpg } from "react-icons/bs";
 import { CiFileOn } from "react-icons/ci";
 import { jwtDecode } from 'jwt-decode';
-const FilesDoc = ({filesadded, currentTab,CompanyName,itsfrom }) => {
+const FilesDoc = ({id,filesadded, currentTab,CompanyName,itsfrom }) => {
     const [uploadFile, setUploadFile] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -30,6 +30,7 @@ const FilesDoc = ({filesadded, currentTab,CompanyName,itsfrom }) => {
     const handleUpload = async () => {
         if (selectedFile) {
             const formData = new FormData();
+            formData.append('id',id)
             formData.append('files', selectedFile);
             formData.append('tab', `Tab${currentTab}`);
             formData.append('CompanyName',CompanyName);
@@ -53,7 +54,7 @@ const FilesDoc = ({filesadded, currentTab,CompanyName,itsfrom }) => {
 
     const fetchUploadedFiles = async () => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getfiles`, { CompanyName:CompanyName,tab: `Tab${currentTab}`,organization:Logorganization },{
+            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getfiles`, {id:id, CompanyName:CompanyName,tab: `Tab${currentTab}`,organization:Logorganization },{
                 headers:{
                   "Authorization":`Bearer ${token}`
                 }

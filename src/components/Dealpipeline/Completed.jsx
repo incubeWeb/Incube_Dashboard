@@ -211,6 +211,7 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
           currentData.map(company => 
               <GridTemplate
                 key={company._id}
+                 id={company._id}
                 selectedTab={selectedTab}
                 setActiveField={setActiveField}
                 Title={company.title}

@@ -17,7 +17,7 @@ import { FaDownload } from "react-icons/fa6";
 import { jwtDecode } from 'jwt-decode';
 import ChatBot from '../GenaiBox/ChatBot';
 
-function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,companyName,description,handleOpenGrid}) {
+function OpenCompleteGrid({id,realtimedealpipelinecompanyInfo,hidenavbar,setActiveField,companyName,description,handleOpenGrid}) {
     const [AddNewWindow,setAddnewWindow]=useState(false)
     const [TotalCards,setTotalCards]=useState([])
     const [Tabs,setTabs]=useState([{id:1,Tab:"Tab1"}])
@@ -37,6 +37,7 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
         try{
             const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/createpdf/create-pdf`, {
                 companyname: companyName,
+                id:id,
                
                 organization: Logorganization,
             }, {
@@ -83,7 +84,7 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
     
     useEffect(()=>{
         const fun=async()=>{
-           const data= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getOpenedTabs`,{companyname:companyName,organization:Logorganization},{
+           const data= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getOpenedTabs`,{id:id,companyname:companyName,organization:Logorganization},{
             headers:{
               "Authorization":`Bearer ${token}`
             }
@@ -111,6 +112,7 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
     useEffect(()=>{
         const InitialVal=async()=>{
             const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getNewDetails`,{
+                id:id,
                 CompanyName:companyName,
                 Tab:`Tab${currentTab}`,
                 organization:Logorganization
@@ -130,7 +132,7 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
 
     useEffect(()=>{
         const fun=async()=>{
-            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setopenedTabs`,{companyname:companyName,count:TabCount,organization:Logorganization},{
+            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setopenedTabs`,{id:id,companyname:companyName,count:TabCount,organization:Logorganization},{
                 headers:{
                   "Authorization":`Bearer ${token}`
                 }
@@ -201,7 +203,7 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
                     
             </div>
         </div>
-        {AddNewWindow?<AddNewDetails openAddNewWindow={openAddNewWindow} CompanyName={companyName} handleTotalCards={handleTotalCards} openedTab={currentTab}/>:<></>}
+        {AddNewWindow?<AddNewDetails id={id} openAddNewWindow={openAddNewWindow} CompanyName={companyName} handleTotalCards={handleTotalCards} openedTab={currentTab}/>:<></>}
         <div className='w-[100%] h-[100%] flex space-x-2 md:flex-row '>
            
         {
@@ -235,14 +237,14 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
                 <div className='w-[100%] h-[50%] '>
                 {
                     
-                        <ChatCard itsfrom='completed' currentTab={currentTab} CompanyName={companyName}/>
+                        <ChatCard id={id} itsfrom='completed' currentTab={currentTab} CompanyName={companyName}/>
                 
                 }
                 </div>
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <FilesDoc itsfrom='completed' CompanyName={companyName} currentTab={currentTab}/>
+                        <FilesDoc id={id} itsfrom='completed' CompanyName={companyName} currentTab={currentTab}/>
                 
                 }
                 </div>
@@ -261,14 +263,14 @@ function OpenCompleteGrid({realtimedealpipelinecompanyInfo,hidenavbar,setActiveF
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <ChatCard itsfrom='completed' currentTab={currentTab} CompanyName={companyName}/>
+                        <ChatCard id={id} itsfrom='completed' currentTab={currentTab} CompanyName={companyName}/>
                 
                 }
                 </div>
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <FilesDoc itsfrom='completed' CompanyName={companyName} currentTab={currentTab}/>
+                        <FilesDoc id={id} itsfrom='completed' CompanyName={companyName} currentTab={currentTab}/>
                 
                 }
                 </div>
