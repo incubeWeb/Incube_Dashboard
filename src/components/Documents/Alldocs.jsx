@@ -392,12 +392,12 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
                         {
                             !privatefiles.includes(doc._id)?
                             <div onClick={()=>{setfileprivate(true);setdocId(doc._id)}} className='select-none cursor-pointer  h-[35px] mr-[32px] flex items-center justify-cente rounded-md text-black'>
-                            <CiLock  size={18}/> <p className='text-[14px] font-inter w-[100px] font-[300] pl-2'> Private</p>
+                                 <CiUnlock  size={18}/> <p className='text-[14px] font-inter w-[200px] pl-2 font-[300]'> Public</p>
                            </div>
                            :
                            <div onClick={()=>handlepublicfun(doc._id)} className='select-none cursor-pointer bg-white     h-[35px] mr-[32px] flex items-center justify-center  rounded-md text-black'>
-                           <CiUnlock  size={18}/> <p className='text-[14px] font-inter w-[200px] pl-2 font-[300]'> Public</p>
-                           
+                          
+                           <CiLock  size={18}/> <p className='text-[14px] font-inter w-[100px] font-[300] pl-2'> Private</p>
                            </div>
                            }
                         </div>
