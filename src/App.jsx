@@ -49,6 +49,7 @@ function App() {
   const [realtimecheckAPikeys,setrealtimecheckapikeys]=useState([])
 
   const [error,seterror]=useState(false)
+  const [realtimetimeline,setrealtimetimeline]=useState([])
 
   
 
@@ -73,7 +74,7 @@ function App() {
         const Logemail=userdata.userdetails.email || ''
         const Logorganization=userdata.userdetails.organization || ''
         const Logrole=userdata.userdetails.role || ''
-        console.log(Logemail,"itn is")
+        
         if(Logemail=='')
         {
           return
@@ -83,19 +84,7 @@ function App() {
           setLoginIn(true)
         }
        
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/gettimeline`,{organization:Logorganization},{
-          headers:{
-            "Authorization":`Bearer ${token}`
-          }
-        })
         
-        if(response.data.data.length>0)
-        {
-          response.data.data.map(item=>
-            
-            dispatch(addTimeline(item))
-          )
-        }
 
         socket2.on('Googleconnected',(change)=>{
           
@@ -106,7 +95,8 @@ function App() {
         socket.on('databaseChange',(change)=>{
             const key=changes.length-1
             const newCol={key:key,updateInColl: change.ns.coll,updateIs: JSON.stringify(change)}
-          dispatch(addTimeline(newCol))
+          
+          setrealtimetimeline(newCol)
           if(change.ns.coll=='UploadedFiles')
           {
             setfilesadded(change)
@@ -185,7 +175,7 @@ function App() {
           <Routes>
             <Route path="/" element={!login?<Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn}/>:<></>} />
             <Route path="/dashboard" element={
-              <ProtectedRoute login={login}><Dashboard setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
+              <ProtectedRoute login={login}><Dashboard realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
             <Route path="/dealpipeline" element={
               <ProtectedRoute login={login}>
               <FirstCol filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>

@@ -28,7 +28,7 @@ import CalendarWidgit from '../Calendar/CalendarWidgit';
 import { jwtDecode } from 'jwt-decode';
 
 
-const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
+const Dashboard = ({realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
   const [boxes, setBoxes] = useState([]);
   const [openChatbar,setopenChatbar]=useState(false)
   const [showPopup, setShowPopup] = useState(false);
@@ -390,6 +390,7 @@ const Dashboard = ({setActiveField,realtimetabchats,realtimedealpipelinecompanyI
                     id={index}
                     setBoxes={setBoxes}
                     boxes={boxes}
+                    realtimetimeline={realtimetimeline}
                     />
                   )
                 case 'portfoliocard':

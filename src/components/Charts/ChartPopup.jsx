@@ -236,17 +236,19 @@ const ChartPopup = ({
 
   const handleselectDatabase=async(e)=>{
     e.stopPropagation();
-    setclickedGoogle(false)
-    setClickedDatabase(true)
+    
     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:Logorganization},{
       headers:{
         "Authorization":`Bearer ${token}`
       }
     })
-   // const filteredData=response.data.data.filter(val=>val.fileType=='xlsx')
+    const filteredData=response.data.data.filter(val=>val.fileType=='xlsx')
    // console.log("my fileted data",response.data.data)
-    setpresentSheets(response.data.data)
+    setpresentSheets(filteredData)
     setLoading1(false);
+    setclickedGoogle(false)
+    setClickedDatabase(true)
+    setselectedsheetfromdbname(filteredData[0]._id)
    
   }
 
@@ -1094,9 +1096,9 @@ const ChartPopup = ({
               </div>
             </div>
             <div className="w-[100%] flex h-[30%] items-center space-x-2">
-              <select value={selectedsheetfromdbname} onChange={handlesetselecteddbsheetname} className="border-[1px] border-gray-400 w-[80%] h-[40px] text-[14px]">
+              <select onChange={handlesetselecteddbsheetname} className="border-[1px] border-gray-400 w-[80%] h-[40px] text-[14px]">
               {Loading1 ? (
-    <option value="">
+    <option>
       <div className="flex items-center">
         <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
         Loading...
@@ -1329,7 +1331,7 @@ const ChartPopup = ({
               </div>
             </div>
             <div className="w-[100%] flex h-[30%] items-center space-x-2">
-              <select value={selectedsheetfromdbname} onChange={handlesetselecteddbsheetname} className="border-[1px] border-gray-400 w-[80%] h-[40px] text-[14px]">
+              <select onChange={handlesetselecteddbsheetname} className="border-[1px] border-gray-400 w-[80%] h-[40px] text-[14px]">
               {Loading1 ? (
     <option value="">
       <div className="flex items-center">
@@ -1656,7 +1658,7 @@ const ChartPopup = ({
               </div>
             </div>
             <div className="w-[100%] flex h-[30%] items-center space-x-2">
-              <select value={selectedsheetfromdbname} onChange={handlesetselecteddbsheetname} className="border-[1px] border-gray-400 w-[80%] h-[40px] text-[14px]">
+              <select onChange={handlesetselecteddbsheetname} className="border-[1px] border-gray-400 w-[80%] h-[40px] text-[14px]">
               {Loading1 ? (
     <option value="">
       <div className="flex items-center">

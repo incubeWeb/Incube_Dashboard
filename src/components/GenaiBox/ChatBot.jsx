@@ -22,6 +22,9 @@ const ChatBot = () => {
     }
   };
 
+
+  
+
   return (
     <div className="fixed flex flex-col items-center justify-center  h-screen ">
      

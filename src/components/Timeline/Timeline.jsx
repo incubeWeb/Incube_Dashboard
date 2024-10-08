@@ -6,8 +6,8 @@ import { RxCross2 } from 'react-icons/rx'
 import { useSelector } from 'react-redux'
 
 
-const Timeline = ({id,boxes,setBoxes}) => {
-    const changes=useSelector((state)=>state.timelinestate)
+const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
+    
     const [timelinedata,settimelinedata]=useState([])
     const token=localStorage.getItem('token')
     const userdata=jwtDecode(token)
@@ -243,13 +243,37 @@ const Timeline = ({id,boxes,setBoxes}) => {
 
         return toSend || `notshow`
     }
+    
     useEffect(()=>{
-      settimelinedata(changes)
-    },[changes])
-    useEffect(()=>{
-      console.log(changes)
-      settimelinedata(changes)
+      const settimelinedatas=async()=>{
+          const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/gettimeline`,{organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
+          
+          settimelinedata(response.data.data)
+        }
+        settimelinedatas()
     },[])
+
+    useEffect(()=>{
+      const settimelinedatas=async()=>{
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/gettimeline`,{organization:Logorganization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        })
+        
+        settimelinedata(response.data.data)
+      }
+      settimelinedatas()
+    },[realtimetimeline])
+
+    useEffect(()=>{
+      console.log(timelinedata)
+    },[timelinedata])
+    
   
 {   try{
     return (

@@ -84,9 +84,9 @@ const Login = ({ setLoginIn,login }) => {
   }
 
   const loginUser = async () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const organization=document.getElementById('organization').value
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const organization=document.getElementById('organization').value.trim()
 
     if (!email || !password || !organization) {
       alert("Please enter all required fields");
