@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux'
 
 const Timeline = ({id,boxes,setBoxes}) => {
     const changes=useSelector((state)=>state.timelinestate)
+    const [timelinedata,settimelinedata]=useState([])
     const token=localStorage.getItem('token')
     const userdata=jwtDecode(token)
     const Logemail=userdata.userdetails.email
@@ -74,6 +75,7 @@ const Timeline = ({id,boxes,setBoxes}) => {
       
         return toSend || ""
     }
+    
 
     const provideData=(item)=>{
         let toSend=""
@@ -241,12 +243,18 @@ const Timeline = ({id,boxes,setBoxes}) => {
 
         return toSend || `notshow`
     }
-
+    useEffect(()=>{
+      settimelinedata(changes)
+    },[changes])
+    useEffect(()=>{
+      console.log(changes)
+      settimelinedata(changes)
+    },[])
   
 {   try{
     return (
    <div className="flex z-0 flex-col scrollbar-hide w-full max-h-screen h-[100%] overflow-y-auto">
-  {changes.map((item) =>
+  {timelinedata.map((item) =>
     provideData(item) !== "notshow" ? (
       <div
         key={item.key || item._id}
@@ -298,7 +306,7 @@ const Timeline = ({id,boxes,setBoxes}) => {
 </div>
 
   )}catch(e){
-    
+    console.log(e)
     return(
         <>error</>
     )
