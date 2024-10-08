@@ -132,7 +132,7 @@ const Addusers = ({setActiveField,hidenavbar}) => {
     },[])
 
   return (
-    <div className={`${hidenavbar?' ml-[2%] w-[97%] ':'ml-[20%] w-[80%]'} pt-[5%] pl-[25px] bg-gray-100 flex flex-col items-center justify-start space-y-4  w-[100%] p-[20px] font-roboto`}>
+    <div className={`${hidenavbar?' ml-[2%] w-[98%] ':'ml-[20%] w-[80%]'} pt-[48px] pl-[36px] bg-gray-100 flex flex-col items-center justify-start space-y-4  w-[100%] p-[20px] font-roboto`}>
         <div className='w-[100%] h-[10%] flex flex-row space-x-3'>
             <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className=' text-gray-400 hover:text-gray-600 font-inter font-semibold text-[16px]'>Dashboard</p></Link>
             <p className='text-gray-600'>/</p>

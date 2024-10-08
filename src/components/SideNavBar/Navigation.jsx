@@ -225,7 +225,7 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
 
   return (
         <div className='w-[100%] '>
-        <div ref={NavbarRef} className=' text-gray-700 select-none font-roboto w-[20%] shadow-lg z-[60] fixed h-[100%] bg-white p-[40px] pt-[30px] flex flex-col '>
+        <div ref={NavbarRef} className=' text-gray-700 select-none font-roboto w-[20%] shadow-lg z-[50] fixed h-[100%] bg-white p-[40px] pt-[30px] flex flex-col '>
        <div className='flex flex-col items-start justify-start h-[100%] w-[100%]'>
             <div className='w-[100%] h-[13%] flex justify-start items-center'>
             <img src={Incubelogo} className='h-[67px]] w-[24px] ml-1'/>   <p className='text-[24px] ml-1 font-kadwa font-bold'> InCube</p>
@@ -424,9 +424,7 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
                     <FiAlignJustify  className='text-gray-500' size={20} onClick={hideNav}/>
                 </div>
         </div>
-     <div className='z-90' >
-        <ChatBot/>
-     </div>
+     
 
     </div>
 

@@ -12,6 +12,7 @@ import Google_Drive from '../Icons/Google_Drive.svg'
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { CiLock, CiUnlock } from 'react-icons/ci'
 import { jwtDecode } from 'jwt-decode'
+import PublicPopup from './PublicPopup'
 
 const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocumentvisibility}) => {
 
@@ -43,6 +44,10 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     const Logemail=userdata.userdetails.email
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
+
+    const [showConfirmPublicPopup,setshowConfirmPublicPopup]=useState(false)
+    const [showconfirmpublicpopupid,setshowconfirmpublicpopupid]=useState('')
+    
 
     const GetDriveSheets=async()=>{
         setloading1(true)
@@ -77,7 +82,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
           })
         if(response.data.status==200)
         {
-            alert('converted to public')
+           
             setprivatefiles(prev=>prev.filter(item=>item!=docId))
         }
         
@@ -178,7 +183,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         }
     }
     const handleView=async (id,name)=>{
-    
+        
         setid(id)
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:id,organization:Logorganization},{
             headers:{
@@ -310,8 +315,9 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         const date = new Date(parseInt(time, 10));
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
+
   return (
-    <div className={`${hidenavbar?'ml-[2%] w-[90%] h-screen':'ml-[20%] w-[80%] '} pt-[5%] flex flex-col p-4 items-center justify-start space-y-4 font-sans bg-gray-100`}>
+    <div className={`${hidenavbar?'ml-[2%] w-[98%] h-screen':'ml-[20%] w-[80%] '} pt-[48px] pl-[36px] flex flex-col p-4 items-center justify-start space-y-4 font-sans bg-gray-100`}>
     <div className='w-[100%] h-[10%] flex flex-row space-x-3'>
         <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className='text-gray-500 hover:text-gray-600 font-inter text-[16] font-semibold'>Dashboard</p></Link>
         <p>/</p>
@@ -366,7 +372,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         <div className='w-[100%] bg-white h-[1px] overflow-auto  '> </div>
         {
             !loading?
-            <div className='flex flex-col w-[100%] h-[10%] pt-2 font-roboto overflow-auto'>
+            <div className='flex flex-col w-[100%]  pt-2 font-roboto overflow-auto'>
                 {
                     (allDocs||[]).map(doc=>
                     <div key={doc._id} className='flex flex-row w-[100%] h-[100%] font-inter items-center pt-1  border-t border-gray-300 mb-6' >
@@ -395,7 +401,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
                                  <CiUnlock  size={18}/> <p className='text-[14px] font-inter w-[200px] pl-2 font-[300]'> Public</p>
                            </div>
                            :
-                           <div onClick={()=>handlepublicfun(doc._id)} className='select-none cursor-pointer bg-white     h-[35px] mr-[32px] flex items-center justify-center  rounded-md text-black'>
+                           <div onClick={()=>{setshowConfirmPublicPopup(true);setshowconfirmpublicpopupid(doc._id)}} className='select-none cursor-pointer bg-white     h-[35px] mr-[32px] flex items-center justify-center  rounded-md text-black'>
                           
                            <CiLock  size={18}/> <p className='text-[14px] font-inter w-[100px] font-[300] pl-2'> Private</p>
                            </div>
@@ -501,6 +507,12 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         <div className='fixed left-0 w-[100%] top-[-20px] h-[100%] bg-white bg-opacity-80'>
             <PrivatePopup docId={docId} hidenavbar={hidenavbar} setfileprivate={setfileprivate}/>
         </div>
+        :
+        <></>
+    }
+    {
+        showConfirmPublicPopup?
+        <PublicPopup setshowConfirmPublicPopup={setshowConfirmPublicPopup} showconfirmpublicpopupid={showconfirmpublicpopupid} handlepublicfun={handlepublicfun} />
         :
         <></>
     }
