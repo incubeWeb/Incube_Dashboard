@@ -81,6 +81,7 @@ function OpenUnassignedGrid({id,hidenavbar, setSelectedTab, setActiveField, comp
 
     useEffect(() => {
         const settingRoles = async () => {
+          
             const selectedUsers = users.filter(user => selects[user._id]);
             await Promise.all(selectedUsers.map(async (user) => {
                 
@@ -156,6 +157,7 @@ function OpenUnassignedGrid({id,hidenavbar, setSelectedTab, setActiveField, comp
         setApply(!apply);
     };
     const handleAssignChanges=async()=>{
+       
         if(Logrole=='super admin' || Logrole=='admin')
         {
             const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addTeam`, {
@@ -186,8 +188,9 @@ function OpenUnassignedGrid({id,hidenavbar, setSelectedTab, setActiveField, comp
                 handleOpenGrid()
             }
         }
-        if(Logrole=='team lead')
+        else if(Logrole=='team lead')
         {
+            console.log(id,companyName,Logorganization)
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updateCompanyTeamLeadstatus`, {
                 id:id,
                 company: companyName,
