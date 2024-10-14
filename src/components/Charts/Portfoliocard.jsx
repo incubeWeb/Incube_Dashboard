@@ -135,6 +135,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
         setsheetpopup(true)
         setallsheets(response.data.data)
         setLoading(false)
+        
     }
     const handlesheetclick=async(id,name)=>{
         setsheetname(name)
@@ -187,6 +188,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
           setcapturingPortfoliowidgitvalues(prev=>
             prev.filter(val=>val.portfoliowidgit.id!=id+1)
           )
+         
         }
 
       }
@@ -255,6 +257,13 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     },[clickedSheetId])
 
     const[showFilterMenu,setshowFilterMenu]=useState(false)
+
+    useEffect(()=>{
+const mergedData=[...sheets,
+  ...sheetKeys,
+...sheetJson]
+sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
+    },[sheets,sheetKeys,sheetJson])
 
   return (
     <div className='flex h-[100%] flex-col  bg-white cursor-default space-y-2'>

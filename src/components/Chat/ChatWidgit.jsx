@@ -49,13 +49,16 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
         }
       })
       const users=response.data.data
-   
+     
+     
       setUsers(users)
     }
     
     if(searchUser!='')
     {
+      console.log(response.data)
     fun()
+    
     }
     
   },[searchUser])
@@ -82,6 +85,8 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     if(response.data.status==200)
     {
       setBoxes(boxes.filter((box,index)=>index!=id))
+     
+      
     }
   }
   }
@@ -130,6 +135,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
           sender:Logemail,
           receiver:openuser,
           organization:Logorganization
+         
         },{
           headers:{
             "Authorization":`Bearer ${token}`
@@ -148,6 +154,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
         let dataR=[]
         response1.data.data.map(response=>
           dataS.push({sender:response.sender,message:response.message,time:response.time})
+          
         )
         
         setsendedMsg(dataS)
@@ -238,7 +245,14 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     }
     
    
-    
+    useEffect(()=>{
+const mergedData={
+  sendmessage:{sendedMsg},
+  receivedMessage:{receivedMsg}
+  
+    }
+  sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+},[sendedMsg,receivedMsg])
     
   return (
     <div className=' bg-white space-y-2 font-inter shadow-gray-400 w-[100%]  h-[100%] flex flex-col'>

@@ -283,6 +283,14 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     },[realtimedocumentvisibility])
 
     useEffect(()=>{
+        const mergedData=[...allDocs,
+            ...privatefiles,
+            ...googleDrivesheets
+        ]
+         sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))   
+        },[allDocs,privatefiles,googleDrivesheets])
+
+    useEffect(()=>{
         const checkIfSelected=async()=>{
             if(activeField=='documents')
             {
@@ -315,6 +323,8 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         const date = new Date(parseInt(time, 10));
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
+
+    
 
   return (
     <div className={`${hidenavbar?'ml-[2%] w-[98%] h-screen':'ml-[20%] w-[80%] '} pt-[48px] pl-[36px] flex flex-col p-4 items-center justify-start space-y-4 font-sans bg-gray-100`}>

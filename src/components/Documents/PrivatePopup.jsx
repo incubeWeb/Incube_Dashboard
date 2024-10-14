@@ -113,7 +113,9 @@ const PrivatePopup = ({hidenavbar,setfileprivate,docId}) => {
                   <RxCross2 size={16} className='text-black'/>
                 </div>
           </div> 
+          <p className='text-[14px]'>You are making this file Private.</p>
           <div className='w-[100%] h-[40px] flex flex-row items-center space-x-2'>
+              
               <input value={searchUser} onChange={(e)=>setsearchuser(e.target.value)} className='w-[95%] h-[100%] text-[14px] border-gray-300 border-[1px] p-2 rounded-md ' placeholder='Search User'/>
               <div className='w-[16px] h-[16px] cursor-pointer'>
                 <IoRefresh size={16} onClick={()=>handleRefreshUsers()}/>
@@ -142,10 +144,10 @@ const PrivatePopup = ({hidenavbar,setfileprivate,docId}) => {
 
           <div className=' w-[100%] h-[40px] flex justify-center space-x-2'>
               <div onClick={handlesharenow} className='w-[130px] cursor-pointer select-none h-[35px] bg-gradient-to-r from-blue-500 text-white flex items-center justify-center rounded-md to-sky-400'>
-                  <p className='text-[13px] font-inter font-bold'> Share </p>
+                  <p className='text-[12px] font-inter font-bold'> Share with selected </p>
               </div>
               <div onClick={handlesharenow} className='w-[170px] cursor-pointer select-none h-[35px] bg-gradient-to-r from-gray-300 text-blue-500 flex items-center justify-center rounded-md to-gray-100'>
-                  <p className='text-[13px] font-inter font-bold'>Only for me  </p>
+                  <p className='text-[13px] font-inter font-bold'>show only me  </p>
               </div>
           </div>
           

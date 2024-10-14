@@ -25,6 +25,7 @@ const NewsWidgit = ({ id, boxes, setBoxes }) => {
               });
             if (response.data.status === 200) {
                 setFetchedNews(response.data.data.Results);
+            
             }
 
             setTimeout(() => {
@@ -57,6 +58,11 @@ const NewsWidgit = ({ id, boxes, setBoxes }) => {
             }
         }
     };
+
+    useEffect(()=>{
+const mergedData=[...fetchedNews]
+sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+    },[fetchedNews])
 
     return (
         <div className='w-[100%] h-[100%] flex flex-col font-sans'>

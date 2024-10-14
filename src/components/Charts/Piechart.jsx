@@ -52,6 +52,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       });
       if(response.data.status==200) {
         setBoxes(boxes.filter((box,index)=>index!=id));
+       
       }
     }
   };
@@ -125,6 +126,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
           setisitfromdrive(fromdrive)
           selectedsheetidfordrive=m.selectedsheetfromdbname
           selectedsheetfromdbname=m.selectedsheetfromdbname
+         
           
         }
       });
@@ -465,6 +467,12 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
     };
     const BASE_BLUE = '#528BFF';
     const GRADIENT_BLUE = ['#528BFF', '#85AFFF', '#A1C2FF', '#C3D6FF']; // Gradient shades
+
+
+useEffect(()=>{
+const mergedData=[...mydata]
+sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+},[mydata])
 
 
   return (

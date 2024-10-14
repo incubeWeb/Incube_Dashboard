@@ -14,6 +14,9 @@ import { Bars } from 'react-loader-spinner'
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { BsBarChartFill } from "react-icons/bs";
 import { jwtDecode } from 'jwt-decode'
+import { createSlice } from '@reduxjs/toolkit';
+import { useSheet } from '../SheetContext/SheetContext.jsx';
+
 
 const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited,realtimeportfoliostate}) => {
     const [chartselectpopup,setchartselectpopup]=useState(false)
@@ -47,6 +50,11 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
     const Logemail=userdata.userdetails.email
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
+    const { setSheetJson } = useSheet();
+
+    
+    setSheetJson(sheetJson);
+
 
     const RefreshSheets=()=>{
         setavailableDatabaseSheets()
@@ -114,6 +122,8 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                 setTimeout(()=>{
                     setloading(false)
                 },1000)
+                
+            
             }
 
            console.log("here",response.data.data)
@@ -428,6 +438,30 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
             setavailableDatabaseSheets()
         }
     },[clickedBar,clickedPie,clickedLine])
+
+
+  
+
+    
+    
+
+    
+
+
+    useEffect(()=>{
+        const mergedData=[...sheetJson,
+        
+           
+        ]
+        sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+        console.log(mergedData)
+        
+            },[sheetJson])
+
+
+
+
+
     
   return (
     <div className=' font-roboto h-[300px]  flex flex-col'>
@@ -835,7 +869,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                 :<></>
             }
             <div className='flex w-[30%] h-[420px] bg-white rounded-xl'>
-                <PortfolioMeter/>
+                <PortfolioMeter selectedTab={selectedTab}/>
             </div>
             <div className='w-[70%] h-[420px] bg-white rounded-xl flex flex-col items-center justify-center'>
                     <div className=' w-[100%] relative h-[20px] flex flex-row items-end justify-end pt-2 pr-2'>
@@ -909,7 +943,9 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
             </div>
         </div>
     </div>
+    
   )
+  
 }
 
 export default PortfolioTopGraph

@@ -22,6 +22,9 @@ const ChatCard = ({id,currentTab,CompanyName,itsfrom,realtimetabchats}) => {
     const Logemail=userdata.userdetails.email
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
+    const[chatting,setChatting]=useState([])
+   const [company,Setcompany]=useState([])
+
 
     useEffect(()=>{
         const fun=async()=>{
@@ -32,18 +35,21 @@ const ChatCard = ({id,currentTab,CompanyName,itsfrom,realtimetabchats}) => {
           "Authorization":`Bearer ${token}`
         }
       })
-            
+          
+          
             doc.data.data.map(d=>
                 {
                 let chat=JSON.parse(d.chats)
                 
                 setChat(chat)
+               
                 }
             )
             
             
         }
         fun()
+      
     },[realtimetabchats])
 
     useEffect(()=>{
@@ -54,18 +60,21 @@ const ChatCard = ({id,currentTab,CompanyName,itsfrom,realtimetabchats}) => {
           "Authorization":`Bearer ${token}`
         }
       })
-            
+     
+        
             if(doc.data.data.length>0){
                 doc.data.data.map(d=>
                   {
                   let chat=JSON.parse(d.chats)
                   
                   setChat(chat)
+                 
                   }
               )
-              console.log(doc.data.data)
+             
             }else{
               setChat([])
+             
             }
       }
       fun()
@@ -109,6 +118,77 @@ const ChatCard = ({id,currentTab,CompanyName,itsfrom,realtimetabchats}) => {
         const time1=new Date(time)
         return time1.toLocaleTimeString()
     }
+
+// useEffect(()=>{
+// const mergedData=[...chatting]
+// sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+// console.log("zy",mergedData)
+// },[chatting])
+
+const fetchCaht= async()=>{
+  let organization=Logorganization
+
+  try{
+    const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{id:id,CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization},{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
+    
+    })
+    return response
+    // setChatting(JSON.stringify(
+    //   response))
+    // console.log("Chahat data:", response);
+    
+}catch(error){
+  console.log("server error")
+}
+};
+
+const fetchCompanyData = async () => {
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
+    });
+        // console.log("Response data:", response.data.data); // Check the response structure
+    return response
+    // Setcompany(
+    //   JSON.stringify(
+    //     response.data)
+    //   )
+  } catch (error) {
+    console.log("server error")
+  }
+};
+// const chatData=[]
+// chatting.map((val=>{
+//   chatData.push(val.chats)
+// }))
+
+useEffect(() => {
+  const fetchData = async () => {
+   const CompanyData = await fetchCompanyData();
+   const ChatData = await fetchCaht();
+   
+   
+   // corrected from fetchCaht to
+     const mergedData = [
+       CompanyData['data']['data'],
+       ChatData['data']['data'][0].chats
+       
+     ];
+   sessionStorage.setItem("Bot_Data", JSON.stringify(mergedData));
+   console.log("Chatting_Value",mergedData)
+
+  };
+  fetchData();
+}, []);
+
+
+
+
   return (
     <div className={` w-[100%] h-[100%] `}>
         <div className='w-[100%] h-[100%] rounded-md shadow-md border-[1px] border-gray-300 md:flex md:flex-col space-y-4'>

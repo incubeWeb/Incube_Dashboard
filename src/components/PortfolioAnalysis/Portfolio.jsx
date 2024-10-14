@@ -17,6 +17,11 @@ import PortfolioRemoveSharedUsers from './PortfolioRemoveSharedUsers'
 import { MdGroupRemove } from 'react-icons/md'
 import { TbCircleDotFilled } from "react-icons/tb";
 import { jwtDecode } from 'jwt-decode'
+import {useSheet } from '../SheetContext/SheetContext.jsx'
+
+
+
+
 const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
     const token=localStorage.getItem('token')
@@ -76,9 +81,12 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         setSelectedSort(sort);
         setShowSortMenu(false); // Close sorting menu after selection
     };
+    const { sheetJson1 } = useSheet();
+    const {percentage1}=useSheet();
     
     useEffect(()=>{
         setloading(true)
+        
     },[selectedTab])
 
     useEffect(()=>{
@@ -89,6 +97,9 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                   "Authorization":`Bearer ${token}`
                 }
               })
+             
+              
+             
             if(response.data.status==-200)
             {
                 setTimeout(()=>{
@@ -98,6 +109,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             }
             const data=response.data.data
             setportfoliosecurity(response.data.security)
+          
             
            // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
            const stateValues=JSON.parse(data)||[]
@@ -114,7 +126,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 setshowimagePopup(val.showimagepopup)
                 setsheetname(val.sheetname)
                 setselectfield(val.selectfield)
-                
+             
                 
                 })
             }
@@ -558,7 +570,32 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             }
         
     }
-    
+    const PortfolioCard=[]
+    portfoliocardsdata.map((val=>{
+        PortfolioCard.push({"Label Name":val.labelname,"Values":val.showValue})
+    }))
+
+
+    useEffect(()=>{
+    const mergedData = {
+        investmentHistory: {
+            keys: sheetKeys,
+            data: sheetJson,
+            
+           
+        },
+            PortfolioCard,
+           PieChart:{ sheetJson1
+           },
+           BarChart:{sheetJson1},
+           LineChart:{sheetJson1},
+           MeterPercentage:{percentage1}
+        
+    };
+sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+console.log(mergedData)
+
+    },[sheetJson,sheetKeys,portfoliocardsdata,sheetJson1])
 
   return (
     <div className={`${hidenavbar?'pl-[4%] w-[100%]':'pl-[21%] w-[100%]'} p-4 font-noto  flex flex-col space-y-4 bg-gray-100`}>

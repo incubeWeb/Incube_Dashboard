@@ -16,6 +16,7 @@ import Viewsheet from "./components/ViewSheet/Viewsheet";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 import Apikeys from "./components/ApiKeys/Apikeys";
 import { jwtDecode } from "jwt-decode";
+import ChatBot from "./components/GenaiBox/ChatBot";
 
 
 
@@ -48,33 +49,36 @@ function App() {
   
   const [realtimecheckAPikeys,setrealtimecheckapikeys]=useState([])
 
-  const [error,seterror]=useState(false)
   const [realtimetimeline,setrealtimetimeline]=useState([])
+  const [error,seterror]=useState(false)
 
   
 
 
 
   useEffect(()=>{
-    const socket=io(`${import.meta.env.VITE_HOST_URL}8999`, {
-      reconnection: true,           // Enable reconnection
-      reconnectionAttempts: Infinity, // Try reconnecting indefinitely
-      reconnectionDelay: 100,       // Initial delay before reconnection (2 seconds)
-      reconnectionDelayMax: 300,    // Maximum delay (5 seconds)
-    })
-    const socket2=io(`${import.meta.env.VITE_HOST_URL}1222`, {
-      reconnection: true,           // Enable reconnection
-      reconnectionAttempts: Infinity, // Try reconnecting indefinitely
-      reconnectionDelay: 100,       // Initial delay before reconnection (2 seconds)
-      reconnectionDelayMax: 300,    // Maximum delay (5 seconds)
-    })
+    
       const fun=async()=>{
+
+        const socket=io(`${import.meta.env.VITE_HOST_URL}8999`, {
+          reconnection: true,           // Enable reconnection
+          reconnectionAttempts: Infinity, // Try reconnecting indefinitely
+          reconnectionDelay: 100,       // Initial delay before reconnection (2 seconds)
+          reconnectionDelayMax: 300,    // Maximum delay (5 seconds)
+        })
+        const socket2=io(`${import.meta.env.VITE_HOST_URL}1222`, {
+          reconnection: true,           // Enable reconnection
+          reconnectionAttempts: Infinity, // Try reconnecting indefinitely
+          reconnectionDelay: 100,       // Initial delay before reconnection (2 seconds)
+          reconnectionDelayMax: 300,    // Maximum delay (5 seconds)
+        })
+
         const token=localStorage.getItem('token') || ''
         const userdata=jwtDecode(token) || ''
         const Logemail=userdata.userdetails.email || ''
         const Logorganization=userdata.userdetails.organization || ''
         const Logrole=userdata.userdetails.role || ''
-        
+        console.log(Logemail,"itn is")
         if(Logemail=='')
         {
           return
@@ -84,7 +88,19 @@ function App() {
           setLoginIn(true)
         }
        
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/gettimeline`,{organization:Logorganization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        })
         
+        if(response.data.data.length>0)
+        {
+          response.data.data.map(item=>
+            
+            setrealtimetimeline(item)
+          )
+        }
 
         socket2.on('Googleconnected',(change)=>{
           
@@ -95,8 +111,7 @@ function App() {
         socket.on('databaseChange',(change)=>{
             const key=changes.length-1
             const newCol={key:key,updateInColl: change.ns.coll,updateIs: JSON.stringify(change)}
-          
-          setrealtimetimeline(newCol)
+            setrealtimetimeline(newCol)
           if(change.ns.coll=='UploadedFiles')
           {
             setfilesadded(change)
@@ -150,7 +165,10 @@ function App() {
         })
       
       }
+      
+      if(login){
       fun()
+      }
       
   },[])
 
@@ -172,6 +190,12 @@ function App() {
   return (
     <BrowserRouter>
           {login? <Navigation login={login} setlogin={setLoginIn} googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />:<></>}
+         
+         {login ? 
+          <div className="fixed flex flex-col items-center justify-center h-screen z-50">
+ <ChatBot/>
+  </div>
+         :<></>}
           <Routes>
             <Route path="/" element={!login?<Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn}/>:<></>} />
             <Route path="/dashboard" element={

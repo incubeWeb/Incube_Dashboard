@@ -621,7 +621,7 @@ const ChartPopup = ({
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
         width: '30%',
-        height: '430px',
+        height: '30%',
         x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
@@ -827,6 +827,14 @@ const ChartPopup = ({
     
     setselectedsheetfromdbname(e.target.value)
   }
+
+  useEffect(()=>{
+    const mergedData=[...dbSheetIntRows,
+      ...sheetdbdata,
+      ...presentSheets
+    ]
+    sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
+      },[dbSheetIntRows,sheetdbdata,presentSheets])
 
   return (
     <div 

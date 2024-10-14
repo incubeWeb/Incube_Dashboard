@@ -55,6 +55,7 @@ const Areachart = ({investmentchange,id,data01,clickedArea,setClickedArea,fromAp
     if(response.data.status==200)
     {
       setBoxes(boxes.filter((box,index)=>index!=id))
+     
     }
   }
   }
@@ -129,6 +130,7 @@ const fieldConversionsApi={
             setisitfromdrive(fromdrive)
           selectedsheetidfordrive=m.selectedsheetfromdbname
           selectedsheetfromdbname=m.selectedsheetfromdbname
+           
           }
         }
         )
@@ -279,7 +281,10 @@ const fieldConversionsApi={
     fun()
 }, []);
 
-
+useEffect(()=>{
+const mergedData=[...mydata]
+sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
+},[mydata])
 
   return (
     <div style={{ width: '100%', height: '90%' }} className='mt-8  pr-10'>

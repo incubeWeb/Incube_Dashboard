@@ -56,6 +56,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
       if(response.data.status==200)
       {
         setBoxes(boxes.filter((box,index)=>index!=id));
+    
       }
     }
   };
@@ -127,6 +128,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
           setisitfromdrive(fromdrive)
           selectedsheetidfordrive=m.selectedsheetfromdbname
           selectedsheetfromdbname=m.selectedsheetfromdbname
+          
         }
       });
 
@@ -284,6 +286,14 @@ const handleMouseLeave = () => {
 const barColor = (index) => {
     return index === hoveredIndex ? '#FF8042' : '#2970FF';  // Change color on hover
 };
+
+useEffect(()=>{
+const mergedData=[...mydata]
+sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+},[mydata])
+
+
+
   return (
     <div style={{ width: '100%', height: '95%' ,paddingBottom:'15px'}} className='mt-8  pr-10'>
       

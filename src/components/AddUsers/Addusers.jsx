@@ -29,6 +29,14 @@ const Addusers = ({setActiveField,hidenavbar}) => {
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
 
+
+    useEffect(()=>{
+        const mergedData=[...allUsers]
+        
+        sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
+        
+        },[allUsers])
+
     useEffect(()=>{
         const setUsers=async()=>{
             let organization=Logorganization

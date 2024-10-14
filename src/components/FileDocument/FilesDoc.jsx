@@ -46,6 +46,7 @@ const FilesDoc = ({id,filesadded, currentTab,CompanyName,itsfrom }) => {
                 setSelectedFile(null);
                 fetchUploadedFiles(); // Clear selected file after upload
                 setUploadFile(!uploadFile)
+               
             } catch (error) {
                 console.error('Error uploading file', error);
             }
@@ -60,6 +61,8 @@ const FilesDoc = ({id,filesadded, currentTab,CompanyName,itsfrom }) => {
                 }
               });
             setUploadedFiles(response.data.data);
+
+           
         } catch (error) {
             console.error('Error fetching uploaded files', error);
         }
@@ -71,6 +74,11 @@ const FilesDoc = ({id,filesadded, currentTab,CompanyName,itsfrom }) => {
     useEffect(() => {
         fetchUploadedFiles();
     }, [currentTab]);
+
+    useEffect(()=>{
+const mergedData=[...uploadedFiles]
+sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+    },[uploadedFiles])
 
     return (
         <div className="w-[100%] h-[100%]">

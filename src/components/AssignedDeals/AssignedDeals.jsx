@@ -48,6 +48,7 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
       );
       setassignedtodeals(filteredArray)
       setassignedDeals(response.data.data)
+      
      }
 
     getAllDeals()
@@ -74,6 +75,7 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
     setstatus(response.data.data[0].status)
     setTeamLead_status(response.data.data[0].TeamLead_status)
     setassigneddealclicked(true)
+   
   }
 
   
@@ -110,6 +112,17 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
 
     return T.toLocaleTimeString()
   }
+useEffect(()=>{
+const mergedData=[
+  ...asignedDeals,
+  ...assingedtodeals
+ ]
+ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+},[asignedDeals,assingedtodeals])
+
+
+
+
   return (
     <div className=' flex flex-col h-[100%] w-[100%] font-inter p-4'>
         <div className='z-[10] mt-3 mr-2 cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px]  bg-gray-100 fixed right-[-2px] top-[-8px] ' onClick={deleteWidgit}>

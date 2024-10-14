@@ -131,6 +131,17 @@ const Dashboard = ({realtimetimeline,setActiveField,realtimetabchats,realtimedea
    
   },[openChatbar])
 
+  useEffect(()=>{
+    const mergedData=[
+     
+      ...data01,
+     
+      
+    
+   
+    ]
+    sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+  },[data01])
   
   
 
