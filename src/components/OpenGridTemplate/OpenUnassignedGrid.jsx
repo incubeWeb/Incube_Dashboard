@@ -280,7 +280,7 @@ function OpenUnassignedGrid({id,hidenavbar, setSelectedTab, setActiveField, comp
                     </div>
                 </div>
             </div>
-            <ChatBot/>
+            
         </div>
     );
 }

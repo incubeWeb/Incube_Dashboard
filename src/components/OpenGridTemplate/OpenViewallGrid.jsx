@@ -244,7 +244,7 @@ function OpenViewallGrid({id,realtimedealpipelinecompanyInfo,hidenavbar,setActiv
             </div>
         </div>
 
-        <ChatBot/>
+        
     </div>
   )
 }

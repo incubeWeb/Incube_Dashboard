@@ -113,6 +113,17 @@ const Dashboard = ({realtimetimeline,setActiveField,realtimetabchats,realtimedea
     Navigate('/dealpipeline')
     
 }
+
+useEffect(() => {
+  const screenAdjustment = window.innerWidth * 0.2;
+  // Adjust the x position of all boxes based on the hide navbar state
+  const updatedBoxes = boxes.map(box => {
+    const newX = hidenavbar ? box.x - screenAdjustment : box.x + screenAdjustment;
+    return { ...box, x: newX };
+  });
+  setBoxes(updatedBoxes);
+}, [hidenavbar]);
+
   useEffect(()=>{
       const handleOpenChat=()=>{
         gsap.from(chatRef.current,{

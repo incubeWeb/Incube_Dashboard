@@ -279,7 +279,7 @@ function OpenCompleteGrid({id,realtimedealpipelinecompanyInfo,hidenavbar,setActi
             </div>
         </div>
 
-        <ChatBot/>
+        
     </div>
   )
 }

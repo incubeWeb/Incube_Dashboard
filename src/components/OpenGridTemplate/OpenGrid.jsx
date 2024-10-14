@@ -344,7 +344,6 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
             </div>
         </div>
 
-        <ChatBot/>
     </div>
   )
 }
