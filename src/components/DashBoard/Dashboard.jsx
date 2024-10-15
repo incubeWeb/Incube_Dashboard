@@ -124,6 +124,8 @@ useEffect(() => {
   setBoxes(updatedBoxes);
 }, [hidenavbar]);
 
+
+
   useEffect(()=>{
       const handleOpenChat=()=>{
         gsap.from(chatRef.current,{
@@ -146,9 +148,7 @@ useEffect(() => {
     const mergedData=[
      
       ...data01,
-     
-      
-    
+   
    
     ]
     sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))

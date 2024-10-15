@@ -41,6 +41,7 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
       }
       }
 
+
     function convertTimestampToReadableTime(timestamp) {
         const date = new Date(timestamp);
         const options = {
@@ -270,9 +271,13 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
       settimelinedatas()
     },[realtimetimeline])
 
+    
+
     useEffect(()=>{
-      console.log(timelinedata)
-    },[timelinedata])
+      const mergedData=[...timelinedata]
+      
+      sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+          },[timelinedata])
     
   
 {   try{

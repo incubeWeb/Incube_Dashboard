@@ -12,6 +12,7 @@ import { jwtDecode } from 'jwt-decode';
 function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,realtimetabchats,realtimeDealpipelinetabs,realtimedealpipelinecompany}) {
   const [selectedTab, setSelectedTab] = useState("View All");
   const [companyData, setCompanyData] = useState([]);
+  const[company,setcompany]=useState([]);
   const [filter, setFilter] = useState([]);
   const bgRef = useRef(null);
   const viewRef = useRef(null);
@@ -60,6 +61,7 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
       const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
     
       setCompanyData(filteredData);
+      setcompany(response.data.data)
     } catch (error) {
       console.log("server error")
     }
@@ -89,7 +91,15 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
     });
   };
 
-  
+  useEffect(()=>{
+    
+    const mergedData={
+      CompanyDetails:{
+        company
+      }}
+    sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+  },[company])
+
 
   return (
     <div className={`${hidenavbar?'ml-[3%] w-[100%]':'ml-[20%] w-[80%]'}flex flex-col pt-[17px]  font-roboto space-y-3 text-gray-700 pr-[47px]`}>
