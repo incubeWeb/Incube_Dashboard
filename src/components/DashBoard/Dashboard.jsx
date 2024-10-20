@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+
+
 import { Rnd } from 'react-rnd';
 import RenderBarChart from '../Charts/RenderBarChart';
 import Piechart from '../Charts/Piechart';
@@ -28,7 +30,7 @@ import CalendarWidgit from '../Calendar/CalendarWidgit';
 import { jwtDecode } from 'jwt-decode';
 
 
-const Dashboard = ({realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
+const Dashboard = ({navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
   const [boxes, setBoxes] = useState([]);
   const [openChatbar,setopenChatbar]=useState(false)
   const [showPopup, setShowPopup] = useState(false);
@@ -96,7 +98,7 @@ const Dashboard = ({realtimetimeline,setActiveField,realtimetabchats,realtimedea
   const chatRef=useRef(null)
   const blockerRef=useRef(null)
   const rndRef=useRef(null)
-
+  
   const cardData = [
     { id: 1, name: 'Card One' },
     { id: 2, name: 'Card Two' },
@@ -114,15 +116,40 @@ const Dashboard = ({realtimetimeline,setActiveField,realtimetabchats,realtimedea
     
 }
 
+const dashboardwidgitref=useRef(null)
+
 useEffect(() => {
-  const screenAdjustment = window.innerWidth * 0.2;
-  // Adjust the x position of all boxes based on the hide navbar state
-  const updatedBoxes = boxes.map(box => {
-    const newX = hidenavbar ? box.x - screenAdjustment : box.x + screenAdjustment;
-    return { ...box, x: newX };
-  });
-  setBoxes(updatedBoxes);
-}, [hidenavbar]);
+  console.log("end of navbar x,y cordinates of navbar (0,",navbarref.current.clientWidth,")")
+  
+  
+  
+
+  if(!hidenavbar){
+    
+    gsap.to(dashboardwidgitref.current,{
+      width:"74%",
+      x:"27%",
+      duration:0.4,
+      ease:"power2.out",
+      
+    })
+
+    
+    
+  }else{
+    console.log("open distance between components from their position to nav")
+    
+    gsap.to(dashboardwidgitref.current,{
+      width:"92%",
+      x:"8%",
+      duration:0.4,
+     
+      
+    })
+  }
+}, [hidenavbar,loading]);
+
+
 
 
 
@@ -332,12 +359,18 @@ useEffect(() => {
 
 
   const setPosition = (id, direction) => {
+    console.log("drag position")
+    console.log(direction.x,direction.y)
     
+    if(parseInt(direction.y)<-10){
+      direction.y=0
+    }
     if(parseInt(direction.x)<parseInt(window.innerWidth/1.5)-0)
     {
-    setBoxes(boxes.map(box =>
-      box.id === id ? { ...box, x: direction.x, y: direction.y } : box
-    ));
+      
+      setBoxes(boxes.map(box =>
+        box.id === id ? { ...box, x: direction.x, y: direction.y } : box
+      ));
     }
     else{
       setBoxes(boxes.map(box =>
@@ -346,8 +379,8 @@ useEffect(() => {
     }
   };
 
-
-
+  
+  
   const setSize = (id, ref, position) => {
     setBoxes(boxes.map(box =>
       box.id === id ? {
@@ -363,9 +396,12 @@ useEffect(() => {
     setShowPopup(!showPopup);
   };
 
+ 
+  
   return (
     
-    <div className={`${hidenavbar?'w-[100%] ml-[0%]':'w-[100%] pl-[20%]'}  bg-white space-x-4 flex flex-row h-screen p-[44px] pr-0 pt-0 pb-0 font-roboto`}>
+    <div className={`w-[100%] bg-white space-x-4 flex flex-row   font-roboto`}>
+    
     {
       loading ? (
         <div className='w-[100%]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -373,30 +409,32 @@ useEffect(() => {
           
         </div>
       ):
-    <div className='w-[100%] h-[100%] flex flex-col'>
-    <div className='flex flex-col pt-[30px] w-[100%] h-[10%] items-end mt-[44px]'>
-  <div
-    className='absolute top-[20px] right-[20px] flex flex-row w-[130px] h-[33px] rounded-md bg-blue-600  text-[14px] items-center justify-center text-white cursor-pointer'
-    onClick={handleShowPopup}
-  >
-    <p> <span className='text-[20px] font-bold'>+</span>  Add widgets</p>
-  </div>
-  
+      
+    <div  className='w-[100%] h-[100%] flex flex-col  '>
+      <div
+        className='fixed z-[50] top-[20px] right-[20px] flex flex-row w-[130px] h-[33px] rounded-md bg-blue-600  text-[14px] items-center justify-center text-white cursor-pointer'
+        onClick={handleShowPopup}
+      >
+        <p> <span className='text-[20px] font-bold'>+</span>  Add widgets</p>
+      </div>
+
+    <div className=' flex flex-col w-[100%] h-[10%] items-end '>
+    
 </div>
 
-      <div className='w-[100%] h-[100%]  flex flex-col items-center '>
+<div ref={dashboardwidgitref}
+      className="w-[100%] h-[100%] " // 3-column grid layout with a gap
+      
+    >
         {(boxes||[]).map((box,index) => (
          <Rnd
-        
           key={box.id}
-          className='border-gray-300 bg-white border-[0.5px] rounded-lg p-4 pt-7'
+          className='rnd border-gray-300 bg-white border-[0.5px] rounded-lg p-4 pt-7 '
           size={{ width: box.width, height: box.height }}
           position={{ x: box.x, y: box.y }}
-          
-
-            onDragStop={(e, direction) => setPosition(box.id, direction,box.width)}
-            onResizeStop={(e, direction, ref, delta, position) => setSize(box.id, ref, position)}
-            
+          onDragStop={(e, direction) => setPosition(box.id, direction,box.width)}
+          onResizeStop={(e, direction, ref, delta, position) => setSize(box.id, ref, position)}
+          bounds="window"
           >
           
             {(() => {
@@ -565,6 +603,7 @@ useEffect(() => {
       </div>
       {showPopup && (
         <ChartPopup
+        dashboardwidgitref={dashboardwidgitref}
           showlist={handleShowPopup}
           addComponent={addBox}
           xAxisValues={xAxisValues}

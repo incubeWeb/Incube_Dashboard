@@ -87,7 +87,7 @@ function AddNewDetails({id,hidenavbar, openAddNewWindow ,CompanyName, handleTota
   };
 
   return (
-    <div className={`${hidenavbar?'w-[100%]':' w-[80%]'} flex flex-col fixed top-0  pr-10 bg-white h-screen z-[51]  p-[34px]`}>
+    <div className={`${hidenavbar? 'pl-[%] w-[100%]':' w-[80%]'}  flex flex-col fixed top-0  pr-[10%] bg-white h-screen z-[51]  p-[34px]`}>
       <div ref={MainDiv} className="bg-white w-[100%] h-screen opacity-100 top-0 right-0 fixed"></div>
       <div
         className=" rounded-md mb-[60px] space-y-4 w-[100%] h-[100%] p-[23px] flex flex-col overflow-auto"

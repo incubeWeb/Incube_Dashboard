@@ -598,7 +598,7 @@ console.log(mergedData)
     },[sheetJson,sheetKeys,portfoliocardsdata,sheetJson1])
 
   return (
-    <div className={`${hidenavbar?'pl-[4%] w-[100%]':'pl-[21%] w-[100%]'} p-4 font-noto  flex flex-col space-y-4 bg-gray-100`}>
+    <div className={`${hidenavbar?'pl-[6%] w-[100%]':'ml-[21%] w-[79%]'} p-4 font-noto  flex flex-col space-y-4 bg-gray-100`}>
         <div className=' w-[100%] scrollbar-hide  items-end pb-1 pl-2 mt-1 overflow-x-auto h-[40px] bg-white rounded-lg flex flex-row '>
                     
                     {

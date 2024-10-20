@@ -73,7 +73,7 @@ function GridOpen({hidenavbar,companyName,description,handleOpenGrid}) {
 
 
   return (
-    <div className={`${hidenavbar?'ml-[2%] w-[100%]':'ml-[20%] w-[80%]'} h-screen z-50 space-y-7 bg-white absolute top-0 right-0 pt-[45px] overflow-hidden p-[23px] md:flex md:flex-col cursor-default`} onClick={handleBubbling}>
+    <div className={`${hidenavbar?'ml-[4%] w-[100%]':'ml-[22%] w-[80%]'} h-screen z-50 space-y-7 bg-white absolute top-0 right-0 pt-[45px] overflow-hidden p-[23px] md:flex md:flex-col cursor-default`} onClick={handleBubbling}>
         <div ref={MainDiv} className='bg-white w-[100%] h-screen  fixed'></div>
         <div className='flex flex-row h-[40px] w-[100%] mt-[20px]'>
             <div className='flex flex-row items-center justify-center'>

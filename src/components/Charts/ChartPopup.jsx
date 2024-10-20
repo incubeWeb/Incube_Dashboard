@@ -11,7 +11,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai"; // If you're using r
 import { jwtDecode } from "jwt-decode";
 
 const ChartPopup = ({
-  
+  dashboardwidgitref,
   showlist,
   xAxis,
   yAxis,
@@ -121,6 +121,8 @@ const ChartPopup = ({
     e.stopPropagation()
     setSelectedFile(null);
   };
+
+  const convertPxToPercent = (px, parentPx) => (px / parentPx) * 100;
 
   const handleUpload = async (e,chart) => {
     e.stopPropagation()
@@ -322,12 +324,13 @@ const ChartPopup = ({
         setbarchartcount(prev=>[...prev,{values:[...data01,...xAxisValues.map((val,index)=>({name:val,uv:parseInt(yAxisValues[index])}))]}])
       }
       const lastBox = boxes[boxes.length - 1];
+      
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        width: '40%',
-        height: '230px',
+        width:  dashboardwidgitref.current.clientWidth * 0.4,
+        height:  dashboardwidgitref.current.clientHeight * 0.3,
         x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
-        y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
+        y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 20) // Add some space below the last box
       };
       try{
         setBoxes([...boxes, { ...newBox, type : "BarChart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, barchartCount:[...data01,...xAxisValues.map((val,index)=>({name:val,uv:parseInt(yAxisValues[index])}))] }]);
@@ -361,8 +364,8 @@ const ChartPopup = ({
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        width: '40%',
-        height: '230px',
+        width:  dashboardwidgitref.current.clientWidth * 0.4,
+        height:  dashboardwidgitref.current.clientHeight * 0.2,
         x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
@@ -433,8 +436,8 @@ const ChartPopup = ({
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        width: '40%',
-        height: '230px',
+        width:  dashboardwidgitref.current.clientWidth * 0.4,
+        height:  dashboardwidgitref.current.clientHeight * 0.23,
         x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
@@ -460,8 +463,8 @@ const ChartPopup = ({
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        width: '40%',
-        height: '230px',
+        width:  dashboardwidgitref.current.clientWidth * 0.4,
+        height:  dashboardwidgitref.current.clientHeight * 0.23,
         x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
@@ -486,9 +489,9 @@ const ChartPopup = ({
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        width: '40%',
-        height: '230px',
-        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
+        width:  dashboardwidgitref.current.clientWidth * 0.4,
+        height:  dashboardwidgitref.current.clientHeight * 0.2,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10  ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
       setBoxes([...boxes, { ...newBox, type : "Areachart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, areachartCount:data01 ,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName,}]);
@@ -515,9 +518,9 @@ const ChartPopup = ({
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        width: '40%',
-        height: '230px',
-        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
+        width:  dashboardwidgitref.current.clientWidth * 0.4,
+        height:  dashboardwidgitref.current.clientHeight * 0.23,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10  ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
       setBoxes([...boxes, { ...newBox, type : "Areachart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, areachartCount:data01 ,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:false,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName}]);
@@ -542,9 +545,9 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
     const newBox = {
       id: lastBox ? lastBox.id + 1 : 1,
-      width: '40%',
-      height: '230px',
-      x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
+      width:  dashboardwidgitref.current.clientWidth * 0.4,
+        height:  dashboardwidgitref.current.clientHeight * 0.23,
+      x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10  ),
       y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
     };
     setBoxes([...boxes, { ...newBox, type : "BarChart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, barchartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName }]);
@@ -569,9 +572,9 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
     const newBox = {
       id: lastBox ? lastBox.id + 1 : 1,
-      width: '40%',
-      height: '230px',
-      x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
+      width:  dashboardwidgitref.current.clientWidth * 0.4,
+        height:  dashboardwidgitref.current.clientHeight * 0.4,
+      x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10  ),
       y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
     };
     setBoxes([...boxes, { ...newBox, type : "BarChart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, barchartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:false,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName }]);
@@ -597,9 +600,9 @@ const ChartPopup = ({
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        width: '40%',
-        height: '230px',
-        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
+        width:  dashboardwidgitref.current.clientWidth * 0.4,
+        height:  dashboardwidgitref.current.clientHeight * 0.3,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10  ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
       setBoxes([...boxes, { ...newBox, type : "Piechart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, piechartCount:[...data01,...xAxisValues.map((val,index)=>({name:val,value:parseInt(yAxisValues[index])}))]}]);
@@ -620,9 +623,9 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        width: '30%',
-        height: '30%',
-        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
+        width:  dashboardwidgitref.current.clientWidth * 0.3,
+        height:  dashboardwidgitref.current.clientHeight * 0.3,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10  ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
     setBoxes([...boxes, { ...newBox, type : "AssignedDeals" }]);
@@ -636,9 +639,9 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        width: '20%',
-        height: '430px',
-        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
+        width:  dashboardwidgitref.current.clientWidth * 0.25,
+        height:  dashboardwidgitref.current.clientHeight * 0.6,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10  ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
     setBoxes([...boxes, { ...newBox, type : "chat" }]);
@@ -652,9 +655,9 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        width: '25%',
-        height: '430px',
-        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
+        width:  dashboardwidgitref.current.clientWidth * 0.25,
+        height:  dashboardwidgitref.current.clientHeight * 0.3,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10  ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
     setBoxes([...boxes, { ...newBox, type : "calendarwidgit" }]);
@@ -669,9 +672,9 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        width: '40%',
-        height: '230px',
-        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
+        width:  "40%",
+        height:  "345px",
+        x: (lastBox ? lastBox.x : 25 ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
     setBoxes([...boxes, { ...newBox, type : "timeline" }]);
@@ -685,9 +688,9 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        width: '420',
-        height: '400px',
-        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
+        width:  dashboardwidgitref.current.clientWidth * 0.5,
+        height: dashboardwidgitref.current.clientHeight * 0.4,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10  ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
     setBoxes([...boxes, { ...newBox, type : "news" }]);
@@ -703,9 +706,9 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        width: '20%',
-        height: '180px',
-        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10 ),
+        width:  dashboardwidgitref.current.clientWidth * 0.2,
+        height:  dashboardwidgitref.current.clientHeight * 0.3,
+        x: (lastBox ? lastBox.x + parseInt(lastBox.width) : 10  ),
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
       setBoxes([...boxes, { ...newBox, type : "portfoliocard" , portfoliowidgitcount:{id:boxes.length +1,labelname:"Enter Label",showValue:"$0"}}]);
@@ -839,7 +842,7 @@ const ChartPopup = ({
   return (
     <div 
       style={containerStyle}
-      className="pr-[273px] font-sans  font-semibold  "
+      className=" font-sans  font-semibold  "
       onClick={showlist}
     >
       <div className="relative flex  bg-white rounded-lg   w-[40%] flex-col h-[80%] p-4" onClick={(e) => e.stopPropagation()}>

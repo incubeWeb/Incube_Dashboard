@@ -303,7 +303,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
     }
 
   return (
-    <div className={`${hidenavbar?'pl-[4%] w-[100%]':'pl-[21%] w-[100%]'} select-none h-screen p-4 font-noto  flex flex-col space-y-4 font-inter bg-white`}>
+    <div className={`${hidenavbar?'ml-[4%] w-[96%]':'ml-[22%] w-[78%]'} select-none h-screen p-4 font-noto  flex flex-col space-y-4 font-inter bg-white`}>
         <div className='w-[100%] flex flex-col h-[100%] justify-center'>
         <div className='w-[100%] pt-[33px] h-[50px] flex flex-row items-center justify-start'>
                 <div className='w-[20px] h-[20px] text-gray-500'><IoInformationCircle size={20} /></div>

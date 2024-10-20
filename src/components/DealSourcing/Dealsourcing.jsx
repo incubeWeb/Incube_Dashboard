@@ -152,7 +152,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
   },[companies])
 
   return (
-    <div className={`${hidenavbar?'ml-[0%] w-[100%]':'ml-[20%] w-[80%]'}select-none text-gray-800 flex flex-col p-[63px] pt-[30px] h-screen`}>
+    <div className={`${hidenavbar?'ml-[2%] w-[100%]':'ml-[20%] w-[80%]'}select-none text-gray-800 flex flex-col p-[63px] pt-[30px] h-screen`}>
       <div className='flex flex-col w-[100%] h-[20%] justify-center'>
         <div className='w-[100%] h-[30%] flex flex-row items-center'>
           <p className='basis-1/2 text-[28px] font-inter font-bold'>232 Startups in Gurugram</p>

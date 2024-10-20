@@ -140,7 +140,7 @@ const Addusers = ({setActiveField,hidenavbar}) => {
     },[])
 
   return (
-    <div className={`${hidenavbar?' ml-[2%] w-[98%] ':'ml-[20%] w-[80%]'} pt-[48px] pl-[36px] bg-gray-100 flex flex-col items-center justify-start space-y-4  w-[100%] p-[20px] font-roboto`}>
+    <div className={`${hidenavbar?' ml-[4%] w-[96%] ':'ml-[20%] w-[80%]'} pt-[48px] pl-[36px] bg-gray-100 flex flex-col items-center justify-start space-y-4  w-[100%] p-[20px] font-roboto`}>
         <div className='w-[100%] h-[10%] flex flex-row space-x-3'>
             <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className=' text-gray-400 hover:text-gray-600 font-inter font-semibold text-[16px]'>Dashboard</p></Link>
             <p className='text-gray-600'>/</p>
@@ -234,13 +234,13 @@ const Addusers = ({setActiveField,hidenavbar}) => {
         </div>
         {
             adduser?
-            <CreateUser handleAddUser={handleAddUser} setAllusers={setAllusers}/>
+            <CreateUser hidenavbar={hidenavbar} handleAddUser={handleAddUser} setAllusers={setAllusers}/>
             :
             <></>
         }
         {
             edit?
-                <Editusers handleEdit={handleEdit} email={selectedemail} password={selectedpassword} role={selectedrole} edit={edit} setAllusers={setAllusers}/>
+                <Editusers hidenavbar={hidenavbar} handleEdit={handleEdit} email={selectedemail} password={selectedpassword} role={selectedrole} edit={edit} setAllusers={setAllusers}/>
                 :
                 <></>
                 

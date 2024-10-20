@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Navigation from "./components/SideNavBar/Navigation";
 import FirstCol from "./components/Dealpipeline/FirstCol";
 import { BrowserRouter, Route, Routes,} from "react-router-dom";
@@ -17,6 +17,7 @@ import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 import Apikeys from "./components/ApiKeys/Apikeys";
 import { jwtDecode } from "jwt-decode";
 import ChatBot from "./components/GenaiBox/ChatBot";
+import Ai from "./components/AI-Component/Ai";
 
 
 
@@ -41,7 +42,7 @@ function App() {
   const [googleaccountconnected,setgoogleaccountconnected]=useState([])
   const [realtimedocumentvisibility,setrealtimedocumentvisibility]=useState([])
   const [realtimeportfoliostate,setrealtimeportfoliostate]=useState([])
-
+  const [showsmallnav,setshowsmallnav]=useState(false)
   
   
 
@@ -51,28 +52,40 @@ function App() {
 
   const [realtimetimeline,setrealtimetimeline]=useState([])
   const [error,seterror]=useState(false)
-
+  const navbarref=useRef(null)
   
-
-
 
   useEffect(()=>{
     
-      const fun=async()=>{
+    const fun=()=>{
+      const socket2=io(`${import.meta.env.VITE_HOST_URL}1222`, {
+        reconnection: true,           // Enable reconnection
+        reconnectionAttempts: Infinity, // Try reconnecting indefinitely
+        reconnectionDelay: 100,       // Initial delay before reconnection (2 seconds)
+        reconnectionDelayMax: 300,    // Maximum delay (5 seconds)
+      })
+      socket2.on('Googleconnected',(change)=>{
+        console.log(change,"tyhids")
+        setgoogleaccountconnected(change)
+      })
+    }
+    if(login){
+    fun()
+    }
 
+  },[])
+
+  useEffect(()=>{
+    
+   
+    
+      const fun=async()=>{
         const socket=io(`${import.meta.env.VITE_HOST_URL}8999`, {
           reconnection: true,           // Enable reconnection
           reconnectionAttempts: Infinity, // Try reconnecting indefinitely
           reconnectionDelay: 100,       // Initial delay before reconnection (2 seconds)
           reconnectionDelayMax: 300,    // Maximum delay (5 seconds)
         })
-        const socket2=io(`${import.meta.env.VITE_HOST_URL}1222`, {
-          reconnection: true,           // Enable reconnection
-          reconnectionAttempts: Infinity, // Try reconnecting indefinitely
-          reconnectionDelay: 100,       // Initial delay before reconnection (2 seconds)
-          reconnectionDelayMax: 300,    // Maximum delay (5 seconds)
-        })
-
         const token=localStorage.getItem('token') || ''
         const userdata=jwtDecode(token) || ''
         const Logemail=userdata.userdetails.email || ''
@@ -102,10 +115,7 @@ function App() {
           )
         }
 
-        socket2.on('Googleconnected',(change)=>{
-          
-          setgoogleaccountconnected(change)
-        })
+        
 
         
         socket.on('databaseChange',(change)=>{
@@ -189,17 +199,17 @@ function App() {
 
   return (
     <BrowserRouter>
-          {login? <Navigation login={login} setlogin={setLoginIn} googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />:<></>}
+          {login? <Navigation navbarref={navbarref} showsmallnav={showsmallnav} setshowsmallnav={setshowsmallnav} login={login} setlogin={setLoginIn} googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />:<></>}
          
          {login ? 
-          <div className="fixed flex flex-col items-center justify-center h-screen z-50">
+          <div className="fixed flex flex-col items-center justify-center h-screen z-50 scrollbar-hide">
  <ChatBot/>
   </div>
          :<></>}
           <Routes>
             <Route path="/" element={!login?<Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn}/>:<></>} />
             <Route path="/dashboard" element={
-              <ProtectedRoute login={login}><Dashboard realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
+              <ProtectedRoute login={login}><Dashboard navbarref={navbarref} showsmallnav={showsmallnav} sethidenavbar={sethidenavbar} realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
             <Route path="/dealpipeline" element={
               <ProtectedRoute login={login}>
               <FirstCol filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>
@@ -210,7 +220,8 @@ function App() {
             <Route path="/allDocs" element={<ProtectedRoute login={login}><Alldocs realtimedocumentvisibility={realtimedocumentvisibility} filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar}/></ProtectedRoute>} />
             <Route path='/portfolio' element={<ProtectedRoute login={login}><Portfolio realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited} hidenavbar={hidenavbar} /></ProtectedRoute>}/>
             <Route path='/keys' element={<ProtectedRoute login={login}><Apikeys realtimecheckAPikeys={realtimecheckAPikeys} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
-            
+            <Route path='/AI' element={<ProtectedRoute login={login}><Ai realtimecheckAPikeys={realtimecheckAPikeys} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
+          
           </Routes>
       
       

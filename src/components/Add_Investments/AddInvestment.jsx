@@ -73,7 +73,7 @@ const AddInvestment = ({hidenavbar}) => {
     setCurrentPage(prevPage => (prevPage >= totalPages ? totalPages : prevPage + 1));
   };
    return (
-    <div className={`${hidenavbar?'ml-[2%] w-[98%]':'ml-[20%] w-[80%]'} font-noto h-screen flex flex-col`}>
+    <div className={`${hidenavbar?'ml-[4%] w-[98%]':'ml-[22%] w-[80%]'} font-noto h-screen flex flex-col`}>
       <div className='flex flex-row w-[100%] space-x-2 h-[15%] p-[20px]'>
         <div className='relative w-[260px] space-x-2 items-center flex text-white  h-[45px] bg-gray-200 rounded-md p-2'>
             <div ref={Drawerref} className='absolute w-[120px] h-[70%] bg-white rounded-md flex items-center justify-center'><p className='text-gray-700 text-[14px] '>{currentView}</p></div>

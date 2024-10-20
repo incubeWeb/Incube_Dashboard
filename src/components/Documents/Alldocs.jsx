@@ -327,7 +327,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     
 
   return (
-    <div className={`${hidenavbar?'ml-[2%] w-[98%] h-screen':'ml-[20%] w-[80%] '} pt-[48px] pl-[36px] flex flex-col p-4 items-center justify-start space-y-4 font-sans bg-gray-100`}>
+    <div className={`${hidenavbar?'ml-[4%] w-[96%] h-screen':'ml-[20%] w-[80%] '} pt-[48px] pl-[36px] flex flex-col p-4 items-center justify-start space-y-4 font-sans bg-gray-100`}>
     <div className='w-[100%] h-[10%] flex flex-row space-x-3'>
         <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className='text-gray-500 hover:text-gray-600 font-inter text-[16] font-semibold'>Dashboard</p></Link>
         <p>/</p>
@@ -337,7 +337,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         <div className='flex flex-row w-[50%]'>
             <p className='text-[30px] font-inter font-semibold'>Documents</p>
         </div>
-        <div className='flex flex-row w-[50%] h-[60%] space-x-3 justify-end'>
+        <div className={`${hidenavbar?' w-[50%] h-[82%] ':'w-[50%] h-[100%]'} flex flex-row space-x-3 justify-end`}>
                 <div className='ease-linear duration-150 cursor-pointer hover:w-[160px] h-[100%] flex flex-row items-center space-x-2 p-2 rounded-md bg-gradient-to-r from-green-500 to-green-700' onClick={()=>setcreateSheet(true)}>
                     <div className='text-white flex items-center'><FaFileExcel/></div>
                     <p className='text-[14px] text-white font-inter font-semibold'>create sheet</p>

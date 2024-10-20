@@ -102,7 +102,7 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
 
 
   return (
-    <div className={`${hidenavbar?'ml-[3%] w-[100%]':'ml-[20%] w-[80%]'}flex flex-col pt-[17px]  font-roboto space-y-3 text-gray-700 pr-[47px]`}>
+    <div className={`${hidenavbar?'ml-[4%] w-[100%]':'ml-[22%] w-[78%]'}flex flex-col pt-[17px]  font-roboto space-y-3 text-gray-700 pr-[47px]`}>
       
       <div className='w-[100%] h-[100%]'>
         

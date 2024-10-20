@@ -15,13 +15,27 @@ import { Bars } from 'react-loader-spinner';
 import { AiOutlineClose } from 'react-icons/ai';  // Close icon
 import { jwtDecode } from 'jwt-decode';
 import ChatBot from '../GenaiBox/ChatBot';
+import { FaPlus } from 'react-icons/fa';
+import ApplicationsNav from './ApplicationsNav';
+import googleLogo from '../../Assets/googleLogo.png'
+import github from '../../Assets/github.png'
+import outlook from '../../Assets/outlook.png'
+import airtable from '../../Assets/airtable.png'
+import { PiStarFourBold } from 'react-icons/pi';
 
 
 
-const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,hidenavbar,sethidenavbar}) => {
+const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccountconnected,activeField,setActiveField,hidenavbar,sethidenavbar}) => {
   
+    
     const location=useLocation()
     const Navigate=useNavigate()
+    const [openappList,setopenappList]=useState([{"id":1,"image":googleLogo,"name":"Google","active":false}])
+    const [lockedapplist,setlockedapplist]=useState([{"id":1,"name":"Airtable","image":airtable},{"id":2,"name":"GitHub","image":github},{"id":3,"name":"Microsoft Outlook","image":outlook}])
+
+    
+
+    const [showApplicationNav,setshowApplicationNav]=useState(false)
 
     const [showgoogleconnected,setshowgoogleconnected]=useState(false)
     const [loading,setloading]=useState(false)
@@ -30,7 +44,7 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
           setlogin(false)
           localStorage.clear() 
     }
-    const NavbarRef=useRef(null)
+    const NavbarRef=navbarref
     const settingBtnRef=useRef(null)
     const [showPopup, setShowPopup] = useState(false); 
     const [showPopup1, setShowPopup1] = useState(false); 
@@ -43,89 +57,63 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
         {
             return
         }
+    const applicationNavRef=useRef(null)
+
+    useEffect(()=>{
+        const settingApplicationNav=()=>{
+            gsap.to(applicationNavRef.current,{
+                x:"-100%",
+                duration:0.4
+            })
+        }
+        settingApplicationNav()
+    },[])
     
 
-    useEffect(()=>
-    {
+    const ShowApplicationNavfun=(val)=>{
         
-        const checkGoogleLogin=async()=>{
-
-            const token=localStorage.getItem('token') || ""
-        const userdata=jwtDecode(token) || ""
-        const Logemail=userdata.userdetails.email || ""
-        const Logorganization=userdata.userdetails.organization || ""
-        const Logrole=userdata.userdetails.role || ""
-        if(Logemail=="")
-        {
-            return
+        if(val){
+            setshowApplicationNav(true)
+            if(hidenavbar){
+                gsap.to(applicationNavRef.current,{
+                    x:"18%",
+                    duration:0.4
+                })    
+            }
+            else{
+                gsap.to(applicationNavRef.current,{
+                    x:"100%",
+                    duration:0.4
+                })    
+            }
+        }else{
+            setshowApplicationNav(false)
+            gsap.to(applicationNavRef.current,{
+                x:"-100%",
+                duration:0.4
+            })
         }
-           const response= await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{
-                email:Logemail,
-                organization:Logorganization
-            },{
-                headers:{
-                  "Authorization":`Bearer ${token}`
-                }
-              })
-            if(response.data.status==200 &&response.data.msg=="Valid Refresh token")
-            {
-                setshowgoogleconnected(true)
-            }
-            else if(response.data.status==400)
-            {
-                alert('Google Session Ended')
-                setshowgoogleconnected(false)
-            }
-            else if(response.data.status==-200)
-            {
-                setshowgoogleconnected(false)
-            }
-        }
-        checkGoogleLogin()
-    },[googleaccountconnected])
-
-    useEffect(()=>
-        {
-           
-            const checkGoogleLogin=async()=>{
-                const token=localStorage.getItem('token') || ""
-                const userdata=jwtDecode(token) || ""
-                const Logemail=userdata.userdetails.email || ""
-                const Logorganization=userdata.userdetails.organization || ""
-                const Logrole=userdata.userdetails.role || ""
-                if(Logemail=="")
-                {
-                    return
-                }
-               const response= await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{
-                    email:Logemail,
-                    organization:Logorganization
-                },{
-                    headers:{
-                      "Authorization":`Bearer ${token}`
-                    }
-                  })
-                if(response.data.status==200 &&response.data.msg=="Valid Refresh token")
-                {
-                    setshowgoogleconnected(true)
-                }
-                else if(response.data.status==400)
-                {
-                    alert('Google Session Ended')
-                    setshowgoogleconnected(false)
-                }
-                else{
-                    setshowgoogleconnected(false)
-                }
-            }
-            checkGoogleLogin()
-        },[])
-
+    }
+    
+   
     const hideNav=()=>{
+        ShowApplicationNavfun(false)
         if(!hidenavbar)
         {
+            setshowsmallnav(true)
+            if(showApplicationNav){
+                gsap.to(applicationNavRef.current,{
+                    x:"-100%",
+                    
+                    duration:0.4,
+                    onComplete:()=>{
+                        setshowApplicationNav(false)
+                    }
+                })
+            }
             gsap.to(NavbarRef.current,{
                 x:"-100%",
+                
                 duration:0.4,
                 
             })
@@ -139,6 +127,7 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
             })
         }
         else{
+            setshowsmallnav(false)
             gsap.to(NavbarRef.current,{
                 x:"0%",
                 duration:0.4
@@ -172,6 +161,116 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
 
     },[activeField,location.pathname])
 
+    useEffect(()=>
+        {
+            const checkGoogleLogin=async()=>{
+            
+            const token=localStorage.getItem('token') || ""
+            const userdata=jwtDecode(token) || ""
+            const Logemail=userdata.userdetails.email || ""
+            const Logorganization=userdata.userdetails.organization || ""
+            const Logrole=userdata.userdetails.role || ""
+            if(Logemail=="")
+            {
+                return
+            }
+               const response= await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{
+                    email:Logemail,
+                    organization:Logorganization
+                },{
+                    headers:{
+                      "Authorization":`Bearer ${token}`
+                    }
+                 })
+                
+                if(response.data.status==200 &&response.data.msg=="Valid Refresh token")
+                {
+                    setopenappList(prevApps => prevApps.map(app => {
+                        if (app.name === "Google") {
+                          return { ...app, active: true };
+                        }
+                        return app;
+                      }));
+                      setShowPopup(false)
+                }
+                else if(response.data.status==400)
+                {
+                    setopenappList(prevApps => prevApps.map(app => {
+                        if (app.name === "Google") {
+                          return { ...app, active: false };
+                        }
+                        return app;
+                      }));
+                      setShowPopup(false)
+                }
+                else if(response.data.status==-200)
+                {
+                    setopenappList(prevApps => prevApps.map(app => {
+                        if (app.name === "Google") {
+                          return { ...app, active: false };
+                        }
+                        return app;
+                      }));
+                      setShowPopup(false)
+                }
+            }
+            checkGoogleLogin()
+            
+        },[googleaccountconnected])
+    
+        useEffect(()=>
+            {
+               
+                const checkGoogleLogin=async()=>{
+                    const token=localStorage.getItem('token') || ""
+                    const userdata=jwtDecode(token) || ""
+                    const Logemail=userdata.userdetails.email || ""
+                    const Logorganization=userdata.userdetails.organization || ""
+                    const Logrole=userdata.userdetails.role || ""
+                    if(Logemail=="")
+                    {
+                        return
+                    }
+                   const response= await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{
+                        email:Logemail,
+                        organization:Logorganization
+                    },{
+                        headers:{
+                          "Authorization":`Bearer ${token}`
+                        }
+                      })
+                    if(response.data.status==200 &&response.data.msg=="Valid Refresh token")
+                    {
+                        setopenappList(prevApps => prevApps.map(app => {
+                            if (app.name === "Google") {
+                              return { ...app, active: true };
+                            }
+                            return app;
+                          }));
+                          setShowPopup(false)
+                    }
+                    else if(response.data.status==400)
+                    {
+                        setopenappList(prevApps => prevApps.map(app => {
+                            if (app.name === "Google") {
+                              return { ...app, active: false };
+                            }
+                            return app;
+                          }));
+                          setShowPopup(false)
+                    }
+                    else{
+                        setopenappList(prevApps => prevApps.map(app => {
+                            if (app.name === "Google") {
+                              return { ...app, active: false };
+                            }
+                            return app;
+                          }));
+                          setShowPopup(false)
+                    }
+                }
+                checkGoogleLogin()
+            },[])
     
 
 
@@ -192,11 +291,14 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
           })
         if(response.data.status==200)
         {
+            setShowPopup1(false)
+            setopenappList(prevApps => prevApps.map(app => {
+                if (app.name === "Google") {
+                  return { ...app, active: false };
+                }
+                return app;
+              }));
             
-            setTimeout(()=>{
-                setloading(false)
-                setshowgoogleconnected(false)
-            },1000)    
         }
     }
 
@@ -224,20 +326,22 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
     }
 
   return (
-        <div className='w-[100%] '>
-        <div ref={NavbarRef} className=' text-gray-700 select-none font-roboto w-[20%] shadow-lg z-[50] fixed h-[100%] bg-white p-[40px] pt-[30px] flex flex-col '>
+        <div className='w-[100%] flex flex-row '>
+        <div ref={NavbarRef} className=' text-gray-700 select-none font-roboto w-[21%] shadow-lg z-[90] fixed h-[100%] bg-white p-[40px] pt-[10px] flex flex-col '>
        <div className='flex flex-col items-start justify-start h-[100%] w-[100%]'>
             <div className='w-[100%] h-[13%] flex justify-start items-center'>
             <img src={Incubelogo} className='h-[67px]] w-[24px] ml-1'/>   <p className='text-[24px] ml-1 font-kadwa font-bold'> InCube</p>
                 
             </div>
-            <div className='flex flex-col space-y-2 w-[100%] h-[80%] pt-2'>
+            <div className=' flex flex-col space-y-2 w-[100%] h-[80%] pt-2'>
 
                 <Link to='/dashboard'>
                     <div className={`${activeField=='/dashboard'?'bg-blue-600 text-white':'select-none hover:bg-gray-300 cursor-pointer hover:text-white'} flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`}  onClick={()=>setActiveField('/dashboard')}>
                         <div><RiHome6Line  size={24}  className={`${activeField=='/dashboard'?' text-white ':'text-[#667085]'} `}/> </div>
                     <div className='text-[14px] font-inter font-semibold'><p>Dashboard</p></div>
+                    
                     </div>
+                    
                 </Link>
                 <Link to='/dealpipeline'>
                 <div className={`${activeField=='/dealpipeline'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/dealpipeline')}>
@@ -275,131 +379,21 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
                     <div className='text-[14px] font-inter font-semibold'><p>Api Keys</p></div>
                 </div>
                 </Link>
-            </div>
 
-            <div className='w-[100%] h-[60px] flex items-center justify-center'>
-            {
-                loading?
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                    <Bars color="#8884d8" height={30} width={80} />
+                <Link to='/AI'>
+                <div className={`${activeField=='/AI'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/AI')}>
+                    <div> <PiStarFourBold  className={`${activeField=='/AI'?' text-white ':'text-[#667085]'} `} size={24}/></div>
+                    <div className='text-[14px] font-inter font-semibold'><p>AI</p></div>
                 </div>
-                :
-                <div className='w-[100%] h-[100%]'>
-                    {
-                        showgoogleconnected?
-                        <div>
-                        <div className='w-[120%] cursor-pointer mt-4 flex items-center justify-center h-[100%] '>
-                          
-                            <button onClick={()=>{setShowPopup1(true); setShowPopup(false);}}  className=" h-[110%] -mt-2 flex items-center justify-between mr-6 bg-white  shadow-md rounded-md p-2 hover:bg-gray-100 transition duration-200">
-                
-             <div className="flex items-center space-x-2">
-                 <div className="w-6 h-6">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" className="w-full h-full">
-                  <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
-                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
-                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
-                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
-                 <path fill="none" d="M0 0h48v48H0z"></path>
-        </svg>
-            </div>
-            <span className="text-gray-700  text-[12px] font-inter font-bold pr-3">Disconnect to google</span>
-            </div>
-            
-            </button>
- 
-           
-            {showPopup1 && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-    <div className="relative w-[90%] md:w-[400px] bg-white shadow-md p-8 rounded-lg">
-      <AiOutlineClose
-        size={20}
-        className="absolute top-4 right-4 bg-gray-100 rounded-full w-[25px] h-[25px] cursor-pointer"
-        onClick={() => setShowPopup1(false)}
-      />
-      <div className="flex flex-col items-center mt-8">
-        <p className="text-[14px] font-inter font-semibold text-center">
-          Are you sure you want to disconnect with google?
-          <br /><br />
-          <span
-            className='font-inter text-[18px] px-6 py-2 bg-white rounded-md hover:bg-gray-100 hover:text-black cursor-pointer inline-block'
-            onClick={() => handleRemoveGoogleConnect()}
-          >
-            Ok
-          </span>
-        </p>
-      </div>
-    </div>
-  </div>
-)}
+                </Link>
 
-                            </div> 
-                            </div>
-                        :
-                        <div>
-                          <div className='w-[120%] cursor-pointer mt-4 flex items-center justify-center h-[100%] '>
-                          
-                                
-            
-                            <button onClick={() => {setShowPopup(true); setShowPopup1(false);}}  className=" h-[110%] -mt-2 flex items-center justify-between mr-6 bg-white  shadow-md rounded-md p-2 hover:bg-gray-100 transition duration-200">
-                <div className="relative">
-                 <div className="absolute inset-0"></div>
-                        </div>
-             <div className="flex items-center space-x-2">
-                 <div className="w-6 h-6">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" className="w-full h-full">
-                  <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
-                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
-                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
-                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
-                 <path fill="none" d="M0 0h48v48H0z"></path>
-        </svg>
-            </div>
-            <span className="text-gray-700  text-[12px] font-inter font-bold pr-3">Connect to google</span>
-            </div>
-            
-            </button>
- 
-           
-
-                            </div> 
-                {showPopup && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-    <div className="relative w-[90%] md:w-[400px] bg-white shadow-md p-8 rounded-lg">
-      <AiOutlineClose
-        size={20}
-        className="absolute top-4 right-4 bg-gray-100 rounded-full w-[25px] h-[25px] cursor-pointer"
-        onClick={() => setShowPopup(false)}
-      />
-      <div className="flex flex-col items-center mt-8">
-        <p className="text-[14px] font-inter font-semibold text-center">
-          Are you sure you want to connect with google?
-          <br /><br />
-          <span
-            className='font-inter text-[18px] px-6 py-2 bg-white rounded-md hover:bg-gray-100 hover:text-black cursor-pointer inline-block'
-            onClick={() => handleGoogleConnect()}
-          >
-            Ok
-          </span>
-        </p>
-      </div>
-    </div>
-  </div>
-)}
-
-
-                            
-                            </div>
-                        } 
-                           
-
-           
-                    
+                <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white hover:bg-gray-300 cursor-pointer rounded-md pl-2`} onClick={()=>{ShowApplicationNavfun(true)}}>
+                    <div className='w-[24px] flex justify-center text-[#667085] items-center'><FaPlus size={16}/></div>
+                    <div className='text-[14px] font-inter font-semibold'><p>Connect an Application</p></div>
                 </div>
-            }
-                
             </div>
-           
 
+        
             <div className='w-[100%] h-[20%] flex flex-col items-center justify-center border-t mt-5 border-gray-400 '>
                     <div className='text-[14px] text-gray-500'>
                         <p className='font-bold'>{Logemail}</p>
@@ -419,12 +413,100 @@ const Navigation = ({setlogin,googleaccountconnected,activeField,setActiveField,
        
     </div>
 
-        <div  ref={settingBtnRef} className='ml-20  cursor-pointer left-[-20px] z-[90] fixed w-[16%] top-[50px]  flex justify-end items-start '>
-                <div>
+    
+        <div ref={applicationNavRef} className='w-[21%] h-[100%] z-[80] bg-white fixed' >
+            <ApplicationsNav ShowApplicationNavfun={ShowApplicationNavfun} lockedapplist={lockedapplist} setlockedapplist={setlockedapplist} openappList={openappList} setopenappList={setopenappList} setshowApplicationNav={setshowApplicationNav} setShowPopup={setShowPopup} showPopup1={showPopup1} setShowPopup1={setShowPopup1} googleaccountconnected={googleaccountconnected} handleRemoveGoogleConnect={handleRemoveGoogleConnect} showPopup={showPopup} handleGoogleConnect={handleGoogleConnect}/>
+        </div>
+       
+    {showPopup1 && (
+                <div className="fixed z-[100] inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+                    <div className="relative w-[90%] md:w-[400px] bg-white shadow-md p-8 rounded-lg">
+                    <AiOutlineClose
+                        size={20}
+                        className="absolute top-4 right-4 bg-gray-100 rounded-full w-[25px] h-[25px] cursor-pointer"
+                        onClick={() => setShowPopup1(false)}
+                    />
+                    <div className="flex flex-col items-center mt-8">
+                        <p className="text-[14px] font-inter font-semibold text-center">
+                        Are you sure you want to disconnect with google?
+                        <br /><br />
+                        <span
+                            className='font-inter text-[18px] px-6 py-2 bg-white rounded-md hover:bg-gray-100 hover:text-black cursor-pointer inline-block'
+                            onClick={() => handleRemoveGoogleConnect()}
+                        >
+                            Ok
+                        </span>
+                        </p>
+                    </div>
+                    </div>
+                </div>
+                )}
+
+                {showPopup && (
+                    <div className="z-[100] fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+                        <div className="relative w-[90%] md:w-[400px] bg-white shadow-md p-8 rounded-lg">
+                        <AiOutlineClose
+                            size={20}
+                            className="absolute top-4 right-4 bg-gray-100 rounded-full w-[25px] h-[25px] cursor-pointer"
+                            onClick={() => setShowPopup(false)}
+                        />
+                        <div className="flex flex-col items-center mt-8">
+                            <p className="text-[14px] font-inter font-semibold text-center">
+                            Are you sure you want to connect with google?
+                            <br /><br />
+                            <span
+                                className='font-inter text-[18px] px-6 py-2 bg-white rounded-md hover:bg-gray-100 hover:text-black cursor-pointer inline-block'
+                                onClick={() => handleGoogleConnect()}
+                            >
+                                Ok
+                            </span>
+                            </p>
+                        </div>
+                        </div>
+                    </div>
+                )}
+
+        <div  ref={settingBtnRef} className={`${showsmallnav?'w-[16%]  z-[90] bg-white shadow-lg h-[100%] pr-4':'w-[16%] h-[40px]'} ml-[4%] flex fixed flex-col items-end  z-[90]  pt-[30px]  `}>
+                <div className='cursor-pointer'>
                     <FiAlignJustify  className='text-gray-500' size={20} onClick={hideNav}/>
                 </div>
+                
+                    <div className={`${showsmallnav?'opacity-100 w-[100%] h-[100%]':'opacity-0 w-[0px] h-[0px]'} transition-all  relative  flex flex-col items-end space-y-6 mt-[49px]`}>
+                    <Link to="/dashboard">
+                        <RiHome6Line size={24} className={`mx-auto ${activeField === '/dashboard' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/dashboard')} />
+                    </Link>
+                    <Link to="/dealpipeline">
+                        <HiOutlineChartBarSquare size={24} className={`mx-auto ${activeField === '/dealpipeline' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/dealpipeline')} />
+                    </Link>
+                    <Link to="/dealsourcing">
+                        <SlSocialDropbox size={24} className={`mx-auto ${activeField === '/dealsourcing' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/dealsourcing')} />
+                    </Link>
+                    <Link to="/portfolio">
+                        <RiCheckboxMultipleLine size={24} className={`mx-auto ${activeField === '/portfolio' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/portfolio')} />
+                    </Link>
+                    <Link to="/adduser">
+                        <HiOutlineUserAdd size={24} className={`mx-auto ${activeField === '/adduser' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/adduser')} />
+                    </Link>
+                    <Link to="/allDocs">
+                        <IoDocumentOutline size={24} className={`mx-auto ${activeField === '/allDocs' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/allDocs')} />
+                    </Link>
+                    <Link to="/keys">
+                        <IoKeyOutline size={24} className={`mx-auto ${activeField === '/keys' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/keys')} />
+                    </Link>
+                    
+                    <Link to="/AI">
+                        <PiStarFourBold size={24} className={`mx-auto ${activeField === '/AI' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/AI')} />
+                    </Link>
+                    <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white cursor-pointer rounded-md pl-2`} onClick={()=>{ShowApplicationNavfun(true)}}>
+                        <div className='w-[24px] flex justify-center text-[#667085] items-center'><FaPlus size={18}/></div>  
+                    </div>
+                </div>
+                
+                
         </div>
      
+
+        
 
     </div>
 
