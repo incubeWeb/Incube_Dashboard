@@ -69,9 +69,9 @@ function App() {
         setgoogleaccountconnected(change)
       })
     }
-    if(login){
+    
     fun()
-    }
+    
 
   },[])
 
