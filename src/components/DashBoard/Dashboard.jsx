@@ -404,7 +404,7 @@ useEffect(() => {
     
     {
       loading ? (
-        <div className='w-[100%]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+        <div className={`${hidenavbar? 'w-[100%] h-screen':'ml-[20%] w-[100%] h-screen'}`} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
           <Bars color="#8884d8" height={80} width={80} />
           
         </div>

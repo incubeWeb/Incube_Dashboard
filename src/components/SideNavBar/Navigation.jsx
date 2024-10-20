@@ -500,6 +500,13 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
                     <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white cursor-pointer rounded-md pl-2`} onClick={()=>{ShowApplicationNavfun(true)}}>
                         <div className='w-[24px] flex justify-center text-[#667085] items-center'><FaPlus size={18}/></div>  
                     </div>
+
+                    <div className='w-[44px] flex items-end justify-end p-2 pr-0 pb-0  h-[40px]'>
+                        <div className=' font-bold text-[20px]  rounded-[100%] items-center bg-gray-100  flex justify-center border-gray-300 border-[1px] w-[30px] h-[30px] '>
+                        <p className='mt-[-6px]'>{Logemail?.[0]}</p>
+                        </div>
+                    </div>
+
                 </div>
                 
                 
