@@ -433,7 +433,7 @@ useEffect(() => {
           position={{ x: box.x, y: box.y }}
           onDragStop={(e, direction) => setPosition(box.id, direction,box.width)}
           onResizeStop={(e, direction, ref, delta, position) => setSize(box.id, ref, position)}
-          bounds="window"
+          
           >
           
             {(() => {
