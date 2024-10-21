@@ -17,6 +17,7 @@ const MeterComponent = ({selectedTab}) => {
   const [googlesheetfiles,setgoogledriveSheets]=useState([])
   const token=localStorage.getItem('token')
   const userdata=jwtDecode(token)
+  const [hover,sethover]=useState(false)
   const Logemail=userdata.userdetails.email
   const Logorganization=userdata.userdetails.organization
   const Logrole=userdata.userdetails.role
@@ -29,10 +30,16 @@ const MeterComponent = ({selectedTab}) => {
   const [sheetJson,setsheetJson]=useState([])
   const [showValue,setshowvalue]=useState('$0')
   const [percentage,setpercentage] = useState('')
+  const[checkvalue,setcheckvalue]=useState('')
   const totalArcLength=820;
   
     const { setpercentage1 } = useSheet();
     setpercentage1(showValue+"%")
+
+
+   
+
+
   const handlePlusClick=async()=>{
    
     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:Logorganization},{
@@ -103,33 +110,78 @@ const setmeterValue=async()=>{
               })
             
         }
+        if(selectedTab==Logemail){
         setmeterValue()
+        }
 },[percentage])
 
-const handleselectsheetfield=()=>{
-  setsheetClicked(false)
-  setsheetpopup(false)
-  let value=sheetJson[0][sheetfieldselected]
-  // let value=''
-  // try{
-  //     value=parseInt(sheetJson[0][sheetfieldselected]) 
-      
-  //     if(isNaN(sheetJson[0][sheetfieldselected]))
-  //     {
-  //         value='$0'
-  //     }
-  // }
-  // catch(e)
-  // {
-  //     value='$0'
-  // }
+useEffect(()=>{
+  const insertValue=async()=>{
+            
+            const organization2=`${Logorganization}_ShownGraph`
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization2},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
+              console.log(response.data)
+            if(response.data.status==200)
+            {
+              setpercentage(response.data.metervalue)
+            }
+  }
+  insertValue()
+},[selectedTab])
 
+
+
+const handleselectsheetfield = () => {
+  setsheetClicked(false);
+  setsheetpopup(false);
   
-  
-  setshowvalue(value)
-  const ans=Math.max(min, Math.min(showValue/2, max)); 
-  setpercentage(ans)
-}
+  // Check if sheetJson is not empty
+  if (sheetJson.length > 0) {
+    let value = sheetJson[0][sheetfieldselected];
+    
+    // Extract numeric value if it starts with symbols
+    const numericValue = parseFloat(value.replace(/[^0-9.-]+/g, ''));
+    
+    // Check if the extracted value is a valid number
+    if (!isNaN(numericValue)) {
+      let maxval; // Define maxval here
+      
+      if (numericValue < 100) {
+        maxval = 100;
+      }
+       else if (numericValue <= 100) {
+        maxval = 1000; // Default max for values <= 200
+      } else if (numericValue <= 1000) {
+        maxval = 1000; // For values between 201 and 1000
+      } else if (numericValue <= 10000) {
+        maxval = 10000; // For values between 1001 and 10000
+      } else if (numericValue <= 100000) {
+        maxval = 100000; // For values between 10001 and 100000
+      } else {
+        maxval = 1000000; // For values above 100000
+      }
+
+      // Calculate the percentage based on the numeric value
+      const percentageValue = (numericValue / maxval) * 100;
+
+      // Update the value and ensure it's within range
+      value = Math.round(percentageValue); // Round to the nearest integer
+    } else {
+      // If it's not a valid number, set to default value
+      value = 0; // or set it to some default string like '$0'
+    }
+    
+    setshowvalue(value);
+    const ans = Math.max(min, Math.min(value/2, max)); 
+    setpercentage(ans);
+  } else {
+    console.warn("sheetJson is empty");
+  }
+};
 
 
 
@@ -165,7 +217,7 @@ useEffect(()=>{
       
       setsheetfieldselected(fileteredKey[0])
       setsheetKeys(fileteredKey)
-      setLoading2(false)
+      
   }
   try{
   setValues()
@@ -176,12 +228,101 @@ useEffect(()=>{
 },[clickedSheetId])
 
 
+useEffect(()=>{
+  const setValues=async()=>{
+      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:clickedSheetId,organization:Logorganization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        })
+      const data=JSON.parse(response.data.data)
+      setsheetJson(data)
+      const key=Object.keys(data[0])
+      
+      const fileteredKey=[]
+      data.map(d=>{
+          key.map(k=>{
+              if(d[k]!=""&&!fileteredKey.includes(k)){
+              fileteredKey.push(k)
+              }
+          }
+          )
+      })
+      
+      setsheetfieldselected(fileteredKey[0])
+      setsheetKeys(fileteredKey)
+     
+  }
+  try{
+  setValues()
+  }catch(e)
+  {
+      setValues()
+  }
+},[clickedSheetId])
+
+
+
+
+const handleGooglesheetclicked=async (id,name)=>{
+      
+  setsheetClicked(true)
+  setsheetpopup(false)
+  
+  const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:id,email:Logemail,organization:Logorganization},{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
+    })
+  if(response.data.status==200)
+  {
+  const allJson=response.data.data
+
+  await Promise.all(allJson)
+
+  const keys=allJson[0].data
+  const showdata=allJson[1].data[0]
+  const finalJson=[]
+  allJson.map(val=>{
+      if(val.rowIndex!=1)
+      {
+          const result=keys.reduce((obj,key,value)=>{obj[key]=val.data[value]; return obj},{})
+          finalJson.push(result)
+      }
+  })
+  setsheetJson(finalJson)
+  const key_=Object.keys(finalJson[0])
+          
+  const fileteredKey=[]
+          finalJson.map(d=>{
+              key_.map(k=>{
+                  if(d[k]!=""&&!fileteredKey.includes(k)){
+                  fileteredKey.push(k)
+                  }
+              }
+              )
+          })
+
+      setsheetfieldselected(fileteredKey[0])
+      setsheetKeys(fileteredKey)
+     
+
+  }
+  else{
+      setsheetfieldselected('wrong sheet format')
+      setsheetKeys(['none'])
+     
+  }
+}
+
+
+
   return (
     <div className='relative'>
-      <HiOutlineDotsVertical size={20} className='absolute -mt-16 right-2' onClick={()=>{setshowPopupMenu(true)}}/>
+      <HiOutlineDotsVertical size={20} className='absolute -mt-16 right-4' onClick={()=>{setshowPopupMenu(!showPopupMenu)}}/>
       {showPopupMenu && (
-    <div className='absolute -mt-16 mr-2 right-0 w-[150px] bg-white p-3 border-gray-300 border-[1px] rounded-md z-50'>
-    <RxCross2 onClick={()=>{setshowPopupMenu(false)}} className='absolute top-0 left-0 cursor-ponter' />
+    <div className='absolute -mt-10  right-9 w-[150px] bg-white p-3 border-gray-300 border-[1px] rounded-md z-50'>
+    
         <div
             className='p-1 hover:bg-blue-400  flex items-center rounded-md  text-[12px] font-semibold font-inter cursor-pointer'
             onClick={() => {handlePlusClick();setshowPopupMenu(false)}}>

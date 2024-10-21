@@ -656,7 +656,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
 
                                 {
                                     (googlesheetfiles||[]).map(val=>
-                                        <div key={val._id} onClick={()=>{setsheetrowsselect(true);setclickedPie(false); handleGooglesheetclicked(val.id,val.name)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
+                                        <div key={val._id} onClick={()=>{setsheetrowsselectPie(true);setclickedPie(false); handleGooglesheetclicked(val.id,val.name)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
                                             <p className='w-[50%] text-[14px]'>{val.name.substring(val.name.length-15,val.name.length)}</p>
                                             <div className='w-[50%] flex text-green-800 items-center justify-end'>
                                                 <FaRegFileExcel />

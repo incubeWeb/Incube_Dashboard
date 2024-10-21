@@ -18,6 +18,7 @@ import { MdGroupRemove } from 'react-icons/md'
 import { TbCircleDotFilled } from "react-icons/tb";
 import { jwtDecode } from 'jwt-decode'
 import {useSheet } from '../SheetContext/SheetContext.jsx'
+import { IoShareSocialOutline } from "react-icons/io5";
 
 
 
@@ -57,7 +58,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     const [portfoliosecurity,setportfoliosecurity]=useState('private')
     const [clickedportfolioshared,setclickedPortfolioShared]=useState(false)
   const [clickedportfolioremoveshared,setclickedportfolioremoveshared]=useState(false)
- 
+    const [SharepopUp,setSharepopUp]=useState(false)
 
     
     // Function to toggle filter menu visibility
@@ -416,7 +417,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
         const data=finalJson
         setsheetJson(data)
-          
+          console.log("google",data)
             const key=Object.keys(data[0])
             
             const fileteredKey=[]
@@ -457,6 +458,21 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         
         
     },[selectedSheetId,sheetedited])
+
+    const handleClickOutside = (event) => {
+        if (popupRef.current && !popupRef.current.contains(event.target)) {
+            setclickedPortfolioShared(false);
+        }
+    };
+
+    useEffect(() => {
+        if (clickedportfolioshared) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [clickedportfolioshared]);
 
     const handleGooglesheet=async()=>{
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{
@@ -585,10 +601,8 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
            
         },
             PortfolioCard,
-           PieChart:{ sheetJson1
+           ChartData:{ sheetJson1
            },
-           BarChart:{sheetJson1},
-           LineChart:{sheetJson1},
            MeterPercentage:{percentage1}
         
     };
@@ -598,11 +612,11 @@ console.log(mergedData)
     },[sheetJson,sheetKeys,portfoliocardsdata,sheetJson1])
 
   return (
-    <div className={`${hidenavbar?'pl-[6%] w-[100%]':'ml-[21%] w-[79%]'} p-4 font-noto  flex flex-col space-y-4 bg-gray-100`}>
+    <div className={`${hidenavbar?'pl-[6%] w-[100%]':'ml-[21%] w-[79%]'} p-4 font-noto  flex flex-col space-y-4 bg-gray-100`}> 
         <div className=' w-[100%] scrollbar-hide  items-end pb-1 pl-2 mt-1 overflow-x-auto h-[40px] bg-white rounded-lg flex flex-row '>
                     
                     {
-                        allportfoliotabs?.length>0?
+                        allportfoliotabs?.length>0 && !clickedportfolioshared?
                         allportfoliotabs.map((val, index)=>
                             
                             <div onClick={()=>handleselectedportfoliotab(val.email)} key={val.id} className={`cursor-pointer p-2 h-[30px] w-[200px] flex items-center justify-center 
@@ -646,25 +660,22 @@ console.log(mergedData)
             <div className='w-[20%] flex items-center justify-end space-x-2'>
                 {
                     selectedTab==Logemail?
-                    <div className='flex flex-row space-x-2 items-center justify-center'>
-                    {
-                        portfoliosecurity=='private'?
-                            <div className='flex flex-row space-x-2 w-[60px]'>
-                                <div onClick={()=>setclickedPortfolioShared(true)} className='w-[20px] h-[20px] mr-2 cursor-pointer'>
-                                <CiShare2 size={22} />
-                               
+                    <div className='flex flex-row space-x-4 items-center justify-center'>
+                  
+                            <div className='flex flex-row space-x-2 '>
+                                <div onClick={()=>setclickedPortfolioShared(true)} className='w-[20px] h-[20px] cursor-pointer'>
+                                <IoShareSocialOutline  size={24} />
+                              
                             </div>
-                            <div onClick={()=>setclickedportfolioremoveshared(true)} className='w-[20px] h-[20px]  '>
+                            {/* <div onClick={()=>setclickedportfolioremoveshared(true)} className='w-[20px] h-[20px]  '>
                             <MdGroupRemove size={20} className='mr-12 cursor-pointer'/>
-                            </div>
+                            </div> */}
                         </div>
-                    :
-                    <></>
-                    }
-                    <select className='h-[30px]  font-inter font-bold text-[12px] rounded-md' value={portfoliosecurity} onChange={(e)=>{setportfoliosecurity(e.target.value)}}>
+                    
+                    {/* <select className='h-[30px]  font-inter font-bold text-[12px] rounded-md' value={portfoliosecurity} onChange={(e)=>{setportfoliosecurity(e.target.value)}}>
                         <option value='public'>Public</option>
                         <option value='private'>Private</option>
-                    </select>
+                    </select> */}
                     <div onClick={handlesavestate} className='cursor-pointer w-[120px] h-[30px] bg-gradient-to-r from-blue-500 to-blue-700 rounded-md text-white items-center justify-center'>
                         <p className='w-[100%] h-[100%] text-[12px] font-inter font-bold flex items-center justify-center'>Save state</p>
                     </div>
@@ -945,7 +956,7 @@ console.log(mergedData)
         <></>
         }
 
-        <div className='h-[120px]'>
+        <div className='h-[120px] '>
 
         </div>
         
@@ -954,8 +965,9 @@ console.log(mergedData)
 
         {
             clickedportfolioshared?
-            <div className='fixed left-0 w-[100%] top-[-20px] h-[100%] bg-white bg-opacity-80'>
-                <PortfolioShared realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar} setclickedPortfolioShared={setclickedPortfolioShared}/>
+            <div className='fixed overflow-hidden left-0 w-[100%] top-[-20px] h-[100%] bg-opacity-80 bg-gray-50'>
+                
+                <PortfolioShared realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar} setclickedPortfolioShared={setclickedPortfolioShared} handlesavestate={handlesavestate} sharedwithusers={sharedwithusers} />
             </div>
             :
             <></>

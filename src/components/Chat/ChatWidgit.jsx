@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { BiSolidError } from 'react-icons/bi'
 import { FaCircleUser } from 'react-icons/fa6'
 import { FiSearch } from 'react-icons/fi'
@@ -174,8 +174,16 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
 
   },[openuser])
 
+  const lastProcessedMsgId = useRef(null);
+
   useEffect(()=>{
     const chatingData=()=>{
+      if (lastProcessedMsgId.current === realtimeChat.fullDocument._id) {
+        return; // Skip processing if the message has already been handled
+      }
+
+      // Update last processed message ID
+      lastProcessedMsgId.current = realtimeChat.fullDocument._id;
       
       if(realtimeChat.fullDocument.sender==Logemail && realtimeChat.fullDocument.receiver==openuser)
         {
@@ -258,7 +266,7 @@ const mergedData={
     <div className=' bg-white space-y-2 font-inter shadow-gray-400 w-[100%]  h-[100%] flex flex-col'>
         {
                       clickedUser&&openChat!=''?
-                      <div className='flex flex-col space-y-4 font-noto p-[20px] fixed  w-[100%] h-[100%] top-0 left-0 rounded-md  bg-white  shadow-lg overflow-y-auto mb-4 ' onClick={(e)=>e.stopPropagation()}>
+                      <div className='flex flex-col space-y-4 font-noto p-[20px] fixed  w-[100%] h-[100%] top-0 left-0 rounded-md  bg-white scrollbar-hide  shadow-lg overflow-y-auto mb-4 ' onClick={(e)=>e.stopPropagation()}>
                         <div className='flex flex-row items-center h-[40px]'>
                           <div className='flex w-[30%] text-gray-400'>
                             <IoArrowBack size={18} className='cursor-pointer' onClick={()=>handleBackButton()} />
@@ -267,7 +275,7 @@ const mergedData={
                         </div>
                         <div className='w-[100%] h-[75%]'>
                               {/*Chat Messages show */}
-                              <div className='w-[100%] overflow-y-auto h-[100%] flex items-end flex-col space-y-2 justify-end'>
+                              <div className='w-[100%] overflow-y-auto scrollbar-hide h-[100%] flex items-end flex-col space-y-2 justify-end'>
   {
     [...sendedMsg, ...receivedMsg].length === 0
       ? (
