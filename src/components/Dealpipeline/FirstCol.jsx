@@ -143,7 +143,7 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
           </div>
           <div className='md:w-[100%] md:flex md:items-center md:justify-end'>
             {
-              Logrole!='admin'&&Logrole!='super admin'?
+              Logrole!='admin' || Logrole!='super admin'?
             <></>
             :
             <div className='border-[1px] border-blue-200 w-[140px] hover:border-0  h-[35px] rounded-md md:flex md:items-center md:space-x-2 select-none cursor-pointer hover:bg-gray-300' onClick={() => { setCreateNew(!createNew) }}>

@@ -176,9 +176,9 @@ function App() {
       
       }
       
-      if(login){
+      
       fun()
-      }
+      
       
   },[])
 

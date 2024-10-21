@@ -416,7 +416,7 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
 
 
                     <div className='w-[100%] h-[30%] flex flex-row items-center justify-start space-x-2 mt-2'>
-                    <div className="bg-blue-500 w-[20%] h-[50px]  rounded-full flex items-center justify-center mr-4 "onClick={() => setShowPopup(!showPopup)}>
+                    <div className="bg-blue-500 w-[20%] glow h-[50px]  shadow-[0_0_15px_rgba(59,130,246,1)] rounded-full flex items-center justify-center mr-4 "onClick={() => setShowPopup(!showPopup)}>
                   {icon }
                 </div>
                                 {

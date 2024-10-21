@@ -128,7 +128,7 @@ useEffect(() => {
     
     gsap.to(dashboardwidgitref.current,{
       width:"74%",
-      x:"27%",
+      x:"29%",
       duration:0.4,
       ease:"power2.out",
       
@@ -359,8 +359,7 @@ useEffect(() => {
 
 
   const setPosition = (id, direction) => {
-    console.log("drag position")
-    console.log(direction.x,direction.y)
+    
     
     if(parseInt(direction.y)<-10){
       direction.y=0

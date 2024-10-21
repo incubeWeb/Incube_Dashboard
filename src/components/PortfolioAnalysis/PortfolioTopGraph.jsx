@@ -598,7 +598,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                 }
                                 {
                                     (googlesheetfiles||[]).map(val=>
-                                        <div key={val._id} onClick={()=>{setsheetrowsselect(true);setclickedBar(false); handleGooglesheetclicked(val.id,val.name)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
+                                        <div key={val._id} onClick={()=>{setsheetrowsselectLine(true);setclickedLine(false); handleGooglesheetclicked(val.id,val.name)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
                                             <p className='w-[50%] text-[14px]'>{val.name.substring(val.name.length-15,val.name.length)}</p>
                                             <div className='w-[50%] flex text-green-800 items-center justify-end'>
                                                 <FaRegFileExcel />
@@ -656,7 +656,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
 
                                 {
                                     (googlesheetfiles||[]).map(val=>
-                                        <div key={val._id} onClick={()=>{setsheetrowsselect(true);setclickedBar(false); handleGooglesheetclicked(val.id,val.name)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
+                                        <div key={val._id} onClick={()=>{setsheetrowsselect(true);setclickedPie(false); handleGooglesheetclicked(val.id,val.name)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
                                             <p className='w-[50%] text-[14px]'>{val.name.substring(val.name.length-15,val.name.length)}</p>
                                             <div className='w-[50%] flex text-green-800 items-center justify-end'>
                                                 <FaRegFileExcel />
@@ -687,7 +687,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">X-axis</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedX(e.target.value)}>
-                                      {Loading1 ? (
+                                      {Loading1 && sheetKeys.length==0 ? (
                      <option value="">
                  <div className="flex items-center">
                   <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
@@ -709,7 +709,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Y-axis</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedY(e.target.value)}>
-                                      {Loading1 ? (
+                                      {Loading1 && sheetKeys.length==0 ? (
     <option value="">
       <div className="flex items-center">
         <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
@@ -728,7 +728,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                       </select>
                                     </div>
                                     <div onClick={()=>handleSheetCreateBarchart()} className="cursor-pointer select-none w-[100%] h-[40px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
-                                    {Loading1 ? (
+                                    {Loading1 && sheetKeys.length==0 ? (
             <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
           ) : (
                                         <p className="text-[14px] text-white">Create the Bar chart</p>)}
@@ -752,7 +752,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Label</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedX(e.target.value)}>
-                                      {Loading1 ? (
+                                      {Loading1 && sheetKeys.length==0 ? (
                      <option value="">
                  <div className="flex items-center">
                   <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
@@ -774,7 +774,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Value</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedY(e.target.value)}>
-                                      {Loading1 ? (
+                                      {Loading1 && sheetKeys.length==0 ? (
                      <option value="">
                  <div className="flex items-center">
                   <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
@@ -793,7 +793,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                       </select>
                                     </div>
                                     <div onClick={()=>handleSheetCreatePiechart()} className="cursor-pointer select-none w-[100%] h-[40px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
-                                    {Loading1 ? (
+                                    {Loading1 && sheetKeys.length==0 ? (
             <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
           ) : (
                                         <p className="text-[14px] text-white">Create the Pie chart</p>)}
@@ -817,7 +817,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">X-axis</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedX(e.target.value)}>
-                                      {Loading1 ? (
+                                      {Loading1 && sheetKeys.length==0 ? (
     <option value="">
       <div className="flex items-center">
         <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
@@ -839,7 +839,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Y-axis</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedY(e.target.value)}>
-                                      {Loading1 ? (
+                                      {Loading1 && sheetKeys.length==0 ? (
     <option value="">
       <div className="flex items-center">
         <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
@@ -858,7 +858,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                       </select>
                                     </div>
                                     <div onClick={()=>handleSheetCreateLinechart()} className="cursor-pointer select-none w-[100%] h-[40px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
-                                    {Loading1 ? (
+                                    {Loading1 && sheetKeys.length==0 ? (
             <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
           ) : (
                                         <p className="text-[14px] text-white">Create the Line chart</p>)}

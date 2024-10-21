@@ -95,7 +95,7 @@ function GridTemplate({id,filesadded,realtimeDealpipelinetabs,realtimedealpipeli
             </div>
         </div>
         {
-            selectedTab=='View All' && (Logrole=='admin' || Logrole=='super admin' && completed!='completed')?
+            selectedTab=='View All' && ((Logrole=='admin' || Logrole=='super admin') && completed!='completed')?
             <div className={`${status=='Unassigned'?'text-red-500':'text-sky-500'} w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[14px] md:text-[14px]  font-roboto`}>
                 <p className='cursor-pointer font-inter'>{status}</p>
             </div>
@@ -104,7 +104,7 @@ function GridTemplate({id,filesadded,realtimeDealpipelinetabs,realtimedealpipeli
         }
         
         {
-            selectedTab=='View All' && (Logrole=='admin' || Logrole=='super admin' && completed=='completed')?
+            selectedTab=='View All' && ((Logrole=='admin' || Logrole=='super admin') && completed=='completed')?
             <div className={`text-green-500 w-[100%] h-[24%] border-t-2 flex items-center pl-3 text-[14px] md:text-[14px]  font-roboto`}>
                 <p className='cursor-pointer font-inter'>Completed</p>
             </div>
