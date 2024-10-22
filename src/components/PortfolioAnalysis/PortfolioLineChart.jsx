@@ -9,11 +9,7 @@ const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfi
         const str = String(input);
         const match = str.match(continuousDigitsPattern);
 
-        if (match && !/[a-zA-Z]+/.test(input)) {
-            return parseInt(match[1], 10);
-        } else {
-            return 0;
-        }
+        return str.replace(/\D/g, '').length==0?0:parseInt(str.replace(/\D/g, ''))
     }
 
     function convertDataTypes(array, fieldConversions) {

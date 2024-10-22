@@ -52,14 +52,7 @@ const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldse
         const continuousDigitsPattern = /^\D*(\d+)\D*$/;
         const str=String(input)
         const match = str.match(continuousDigitsPattern);
-      
-        if (match && !/[a-zA-Z]+/.test(input)) {
-            // If input matches the pattern and does not contain interspersed letters, return the captured group
-            return parseInt(match[1], 10);
-        } else {
-            // If input does not match the pattern or contains interspersed letters, return 0
-            return 0;
-        }
+        return str.replace(/\D/g, '').length==0?0:parseInt(str.replace(/\D/g, ''))
       }
       
   function convertDataTypes(array, fieldConversions) {

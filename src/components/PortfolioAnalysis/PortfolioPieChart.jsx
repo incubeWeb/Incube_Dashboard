@@ -9,7 +9,8 @@ const PortfolioPieChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfie
         const continuousDigitsPattern = /^\D*(\d+)\D*$/;
         const str = String(input);
         const match = str.match(continuousDigitsPattern);
-        return match && !/[a-zA-Z]+/.test(input) ? parseInt(match[1], 10) : 0;
+        
+        return str.replace(/\D/g, '').length==0?0:parseInt(str.replace(/\D/g, ''))
     };
 
     const convertDataTypes = (array, fieldConversions) => {
