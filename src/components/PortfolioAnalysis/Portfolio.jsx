@@ -586,6 +586,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             }
         
     }
+    
     const PortfolioCard=[]
     portfoliocardsdata.map((val=>{
         PortfolioCard.push({"Label Name":val.labelname,"Values":val.showValue})

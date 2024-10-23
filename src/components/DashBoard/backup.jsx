@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+
+
 import { Rnd } from 'react-rnd';
 import RenderBarChart from '../Charts/RenderBarChart';
 import Piechart from '../Charts/Piechart';
@@ -12,9 +14,23 @@ import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { BiSolidError } from "react-icons/bi";
 import { RxCross2 } from "react-icons/rx";
 import DashBoardSingleUserChat from '../Chat/DashBoardSingleUserChat';
+import ChatWidgit from '../Chat/ChatWidgit';
+import Timeline from '../Timeline/Timeline';
+import { io } from 'socket.io-client';
+import { useNavigate } from 'react-router-dom';
+import { Bars } from 'react-loader-spinner';
+import Portfoliocard from '../Charts/Portfoliocard';
+import NewsWidgit from '../News_widgit/NewsWidgit';
+import { FaPlus } from "react-icons/fa6";
+import AssignedDeals from '../AssignedDeals/AssignedDeals';
+import OpenGrid from '../OpenGridTemplate/OpenGrid';
+import OpenCompleteGrid from '../OpenGridTemplate/OpenCompleteGrid';
+import OpenUnassignedGrid from '../OpenGridTemplate/OpenUnassignedGrid';
+import CalendarWidgit from '../Calendar/CalendarWidgit';
+import { jwtDecode } from 'jwt-decode';
 
 
-const Dashboard = () => {
+const Dashboard = ({navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
   const [boxes, setBoxes] = useState([]);
   const [openChatbar,setopenChatbar]=useState(false)
   const [showPopup, setShowPopup] = useState(false);
@@ -24,38 +40,118 @@ const Dashboard = () => {
   const [selectedField,setSelectedField]=useState('Chats')
   const [clickUserField,setClickedUserField]=useState(false)
   const [clickUseremail,setclickeduseremail]=useState('')
+  const [chartDatatypeY,setchartDatatypeY]=useState('string')
+  const [chartDatatypeX,setchartDatatypeX]=useState('string')
+  const [companyName,setCompanyName]=useState('')
+  const [companyDiscription,setcompanyDiscription]=useState('')
+  const [status,setstatus]=useState('')
+  const [TeamLead_status,setTeamLead_status]=useState('')
+  const [completed,setcompleted]=useState('')
 
-  const [searchUser,setSearchUser]=useState('')
+  const token=localStorage.getItem('token')
+  const userdata=jwtDecode(token)
+  const Logemail=userdata.userdetails.email
+  const Logorganization=userdata.userdetails.organization
+  const Logrole=userdata.userdetails.role
+
+
+  const [chartDatatypeFromApiX,setchartDatatypeFromApiX]=useState([])
+  const [chartDatatypeFromApiY,setchartDatatypeFromApiY]=useState([])
   
   const [clickedPie, setClickedPie] = useState(false);
   const [data01,setdata01]=useState([])
+  const [piechartCount,setpiechartcount]=useState([])
 
+  const [clickedArea,setClickedArea]=useState(false)
+  const [areachartCount,setareachartcount]=useState([])
+
+  const [barchartCount,setbarchartcount]=useState([])
+  const [clickedBar,setClickedBar]=useState(false)
+
+  const [chatwidgit,setchatwidgit]=useState(false)
+  const [chatwidgitcount,setchatwidgitcount]=useState([])
+
+  const [timelinewidget,settimelinewidgit]=useState(false)
+  const [timelinewidgitcount,settimelinewidgitcount]=useState([])
+  
+  const [portfoliocardwidgit,setportfoliocardwidgit]=useState(false)
+  const [portfoliocardwidgitcount,setportfoliocardwidgitcount]=useState([])
   
   const [xAxis,setXaxis]=useState(0)
   const [yAxis,setYaxis]=useState(0)
 
   const [xAxisValues,setXaxisValues]=useState(Array(xAxis).fill(0))
   const [yAxisValues,setYaxisValues]=useState(Array(yAxis).fill(0))
+  const [addingBox,setaddingBox]=useState(false)
+  const [typeofChart,settypeofchart]=useState('')
+  const [fromApi,setFromApi]=useState(false)
+  const [isSheetchart,setisSheetChart]=useState(false)
+  const [capturingPortfoliowidgitvalues,setcapturingPortfoliowidgitvalues]=useState([])
+  
+  const [assigneddealclicked,setassigneddealclicked]=useState(false)
 
-
-  const [users,setUsers]=useState([])
-
+  const [retry,setretry]=useState(false)
+  const [loading,setloading]=useState(true)
+  
   const drawerRef=useRef(null)
 
   const chatRef=useRef(null)
+  const blockerRef=useRef(null)
+  const rndRef=useRef(null)
+  
+  const cardData = [
+    { id: 1, name: 'Card One' },
+    { id: 2, name: 'Card Two' },
+    { id: 3, name: 'Card Three' },
+    // This array can grow infinitely
+  ];
+  const Navigate=useNavigate()
+  const handleOpenGrid=async()=>{
+    
+    setassigneddealclicked(!assigneddealclicked)
+    localStorage.setItem('activeField','/dealpipeline')
+    setActiveField('/dealpipeline')
+    
+    Navigate('/dealpipeline')
+    
+}
 
+const dashboardwidgitref=useRef(null)
 
-  useEffect(()=>{
-    const fun=async()=>{
-      const response=await axios.post('http://localhost:8999/findUsers',{
-        user:searchUser
-      })
-      const users=response.data.data
+useEffect(() => {
+  console.log("end of navbar x,y cordinates of navbar (0,",navbarref.current.clientWidth,")")
+  
+  
+  
+
+  if(!hidenavbar){
+    
+    gsap.to(dashboardwidgitref.current,{
+      width:"74%",
+      x:"29%",
+      duration:0.4,
+      ease:"power2.out",
+      
+    })
+
+    
+    
+  }else{
+    console.log("open distance between components from their position to nav")
+    
+    gsap.to(dashboardwidgitref.current,{
+      width:"92%",
+      x:"8%",
+      duration:0.4,
      
-      setUsers(users)
-    }
-    fun()
-  },[searchUser])
+      
+    })
+  }
+}, [hidenavbar,loading]);
+
+
+
+
 
   useEffect(()=>{
       const handleOpenChat=()=>{
@@ -67,7 +163,7 @@ const Dashboard = () => {
         })
       }
       
-    
+  
     if(openChatbar)
     {
       handleOpenChat()
@@ -75,23 +171,17 @@ const Dashboard = () => {
    
   },[openChatbar])
 
-  const handleSearchUser=(e)=>{
-    setSearchUser(e.target.value)
-  }
-
-  const handleOpenchatbar=()=>{
+  useEffect(()=>{
+    const mergedData=[
+     
+      ...data01,
    
-
-    gsap.to(chatRef.current,{
-      x:"200%",
-      duration:"0.4",
-      ease:'power2.out',
-      onComplete:()=>{
-        setopenChatbar(!openChatbar)
-      }
-    })
-    
-  }
+   
+    ]
+    sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+  },[data01])
+  
+  
 
   const handleSeeUsers=()=>{
     gsap.to(drawerRef.current,{
@@ -105,60 +195,191 @@ const Dashboard = () => {
       }
     })  
   }
+  const handleretry=()=>{
+    setretry(!retry)
+  }
 
   useEffect(()=>{
-    const email=localStorage.getItem('email')
+    const email=Logemail
     setUseremail(email)
   },[])
 
   useEffect(()=>{
     const checkBoxValues=async()=>{
-  
-      let email=localStorage.getItem('email')
-      let checkDb=await axios.post('http://localhost:8999/getDashboardData',{email:email})
-    
+      
+      let email=Logemail
+      const organization=Logorganization
+      let checkDb=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`,{email:email,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
+
+      
+
+      
       if(checkDb.data.status==200)
       {
         let val=JSON.parse(checkDb.data.data.positions)
+        val.map((d)=>{
+          const pievalue=d.piechartCount
+          const areavalue=d.areachartCount
+          const barvalue=d.barchartCount
+          const chartXdatatype=d.chartDatatypeX
+          const chartYdatatype=d.chartDatatypeY
+          const isSheetChart=d.isSheetChart
+          const portfoliowidgit=d.portfoliowidgitcount || []
+          setisSheetChart(isSheetChart)
+          setchartDatatypeFromApiX(prev=>[...prev,{chartDatatypeX:chartXdatatype}])
+          setchartDatatypeFromApiY(prev=>[...prev,{chartDatatypeY:chartYdatatype}])
+          setpiechartcount(prev=>[...prev,{values:[pievalue]}])
+          setareachartcount(prev=>[...prev,{values:[areavalue]}])
+          setbarchartcount(prev=>[...prev,{values:[barvalue]}])
+          setcapturingPortfoliowidgitvalues(prev=>[...prev,{portfoliowidgit}])
+          
+          }
+        )
         setBoxes(val)
+        setFromApi(true)
+        
       }
+      setTimeout(()=>{  
+        setloading(false)
+      },1000)
+    }
+   try{
+    checkBoxValues()
+    
+   }catch(e){
+    checkBoxValues()
+   }
+    
+  },[])
+
+  useEffect(()=>{
+    const checkBoxValues=async()=>{
+      
+      let email=Logemail
+      const organization=Logorganization
+      let checkDb=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`,{email:email,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      
+      })
+      
+
+      
+      if(checkDb.data.status==200)
+      {
+        let val=JSON.parse(checkDb.data.data.positions)
+        val.map((d)=>{
+          
+          const pievalue=d.piechartCount
+          const areavalue=d.areachartCount
+          const barvalue=d.barchartCount
+          const chartXdatatype=d.chartDatatypeX
+          const chartYdatatype=d.chartDatatypeY
+          const isSheetChart=d.isSheetChart
+          const portfoliowidgit=d.portfoliowidgitcount || []
+      
+          setisSheetChart(isSheetChart)
+          setchartDatatypeFromApiX(prev=>[...prev,{chartDatatypeX:chartXdatatype}])
+          setchartDatatypeFromApiY(prev=>[...prev,{chartDatatypeY:chartYdatatype}])
+          setpiechartcount(prev=>[...prev,{values:[pievalue]}])
+          setareachartcount(prev=>[...prev,{values:[areavalue]}])
+          setbarchartcount(prev=>[...prev,{values:[barvalue]}])
+          setcapturingPortfoliowidgitvalues(prev=>[...prev,{portfoliowidgit}])
+          
+          }
+        )
+        setBoxes(val)
+        setFromApi(true)
+        
+      }
+      
     }
     checkBoxValues()
-  },[])
+    setTimeout(()=>{  
+      setloading(false)
+    },1000)
+    
+  },[retry])
+  
+
+
 
   useEffect(() => {
     const setBoxValues=async ()=>{
-        const email=localStorage.getItem('email')
-        localStorage.setItem(email,JSON.stringify(boxes))
+        const email=Logemail
+        const organization=Logorganization
+        
         let position=JSON.stringify(boxes)
-        if(boxes.length!=0)
+
+
+        if(boxes.length>0)
         {
-         await axios.post('http://localhost:8999/addDashboardData',{email:email,positions:position})
+          await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addDashboardData`,{email:email,positions:position,organization:organization},{
+            headers:{
+             "Authorization":`Bearer ${token}`
+            }
+          })
         }
+       
+        
     }
+   
     setBoxValues()
+    
+   
+    
   }, [boxes]);
 
+  useEffect(()=>{
+  
+    
+      setBoxes(prev=>
+      prev.map(b=>
+        b.id===portfoliocardwidgitcount.id
+        ? { ...b, portfoliowidgitcount: {id:portfoliocardwidgitcount.id,labelname:portfoliocardwidgitcount.labelname,showValue:portfoliocardwidgitcount.showValue,portfolioicon:portfoliocardwidgitcount.portfolioicon} } 
+        : b
+      )
+      )
+    
+  },[portfoliocardwidgitcount])
+  
+
   const addBox = (chartType) => {
-    // Calculate the next position based on the last box
-    const lastBox = boxes[boxes.length - 1];
-    const newBox = {
-      id: lastBox ? lastBox.id + 1 : 1,
-      width: '40%',
-      height: '230px',
-      x: 10,
-      y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
-    };
-    setBoxes([...boxes, { ...newBox, type: chartType }]);
-    setShowPopup(false);
+      setaddingBox(!addingBox)
+   
+      
+    
   };
+  
+
 
   const setPosition = (id, direction) => {
-    setBoxes(boxes.map(box =>
-      box.id === id ? { ...box, x: direction.x, y: direction.y } : box
-    ));
+    
+    
+    if(parseInt(direction.y)<-10){
+      direction.y=0
+    }
+    if(parseInt(direction.x)<parseInt(window.innerWidth/1.5)-0)
+    {
+      
+      setBoxes(boxes.map(box =>
+        box.id === id ? { ...box, x: direction.x, y: direction.y } : box
+      ));
+    }
+    else{
+      setBoxes(boxes.map(box =>
+        box.id === id ? { ...box, x: 600, y: direction.y } : box
+      ));
+    }
   };
 
+  
+  
   const setSize = (id, ref, position) => {
     setBoxes(boxes.map(box =>
       box.id === id ? {
@@ -174,36 +395,214 @@ const Dashboard = () => {
     setShowPopup(!showPopup);
   };
 
+ 
+  
   return (
-    <div className='w-[80%] ml-[20%] space-x-4 flex flex-row h-screen p-[44px] pr-0 pt-0 pb-0 font-roboto'>
-    <div className='w-[70%] h-[100%] flex flex-col'>
-      <div className='flex flex-col w-[100%] h-[10%] items-start mt-[44px]'>
-        <div
-          className='flex flex-row w-[120px] h-[33px] rounded-md bg-gradient-to-r from-blue-600 to-blue-300 text-[14px] items-center justify-center text-white cursor-pointer'
-          onClick={handleShowPopup}
-        >
-          <p>Widgets</p>
+    
+    <div className={`w-[100%] bg-white space-x-4 flex flex-row   font-roboto`}>
+    
+    {
+      loading ? (
+        <div className={`${hidenavbar? 'w-[100%] h-screen':'ml-[20%] w-[100%] h-screen'}`} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', }}>
+          <Bars color="#8884d8" height={80} width={80} />
+          
         </div>
+      ):
+      
+    <div  className='w-[100%] h-[100%] flex flex-col  '>
+      <div
+        className='fixed z-[50] top-[20px] right-[20px] flex flex-row w-[130px] h-[33px] rounded-md bg-blue-600  text-[14px] items-center justify-center text-white cursor-pointer'
+        onClick={handleShowPopup}
+      >
+        <p> <span className='text-[20px] font-bold'>+</span>  Add widgets</p>
       </div>
-      <div className='w-[100%] flex flex-col items-center'>
-        {boxes.map(box => (
-          <Rnd
-            key={box.id}
-            className='border-gray-700 shadow-md border-[1px] rounded-lg p-4 pt-7'
-            size={{ width: box.width, height: box.height }}
-            position={{ x: box.x, y: box.y }}
-            onDragStop={(e, direction) => setPosition(box.id, direction)}
-            onResizeStop={(e, direction, ref, delta, position) => setSize(box.id, ref, position)}
-            // Ensure the Rnd component stays within its parent container
+
+    <div className=' flex flex-col w-[100%] h-[10%] items-end '>
+    
+</div>
+
+<div ref={dashboardwidgitref}
+      className="w-[100%] h-[100%] " // 3-column grid layout with a gap
+      
+    >
+        {(boxes||[]).map((box,index) => (
+         <Rnd
+          key={box.id}
+          className='rnd border-gray-300 bg-white border-[0.5px] rounded-lg p-4 pt-7 '
+          size={{ width: box.width, height: box.height }}
+          position={{ x: box.x, y: box.y }}
+          onDragStop={(e, direction) => setPosition(box.id, direction,box.width)}
+          onResizeStop={(e, direction, ref, delta, position) => setSize(box.id, ref, position)}
+          
           >
-            {box.type === 'Areachart' && <Areachart />}
-            {box.type === 'Piechart' && <Piechart data01={data01} clickedPie={clickedPie} setClickedPie={setClickedPie}/>}
-            {box.type === 'BarChart' && <RenderBarChart />}
+          
+            {(() => {
+            try {
+              switch (box.type) {
+                case 'news':
+                  return (
+                    <NewsWidgit id={index} boxes={boxes} setBoxes={setBoxes}/>
+                  )
+                case 'timeline':
+                  return (
+                    <Timeline
+                    id={index}
+                    setBoxes={setBoxes}
+                    boxes={boxes}
+                    realtimetimeline={realtimetimeline}
+                    />
+                  )
+                case 'portfoliocard':
+                  return (
+
+                    
+                    <Portfoliocard 
+                     id={index}
+                     setBoxes={setBoxes} 
+                     boxes={boxes}
+                     setportfoliocardwidgitcount={setportfoliocardwidgitcount}
+                     portfoliocardwidgitcount={portfoliocardwidgitcount}
+                     capturingPortfoliowidgitvalues={capturingPortfoliowidgitvalues}
+                     setcapturingPortfoliowidgitvalues={setcapturingPortfoliowidgitvalues}
+                     
+                     />
+
+                  )
+                case 'chat':
+                  return (
+                    <ChatWidgit 
+                    id={index} 
+                    setBoxes={setBoxes}
+                    boxes={boxes} 
+                    realtimeChat={realtimeChat} 
+                    Useremail={Useremail} 
+                    handleSeeUsers={handleSeeUsers} 
+                    setclickeduseremail={setclickeduseremail}/>
+                  )
+                case 'calendarwidgit':
+                  return(
+                    <CalendarWidgit
+                      id={index}
+                      setBoxes={setBoxes}
+                      boxes={boxes}
+                    />
+                  )
+                
+                case 'AssignedDeals':
+                  return(
+                    <AssignedDeals
+                      id={index}
+                      setBoxes={setBoxes}
+                      boxes={boxes}
+                      hidenavbar={hidenavbar}
+                      realtimetabchats={realtimetabchats}
+                      realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo}
+                      setassigneddealclicked={setassigneddealclicked}
+                      status={status}
+                      setstatus={setstatus}
+                      TeamLead_status={TeamLead_status}
+                      setTeamLead_status={setTeamLead_status}
+                      completed={completed}
+                      setcompleted={setcompleted}
+                      openViewallGrid={assigneddealclicked}
+                      setOpenViewallGrid={setassigneddealclicked}
+                      setcompanyDiscription={setcompanyDiscription}
+                      setCompanyName={setCompanyName}
+                      setActiveField={setActiveField}
+                    />
+                  )
+
+                case 'Areachart':
+                  if (areachartCount.length > 0) {
+                    return (
+                      <Areachart
+                        key={index}
+                        id={index}
+                        data01={areachartCount[[box.id]-1]['values']}
+                        clickedArea={clickedArea}
+                        setClickedArea={setClickedArea}
+                        fromApi={fromApi}
+                        setFromApi={setFromApi}
+                        chartDatatypeX={chartDatatypeX}
+                        chartDatatypeY={chartDatatypeY}
+                        chartDatatypeFromApiX={chartDatatypeFromApiX[[box.id]-1]['chartDatatypeX']}
+                        chartDatatypeFromApiY={chartDatatypeFromApiY[[box.id]-1]['chartDatatypeY']}
+                        isSheetchart={isSheetchart}
+                        investmentchange={investmentchange}
+                        setBoxes={setBoxes}
+                        boxes={boxes}
+                      />
+                    );
+                  } else {
+                    return <div>No Areachart data available</div>;
+                  }
+                case 'Piechart':
+                  if (piechartCount.length > 0) {
+                    return (
+                      <Piechart
+                        key={index}
+                        id={index}
+                        data01={piechartCount[[box.id]-1]['values']}
+                        clickedPie={clickedPie}
+                        setClickedPie={setClickedPie}
+                        fromApi={fromApi}
+                        setFromApi={setFromApi}
+                        chartDatatypeX={chartDatatypeX}
+                        chartDatatypeY={chartDatatypeY}
+                        chartDatatypeFromApiX={chartDatatypeFromApiX[[box.id]-1]['chartDatatypeX']}
+                        chartDatatypeFromApiY={chartDatatypeFromApiY[[box.id]-1]['chartDatatypeY']}
+                        isSheetchart={isSheetchart}
+                        investmentchange={investmentchange}
+                        setBoxes={setBoxes}
+                        boxes={boxes}
+                        
+                      />
+                    );
+                  } else {
+                    return <div>No Piechart data available</div>;
+                  }
+                case 'BarChart':
+                  if (barchartCount.length > 0) {
+                    return (
+                      <RenderBarChart
+                        key={index}
+                        id={index}
+                        data01={barchartCount[[box.id]-1]['values']}
+                        clickedBar={clickedBar}
+                        setClickedBar={setClickedBar}
+                        fromApi={fromApi}
+                        setFromApi={setFromApi}
+                        chartDatatypeX={chartDatatypeX}
+                        chartDatatypeY={chartDatatypeY}
+                        chartDatatypeFromApiX={chartDatatypeFromApiX[[box.id]-1]['chartDatatypeX']}
+                        chartDatatypeFromApiY={chartDatatypeFromApiY[[box.id]-1]['chartDatatypeY']}
+                        isSheetchart={isSheetchart}
+                        investmentchange={investmentchange}
+                        setBoxes={setBoxes}
+                        boxes={boxes}
+                      />
+                    );
+                  } else {
+                    return <div>No Piechart data available</div>;
+                  }
+                default:
+                  return <div>Unknown chart type</div>;
+              }
+            } catch (error) 
+            {
+              
+              setTimeout(()=>{
+                handleretry()
+              },1000)
+              return <div></div>;
+            }
+          })()}
           </Rnd>
         ))}
       </div>
       {showPopup && (
         <ChartPopup
+        dashboardwidgitref={dashboardwidgitref}
           showlist={handleShowPopup}
           addComponent={addBox}
           xAxisValues={xAxisValues}
@@ -218,83 +617,79 @@ const Dashboard = () => {
           setClickedPie={setClickedPie}
           data01={data01}
           setdata01={setdata01}
+          piechartCount={piechartCount}
+          setpiechartcount={setpiechartcount}
+          settypeofchart={settypeofchart}
+          boxes={boxes}
+          setBoxes={setBoxes}
+          setShowPopup={setShowPopup}
+          clickedArea={clickedArea}
+          setClickedArea={setClickedArea}
+          areachartCount={areachartCount}
+          setareachartcount={setareachartcount}
+          clickedBar={clickedBar}
+          setClickedBar={setClickedBar}
+          barchartCount={barchartCount}
+          setbarchartcount={setbarchartcount}
+          setchatwidgit={setchatwidgit}
+          chatwidgit={chatwidgit}
+          setchatwidgitcount={setchatwidgitcount}
+          chatwidgitcount={chatwidgitcount}
+          settimelinewidgit={settimelinewidgit}
+          timelinewidget={timelinewidget}
+          settimelinewidgitcount={settimelinewidgitcount}
+          timelinewidgitcount={timelinewidgitcount}
+          chartDatatypeY={chartDatatypeY}
+          setchartDatatypeY={setchartDatatypeY}
+          chartDatatypeX={chartDatatypeX}
+          setchartDatatypeX={setchartDatatypeX}
+          isSheetchart={isSheetchart}
+          setisSheetChart={setisSheetChart}
+          portfoliocardwidgit={portfoliocardwidgit}
+          setportfoliocardwidgit={setportfoliocardwidgit}
+          portfoliocardwidgitcount={portfoliocardwidgitcount}
+          setportfoliocardwidgitcount={setportfoliocardwidgitcount}
         />
       )}
       </div>
-      <div className='fixed right-0 bg-white space-y-2 font-roboto shadow-gray-400 w-[25%] p-[45px] h-[100%] border-gray-300 border-[1px] shadow-md rounded-md flex flex-col'>
-          <div className='shadow-md rounded-md w-[100%] h-[10%] border-gray-300 border-[1px] p-4 flex flex-row space-x-2 items-center justify-start'>
-              <div><FiSearch className='text-gray-400' /></div>
-              <input className='w-[100%] h-[100%] outline-none text-gray-700 text-[14px] ' placeholder='Search' onChange={(e)=>handleSearchUser(e)}/>
-          </div>
-          <div className='flex flex-row space-x-4 w-[100%] h-[10%] text-gray-700 font-roboto items-center justify-start'>
-              <div className='flex items-center text-gray-700'><FaCircleUser size={20} /></div>
-              <div><p className='text-[14px]'>{Useremail}</p></div>
-          </div>
-          <div className='relative space-x-4 bg-gray-300 rounded-md flex flex-row items-center justify-center  w-[100%] h-[10%] '>
-                
-                <div className='cursor-pointer h-[65%] bg-gray-300 text-white flex items-center justify-center w-[50%] border-gray-300 border-[1px] rounded-md' onClick={handleSeeUsers}>
-                      <p className='text-[13px] text-gray-700'>Users</p>
-                </div>
-          </div>  
-          <div className='overflow-y-auto flex w-[100%] h-[100%] flex-row items-center justify-center '>
-            {
-              users.length==0?
-              <div className='flex flex-row w-[100%] h-[100%] items-center justify-center text-gray-700 space-x-4'>
-                <BiSolidError size={20}/>
-                <p className='text-[14px]'>No Users</p>
-              </div>
-              :
-              users.length>0?
-              <div className=' bg-white flex pt-[0px] mt-[-40px] flex-col w-[100%] h-[385px] text-gray-700 space-y-1 overflow-y-auto scrollbar-hide'>
-               
-              {
-                users.map(user=>
-               
-                user.email!=localStorage.getItem('email')
-                    ?
-                   <div key={user._id} onClick={()=>setclickeduseremail(user.email)} className=' h-[60px] w-[100%] flex flex-row' >
-                      <div onClick={handleOpenchatbar}  className=' cursor-pointer h-[100%] w-[100%] border-[1px] rounded-md shadow-sm shadow-gray-300 border-gray-300 flex flex-row'>
-                        <div className='h-[100%] w-[30%] flex items-center justify-center'>
-                            <img src="https://st3.depositphotos.com/15648834/17930/v/450/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" className='w-[70%] h-[60%] object-contain rounded-[20%]'/>
-                        </div>
-                        <div className='h-[100%] w-[50%] flex items-center justify-start'>
-                              <p className='text-[13px] lowercase'>{user.email}</p>
-                        </div>
-                        <div className='w-[20%] flex items-center justify-center'>
-                          <IoChatboxEllipsesOutline />
-                        </div>
-                    </div>
-                    
-                   </div>
-                  
-                  :<></>
+    } 
 
-                
-                )
-                
-              }
+    {
+      assigneddealclicked?
+      <div className='w-[100%] h-screen fixed left-[-10px] '>
+          {
+              assigneddealclicked && status=='In Progress' && completed=='incomplete' &&(Logrole=='super admin'||Logrole=='admin')?
+              <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
+          :
+              assigneddealclicked && status=='In Progress' && completed=='incomplete' &&(Logrole=='super admin'||Logrole=='admin')?
+              <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
+          :
+              assigneddealclicked && status=='In Progress' && completed=='completed' &&(Logrole=='super admin'||Logrole=='admin')?
+              <OpenCompleteGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab="View All" setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
+          :
+              assigneddealclicked && status=='Unassigned' && completed=='incomplete' && (Logrole=='super admin'||Logrole=='admin')?
+              <OpenUnassignedGrid hidenavbar={hidenavbar} setSelectedTab="View All" setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
+          :
+          <></>
+          }
 
-              </div>:<></>
-            }
-          </div>
+          {
+              assigneddealclicked && status=='In Progress' && completed=='incomplete' && TeamLead_status=='In Progress' &&(Logrole=='team lead'||Logrole=='user')?
+              <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
+          :
+              assigneddealclicked && status=='In Progress' && completed=='completed' && TeamLead_status=='In Progress' &&(Logrole=='team lead'||Logrole=='user')?
+              <OpenCompleteGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab="View All" setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
+          :
+              assigneddealclicked && status=='In Progress' && completed=='incomplete' && TeamLead_status=='Unassigned' &&(Logrole=='team lead'||Logrole=='user')?
+              <OpenUnassignedGrid hidenavbar={hidenavbar} setSelectedTab='View All' setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
+          :
+              <></>
+          }
       </div>
-     { openChatbar?
-      <div ref={chatRef} className='fixed flex flex-col w-[430px] h-[90%] rounded-md top-[5%] z-50 right-[23%] bg-white border-gray-300 border-[1px] shadow-lg shadow-gray-400'>
-                    <div className=' shadow-md border-gray-300 border-b-[1px] w-[100%] h-[10%] flex items-center p-[24px] justify-end flex-row' >
-                      <div className='flex flex-row w-[90%] h-[100%]'>
-                            <p className='text-[15px] text-gray-500'>{clickUseremail}</p>
-                      </div>
-                      <RxCross2 size={20} className='text-gray-600 cursor-pointer' onClick={handleOpenchatbar}/>
-                      
-                    </div>
-                    <div className='w-[100%] h-[90%] '>
-                      <DashBoardSingleUserChat receiver={clickUseremail} clickUserField={clickUseremail} openChatbar={openChatbar}/>
-                    </div>
-            </div>
-            :
-            <></>
-     }
-
+      :
+      <></>
+    }
+    
     </div>
   );
 };

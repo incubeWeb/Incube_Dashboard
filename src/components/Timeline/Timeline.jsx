@@ -15,7 +15,8 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
 
-    const deleteWidgit=async()=>{
+    const deleteWidgit=async()=>{ 
+        
         const email=Logemail
         const organization=Logorganization
         const position=JSON.stringify(boxes.filter((box,index)=>index!=id))

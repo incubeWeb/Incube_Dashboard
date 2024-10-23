@@ -29,6 +29,12 @@ import OpenUnassignedGrid from '../OpenGridTemplate/OpenUnassignedGrid';
 import CalendarWidgit from '../Calendar/CalendarWidgit';
 import { jwtDecode } from 'jwt-decode';
 
+import { Responsive, WidthProvider } from 'react-grid-layout';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
+
 
 const Dashboard = ({navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
   const [boxes, setBoxes] = useState([]);
@@ -378,6 +384,36 @@ useEffect(() => {
     }
   };
 
+  const updateLayoutItem = (updatedItem) => {
+    console.log(updatedItem.i,"id")
+    const updatedLayouts = boxes.map((item) => {
+      
+      if (item.id === parseInt(updatedItem.i)) {
+       
+        return {
+          ...item, // Preserve other properties
+          x: updatedItem.x,
+          y: updatedItem.y,
+          w: updatedItem.w,
+          h: updatedItem.h,
+        };
+      }
+      return item;
+    });
+    setBoxes(updatedLayouts);
+  };
+
+
+  const onResizeStop = (layout, oldItem, newItem) => {
+    console.log("Resized:", newItem);
+    updateLayoutItem(newItem); // Only update x, y, w, h
+  };
+
+  // Callback for when the drag event ends
+  const onDragStop = (layout, oldItem, newItem) => {
+    console.log("Dragged:", newItem);
+    updateLayoutItem(newItem); // Only update x, y, w, h
+  };
   
   
   const setSize = (id, ref, position) => {
@@ -420,21 +456,31 @@ useEffect(() => {
     <div className=' flex flex-col w-[100%] h-[10%] items-end '>
     
 </div>
-
-<div ref={dashboardwidgitref}
-      className="w-[100%] h-[100%] " // 3-column grid layout with a gap
+      <div ref={dashboardwidgitref} className='mt-[4%]'>
+      <ResponsiveReactGridLayout
+      className="layout "
       
+      layouts={{ lg: boxes }}
+      breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+      cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+      rowHeight={100}
+      isResizable={true}
+
+      isDraggable={true}
+      onResizeStop={onResizeStop}
+        onDragStop={onDragStop}
     >
+      
+      
+      
+    
         {(boxes||[]).map((box,index) => (
-         <Rnd
-          key={box.id}
-          className='rnd border-gray-300 bg-white border-[0.5px] rounded-lg p-4 pt-7 '
-          size={{ width: box.width, height: box.height }}
-          position={{ x: box.x, y: box.y }}
-          onDragStop={(e, direction) => setPosition(box.id, direction,box.width)}
-          onResizeStop={(e, direction, ref, delta, position) => setSize(box.id, ref, position)}
-          
-          >
+         <div
+         key={box.id}
+        data-grid={box}
+        className="dev-box z-20 border-gray-300 bg-white border-[0.5px] rounded-lg p-4 pt-7"
+  
+         >
           
             {(() => {
             try {
@@ -454,8 +500,6 @@ useEffect(() => {
                   )
                 case 'portfoliocard':
                   return (
-
-                    
                     <Portfoliocard 
                     id={index}
                      setBoxes={setBoxes} 
@@ -597,8 +641,9 @@ useEffect(() => {
               return <div></div>;
             }
           })()}
-          </Rnd>
+          </div>
         ))}
+      </ResponsiveReactGridLayout>
       </div>
       {showPopup && (
         <ChartPopup
