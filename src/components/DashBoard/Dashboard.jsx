@@ -125,33 +125,20 @@ const Dashboard = ({navbarref,showsmallnav,realtimetimeline,setActiveField,realt
 const dashboardwidgitref=useRef(null)
 
 useEffect(() => {
-  console.log("end of navbar x,y cordinates of navbar (0,",navbarref.current.clientWidth,")")
-  
   
   
 
   if(!hidenavbar){
     
     gsap.to(dashboardwidgitref.current,{
-      width:"74%",
-      x:"29%",
-      duration:0.4,
-      ease:"power2.out",
-      
+      paddingLeft:"21%"
     })
-
-    
     
   }else{
-    console.log("open distance between components from their position to nav")
-    
     gsap.to(dashboardwidgitref.current,{
-      width:"92%",
-      x:"8%",
-      duration:0.4,
-     
+      paddingLeft:"4%"
+    }) 
       
-    })
   }
 }, [hidenavbar,loading]);
 
@@ -430,12 +417,13 @@ useEffect(() => {
   const handleShowPopup = () => {
     setShowPopup(!showPopup);
   };
-
- 
-  
+  //{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 } cols
+  //{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 } brekpoints
+  const breakpoints={ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }
+  const cols={ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }
   return (
     
-    <div className={`w-[100%] bg-white space-x-4 flex flex-row   font-roboto`}>
+    <div className={`w-[100%] h-screen bg-white space-x-4 flex flex-row   font-roboto`}>
     
     {
       loading ? (
@@ -445,7 +433,7 @@ useEffect(() => {
         </div>
       ):
       
-    <div  className='w-[100%] h-[100%] flex flex-col  '>
+    <div className='w-[100%] h-[100%] flex flex-col  '>
       <div
         className='fixed z-[50] top-[20px] right-[20px] flex flex-row w-[130px] h-[33px] rounded-md bg-blue-600  text-[14px] items-center justify-center text-white cursor-pointer'
         onClick={handleShowPopup}
@@ -456,13 +444,14 @@ useEffect(() => {
     <div className=' flex flex-col w-[100%] h-[10%] items-end '>
     
 </div>
-      <div ref={dashboardwidgitref} className='mt-[4%]'>
+      <div ref={dashboardwidgitref} className='mt-[4%]  flex h-[100%]'>
+        
       <ResponsiveReactGridLayout
-      className="layout "
+      className="layout w-[100%] "
       
       layouts={{ lg: boxes }}
-      breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-      cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+      breakpoints={breakpoints}
+      cols={cols}
       rowHeight={100}
       isResizable={true}
 
