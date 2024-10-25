@@ -101,6 +101,7 @@ const Navigation = ({activeField,setActiveField,hidenavbar,sethidenavbar}) => {
                 <p className='text-[21px] font-roboto'>Incube Web</p>
                 
             </div>
+<<<<<<< Updated upstream
             <div className='flex flex-col space-y-2 w-[100%] h-[80%] pt-2'>
 
                 <Link to='/dashboard'>
@@ -135,38 +136,90 @@ const Navigation = ({activeField,setActiveField,hidenavbar,sethidenavbar}) => {
   </div>
 </div>
 >>>>>>> Stashed changes
+=======
+            <div className=' flex flex-col space-y-2 w-[100%] h-[80%] pt-2'>
+                
+                <Link to='/dashboard'>
+                <div onClick={()=>{ShowApplicationNavfun(false)}}>
+                        <div      className={`${activeField=='/dashboard'?'bg-blue-600 text-white':'select-none hover:bg-gray-300 cursor-pointer hover:text-white'} flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`}  onClick={()=>setActiveField('/dashboard')}>
+                        <div><RiHome6Line  size={24}  className={`${activeField=='/dashboard'?' text-white ':'text-[#667085]'} `}/> </div>
+                    <div  className='text-[14px] font-inter font-semibold'><p>Dashboard</p></div>
+                    
+                    </div>
+                    </div>
+>>>>>>> Stashed changes
                 </Link>
                 <Link to='/dealpipeline'>
+                <div onClick={()=>{ShowApplicationNavfun(false)}}>
                 <div className={`${activeField=='/dealpipeline'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/dealpipeline')}>
                     <div><VscGraph size={20}/></div>
                     <div className='text-[14px]'><p>Deal pipeline</p></div>
                 </div>
+                </div>
                 </Link>
                 <Link to='/dealsourcing'>
+                <div onClick={()=>{ShowApplicationNavfun(false)}}>
                 <div className={`${activeField=='/dealsourcing'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/dealsourcing')}>
                     <div><BsStack size={20}/></div>
                     <div className='text-[14px]'><p>Deal sourcing</p></div>
                 </div>
+                </div>
                 </Link>
                 <Link to='/portfolio'>
+                <div onClick={()=>{ShowApplicationNavfun(false)}}>
                 <div className={`${activeField=='/portfolio'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/portfolio')}>
                     <div><HiMiniSquare2Stack size={20}/></div>
                     <div className='text-[14px]'><p>Portfolio analysis</p></div>
                 </div>
+                </div>
                 </Link>
                 <Link to='/adduser'>
+                <div onClick={()=>{ShowApplicationNavfun(false)}}>
                 <div className={`${activeField=='/adduser'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/adduser')}>
                     <div><FaUserPlus size={20} /></div>
                     <div className='text-[14px]'><p>Add Users</p></div>
                 </div>
+                </div>
                 </Link>
                 <Link to='/allDocs'>
+                <div onClick={()=>{ShowApplicationNavfun(false)}}>
                 <div className={`${activeField=='/allDocs'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/allDocs')}>
+<<<<<<< Updated upstream
                     <div><IoIosDocument size={20}/></div>
                     <div className='text-[14px]'><p>Documents</p></div>
+=======
+                    <div><IoDocumentOutline  className={`${activeField=='/allDocs'?' text-white ':'text-[#667085]'} `} size={24}/></div>
+                    <div className='text-[14px] font-inter font-semibold'><p>Documents</p></div>
+                </div>
+                </div>
+                </Link>
+                <Link to='/keys'>
+                <div onClick={()=>{ShowApplicationNavfun(false)}}>
+                <div className={`${activeField=='/keys'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/keys')}>
+                    <div><IoKeyOutline   className={`${activeField=='/keys'?' text-white ':'text-[#667085]'} `} size={24}/></div>
+                    <div className='text-[14px] font-inter font-semibold'><p>Api Keys</p></div>
+>>>>>>> Stashed changes
+                </div>
+</div>
+                </Link>
+<<<<<<< Updated upstream
+
+=======
+                
+                <Link to='/AI'>
+                <div onClick={()=>{ShowApplicationNavfun(false)}}>
+                <div className={`${activeField=='/AI'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/AI')}>
+                    <div> <PiStarFourBold  className={`${activeField=='/AI'?' text-white ':'text-[#667085]'} `} size={24}/></div>
+                    <div className='text-[14px] font-inter font-semibold'><p>AI</p></div>
+                </div>
                 </div>
                 </Link>
 
+                <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white hover:bg-gray-300 cursor-pointer rounded-md pl-2`} onClick={()=>{ShowApplicationNavfun(true)}}>
+                    <div className='w-[24px] flex justify-center text-[#667085] items-center'><FaPlus size={16}/></div>
+                    <div className='text-[14px] font-inter font-semibold'><p>Connect an Application</p></div>
+                </div>
+>>>>>>> Stashed changes
             </div>
 
             <div className='w-[100%] h-[30%] flex flex-col items-start justify-start'>

@@ -157,9 +157,9 @@ const PortfolioBarChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfie
     const handleMouseLeave = () => {
         setHoveredIndex(null);  // Reset the hovered bar when the mouse leaves
     };
-
+    const COLORS = ['#1976d2', '#42a5f5',];
     const barColor = (index) => {
-        return index === hoveredIndex ? '#FF8042' : '#2970FF';  // Change color on hover
+        return index === hoveredIndex ? '#FF8042' : COLORS[index % COLORS.length]; // Change color on hover
     };
 
     return (

@@ -7,6 +7,15 @@ import { IoBarChart } from "react-icons/io5";
 import { BiBorderAll, BiLineChart } from "react-icons/bi";
 import { SiGooglesheets } from "react-icons/si";
 import axios from "axios";
+<<<<<<< Updated upstream
+=======
+import { AiOutlineLoading3Quarters } from "react-icons/ai"; // If you're using react-icons
+import { jwtDecode } from "jwt-decode";
+import Bar_Chart from '../Icons/Bar_Chart.svg'
+import Pie_Chart from '../Icons/Pie_Chart.svg'
+import Line_Chart from '../Icons/Line_Chart.svg'
+
+>>>>>>> Stashed changes
 const ChartPopup = ({
   
   showlist,
@@ -141,7 +150,11 @@ const ChartPopup = ({
     setselectedSheetYaxis(dbSheetIntRows[0])
   },[dbSheetIntRows])
 
+<<<<<<< Updated upstream
   
+=======
+ 
+>>>>>>> Stashed changes
 
   const selectedSheetFromDatabase=async(e)=>{
     e.stopPropagation()
@@ -160,6 +173,17 @@ const ChartPopup = ({
     setSelectedFile(null);
 
   }
+<<<<<<< Updated upstream
+=======
+
+ 
+useEffect(()=>{
+console.log("rx",boxes)
+},[boxes])
+
+
+
+>>>>>>> Stashed changes
   const handleselectDatabase=async(e)=>{
     e.stopPropagation();
     setClickedDatabase((prev)=>!prev)
@@ -193,10 +217,17 @@ const ChartPopup = ({
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
+<<<<<<< Updated upstream
         width: '40%',
         height: '230px',
         x: 10,
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
+=======
+        width:  "400px",
+        height:  "300px",
+        x: (lastBox ? lastBox.x : 10  ),
+        y: (lastBox ? lastBox.y + parseInt(lastBox.height) +10 : 10) // Add some space below the last box
+>>>>>>> Stashed changes
       };
       try{
         setBoxes([...boxes, { ...newBox, type : "BarChart" , barchartCount:[...data01,...xAxisValues.map((val,index)=>({name:val,uv:parseInt(yAxisValues[index])}))] }]);
@@ -545,7 +576,7 @@ const ChartPopup = ({
         x: 10,
         y: (lastBox ? lastBox.y + parseInt(lastBox.height) + 10 : 10) // Add some space below the last box
       };
-      setBoxes([...boxes, { ...newBox, type : "portfoliocard" , portfoliowidgitcount:{id:boxes.length +1,labelname:"Enter Label",showValue:"$0"}}]);
+      setBoxes([...boxes, { ...newBox, type : "portfoliocard" , portfoliowidgitcount:{id:boxes.length +1,labelname:"Enter Label",showValue:"0",currencyValue:"&"}}]);
       setShowPopup(false);
   }
 
@@ -602,6 +633,7 @@ const ChartPopup = ({
       className="pr-[273px] font-sans  font-semibold  "
       onClick={showlist}
     >
+<<<<<<< Updated upstream
       <div className="relative flex  bg-white    w-[40%] flex-col h-[80%] p-4" onClick={(e) => e.stopPropagation()}>
         {clickedPie && (
           <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white top-0 left-0">
@@ -611,15 +643,30 @@ const ChartPopup = ({
               </div>
               <div className="flex w-[20%] justify-end ">
                 <RxCross2 size={24} className="cursor-pointer mt-2 ml-15" onClick={showlist} />
+=======
+      <div className="relative flex  bg-white rounded-lg   w-[30%] flex-col h-[70%] p-4" onClick={(e) => e.stopPropagation()}>
+        {clickedPie && (
+          <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] rounded-lg absolute bg-white shadow-lg top-0 left-0">
+            <div className="w-[100%] flex justify-end">
+              <div className="flex w-[80%]">
+                <FaArrowLeftLong className="cursor-pointer absolute top-2 left-2" size={20} onClick={() => setClickedPie(false)} />
+              </div>
+              <div className="flex w-[20%] justify-end absolute top-2 right-2">
+                <RxCross2 size={22} className="cursor-pointer  ml-15  rounded-full" onClick={showlist} />
+>>>>>>> Stashed changes
               </div>
             </div>
-            <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[10%]">
-              <div className="w-[100%] h-[17%] text-[14px] flex flex-row items-center justify-start">
-                <p className="w-[40%] text-[16px] font-sans ">Select chart Type:</p>
-                <div className="w-[30%] mr-2">
-                  <FaChartPie size={24}/>
+            <div className="w-[100%] h-[100%] space-y-4 flex flex-col items-center justify-start mt-[10%]">
+
+              <div className="w-[100%] h-[17%] text-[14px] relative flex flex-row items-center justify-start">
+             
+                <p className="w-[40%] text-[16px] font-inter font-semibold ">Select sheet</p>
+                <div className="w-[30%] ">
+                  <img src={Pie_Chart} className="w-5 h-5" />
+               
                 </div>
               </div>
+             
               <div
                 onClick={(e)=>handleManualCreation(e)}
                 className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-400 rounded-lg flex p-2 items-center border-[1px]"
@@ -651,9 +698,11 @@ const ChartPopup = ({
               </div>
             </div>
             </div>
-          </div>
+            </div>
+         
         )}
         {clickedArea && (
+<<<<<<< Updated upstream
           <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white top-0 left-0">
             <div className="w-[100%] flex justify-end">
               <div className="flex w-[80%]">
@@ -661,13 +710,22 @@ const ChartPopup = ({
               </div>
               <div className="flex w-[20%] justify-end">
                 <RxCross2 size={24} className="cursor-pointer mt-2" onClick={showlist} />
+=======
+          <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute rounded-xl bg-white top-0 left-0">
+            <div className="w-[100%] flex  relative justify-end">
+              <div className="flex w-[80%]">
+                <FaArrowLeftLong className="cursor-pointer -mt-2" size={20} onClick={() => setClickedArea(false)} />
+              </div>
+              <div className="flex w-[20%] justify-end">
+                <RxCross2 size={22} className="cursor-pointer  -mt-2  rounded-full" onClick={showlist} />
+>>>>>>> Stashed changes
               </div>
             </div>
-            <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[10%]">
+            <div className="w-[100%] h-[100%] space-y-4 flex flex-col items-center justify-start mt-[10%]">
               <div className="w-[100%] h-[17%] text-[14px] flex items-center justify-start">
-                <p className="w-[40%] text-[16px]">Select chart Type:</p>
+                <p className="w-[40%] text-[16px] font-inter font-semibold">Select sheet</p>
                 <div className="w-[30%] ">
-                  <BiLineChart size={24} />
+                  <img src={Line_Chart} className="w-5 h-5" />
                 </div>
               </div>
               <div
@@ -711,14 +769,18 @@ const ChartPopup = ({
                 <FaArrowLeftLong className="cursor-pointer mt-2" size={20} onClick={() => setClickedBar(!clickedBar)} />
               </div>
               <div className="flex w-[20%] justify-end">
+<<<<<<< Updated upstream
                 <RxCross2 size={24} className="cursor-pointer mt-2" onClick={showlist} />
+=======
+                <RxCross2 size={22} className="cursor-pointer mt-2 " onClick={showlist} />
+>>>>>>> Stashed changes
               </div>
             </div>
-            <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[10%]">
+            <div className="w-[100%] h-[100%] space-y-4 flex flex-col items-center justify-start mt-[10%]">
               <div className="w-[100%] h-[17%] text-[14px] flex items-center justify-start">
-                <p className="w-[40%] text-[16px]">Select chart Type:</p>
+                <p className="w-[40%] text-[16px] font-inter font-semibold">Select sheet</p>
                 <div className="w-[30%]">
-                   <IoBarChart size={24}/>
+                   <img src={Bar_Chart} className="w-5 h-5"/>
                 </div>
               </div>
               <div
@@ -755,28 +817,33 @@ const ChartPopup = ({
           </div>
         )}
         {clickedManual &&clickedPie && (
-          <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white top-0 left-0">
-            <div className="w-[100%] flex justify-end">
-              <div className="flex w-[80%]">
+          <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] absolute bg-white shadow-lg top-0 left-0">
+            <div className="w-[100%] flex relative justify-end">
+              <div className="flex w-[80%] absolute left-2 top-2">
                 <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedManual(!clickedManual)} />
               </div>
+<<<<<<< Updated upstream
               <div className="flex w-[20%] justify-end">
                 <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+=======
+              <div className="flex w-[20%] absolute right-2 top-2 justify-end">
+                <RxCross2 size={20} className="cursor-pointer rounded-full" onClick={showlist} />
+>>>>>>> Stashed changes
               </div>
             </div>
-            <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[30%]">
+            <div className="w-[100%] h-[100%] space-y-4 flex flex-col items-center justify-start mt-[30%]">
               <div className="w-[100%] h-[17%] text-[14px] flex items-center justify-start">
-                <p className="w-[70%] text-[16px]">Chart values:</p>
+                <p className="w-[70%] text-[16px] font-inter font-semibold">Chart values:</p>
               </div>
               <div
-                className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 flex p-2 items-center flex-col border-[1px]"
+                className="hover:shadow-md shadow-gray-300 cursor-pointer w-[100%] h-[11%] text-[14px] border-gray-300 rounded-md flex p-2 items-center flex-col border-[1px]"
               >
                 <div className="w-[100%] h-[100%] flex flex-row">
-                  <p className="w-[70%]">X-Axis</p>
-                  <div className="w-[30%] flex justify-end">
+                  <p className="w-[70%] font-inter">X-Axis</p>
+                  <div className="w-[30%] flex  items-center  justify-end">
                     <input
                       type="number"
-                      className="pl-2 outline-none w-[60px] h-[25px] rounded-md border-[1px] border-gray-600"
+                      className="pl-2 outline-none w-[60px] h-[25px] rounded-md flex border-[1px] border-gray-600"
                       onClick={(e)=>handleXaxis(e)}
                       onChange={(e) => {
                         setXaxis(e.target.value);
@@ -853,17 +920,22 @@ const ChartPopup = ({
               <FaArrowLeftLong className="cursor-pointer" size={20} onClick={() => setClickedDatabase(!clickedDatabase)} />
             </div>
             <div className="flex w-[20%] justify-end">
+<<<<<<< Updated upstream
               <RxCross2 size={20} className="cursor-pointer" onClick={showlist} />
+=======
+              <RxCross2 size={20} className="cursor-pointer  rounded-full" onClick={showlist} />
+>>>>>>> Stashed changes
             </div>
           </div>
           <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[30%]">
             <div className="w-[100%] h-[17%] text-[14px] flex flex-row items-center justify-start">
-              <p className="w-[60%] text-[16px]">Select your desired File:</p>
-              <div className="w-[30%] pl-2">
-                <FaChartPie size={20}/>
+              <p className="w-[60%] text-[16px] font-bold font-inter">Select your desired File:</p>
+              <div className="w-[30%] ">
+                <img src={Pie_Chart} className="w-5 h-5"/>
               </div>
             </div>
             <div className="w-[100%] flex h-[30%] items-center space-x-2">
+<<<<<<< Updated upstream
               <select value={selectedsheetfromdbname} onChange={handlesetselecteddbsheetname} className="border-[1px] border-gray-400 w-[80%] h-[40px] text-[14px]">
                   {
                     presentSheets.map(sheet=>
@@ -873,6 +945,45 @@ const ChartPopup = ({
               </select>
               <div className="w-[120px] cursor-pointer h-[40px] bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-center">
                 <p className="text-[14px]" onClick={(e)=>selectedSheetFromDatabase(e)}>Confirm sheet</p>
+=======
+              <select onChange={handlesetselecteddbsheetname} className="border-[1px] rounded-md border-gray-400 w-[80%] h-[40px] text-[14px]">
+              {Loading1 ? (
+    <option>
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+        Loading...
+      </div>
+    </option>
+  ) : 
+  clickedGoogle?
+  (
+    presentSheets.map(sheet=>
+      
+    <option key={sheet.id} value={sheet.id}>{sheet.name}</option>
+    
+  )
+):
+(
+  presentSheets.map(sheet => {
+  const sheetName = sheet.name.replace(/^\d+_/, ""); // Remove any digits followed by an underscore
+  return (
+    <option key={sheet._id} value={sheet._id}>
+      {sheetName}
+    </option>
+  );
+})
+)
+  
+  
+  
+  }
+              </select>
+              <div className="w-[120px] rounded-md cursor-pointer h-[40px] bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-center">  
+              {Loading1 ? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+          ) : (
+                <p className="text-[14px] " onClick={(e)=>selectedSheetFromDatabase(e)}>Confirm sheet</p>)}
+>>>>>>> Stashed changes
               </div>
             </div>
             
@@ -893,29 +1004,60 @@ const ChartPopup = ({
            
             <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                 <div><p className="text-[14px]">Name field:</p></div>
+<<<<<<< Updated upstream
                 <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
                   {
+=======
+                <select className="text-[14px] w-[60%] h-[100%] border-[1px] rounded-md border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
+                {Loading2 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+        Loading...
+      </div>
+    </option>
+  ) : (
+>>>>>>> Stashed changes
                     
                     dbSheetIntRows.map(val=>
                       <option key={val.id}>{val}</option>
                     )
                   }
                 </select>
+<<<<<<< Updated upstream
                 <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+=======
+             
+       
+
+                <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
+>>>>>>> Stashed changes
                   <option>string</option>
                   <option >integer</option>
                 </select>
               </div>
               <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                 <div><p className="text-[14px]">Value field:</p></div>
+<<<<<<< Updated upstream
                 <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
                   {
+=======
+                <select className="text-[14px] w-[60%] h-[100%] border-[1px] rounded-md border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
+                {Loading2 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+        Loading...
+      </div>
+    </option>
+  ) : (
+>>>>>>> Stashed changes
                     dbSheetIntRows.map(val=>
                       <option key={val._id}>{val}</option>
                     )
                   }
                 </select>
-                <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+                <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                   <option>string</option>
                   <option >integer</option>
                 </select>
@@ -1007,7 +1149,7 @@ const ChartPopup = ({
                                     
                                     <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">X-axis field:</p></div>
-                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
+                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] rounded-md border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
                                         {
                                           
                                           dbSheetIntRows.map(val=>
@@ -1015,21 +1157,21 @@ const ChartPopup = ({
                                           )
                                         }
                                       </select>
-                                      <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+                                      <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
                                         <option >integer</option>
                                       </select>
                                     </div>
                                     <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Value field:</p></div>
-                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
+                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none rounded-md" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
                                         {
                                           dbSheetIntRows.map(val=>
                                             <option key={val.id}>{val}</option>
                                           )
                                         }
                                       </select>
-                                      <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+                                      <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
                                         <option >integer</option>
                                       </select>
@@ -1056,12 +1198,13 @@ const ChartPopup = ({
           </div>
           <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[30%]">
             <div className="w-[100%] h-[17%] text-[14px] flex flex-row items-center justify-start">
-              <p className="w-[60%] text-[16px]">Select your desired File:</p>
+              <p className="w-[60%] text-[16px] font-inter font-semibold">Select your desired File:</p>
               <div className="w-[30%] pl-2">
-                <BiLineChart size={20}/>
+                <img src={Line_Chart} className="w-5 h-5"/>
               </div>
             </div>
             <div className="w-[100%] flex h-[30%] items-center space-x-2">
+<<<<<<< Updated upstream
               <select value={selectedsheetfromdbname} onChange={handlesetselecteddbsheetname} className="border-[1px] border-gray-400 w-[80%] h-[40px] text-[14px]">
                   {
                     presentSheets.map(sheet=>
@@ -1071,6 +1214,42 @@ const ChartPopup = ({
               </select>
               <div className="w-[120px] h-[40px] cursor-pointer bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-center">
                 <p className="text-[14px]" onClick={(e)=>selectedSheetFromDatabase(e)}>Confirm sheet</p>
+=======
+              <select onChange={handlesetselecteddbsheetname} className="border-[1px] rounded-md border-gray-400 w-[80%] h-[40px] text-[14px]">
+              {Loading1 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> {/* Spinner icon */}
+        Loading...
+      </div>
+    </option>
+  ) : 
+  clickedGoogle?
+  (
+    presentSheets.map(sheet=>
+      
+    <option key={sheet.id} value={sheet.id}>{sheet.name}</option>
+    
+  )
+)
+:
+(
+  presentSheets.map(sheet => {
+  const sheetName = sheet.name.replace(/^\d+_/, ""); // Remove any digits followed by an underscore
+  return (
+    <option key={sheet._id} value={sheet._id}>
+      {sheetName}
+    </option>
+  );
+})
+)
+  }
+              </select>
+              <div className="w-[120px] h-[40px] cursor-pointer bg-gradient-to-r from-sky-500 to-blue-600 rounded-md text-white flex items-center justify-center"> {Loading1 ? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+          ) : (
+                <p className="text-[14px]" onClick={(e)=>selectedSheetFromDatabase(e)}>Confirm sheet</p>)}
+>>>>>>> Stashed changes
               </div>
             </div>
             
@@ -1090,29 +1269,53 @@ const ChartPopup = ({
          <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
              <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                <div><p className="text-[14px]">X-axis field:</p></div>
+<<<<<<< Updated upstream
                <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
                  {
+=======
+               <select className="text-[14px] w-[60%] h-[100%] border-[1px] rounded-md border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
+               {Loading2? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> {/* Spinner icon */}
+        Loading...
+      </div>
+    </option>
+  ) : (
+>>>>>>> Stashed changes
                    
                    dbSheetIntRows.map(val=>
                      <option key={val.id}>{val}</option>
                    )
                  }
                </select>
-               <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+               <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                  <option>string</option>
                  <option >integer</option>
                </select>
              </div>
              <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
                <div><p className="text-[14px]">Y-axis field:</p></div>
+<<<<<<< Updated upstream
                <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
                  {
+=======
+               <select className="text-[14px] w-[60%] h-[100%] border-[1px] rounded-md border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
+               {Loading2 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> {/* Spinner icon */}
+        Loading...
+      </div>
+    </option>
+  ) : (
+>>>>>>> Stashed changes
                    dbSheetIntRows.map(val=>
                      <option key={val.id}>{val}</option>
                    )
                  }
                </select>
-               <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+               <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                  <option>string</option>
                  <option >integer</option>
                </select>
@@ -1345,12 +1548,13 @@ const ChartPopup = ({
           <div className="w-[100%] h-[100%] space-y-2 flex flex-col items-center justify-start mt-[30%]">
           
             <div className="w-[100%] h-[17%] text-[14px] flex flex-row items-center justify-start">
-              <p className="w-[60%] text-[16px]">Select your desired File:</p>
-              <div className="w-[30%] pl-2">
-                <IoBarChart size={20}/>
+              <p className="w-[60%] text-[16px] font-inter font-semibold">Select your desired File:</p>
+              <div className="w-[30%] ">
+                <img src={Bar_Chart} className="w-5 h-5"/>
               </div>
             </div>
             <div className="w-[100%] flex h-[30%] items-center space-x-2">
+<<<<<<< Updated upstream
               <select value={selectedsheetfromdbname} onChange={handlesetselecteddbsheetname} className="border-[1px] border-gray-400 w-[80%] h-[40px] text-[14px]">
                   {
                     presentSheets.map(sheet=>
@@ -1360,6 +1564,43 @@ const ChartPopup = ({
               </select>
               <div className="w-[120px] h-[40px] cursor-pointer bg-gradient-to-r from-sky-500 to-blue-600 text-white flex items-center justify-center">
                 <p className="text-[14px]" onClick={(e)=>selectedSheetFromDatabase(e)}>Confirm sheet</p>
+=======
+              <select onChange={handlesetselecteddbsheetname} className="border-[1px] rounded-md border-gray-400 w-[80%] h-[40px] text-[14px]">
+              {Loading1 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+        Loading...
+      </div>
+    </option>
+  ) : 
+  clickedGoogle?
+  (
+    presentSheets.map(sheet=>
+      
+    <option key={sheet.id} value={sheet.id}>{sheet.name}</option>
+    
+  )
+)
+:
+(
+  presentSheets.map(sheet => {
+  const sheetName = sheet.name.replace(/^\d+_/, ""); // Remove any digits followed by an underscore
+  return (
+    <option key={sheet._id} value={sheet._id}>
+      {sheetName}
+    </option>
+  );
+})
+)
+  
+  }
+              </select>
+              <div className="w-[120px] h-[40px] cursor-pointer bg-gradient-to-r rounded-md from-sky-500 to-blue-600 text-white flex items-center justify-center">{Loading1? (
+            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+          ) : (
+                <p className="text-[14px]" onClick={(e)=>selectedSheetFromDatabase(e)}>Confirm sheet</p>)}
+>>>>>>> Stashed changes
               </div>
             </div>
             
@@ -1381,15 +1622,27 @@ const ChartPopup = ({
         <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
             <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
               <div><p className="text-[14px]">X-axis field:</p></div>
+<<<<<<< Updated upstream
               <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
                 {
+=======
+              <select className="text-[14px] w-[60%] h-[100%] border-[1px] rounded-md border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
+              {Loading2 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> {/* Spinner icon */}
+        Loading...
+      </div>
+    </option>
+  ) : (
+>>>>>>> Stashed changes
                   
                   dbSheetIntRows.map(val=>
                     <option key={val.id}>{val}</option>
                   )
                 }
               </select>
-              <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+              <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                 <option>string</option>
                 <option >integer</option>
               </select>
@@ -1397,14 +1650,26 @@ const ChartPopup = ({
             </div>
             <div className=" w-[100%] h-[%] items-center justify-center flex flex-row space-x-2">
               <div><p className="text-[14px]">Y-axis field:</p></div>
+<<<<<<< Updated upstream
               <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
                 {
+=======
+              <select className="text-[14px] w-[60%] h-[100%] border-[1px] rounded-md border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
+              {Loading2 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> {/* Spinner icon */}
+        Loading...
+      </div>
+    </option>
+  ) : (
+>>>>>>> Stashed changes
                   dbSheetIntRows.map(val=>
                     <option key={val.id}>{val}</option>
                   )
                 }
               </select>
-              <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+              <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                 <option>string</option>
                 <option >integer</option>
               </select>
@@ -1491,7 +1756,7 @@ const ChartPopup = ({
                                 <div className="flex flex-col w-[100%] h-[100%] items-center justify-center space-y-3">
                                     <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">X-axis field:</p></div>
-                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
+                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] rounded-md border-gray-600 outline-none" onClick={(e)=>handlesheetxAxis(e,e.target.value)} onChange={(e)=>setselectedSheetxAxis(e.target.value)}>
                                         {
                                           
                                           dbSheetIntRows.map(val=>
@@ -1499,7 +1764,7 @@ const ChartPopup = ({
                                           )
                                         }
                                       </select>
-                                      <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+                                      <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
                                         <option >integer</option>
                                       </select>
@@ -1507,14 +1772,14 @@ const ChartPopup = ({
                                     </div>
                                     <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Y-axis field:</p></div>
-                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
+                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 rounded-md outline-none" onClick={(e)=>handlesheetyAxis(e,e.target.value)} onChange={(e)=>setselectedSheetYaxis(e.target.value)}>
                                         {
                                           dbSheetIntRows.map(val=>
                                             <option key={val.id}>{val}</option>
                                           )
                                         }
                                       </select>
-                                      <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
+                                      <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
                                         <option >integer</option>
                                       </select>
@@ -1552,7 +1817,7 @@ const ChartPopup = ({
                   <div className="w-[30%] flex justify-end">
                     <input
                       type="number"
-                      className="pl-2 outline-none w-[60px] h-[25px] rounded-md border-[1px] border-gray-600"
+                      className="pl-2 outline-none w-[60px] h-[25px] rounded-md border-[1px] rounded-md border-gray-600"
                       onClick={(e)=>handleXaxis(e)}
                       onChange={(e) => {
                         setXaxis(e.target.value);
@@ -1571,7 +1836,7 @@ const ChartPopup = ({
                       <input
                         key={index}
                         type="text"
-                        className="outline-none pl-2 text-[13px] w-[60px] h-[28px] rounded-md border-[1px] border-gray-600"
+                        className="outline-none pl-2 text-[13px] w-[60px] h-[28px] rounded-md border-[1px]  border-gray-600"
                         onClick={(e)=>handleXaxis(e)}
                         onChange={(e) => handleXaxisValues(index, e.target.value)}
                       />

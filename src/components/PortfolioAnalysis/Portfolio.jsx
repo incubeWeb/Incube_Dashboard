@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState ,useRef} from 'react'
 import { GoDotFill } from 'react-icons/go'
 import { RiFilter3Line } from 'react-icons/ri'
 import DatabaseSheets from './DatabaseSheets'
@@ -13,7 +13,30 @@ import { Bars } from 'react-loader-spinner'
 <<<<<<< Updated upstream
 =======
 import GoogleSheetDatabaseSheets from './GoogleSheetDatabaseSheets'
+<<<<<<< Updated upstream
 import { HiDotsVertical } from "react-icons/hi";
+>>>>>>> Stashed changes
+=======
+import { CiShare2 } from 'react-icons/ci'
+import PortfolioShared from './PortfolioShared'
+import PortfolioRemoveSharedUsers from './PortfolioRemoveSharedUsers'
+import { MdGroupRemove } from 'react-icons/md'
+import { TbCircleDotFilled } from "react-icons/tb";
+import { jwtDecode } from 'jwt-decode'
+import {useSheet } from '../SheetContext/SheetContext.jsx'
+import { IoShareSocialOutline } from "react-icons/io5";
+
+
+
+
+const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
+
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
+    const popupRef = useRef(null);
 >>>>>>> Stashed changes
 
 const Portfolio = ({hidenavbar,sheetedited}) => {
@@ -146,6 +169,192 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
         setJSon()
     },[selectedSheetId,sheetedited])
 
+<<<<<<< Updated upstream
+=======
+    const handleClickOutside = (event) => {
+        if (popupRef.current && !popupRef.current.contains(event.target)) {
+            setclickedPortfolioShared(false);
+        }
+    };
+
+    useEffect(() => {
+        if (clickedportfolioshared) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [clickedportfolioshared]);
+
+    const handleGooglesheet=async()=>{
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/check-login-google`,{
+            email:Logemail,
+            organization:Logorganization
+          },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })  
+          if(response.data.status==400)
+          {
+              alert('Google Session Ended')
+              return
+          }
+          else if(response.data.status==200 && response.data.msg=="no refresh token found")
+          {
+            alert('Google account not connected')
+            return
+          }
+          else if(response.data.status==-200)
+          {
+            alert('Google account not connectd')
+            return
+          }
+    }
+
+    const handleselectedportfoliotab=(email)=>{
+        setselectedTab(email)
+      }
+    
+
+    
+
+    const settingupTabs=async()=>{
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-public-portfoliostate`,{organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
+            const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-shared-portfoliostate`,{
+                organization:Logorganization,
+                email:Logemail
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
+            let publicdata=[]
+            let privatedata=[]
+            if(response.data.status==200)
+            {
+                if(response.data.data.length>0)
+                {
+                    publicdata=response.data.data
+                    
+                }
+            }
+            if(response2.data.status==200)
+            {
+                if(response2.data.data.length>0)
+                {
+                    privatedata=response2.data.data
+                }
+            }
+            const mydata=[{email:Logemail}]
+            const combined=[...mydata,...publicdata,...privatedata]
+            const uniqueCombined = combined.filter(
+                (value, index, self) =>
+                  index === self.findIndex((obj) => obj.email === value.email)
+              );
+            setallportfoliotabs(uniqueCombined)
+        }
+
+    useEffect(()=>{
+        try{
+        settingupTabs()
+        }catch(e)
+        {
+            settingupTabs()
+        }
+    },[])
+    useEffect(()=>{
+        try{
+        settingupTabs()
+        }catch(e)
+        {
+            settingupTabs()
+        }
+    },[realtimeportfoliostate])
+
+    const handlesavestate=async()=>{
+            const organization=`${Logorganization}_Topcards`
+            const organization1=Logorganization
+            const organization2=`${Logorganization}_ShownGraph`
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
+                email:Logemail,
+                organization:organization,
+                portfolioState:JSON.stringify(portfoliocardsdata),
+                security:portfoliosecurity,
+                sharedwith:JSON.stringify(sharedwithusers),
+                organization1:organization1,
+                organization2:organization2
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
+            if(response.data.status==200){
+                alert("State Saved")
+            }
+        
+    }
+    const PortfolioCard=[]
+    portfoliocardsdata.map((val=>{
+        PortfolioCard.push({"Label Name":val.labelname,"Values":val.showValue})
+    }))
+
+
+    useEffect(()=>{
+    const mergedData = {
+        investmentHistory: {
+            keys: sheetKeys,
+            data: sheetJson,
+            
+           
+        },
+            PortfolioCard,
+           ChartData:{ sheetJson1
+           },
+           MeterPercentage:{percentage1}
+        
+    };
+sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+console.log(mergedData)
+
+    },[sheetJson,sheetKeys,portfoliocardsdata,sheetJson1])
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (popupRef.current && !popupRef.current.contains(event.target)) {
+                setclickedDots(false); // Close the popup
+            }
+        };
+
+        if (clickedDots) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [clickedDots]);
+    
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (popupRef.current && !popupRef.current.contains(event.target)) {
+                setclickedPortfolioShared(false)
+            }
+        };
+    
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+>>>>>>> Stashed changes
   return (
     <div className={`${hidenavbar?'pl-[4%] w-[100%]':'pl-[21%] w-[100%]'} p-4 font-noto  flex flex-col space-y-4 bg-gray-100`}>
         <div className='w-[100%]  flex flex-col'>{/*Portfolio content */}
@@ -159,12 +368,17 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                     <div className=' w-[75%]  flex flex-row justify-end '>
                         {
                             clickedDots && showHistory?
+<<<<<<< Updated upstream
                             <div className='border-[1px] w-[160px] p-3  h-[120px] z-[40]  bg-white border-gray-300 rounded-md'>
                                 <div onClick={()=>{setsheetmethod('Database'); setselectfield(false);setclickedDots(false);}} className={`${sheetmethod=='Database'?'bg-white':''} p-1 hover:bg-blue-400 flex items-center rounded-md text-[14px] font-roboto`}>
+=======
+                            <div ref={popupRef} className='border-[1px] mr-52 mt-8 w-[180px] p-3  h-[120px] z-[40]  bg-white border-gray-300 rounded-md'>
+                                <div onClick={()=>{setsheetmethod('Database'); setselectfield(false);setclickedDots(false);}} className={`${sheetmethod=='Database'?'bg-white':''} p-1 hover:bg-gray-100 flex items-center rounded-md text-[14px] font-roboto`}>
+>>>>>>> Stashed changes
                                                 <FaDatabase className='text-gray-700'/>
                                                 <p className='p-2 cursor-pointer'>Database</p>
                                             </div>
-                                            <div onClick={()=>{setsheetmethod('Google Sheet'); setselectfield(false);setclickedDots(false)}} className={`${sheetmethod=='Google Sheet'?'bg-white':''} p-1 hover:bg-blue-400 flex items-center rounded-md text-[14px] font-roboto`}>
+                                            <div onClick={()=>{setsheetmethod('Google Sheet'); setselectfield(false);setclickedDots(false)}} className={`${sheetmethod=='Google Sheet'?'bg-white':''} p-1 hover:bg-gray-100 flex items-center rounded-md text-[14px] font-roboto`}>
                                                 <FaDatabase className='text-gray-700'/>
                                                 <p className='p-2 cursor-pointer'>Google Sheet</p>
                                             </div>
@@ -254,16 +468,16 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                     }
                     {
                         selectfield?
-                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
+                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
                             <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
                                 <div onClick={()=>{setselectfield(false);setsheetmethod('')}} className='cursor-pointer h-[50px]'>
                                     <RxCross2/>
                                 </div>
-                                <div onClick={()=>{setsheetmethod('Database'); setselectfield(false)}} className={`${sheetmethod=='Database'?'bg-white':''} p-1 hover:bg-blue-400 flex items-center rounded-md text-[14px] font-roboto`}>
+                                <div onClick={()=>{setsheetmethod('Database'); setselectfield(false)}} className={`${sheetmethod=='Database'?'bg-white':''} p-1 hover:bg-gray-100 flex items-center rounded-md text-[14px] font-roboto`}>
                                     <FaDatabase className='text-gray-700'/>
                                     <p className='p-2 cursor-pointer'>Database</p>
                                 </div>
-                                <div onClick={()=>{setsheetmethod('Google Sheet'); setselectfield(false)}} className={`${sheetmethod=='Google Sheet'?'bg-white':''} p-1 hover:bg-blue-400 flex items-center rounded-md text-[14px] font-roboto`}>
+                                <div onClick={()=>{setsheetmethod('Google Sheet'); setselectfield(false)}} className={`${sheetmethod=='Google Sheet'?'bg-white':''} p-1 hover:bg-gray-100 flex items-center rounded-md text-[14px] font-roboto`}>
                                     <FaDatabase className='text-gray-700'/>
                                     <p className='p-2 cursor-pointer'>Google Sheet</p>
                                 </div>
@@ -274,8 +488,13 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                     <></>
                     }
                     {
+<<<<<<< Updated upstream
                         !selectfield && sheetmethod=='Database'?
                         <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
+=======
+                        !selectfield && sheetmethod!="Google Sheet" && sheetmethod!="" ?
+                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
+>>>>>>> Stashed changes
                             <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
                                 {
                                     clickedDots?
@@ -300,8 +519,41 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                         <></>
                     }
                     {
+<<<<<<< Updated upstream
                                 showimagepopup ?
                                 <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
+=======
+                        !selectfield && sheetmethod!="Database" && sheetmethod!="" ?
+                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
+                            <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
+                                {
+                                    clickedDots?
+                                    <div onClick={()=>{setselectfield(!selectfield);setsheetmethod('Google Sheet')}} className='cursor-pointer h-[50px]'>
+                                        <IoMdArrowBack />
+                                    </div>
+                                    :
+                                    <div onClick={()=>{setselectfield(false);setsheetmethod("")}} className='cursor-pointer h-[50px]'>
+                                       <RxCross2/>
+                                    </div>
+                                }
+                                <div  className={`${sheetmethod=='Google Sheet'?'bg-white':''} p-1 flex items-center rounded-md text-[14px] flex-col font-roboto`}>
+                                {(allSheets||[]).map(doc=>
+                                        <GoogleSheetDatabaseSheets setsheetname={setsheetname} showimagepopup={showimagepopup} setshowimagePopup={setshowimagePopup} setsheetmethod={setsheetmethod} key={doc.id} sheetKeys={sheetKeys} selectedImageFiled={selectedImageFiled} setselectedImageField={setselectedImageField} id={doc.id} setportfolioHistory={setshowHistory} setshowHistory={setshowHistory} sheetname={doc.name} setselectedSheetId={setselectedSheetId}/>
+                                        
+                                    )}  
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                        :
+                        <></>
+                    }
+
+                            {
+                                showimagepopup && sheetmethod!="Google Sheet" && sheetmethod!=""   ?
+                                <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
+>>>>>>> Stashed changes
                                     <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
                                         
                                         <div className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
@@ -336,6 +588,47 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
                                     :
                                     <></>
                         }
+<<<<<<< Updated upstream
+=======
+
+{
+                                showimagepopup && sheetmethod!="Database" && sheetmethod!=""   ?
+                                <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
+                                    <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
+                                        
+                                        <div className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
+                                            <div className='flex items-center justify-center h-[40px]' onClick={(()=>{setshowimagePopup(false); setsheetmethod('Google Sheet')})}>
+                                            <IoMdArrowBack  className=' cursor-pointer' size={17}/>
+                                            </div>
+                                            <div className='text-gray-500 h-[40px] text-[15px] flex items-center justify-center'>
+                                                {sheetname}
+                                            </div>
+                                            
+                                        </div>
+                                        <div className=' w-[100%] h-[40%] flex flex-col items-center justify-center space-y-8 space-x-2'>
+                                            <p className='text-[15px] text-white'>select image field</p>
+                                            <select onChange={(e)=>setselectedImageField(e.target.value)} className='w-[220px] h-[30px] text-[14px] text-gray-700 rounded-md border-gray-300 border-[1px]'>
+                                                            
+                                                {sheetKeys.map(k=>
+                                                    <option key={k._id}>{k}</option>
+                                                    )
+                                                }
+
+                                            </select>
+                                        </div>
+                                        <div className='w-[100%] mt-[14px] flex flex-row items-center justify-center'>
+                                            <div onClick={handleselect} className='select-none cursor-pointer flex flex-row w-[120px] rounded-md h-[40px] items-center justify-center bg-gradient-to-r from-green-500 to-green-800 spae-x-2'>
+                                                <p className='text-[14px] text-white'>Set image key</p>
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                    :
+                                    <></>
+                        }
+>>>>>>> Stashed changes
                 </div>
             </div>  
             {
@@ -359,6 +652,28 @@ const Portfolio = ({hidenavbar,sheetedited}) => {
         
  
         </div>
+<<<<<<< Updated upstream
+=======
+
+        {
+            clickedportfolioshared?
+            <div className='fixed overflow-hidden left-0 w-[100%] top-[-20px] h-[100%] bg-opacity-40 bg-black'>
+            <div ref={popupRef} className=''>
+                <PortfolioShared realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar} setclickedPortfolioShared={setclickedPortfolioShared} handlesavestate={handlesavestate} sharedwithusers={sharedwithusers} />
+            </div>
+            </div>
+            :
+            <></>
+        }
+        {
+            clickedportfolioremoveshared?
+            <div className='fixed left-0 w-[100%] top-[-20px] h-[100%] bg-white bg-opacity-80'>
+                <PortfolioRemoveSharedUsers realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar} setclickedPortfolioShared={setclickedportfolioremoveshared} />
+            </div>
+            :
+            <></>
+        }
+>>>>>>> Stashed changes
         
     </div>
   )

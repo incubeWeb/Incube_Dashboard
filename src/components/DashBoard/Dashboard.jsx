@@ -73,6 +73,66 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
   const drawerRef=useRef(null)
 
   const chatRef=useRef(null)
+<<<<<<< Updated upstream
+=======
+  const blockerRef=useRef(null)
+  const rndRef=useRef(null)
+  
+  
+  const cardData = [
+    { id: 1, name: 'Card One' },
+    { id: 2, name: 'Card Two' },
+    { id: 3, name: 'Card Three' },
+    // This array can grow infinitely
+  ];
+  const Navigate=useNavigate()
+  const handleOpenGrid=async()=>{
+    
+    setassigneddealclicked(!assigneddealclicked)
+    localStorage.setItem('activeField','/dealpipeline')
+    setActiveField('/dealpipeline')
+    
+    Navigate('/dealpipeline')
+    
+}
+
+const dashboardwidgitref=useRef(null)
+
+useEffect(() => {
+  console.log("end of navbar x,y cordinates of navbar (0,",navbarref.current.clientWidth,")")
+  
+  
+  
+
+  if(!hidenavbar){
+    
+    gsap.to(dashboardwidgitref.current,{
+      width:"74%",
+      x:"29%",
+      duration:0.4,
+      ease:"power2.out",
+      
+    })
+
+    
+    
+  }else{
+    console.log("open distance between components from their position to nav")
+    
+    gsap.to(dashboardwidgitref.current,{
+      width:"92%",
+      x:"8%",
+      duration:0.4,
+     
+      
+    })
+  }
+}, [hidenavbar,loading]);
+
+
+
+
+>>>>>>> Stashed changes
 
   useEffect(()=>{
       const handleOpenChat=()=>{
@@ -208,6 +268,7 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
 
 
 
+
   useEffect(() => {
     const setBoxValues=async ()=>{
         const email=localStorage.getItem('email')
@@ -253,6 +314,7 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
   
 
 
+<<<<<<< Updated upstream
   const setPosition = (id, direction) => {
 <<<<<<< Updated upstream
     setBoxes(boxes.map(box =>
@@ -272,23 +334,101 @@ const Dashboard = ({realtimeChat,investmentchange,hidenavbar}) => {
       ));
     }
 >>>>>>> Stashed changes
+=======
+  // const setPosition = (id, direction) => {
+    
+    
+  //   if(parseInt(direction.y)<-10){
+  //     direction.y=0
+  //   }
+  //   if(parseInt(direction.x)<parseInt(window.innerWidth/1.5)-0)
+  //   {
+      
+  //     setBoxes(boxes.map(box =>
+  //       box.id === id ? { ...box, x: direction.x, y: direction.y } : box
+  //     ));
+  //   }
+  //   else{
+  //     setBoxes(boxes.map(box =>
+  //       box.id === id ? { ...box, x: 600, y: direction.y } : box
+  //     ));
+  //   }
+  // };
+
+ 
+  
+  // const setSize = (id, ref, position) => {
+  //   setBoxes(boxes.map(box =>
+  //     box.id === id ? {
+  //       ...box,
+  //       height: ref.style.height,
+  //       width: ref.style.width,
+  //       ...position
+  //     } : box
+  //   ));
+  // };
+  
+  const handleShowPopup = () => {
+    setShowPopup(!showPopup);
+  };
+
+  const checkCollision = (newBox) => {
+    for (const box of boxes) {
+      if (box.id !== newBox.id) {
+        // Check for overlap
+        if (
+          newBox.x < box.x + box.width &&
+          newBox.x + newBox.width > box.x &&
+          newBox.y < box.y + box.height &&
+          newBox.y + newBox.height > box.y
+        ) {
+          return true; // Collision detected
+        }
+      }
+    }
+    return false; // No collision
+  };
+
+  const adjustPosition = (id, direction) => {
+    let newX = direction.x;
+    let newY = direction.y;
+
+    const tempBox = { id, x: newX, y: newY, width: 200, height: 200 }; // Assume default width and height for checking
+
+    while (checkCollision(tempBox)) {
+      newY += 220; // Move down if there's a collision (adjust as needed)
+      tempBox.y = newY;
+    }
+
+    setBoxes(boxes.map(box =>
+      box.id === id ? { ...box, x: newX, y: newY } : box
+    ));
+  };
+
+  const setPosition = (id, direction) => {
+    adjustPosition(id, direction);
+>>>>>>> Stashed changes
   };
 
   const setSize = (id, ref, position) => {
     setBoxes(boxes.map(box =>
       box.id === id ? {
         ...box,
-        height: ref.style.height,
-        width: ref.style.width,
+        width: ref.offsetWidth,
+        height: ref.offsetHeight,
         ...position
       } : box
     ));
   };
 
+<<<<<<< Updated upstream
   const handleShowPopup = () => {
     setShowPopup(!showPopup);
   };
 
+=======
+  
+>>>>>>> Stashed changes
   return (
     
     <div className={`${hidenavbar?'w-[100%] ml-[0%]':'w-[100%] pl-[20%]'} space-x-4 flex flex-row h-screen p-[44px] pr-0 pt-0 pb-0 font-roboto`}>

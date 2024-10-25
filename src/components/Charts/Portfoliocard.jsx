@@ -15,7 +15,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     const [editLabel,seteditLabel]=useState(false)
     const inputRef=useRef(null)
     const [labelname,setlablename]=useState('Enter Label')
-    const [showValue,setshowvalue]=useState('$0')
+    const [showValue,setshowvalue]=useState('0')
     const [sheetpopup,setsheetpopup]=useState(false)
     const [sheets,setallsheets]=useState([])
     const [sheetname,setsheetname]=useState('')
@@ -24,6 +24,117 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     const [sheetfieldselected,setsheetfieldselected]=useState('')
     const [sheetKeys,setsheetKeys]=useState([])
     const [sheetJson,setsheetJson]=useState([])
+<<<<<<< Updated upstream
+=======
+    const[loading1,setLoading]=useState(false);
+    const[Loading2,setLoading2]=useState(true);
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
+    const popupRef = useRef(null);
+   
+    const [selectedIcon, setSelectedIcon] = useState(null);
+    const [icon, setIcon] = useState(<RiBarChartFill size={28} className="text-white" />); 
+    const [showPopup, setShowPopup] = useState(false);
+    const [iconname,seticonname]=useState('')
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const[currencyValue,setcurrencyvalue]=useState('$');
+   
+    
+    const handleCurrencySelect = (currency) => {
+      console.log(currency);
+      setcurrencyvalue(currency) // Handle currency selection here
+      setIsPopupOpen(false);
+      
+    
+     
+  };
+      
+ 
+    const uniqueIconKey = `selectedIcon-${id}`;
+    const togglePopup = () => {
+      setIsPopupOpen(prev => !prev);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+        if (popupRef.current && !popupRef.current.contains(event.target)) {
+            setIsPopupOpen(false);
+        }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+    };
+}, []);
+
+
+    const [selectedFilter, setSelectedFilter] = useState(''); // Selected 
+
+        const handleIconClick = (iconName) => {
+         // localStorage.setItem(uniqueIconKey, iconName); 
+          seticonname(iconName)
+          setIcon(getIconComponent(iconName)); 
+          setShowPopup(false); 
+          setshowvalue(currency)
+        };
+
+        const handleFilterSelection = (filter) => {
+          setSelectedFilter(filter);
+       
+          setshowFilterMenu(false); // Close filter menu
+          // Open sorting menu
+      };
+      const getValue=(selectedFilter)=>{
+        switch(selectedFilter){
+          case "Change Icon":
+          return setShowPopup(!showPopup)
+          case "Edit Label":
+          return handleEdit()
+          default:
+          return handlePlusClick()
+        
+        }
+       
+      }
+
+        
+        const getIconComponent = (iconName) => {
+          switch (iconName) {
+            case "RiFundsLine":
+              return <RiFundsLine size={28} className="text-white" />;
+            case "RiBarChartFill":
+              return <RiBarChartFill size={28} className="text-white" />;
+            case "PiMoney":
+              return <PiMoney size={28} className="text-white" />;
+            case "FaPeopleGroup":
+              return <FaPeopleGroup size={28} className="text-white" />;
+            case "LuTriangle":
+              return <LuTriangle size={28} className="text-white" />;
+            default:
+              return <RiBarChartFill size={28} className="text-white" />; // Default icon
+          }
+        };
+      
+        // useEffect(() => {
+        //  // const savedIcon = localStorage.getItem(uniqueIconKey);
+        //   if (savedIcon) {
+        //     setIcon(getIconComponent(savedIcon)); // Set the icon based on the stored icon name
+        //   } else {
+        //     // Set default icon if no icon is saved in localStorage
+        //     setIcon(<RiBarChartFill size={28} className="text-white" />);
+        //   }
+
+        
+        // }, [uniqueIconKey]);
+
+
+
+
+>>>>>>> Stashed changes
 
     useEffect(()=>{
         console.log(capturingPortfoliowidgitvalues+"abc"+id);
@@ -35,6 +146,13 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                         
                         setlablename(val.portfoliowidgit.labelname)
                         setshowvalue(val.portfoliowidgit.showValue)
+<<<<<<< Updated upstream
+=======
+                        seticonname(val.portfoliowidgit.portfolioicon)
+                        setIcon(getIconComponent(val.portfoliowidgit.portfolioicon))
+                        setcurrencyvalue(currencyValue)
+                        console.log("zp",capturingPortfoliowidgitvalues)
+>>>>>>> Stashed changes
                     }
                 }
             )
@@ -46,6 +164,11 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
         const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/alluploadedFiles',{organization:localStorage.getItem('organization')})
         setsheetpopup(true)
         setallsheets(response.data.data)
+<<<<<<< Updated upstream
+=======
+        setLoading(false)
+        console.log("xy",response.data.data)
+>>>>>>> Stashed changes
         
     }
     const handlesheetclick=async(id,name)=>{
@@ -58,10 +181,18 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     {
         const settingvalue=()=>{
             let myid=id+1
+<<<<<<< Updated upstream
             const isFine=JSON.stringify({id:myid,labelname:labelname,showValue:showValue})===JSON.stringify({id:myid,labelname:'Enter Label',showValue:'$0'})
            if(!isFine)
            {
             setportfoliocardwidgitcount({id:myid,labelname:labelname,showValue:showValue})
+=======
+            const isFine=JSON.stringify({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname,currencyValue:currencyValue})===JSON.stringify({id:myid,labelname:'Enter Label',showValue:'$0',portfolioicon:''})
+           if(!isFine)
+           {
+            
+            setportfoliocardwidgitcount({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname,currencyValue:currencyValue})
+>>>>>>> Stashed changes
            }
         }
         if(!editLabel)
@@ -69,7 +200,11 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
             settingvalue()
         }
         
+<<<<<<< Updated upstream
     },[editLabel,showValue])
+=======
+    },[editLabel,showValue,iconname,currencyValue])
+>>>>>>> Stashed changes
 
     
 
@@ -115,9 +250,12 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
 
         
         
-        setshowvalue(value)
+        setshowvalue(value);
         
     }
+    useEffect(()=>{
+     
+      },[currencyValue])
 
       const handleEdit=()=>{
         seteditLabel(true)
@@ -128,7 +266,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
             }
         },100)
     }
-    
+ 
     useEffect(()=>{
         const setValues=async()=>{
             const response=await axios.post('http://ec2-13-232-103-3.ap-south-1.compute.amazonaws.com:8999/sheetfromdb',{id:clickedSheetId,organization:localStorage.getItem('organization')})
@@ -152,9 +290,26 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
         setValues()
     },[clickedSheetId])
 
+<<<<<<< Updated upstream
+=======
+    const[showFilterMenu,setshowFilterMenu]=useState(false)
+
+    useEffect(()=>{
+const mergedData=[...sheets,
+  ...sheetKeys,
+...sheetJson]
+sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
+    },[sheets,sheetKeys,sheetJson])
+
+  useEffect(()=>{
+    console.log("zp",sheets.length)
+  },[])
+
+>>>>>>> Stashed changes
   return (
   
     <div className='flex h-[100%] flex-col  bg-white cursor-default space-y-2'>
+<<<<<<< Updated upstream
         <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px]  rounded-full bg-gray-100 h-[20px] fixed right-[-10px] mt-4 mr-3 top-[-15px]' onClick={deleteWidgit}>
         <IoMdClose size={15} className='text-black' />
         </div> 
@@ -168,6 +323,83 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                                 <div className='w-[20px] cursor-pointer ' onClick={()=>{setsheetpopup(false);}}>
                                     <RxCross2 className='w-[20px]'/>
                                 </div>
+=======
+      
+    <div className='-mt-4'  ><HiOutlineDotsVertical onClick={()=>{setshowFilterMenu(true)}} size={20}/></div>
+    {showFilterMenu && (
+<div className='absolute left-1 top-0 w-[150px] p-3 bg-white border-gray-300 border-[1px] rounded-md z-50'>
+<RxCross2 onClick={()=>{setshowFilterMenu(false)}} className='absolute right-2 top-1 cursor-ponter' />
+    <div
+        className='p-1 hover:bg-blue-400  flex items-center rounded-md  text-[12px] font-semibold font-inter cursor-pointer'
+        onClick={() => {setShowPopup(!showPopup);setshowFilterMenu(false) }}>
+        <p className='p-1 '>Change Icon</p>
+    </div>
+    <div
+        className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-inter font-semibold cursor-pointer'
+        onClick={() =>{handleEdit();setshowFilterMenu(false)}}>
+        <p className='p-1'>Edit Label</p>
+    </div>
+    <div
+        className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-inter h-[40px] font-semibold cursor-pointer'
+        onClick={() =>{  handlePlusClick() ;setshowFilterMenu(false)} }>
+        <p className='p-1'>Add Sheet</p>
+    </div>
+</div>
+)}
+    <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px]  rounded-full bg-gray-100 h-[20px] fixed right-0 mt-4 mr-3 top-[1px]' onClick={deleteWidgit}>
+    <IoMdClose size={20} className='text-black' />
+    </div> 
+    
+    
+   
+    
+   
+   
+    {       
+                sheetpopup?
+                
+                    <div className=' flex flex-col space-y-2  overflow-y-auto scrollbar-hide '>
+                    <div className='w-[20px] cursor-pointer ' onClick={()=>{setsheetpopup(false);<RxCross2 className='w-[20px]  mt-4'/>}}>
+                            <IoMdClose size={20} className='text-black mb-6' />
+                            
+                            </div>
+                        <div className='h-[100px]'>
+                           
+                        </div>
+                       
+                        <div className={`p-1 flex h-[200px] items-center rounded-md text-[14px] flex-col font-inter`}>
+    {sheets.length === 0 ? (
+        <p className='text-gray-500'>No sheets found</p>
+    ) : (
+        (sheets || []).filter(doc => doc.fileType === 'xlsx').map(doc => (
+            <div key={doc._id} className='w-[100%] h-[100px] -mt-8 flex flex-col space-y-2 overflow-y-auto'>
+                <div onClick={() => handlesheetclick(doc._id, doc.name)} className='w-[100%] h-[25px] hover:bg-blue-500 p-2 rounded-md select-none cursor-pointer hover:text-white flex flex-row items-center justify-start'>
+                    <FaRegFileExcel className={`text-green-500`} size={19} />
+                    <p className={`text-[14px] px-5 tracking-wider overflow-y-auto`}>
+                        {doc.name.substring(doc.name.length - 13, doc.name.length)}
+                    </p>
+                </div>
+            </div>
+        ))
+    )}
+</div>
+
+                        
+                        
+                    </div>
+               
+                :
+                sheetClicked?
+                
+                    <div className='p-2 flex flex-col space-y-2  z-[40] '>
+                        
+                        <div className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
+                            <div className='flex items-center justify-center h-[40px]' onClick={(()=>{setsheetClicked(false); setsheetpopup(true)})}>
+                            <IoMdArrowBack  className=' cursor-pointer' size={17}/>
+                            </div>
+                            <div className='text-gray-500 h-[40px] text-[15px] flex items-center justify-center'>
+                                {sheetname}
+>>>>>>> Stashed changes
                             </div>
                             
                             <div  className={`p-1 flex h-[100%]  items-center rounded-md text-[14px] flex-col font-roboto`}>
@@ -260,8 +492,73 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
         
         
     </div>
+<<<<<<< Updated upstream
   
   )
+=======
+  )}
+
+
+
+
+
+                    <div className='w-[100%] h-[30%] flex flex-row items-center justify-start space-x-2 mt-2'>
+                    <div className="bg-blue-500 w-[20%] glow h-[50px]  shadow-[0_0_15px_rgba(59,130,246,1)] rounded-full flex items-center justify-center mr-4 "onClick={() => setShowPopup(!showPopup)}>
+                  {icon }
+                </div>
+                                {
+                                    !editLabel?
+                                    <p className='text-[18px] font-inter font-bold text-gray-700 w-[50%] flex items-center h-[30px]  tracking-wider'>{labelname}</p>
+                                    :
+                                    <input ref={inputRef}  onChange={(e)=>{setlablename(e.target.value) }} onKeyPress={(e)=>e.key=='Enter'?seteditLabel(false):seteditLabel(true)} className='w-[90px] h-[30px] text-[13px] pl-1 outline-none border-[1px] border-gray-300 rounded-md'/>
+                                }
+                                
+                                {/* <div onClick={()=>handleEdit()}>
+                                    <BsPencil className='text-blue-600 ml-2' size={20}/>
+                                    
+                                </div> */}
+                               
+                    </div>
+                    <div className='w-[100%] h-[40%]  flex flex-row'>
+                        <div className='w-[70%] '>
+                            <div className='flex h-[100%] items-center justify-start'>
+                            
+                                <p  className='text-[22px] font-inter mt-9 font-bold text-gray-700 ml-2'><span onClick={togglePopup} className='mr-1 cursor-pointer' >{currencyValue}</span>{showValue}</p>
+                            </div>
+                            {isPopupOpen && (
+                    <div ref={popupRef} className='absolute top-0 left-0 bg-white border h-[160px] scrollbar-hide border-gray-300 rounded overflow-y-auto shadow-md mt-2'>
+                        <ul>
+                        <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('$')}>$</li>
+                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('€')}>€</li>
+                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('₹')}>₹</li>
+                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('£')}>£</li>
+                            
+                        
+                        </ul>
+                    </div>
+                )}
+                        </div>
+                        <div className='w-[100%] h-[100%] flex items-center justify-end mt-6'>
+                        {loading1 ? (
+            <AiOutlineLoading3Quarters className="animate-spin  text-[14px]" />
+          ) : (
+                        <div className='h-[20px] cursor-pointer'  onClick={handlePlusClick}>
+                            {/* <AiOutlineFileAdd  size={24} className='' /> */}
+                        </div>
+               )}
+</div>
+                    </div>
+                </div>
+            }
+    
+    
+    
+    
+    
+</div>
+
+)
+>>>>>>> Stashed changes
 }
 
 export default Portfoliocard
