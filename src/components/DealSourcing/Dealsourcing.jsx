@@ -35,7 +35,7 @@ const Dealsourcing = ({hidenavbar}) => {
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
 
-
+  const [loadsearch,setloadsearch]=useState(false)
   const [companies,setCompanies]=useState([])
 
   const handleSearchInputChange=(e)=>{
@@ -71,6 +71,7 @@ const Dealsourcing = ({hidenavbar}) => {
 
 
   const handleSearch = async () => {
+    setloadsearch(true)
  
     setLoading(true);   // Set loading to true when search is initiated
     
@@ -89,6 +90,7 @@ const Dealsourcing = ({hidenavbar}) => {
       console.log("Failed to fetch data. Please try again.");
     } finally {
       setLoading(false);
+      setloadsearch(false)
       ClearInput()
        // Stop loading after fetching is complete
     }
@@ -271,9 +273,16 @@ const Dealsourcing = ({hidenavbar}) => {
                   <div className='shadow-md border h-[100%] w-[70px] border-gray-300 rounded-md items-center flex justify-center cursor-pointer' onClick={ClearInput}>
                     <p className='text-[14px] text-gray-700 font-inter font-semibold'>Clear</p>
                   </div>
-                  <div className='shadow-md border h-[100%] w-[90px] border-blue-600 rounded-md items-center flex justify-center bg-blue-600 cursor-pointer' onClick={handleSearch}>
-                    <p className='text-[14px] text-white font-inter font-semibold'>Search</p>
-                  </div>
+                  {
+                    loadsearch?
+                    <div>
+                      <p>Seach in process...</p>
+                    </div>
+                    :
+                    <div className='shadow-md border h-[100%] w-[90px] border-blue-600 rounded-md items-center flex justify-center bg-blue-600 cursor-pointer' onClick={handleSearch}>
+                      <p className='text-[14px] text-white font-inter font-semibold'>Search</p>
+                    </div>
+                  }
             </div>
         </div>
       </div>
