@@ -5,7 +5,7 @@ import axios from 'axios';
 import { RxCross2 } from 'react-icons/rx';
 import { VscArrowDown, VscArrowUp } from 'react-icons/vsc';
 import { jwtDecode } from 'jwt-decode';
-
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setClickedPie, fromApi, setFromApi, chartDatatypeX, chartDatatypeY, chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [loading, setLoading] = useState(true);
   const [mydata, setmydata] = useState([]);
@@ -451,23 +451,25 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         const onPieMouseLeave = () => {
             setHoveredIndex(null);
         };
-     // Scroll handling for the legend
-     const scrollLegend = (direction) => {
-        if (legendRef.current) {
-            const scrollAmount = direction === 'up' ? -30 : 30;
-            legendRef.current.scrollBy({ top: scrollAmount, behavior: 'smooth' });
-            setScrollPosition(legendRef.current.scrollTop);
-        }
-    };
-
-
-    // Check if legend content overflows
-    const isScrollable = () => {
-        if (legendRef.current) {
-            return legendRef.current.scrollHeight > legendRef.current.clientHeight;
-        }
-        return false;
-    };
+        const scrollLegend = (direction) => {
+          if (legendRef.current) {
+              const scrollAmount = direction === 'down' ? 30 : -30; // Use 30 for down, -30 for up
+              if (direction === 'down') {
+                  legendRef.current.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+              }
+          } else {
+              console.error('legendRef.current is not defined.');
+          }
+        };
+        
+   
+        const isScrollable = () => {
+          if (legendRef.current) {
+              return legendRef.current.scrollHeight > legendRef.current.clientHeight;
+          }
+          return false;
+        };
+        
     const BASE_BLUE = '#528BFF';
     const GRADIENT_BLUE = ['#528BFF', '#85AFFF', '#A1C2FF', '#C3D6FF']; // Gradient shades
 
@@ -526,80 +528,72 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                         />
                         
                         <Legend
-                            layout="vertical"
-                            align="right"
-                            verticalAlign="middle"
-                            formatter={legendFormatter}
-                            content={props => {
-                                const { payload } = props;
-                                return (
-                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
-                                        {/* Scroll Up Arrow */}
-                                        {isScrollable() && (
-                                            <button
-                                                style={{
-                                                    background: 'none',
-                                                    border: 'none',
-                                                    cursor: 'pointer',
-                                                    color: 'black',
-                                                    fontSize: '20px',
-                                                    marginBottom: '15px',
-                                                    paddingRight:'10px'
-                                                    
-                                                }}
-                                                onClick={() => scrollLegend('up')}
-                                            >
-                                                <VscArrowUp size={24}/>
-
-                                            </button>
-                                        )}
-                                        <ul
-                                            ref={legendRef}
-                                            style={{
-                                                listStyleType: 'none',
-                                                paddingLeft: 0,
-                                                fontFamily: 'Inter',
-                                                fontWeight: 600,
-                                                maxHeight: '150px', // Fixed height for scroll
-                                                overflowY: 'auto',
-                                                scrollbarWidth: 'none', // For Firefox
-                                                msOverflowStyle: 'none',
-                                                position: 'relative',
-                                            }}
-                                            className="hide-scrollbar"
-                                        >
-                                            {payload.map((entry, index) => (
-                                                <li key={`item-${index}`} style={{ color: '#8884d8', fontSize: '14px' }}>
-                                                    {`${entry.value}: ${entry.payload.value}`}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                        {/* Scroll Down Arrow */}
-                                        {isScrollable() && (
-                                            <button
-                                                style={{
-                                                    background: 'none',
-                                                    border: 'none',
-                                                    cursor: 'pointer',
-                                                    color: 'black',
-                                                    fontSize: '20px',
-                                                    marginTop: '10px',
-                                                    paddingRight:'10px'
-                                                    
-                                                    
-                                                }}
-                                                onClick={() => scrollLegend('down')}
-                                             
-                                            >
-                                                <VscArrowDown   size={24}/>
-
-                                            </button>
-                                        )}
-                                    </div>
-                                );
-                            }}
-                            wrapperStyle={{ paddingLeft: '20px', lineHeight: '60px' }}
-                        />
+    layout="vertical"
+    align="right"
+    verticalAlign="middle"
+    formatter={legendFormatter}
+    content={props => {
+        const { payload } = props;
+        return (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+                {isScrollable() && (
+                    <button
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            color: 'black',
+                            fontSize: '20px',
+                            marginBottom: '5px', // Space between the up arrow and the legend
+                        }}
+                        onClick={() => scrollLegend('up')}
+                    >
+                        <MdKeyboardArrowUp size={24}  className='mb-2 mr-3'/>
+                    </button>
+                )}
+                <ul
+                    ref={legendRef}
+                    style={{
+                        listStyleType: 'none',
+                        paddingLeft: 0,
+                        fontFamily: 'Inter',
+                        fontWeight: 600,
+                        maxHeight: '200px',
+                        overflowY: 'auto',
+                        scrollbarWidth: 'none',
+                        msOverflowStyle: 'none',
+                        position: 'relative',
+                        margin: '0', // Remove default margin
+                        marginBottom: '10px', // Space between the legend items and the down arrow
+                    }}
+                    className="hide-scrollbar"
+                >
+                    {payload.map((entry, index) => (
+                        <li key={`item-${index}`} style={{ color: '#8884d8', fontSize: '14px' }}>
+                            {`${entry.value}: ${entry.payload.value}`}
+                        </li>
+                    ))}
+                </ul>
+                {isScrollable() && (
+                    <button
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            color: 'black',
+                            fontSize: '20px',
+                            marginTop: '5px', // Space above the down arrow
+                        }}
+                        onClick={() => scrollLegend('down')}
+                    >
+                        <MdKeyboardArrowDown size={24} className='mt-2 mr-3' />
+                    </button>
+                )}
+            </div>
+        );
+    }}
+    wrapperStyle={{ paddingLeft: '20px', lineHeight: '60px' }}
+/>
                     </PieChart>
           {/* <div className='fixed right-5 top-3 flex flex-row items-center space-x-2'>
             <div className='w-[10px] h-[10px] bg-violet-600 mt-3'></div> 
