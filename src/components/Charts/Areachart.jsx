@@ -114,35 +114,45 @@ const fieldConversionsApi={
          let fromdrive='';
       let selectedsheetidfordrive=''
       let selectedsheetfromdbname=''
+      let areachartcount=[]
         entireData.map((m,index)=>
         {
           if(index==id)
           {
-            selectedYaxis=m.selectedYAxis
-            selectedXaxis=m.selectedXAxis
-            isSheetchart=m.isSheetChart
-            clickedsheetname=m.clickedsheetname
+            console.log(m.areachartCount)
+            selectedYaxis=m?.selectedYAxis || ""
+            selectedXaxis=m?.selectedXAxis || ""
+            isSheetchart=m?.isSheetChart || ""
+            clickedsheetname=m?.clickedsheetname || ""
             setthissheetname(clickedsheetname)
-            chartdatatypex=m.chartDatatypeX
+            chartdatatypex=m?.chartDatatypeX || "integer"
             setmydatatypex(chartdatatypex)
-            chartdatatypey=m.chartDatatypeY
+            chartdatatypey=m?.chartDatatypeY || "integer"
             setmydatatypey(chartdatatypey)
-            dbCompanyName=m.dbCompanyName
-            fromdrive=m.fromdrive
+            dbCompanyName=m?.dbCompanyName || ""
+            fromdrive=m?.fromdrive || ""
             setisitfromdrive(fromdrive)
-          selectedsheetidfordrive=m.selectedsheetfromdbname
-          selectedsheetfromdbname=m.selectedsheetfromdbname
+          selectedsheetidfordrive=m?.selectedsheetfromdbname || ""
+          selectedsheetfromdbname=m?.selectedsheetfromdbname || ""
+          areachartcount=m?.areachartCount || []
            
           }
         }
         )
    // const Sheet_response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/ `,{organization:organization,CompanyName:dbCompanyName})  
-    if(fromApi&&!isSheetchart)
+    
+   if(areachartcount.length>0)
+    {
+      console.log("bhavesh here area",areachartcount)
+      const convertedData= convertDataTypes(areachartcount, {pv:chartdatatypex,uv:chartdatatypey});
+      setmydata(convertedData)
+    }
+    else if(fromApi&&!isSheetchart)
     { 
       
         const convertedData = convertDataTypes(data01[0], {
-          pv:chartDatatypeFromApiX,
-          uv:chartDatatypeFromApiY
+          pv:chartdatatypex,
+          uv:chartdatatypey
         });
        
         setmydata(convertedData)
@@ -181,8 +191,8 @@ const fieldConversionsApi={
               dt.map(d => filteredDt.push({ pv: d[selectedXaxis], uv: d[selectedYaxis] }));
   
               const convertedData = convertDataTypes(filteredDt, {
-                pv:chartDatatypeFromApiX,
-                uv:chartDatatypeFromApiY
+                pv:chartdatatypex,
+                uv:chartdatatypey
               });
               setmydata(convertedData);
               setFromApi(false);
@@ -201,8 +211,8 @@ const fieldConversionsApi={
        )
       
         const convertedData = convertDataTypes(filteredDt, {
-          pv:chartDatatypeFromApiX,
-          uv:chartDatatypeFromApiY
+          pv:chartdatatypex,
+          uv:chartdatatypey
         });
        
           setmydata(convertedData)
@@ -242,8 +252,8 @@ const fieldConversionsApi={
                 dt.map(d => filteredDt.push({ pv: d[selectedXaxis], uv: d[selectedYaxis] }));
     
                 const convertedData = convertDataTypes(filteredDt, {
-                  pv:chartDatatypeFromApiX,
-                  uv:chartDatatypeFromApiY
+                  pv:chartdatatypex,
+                  uv:chartdatatypey
                 });
                 setmydata(convertedData);
                 setFromApi(false);
@@ -260,13 +270,14 @@ const fieldConversionsApi={
         dt.map(d => filteredDt.push({ pv: d[selectedXaxis], uv: d[selectedYaxis] }));
   
         const convertedData = convertDataTypes(filteredDt, {
-          pv:chartDatatypeFromApiX,
-          uv:chartDatatypeFromApiY
+          pv:chartdatatypex,
+          uv:chartdatatypey
         });
         setmydata(convertedData);
         setFromApi(false);
             }
       }
+      
       else if(isSheetchart&&clickedsheetname.length<=0)
         {
           const convertedData = convertDataTypes(data01[0], {pv:chartdatatypex,uv:chartdatatypey});
@@ -276,11 +287,15 @@ const fieldConversionsApi={
         else
         {
           const convertedData = convertDataTypes(data01, fieldConversionsNormal);
-        
+          
           setmydata(convertedData)
+          
         }
     }
-    fun()
+    setTimeout(()=>{
+      fun()
+    },1000)
+    
 }, []);
 
 useEffect(()=>{
@@ -290,7 +305,8 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
 
   return (
     <div style={{ width: '100%', height: '90%' }} className='mt-8  pr-10'>
-    <div className='w-[100%] h-[100%] mt-3 pr-14'>
+   <p className='font-inter font-semibold text-[16px] ml-6 -mt-4'>  {thissheetname.replace(/^\d+_/, "")}
+   </p>    <div className='w-[100%] h-[100%] mt-3 pr-14'>
     <ResponsiveContainer width="100%" height="100%">
                     {mydatatypex === 'string' && mydatatypey === 'integer' ? (
                         // Standard layout: String on X-axis, Integer on Y-axis
@@ -305,7 +321,9 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                             <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
                             <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
                         </AreaChart>
-                    ) : (
+                    ) :  
+                      mydatatypex === 'integer' && mydatatypey === 'string'?
+                      (
                         // Horizontal layout: Integer on X-axis, String on Y-axis
                         <AreaChart
                             layout="vertical"
@@ -319,7 +337,20 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                             <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
                             <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
                         </AreaChart>
-                    )}
+                    )
+                    :
+                    (<AreaChart
+                      data={mydata}
+                      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                  >
+                      <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
+                      <XAxis dataKey="pv" tickCount={4}/>
+                      <YAxis tickCount={4} />
+                      <Tooltip />
+                      <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
+                      <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
+                  </AreaChart>)
+                    }
                 </ResponsiveContainer>
     
     </div>

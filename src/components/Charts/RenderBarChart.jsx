@@ -111,35 +111,40 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
       let fromdrive='';
       let selectedsheetidfordrive=''
       let selectedsheetfromdbname=''
+      let barchartcount=[]
       
       entireData.map((m,index)=>{
         if(index==id)
         {
-          selectedYaxis=m.selectedYAxis;
-          selectedXaxis=m.selectedXAxis;
-          isSheetchart=m.isSheetChart;
-          clickedsheetname=m.clickedsheetname;
+          selectedYaxis=m?.selectedYAxis || "";
+          selectedXaxis=m?.selectedXAxis || "";
+          isSheetchart=m?.isSheetChart || "";
+          clickedsheetname=m?.clickedsheetname || "";
           setthissheetname(clickedsheetname)
-          chartdatatypex=m.chartDatatypeX;
+          chartdatatypex=m?.chartDatatypeX || "string";
           setmydatatypex(chartdatatypex)
-          chartdatatypey=m.chartDatatypeY;
+          chartdatatypey=m?.chartDatatypeY || "integer";
           setmydatatypey(chartdatatypey)
-          dbCompanyName=m.dbCompanyName;
-          fromdrive=m.fromdrive
+          dbCompanyName=m?.dbCompanyName || "";
+          fromdrive=m?.fromdrive || ""
           setisitfromdrive(fromdrive)
-          selectedsheetidfordrive=m.selectedsheetfromdbname
-          selectedsheetfromdbname=m.selectedsheetfromdbname
-          
+          selectedsheetidfordrive=m?.selectedsheetfromdbname || ""
+          selectedsheetfromdbname=m?.selectedsheetfromdbname || ""
+          barchartcount=m?.barchartCount || []
         }
       });
 
+      if(barchartcount.length>0)
+        {
+          const convertedData= convertDataTypes(barchartcount, {name:chartdatatypex,uv:chartdatatypey});
+          setmydata(convertedData)
+        }
       
-      
-      if(fromApi && !isSheetchart) { 
+      else if(fromApi && !isSheetchart) { 
        
         const convertedData = convertDataTypes(data01[0], {
-          name:chartDatatypeFromApiX,
-          uv:chartDatatypeFromApiY
+          name:chartdatatypex,
+          uv:chartdatatypey
         });
         setmydata(convertedData);
         setFromApi(false);
@@ -176,8 +181,8 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
               dt.map(d => filteredDt.push({ name: d[selectedXaxis], uv: d[selectedYaxis] }));
   
               const convertedData = convertDataTypes(filteredDt, {
-                name:chartDatatypeFromApiX,
-                uv:chartDatatypeFromApiY
+                name:chartdatatypex,
+                uv:chartdatatypey
               });
               setmydata(convertedData);
               setFromApi(false);
@@ -194,8 +199,8 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
         let filteredDt = [];
         dt.map(d => filteredDt.push({name: d[selectedXaxis], uv: d[selectedYaxis]}));
         const convertedData = convertDataTypes(filteredDt, {
-          name:chartDatatypeFromApiX,
-          uv:chartDatatypeFromApiY
+          name:chartdatatypex,
+          uv:chartdatatypey
         });
         setmydata(convertedData);
         setFromApi(false);
@@ -233,8 +238,8 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
               dt.map(d => filteredDt.push({ name: d[selectedXaxis], uv: d[selectedYaxis] }));
   
               const convertedData = convertDataTypes(filteredDt, {
-                name:chartDatatypeFromApiX,
-                uv:chartDatatypeFromApiY
+                name:chartdatatypex,
+                uv:chartdatatypey
               });
               setmydata(convertedData);
               setFromApi(false);
@@ -251,8 +256,8 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
         let filteredDt = [];
         dt.map(d => filteredDt.push({ name: d[selectedXaxis], uv: d[selectedYaxis] }));
         const convertedData = convertDataTypes(filteredDt, {
-          name:chartDatatypeFromApiX,
-          uv:chartDatatypeFromApiY
+          name:chartdatatypex,
+          uv:chartdatatypey
         });
         setmydata(convertedData);
         setFromApi(false);
@@ -265,12 +270,14 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
       }
       else {
         const convertedData = convertDataTypes(data01[0], fieldConversionsNormal);
-       
+      
         setmydata(convertedData);
       }
     };
-    fun();
-  }, [investmentchange]);
+    setTimeout(()=>{
+      fun();
+    },1000)
+  }, []);
 
   const [hoveredIndex, setHoveredIndex] = useState(null); 
 
@@ -283,9 +290,9 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
 const handleMouseLeave = () => {
     setHoveredIndex(null);  // Reset the hovered bar when the mouse leaves
 };
-
+const COLORS = ['#0d47a1', '#42a5f5',];
 const barColor = (index) => {
-    return index === hoveredIndex ? '#FF8042' : '#2970FF';  // Change color on hover
+    return index === hoveredIndex ? '#FF8042' : COLORS[index % COLORS.length];  // Change color on hover
 };
 
 useEffect(()=>{
@@ -298,14 +305,14 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
   return (
     <div style={{ width: '100%', height: '95%' ,paddingBottom:'15px'}} className='mt-8  pr-10'>
       
-      <div style={{ width: '95%', height: '90%' }} className='mt-2 pr-10 ml-8 '>
+      <div style={{ width: '95%', height: '90%' }} className='mt-2 pr-10 ml- 8'>
     {mydatatypex === 'string' && mydatatypey === 'integer' ?
-        <div className='pl-4' style={{ paddingBottom: '20px' }}>
-            <p className='text-[18px] font-bold font-inter -mt-4'>Vertical Bar Chart</p>
+        <div className='' style={{ paddingBottom: '20px' }}>
+            <p className='text-[16px] font-semibold font-inter -mt-4 ml-6'>{thissheetname.replace(/^\d+_/, "")}</p>
         </div>
         :
-        <div className='pl-4 -pt-4' style={{ paddingBottom: '20px' }}>
-            <p className='text-[18px] font-bold font-inter -mt-4'>Horizontal Bar Chart</p>
+        <div className=' -pt-4' style={{ paddingBottom: '20px' }}>
+            <p className='text-[16px] font-semibold font-inter -mt-4 ml-6'>{thissheetname.replace(/^\d+_/, "")}</p>
         </div>
     }
 
@@ -395,7 +402,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-green-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Database</p>
-                  <p className='text-[14px] text-gray-600 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
+                  {/* <p className='text-[14px] text-gray-600 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p> */}
                 </div>:
                 <></>
             }
@@ -405,7 +412,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-orange-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Google Drive</p>
-                  <p className='text-[14px] text-gray-600 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
+                  {/* <p className='text-[14px] text-gray-600 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p> */}
                 </div>:
                 <></>
             }

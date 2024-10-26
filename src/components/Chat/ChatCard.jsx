@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState ,useRef} from 'react'
 import { FiPlusSquare } from "react-icons/fi";
 import { MdSend } from "react-icons/md";
 import { CiUser } from "react-icons/ci";
@@ -24,7 +24,7 @@ const ChatCard = ({id,currentTab,CompanyName,itsfrom,realtimetabchats}) => {
     const Logrole=userdata.userdetails.role
     const[chatting,setChatting]=useState([])
    const [company,Setcompany]=useState([])
-
+   const chatEndRef = useRef(null);
 
     useEffect(()=>{
         const fun=async()=>{
@@ -80,6 +80,18 @@ const ChatCard = ({id,currentTab,CompanyName,itsfrom,realtimetabchats}) => {
       fun()
     },[currentTab])
 
+
+    const scrollToBottom = () => {
+      if (chatEndRef.current) {
+        chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+  
+    useEffect(() => {
+      scrollToBottom();
+    }, [chat]);
+
+
     useEffect(()=>{
         const fun=async()=>{
             if(chat.length!=0)
@@ -104,16 +116,12 @@ const ChatCard = ({id,currentTab,CompanyName,itsfrom,realtimetabchats}) => {
     
 
 
-    const handleChat=()=>{
-
-        let sender=Logemail
-        
-        setCountChat(countChat+1)
-        setChat(prevChat=>[...prevChat,{id:countChat,chat:mychat,sender:sender,time:Date.now()}])
-        setmychat('')
-        document.getElementById('inputchat').value=""
-    }
-
+    const handleChat = () => {
+      let sender = Logemail;
+      setCountChat(countChat + 1);
+      setChat((prevChat) => [...prevChat, { id: countChat, chat: mychat, sender: sender, time: Date.now() }]);
+      setmychat('');
+    };
     const ReadableTime=(time)=>{
         const time1=new Date(time)
         return time1.toLocaleTimeString()
@@ -253,6 +261,7 @@ useEffect(() => {
                       </div>
                     </div>
                   ))}
+                  <div ref={chatEndRef} />
                 </div>
               </div>
               {itsfrom !== 'completed' ? (
@@ -322,7 +331,7 @@ useEffect(() => {
 
                         )
                     }
-                   
+                    <div ref={chatEndRef} />
                     
                 </div>
                 

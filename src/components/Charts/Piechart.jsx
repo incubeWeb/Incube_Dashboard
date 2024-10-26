@@ -113,29 +113,37 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       let fromdrive='';
       let selectedsheetidfordrive=''
       let selectedsheetfromdbname=''
+      let piechartcount=[]
 
       entireData.map((m, index) => {
         if (index === id) {
-          selectedYaxis = m.selectedYAxis;
-          selectedXaxis = m.selectedXAxis;
-          isSheetchart = m.isSheetChart;
-          clickedsheetname = m.clickedsheetname;
+          selectedYaxis = m?.selectedYAxis || "";
+          selectedXaxis = m?.selectedXAxis || "";
+          isSheetchart = m?.isSheetChart || "";
+          clickedsheetname = m?.clickedsheetname || "";
           setthissheetname(clickedsheetname)
-          chartdatatypex = m.chartDatatypeX;
-          chartdatatypey = m.chartDatatypeY;
-          dbCompanyName = m.dbCompanyName;
-          fromdrive=m.fromdrive
+          chartdatatypex = m?.chartDatatypeX || "string";
+          chartdatatypey = m?.chartDatatypeY || "integer";
+          dbCompanyName = m?.dbCompanyName || "";
+          fromdrive=m?.fromdrive || ""
           setisitfromdrive(fromdrive)
-          selectedsheetidfordrive=m.selectedsheetfromdbname
-          selectedsheetfromdbname=m.selectedsheetfromdbname
-         
+          selectedsheetidfordrive=m?.selectedsheetfromdbname || ""
+          selectedsheetfromdbname=m?.selectedsheetfromdbname || ""
+          piechartcount=m?.piechartCount || []
           
         }
       });
 
       setselectedvalueaxis(selectedYaxis);
+
+      if(piechartcount.length>0)
+        {
+          const convertedData= convertDataTypes(piechartcount, {name:chartdatatypex,value:chartdatatypey});
+          
+          setmydata(convertedData)
+        }
       
-      if (fromApi && !isSheetchart) {
+     else if (fromApi && !isSheetchart) {
       
         const convertedData = convertDataTypes(data01[0], {name: chartdatatypex,
           value: chartdatatypey});
@@ -258,171 +266,13 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       }
       setLoading(false);
     };
-    fun();
+
+    setTimeout(()=>{
+      fun();
+    },1000)
+   
   }, []);
 
-  useEffect(() => {
-    const fun = async () => {
-      const dashboard_response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`, { email: Logemail ,organization:Logorganization},{
-        headers:{
-          "Authorization":`Bearer ${token}`
-        }
-      });
-      const entireData = JSON.parse(dashboard_response.data.data.positions);
-      let selectedYaxis = '';
-      let isSheetchart = '';
-      let selectedXaxis='';
-      let clickedsheetname='';
-      let chartdatatypex='';
-      let chartdatatypey='';
-      let dbCompanyName='';
-      let fromdrive=''
-      let selectedsheetidfordrive=''
-      let selectedsheetfromdbname=''
-      entireData.map((m, index) => {
-        if (index === id) {
-          selectedYaxis = m.selectedYAxis;
-          isSheetchart = m.isSheetChart;
-          selectedXaxis = m.selectedXAxis;
-          clickedsheetname = m.clickedsheetname;
-          setthissheetname(clickedsheetname)
-          chartdatatypex = m.chartDatatypeX;
-          chartdatatypey = m.chartDatatypeY;
-          dbCompanyName = m.dbCompanyName;
-          fromdrive=m.fromdrive
-          selectedsheetfromdbname=m.selectedsheetfromdbname
-          setisitfromdrive(fromdrive)
-          selectedsheetidfordrive=m.selectedsheetfromdbname
-          setdatatypex(chartdatatypex)
-          setdatatypey(chartdatatypey)
-        }
-      });
-
-      setselectedvalueaxis(selectedYaxis);
-      
-      if (fromApi && !isSheetchart) {
-  
-        const convertedData = convertDataTypes(data01[0], {name: chartdatatypex,
-          value: chartdatatypey});
-        setmydata(convertedData);
-        setFromApi(false);
-      } else if (fromApi && isSheetchart && clickedsheetname.length > 0) {
-       
-        if(fromdrive)
-        {
-          setitsfromdatabase(true)
-          const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:Logemail,organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          })
-          
-            if(response.data.status==200)
-            {
-            const allJson=response.data.data
-            
-            const keys=allJson[0].data
-            const finalJson=[]
-            allJson.map(val=>{
-                    if(val.rowIndex!=1)
-                    {
-                        const result=keys.reduce((obj,key,value)=>{obj[key]=val.data[value]; return obj},{})
-                        finalJson.push(result)
-                    }
-                })
-
-            const data=finalJson
-            let dt = data
-            let filteredDt = [];
-            dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
-
-            const convertedData = convertDataTypes(filteredDt, {name: chartdatatypex,
-              value: chartdatatypey});
-            setmydata(convertedData);
-            setFromApi(false);
-          }
-        }
-        else{
-          if(fromdrive)
-            {
-              setitsfromdatabase(true)
-              const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:selectedsheetidfordrive,email:Logemail,organization:Logorganization},{
-                headers:{
-                  "Authorization":`Bearer ${token}`
-                }
-              })
-           
-    
-                if(response.data.status==200)
-                {
-                const allJson=response.data.data
-                
-                const keys=allJson[0].data
-                const finalJson=[]
-                allJson.map(val=>{
-                        if(val.rowIndex!=1)
-                        {
-                            const result=keys.reduce((obj,key,value)=>{obj[key]=val.data[value]; return obj},{})
-                            finalJson.push(result)
-                        }
-                    })
-    
-                const data=finalJson
-                let dt = data
-                let filteredDt = [];
-                dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
-    
-                const convertedData = convertDataTypes(filteredDt, {name: chartdatatypex,
-                  value: chartdatatypey});
-                setmydata(convertedData);
-                setFromApi(false);
-              }
-            }else{
-              const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:Logorganization},{
-                headers:{
-                  "Authorization":`Bearer ${token}`
-                }
-              });
-        setitsfromdatabase(true);
-        let dt = JSON.parse(response.data.data);
-        let filteredDt = [];
-        dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
-
-        const convertedData = convertDataTypes(filteredDt, {name: chartdatatypex,
-          value: chartdatatypey});
-        setmydata(convertedData);
-        setFromApi(false);
-            }
-        }
-      } else if (isSheetchart && clickedsheetname.length > 0) {
-       
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:selectedsheetfromdbname,organization:Logorganization},{
-          headers:{
-            "Authorization":`Bearer ${token}`
-          }
-        });
-        setitsfromdatabase(true);
-        let dt = JSON.parse(response.data.data);
-        let filteredDt = [];
-        dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
-
-        const convertedData = convertDataTypes(filteredDt, {name: chartdatatypex,
-          value: chartdatatypey});
-        setmydata(convertedData);
-        setFromApi(false);
-      } else if (isSheetchart && clickedsheetname.length <= 0) {
-        
-        const convertedData = convertDataTypes(data01[0], {name:chartdatatypex,value:chartdatatypey});
-        setmydata(convertedData);
-      } else {
-        
-        const convertedData = convertDataTypes(data01, fieldConversionsNormal);
-        setmydata(convertedData);
-      }
-      setLoading(false);
-    };
-    fun();
-  }, [investmentchange]);
 
   const legendFormatter = (value, entry) => {
     const { name, value: val } = entry.payload;
@@ -472,6 +322,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         
     const BASE_BLUE = '#528BFF';
     const GRADIENT_BLUE = ['#528BFF', '#85AFFF', '#A1C2FF', '#C3D6FF']; // Gradient shades
+    const COLORS = ['#0d47a1', '#1976d2', '#42a5f5', '#90caf9', '#e3f2fd'];
 
 
 useEffect(()=>{
@@ -482,9 +333,11 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
+     <p className='mt-6 ml-7 font-inter font-semibold'>{thissheetname.replace(/^\d+_/, "")}</p>
       {loading ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
           <Bars color="#8884d8" height={80} width={80} />
+         
         </div>
       ) : (
         <ResponsiveContainer width="100%" height="100%">
@@ -507,7 +360,8 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                                 const fillColor =
                                     hoveredIndex === index || activeIndex === index
                                         ? '#FF8042'  // Apply gradient on hover/click
-                                        : '#528BFF';  // Default to base blue color
+                                          : COLORS[index % COLORS.length];
+                                        // Default to base blue color
 
                                 return (
                                     <Cell
@@ -605,7 +459,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-green-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Database</p>
-                  <p className='text-[14px] text-gray-900 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
+                  {/* <p className='text-[14px] text-gray-900 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p> */}
                 </div>:
                 <></>
             }
@@ -615,7 +469,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-orange-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Google Drive</p>
-                  <p className='text-[14px] text-gray-900 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
+                  {/* <p className='text-[14px] text-gray-900 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p> */}
                 </div>:
                 <></>
             }
