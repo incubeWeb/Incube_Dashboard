@@ -12,8 +12,11 @@ import { MdEmail } from 'react-icons/md'
 import { GrUserAdmin } from 'react-icons/gr'
 import { Bars } from 'react-loader-spinner'
 import { jwtDecode } from 'jwt-decode'
+import Mail from '../Icons/Mail.svg'
+import Key from '../Icons/Key.svg'
+import User from '../Icons/User_Role.svg'
 
-const Addusers = ({setActiveField,hidenavbar}) => {
+const Addusers = ({setActiveField,hidenavbar,realtimeuser}) => {
     const [adduser,setAdduser]=useState(false)
     const [allUsers,setAllusers]=useState([])
     const [edit,setEdit]=useState(false)
@@ -139,14 +142,34 @@ const Addusers = ({setActiveField,hidenavbar}) => {
         }
     },[])
 
+    useEffect(()=>{
+        const getUser=async()=>{
+            let organization=Logorganization
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/fetchallusers`,{organization:organization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
+            setAllusers(response.data.data)
+            
+            
+        }
+        try{
+        getUser()
+        }catch(e)
+        {
+            getUser()
+        }
+    },[realtimeuser])
+
   return (
-    <div className={`${hidenavbar?' ml-[4%] w-[96%] ':'ml-[20%] w-[80%]'} pt-[48px] pl-[36px] bg-gray-100 flex flex-col items-center justify-start space-y-4  w-[100%] p-[20px] font-roboto`}>
+    <div className={`${hidenavbar?' ml-[4%] w-[96%] ':'ml-[20%] w-[80%]'} pt-[48px] pl-[36px] min-h-screen bg-gray-100 flex flex-col items-center justify-start space-y-4  w-[100%] p-[20px] font-roboto  `}>
         <div className='w-[100%] h-[10%] flex flex-row space-x-3'>
             <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className=' text-gray-400 hover:text-gray-600 font-inter font-semibold text-[16px]'>Dashboard</p></Link>
             <p className='text-gray-600'>/</p>
             <p className=' font-inter font-semibold text-[16px]'>Users</p>
         </div>
-        <div className='bg-white text-gray-500 rounded-t-md p-4 flex flex-row w-[100%] h-[10%]' style={{boxShadow:'0px 1px 4px #D1D5DB'}}>
+        <div className='bg-white text-gray-500 rounded-t-md p-4 flex flex-row w-[100%]  ' style={{boxShadow:'0px 1px 4px #D1D5DB'}}>
             <div className='flex flex-row w-[50%]'>
                 <p className='text-[22px] font-inter font-semibold text-gray-600'>Members</p>
             </div>
@@ -164,74 +187,77 @@ const Addusers = ({setActiveField,hidenavbar}) => {
                 }
                 
                 <div className=' w-[120px] h-[35px] rounded-md md:flex md:items-center md:space-x-2 select-none  hover:bg-sky-500 hover:text-white cursor-pointer' onClick={handleAddUser} >
-                    <div className='basis-3/12 md:flex md:justify-end md:items-center h-[100%]'><IoAddCircleSharp size={22} className='cursor-pointer '/></div>
+                    <div className='basis-3/12 md:flex md:justify-end md:items-center h-[90%]'><IoAddCircleSharp size={22} className='cursor-pointer '/></div>
                     <p className=' text-[16px] pt-[1px]  font-inter font-semibold cursor-pointer'>New User</p>
                 </div>
                 
             </div>
         </div>
-        <div className='bg-white mt-[10px] w-[100%] h-[440px] overflow-y-auto rounded-md flex flex-col p-4' style={{boxShadow:'0px 1px 4px #D1D5DB'}}>
-            <div className='flex flex-row w-[100%] h-[40px] font-noto'>
-                <div className='w-[40%] h-[100%] flex items-center justify-start space-x-2'>
-                    <p className='text-[16px] pl-0 font-semibold font-inter text-gray-500'>Email</p>
-                    <div className='pt-[3px]'>
-                    <MdEmail size={17} className='text-gray-600'/>
-                    </div>
-                </div>
-                <div className='w-[30%] items-center justify-start flex h-[100%] space-x-2'>
-                    
-                    <p className='text-[16px] pl-1 font-semibold font-inter text-gray-500'>Password</p>
-                    <div className='pt-[3px]'>
-                        <IoKey size={17} className='text-gray-600'/>
-                    </div>
-                </div>
-                <div className='w-[30%] flex pl-2 items-center justify-start h-[100%] space-x-2'>
-                    <p className='text-[16px] font-semibold font-inter text-gray-500'>Role</p>
-                    <div className='pt-[3px]'>
-                        <GrUserAdmin size={17} className='text-gray-600'/>
-                    </div>
-                </div>
+        {/* List inside the white box  */}
+        <div className='bg-white mt-[10px] w-[100%]  min-h-[150%] scrollbar-hide rounded-md flex flex-col p-4' style={{boxShadow:'0px 1px 4px #D1D5DB' }}>
+    <div className='flex flex-row w-[100%] h-[40px] font-noto'>
+        <div className='w-[40%] h-[100%] flex items-center justify-start space-x-2'>
+            <p className='text-[16px] pl-0 font-semibold font-inter text-gray-500'>Email</p>
+            <div className='pt-[3px]'>
+                <img src={Mail} className='w-5 h-5 -mt-1' />
             </div>
-            <div className='w-[100%] h-[1px] mt-2 '> </div>
-
-            {
-                !loading?
-                <div className= ' w-[100%] h-[10%] flex flex-col space-y-2 mt-[10px]'>
-                    {
-            
-                        allUsers.length>0?
-                        allUsers.map(user=>
-                        <div key={user._id} className='flex flex-row  rounded-md  w-[100%]'>
-                            <div className='space-x-2 w-[40%] h-[40px] flex items-center justify-start'>
-                                <FaUser className='text-gray-500'/>
-                                <p className='text-[15px] pl-2 pt-[2px] font-inter font-semibold text-gray-800'>{user.email}</p>
-                            </div>
-                            <div className='w-[30%] items-center justify-start flex h-[100%]'>
-                                <p className='text-[15px] pl-2 font-inter font-semibold text-gray-800'>{user.password}</p>
-                            </div>
-                            <div className='w-[20%] flex pl-2 items-center justify-start h-[100%] '>
-                                <div className='border-[1px] border-gray-300 flex flex-row items-center h-[27px] space-x-1 rounded-md p-2'>
-                                    <GoDotFill size={12} className={`${user.role=='super admin'?'text-red-800':user.role=='admin'?'text-green-800':user.role=='team lead'?'text-purple-800':'text-sky-500'}`}/>
-                                    <p className='text-[14px] font-inter font-semibold'>{user.role}</p>
-                                </div>
-                            </div>
-                            <div className='w-[10%] flex flex-col pl-2 items-center justify-start h-[100%]'>
-                            <div className='basis-1/2 flex justify-end space-x-3 text-gray-800'><p className='text-[14px] text-gray-600 cursor-pointer font-roboto items-center flex' onClick={()=>handleEdit(user.email,user.password,user.role)}><FaUserEdit size={20} className='mt-4'/></p><p className='text-[14px] text-red-500 cursor-pointer font-roboto flex items-center' onClick={()=>handleDelete(user.email)}><FaUserMinus size={20}  className='mt-4'/></p></div>
-                            </div>        
-                        </div>
-                        )
-                        :
-                        <></>
-                    }
-                </div>
-                :
-                <div className='w-[100%]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                    <Bars color="#8884d8" height={80} width={80} />
-                </div>
-            }
-            
-
         </div>
+        <div className='w-[30%] items-center justify-start flex h-[100%] space-x-2'>
+            <p className='text-[16px] pl-1 font-semibold font-inter text-gray-500'>Password</p>
+            <div className='pt-[3px]'>
+                <img src={Key} className='w-5 h-5 -mt-1'/>
+            </div>
+        </div>
+        <div className='w-[30%] flex pl-2 items-center justify-start h-[100%] space-x-2'>
+            <p className='text-[16px] font-semibold font-inter text-gray-500'>Role</p>
+            <div className='pt-[3px]'>
+                <img src={User}  className='w-5 h-5 -mt-1'/>
+            </div>
+        </div>
+    </div>
+    <div className='w-[100%] h-[1px] mt-2 '> </div>
+
+    {
+        !loading ?
+        <div className='w-[100%] h-[10%] flex flex-col space-y-2 mt-[10px]'>
+            {
+                allUsers.length > 0 ?
+                allUsers.map(user => (
+                    <div key={user._id} className='flex flex-row rounded-md w-full border-b border-gray-200 py-2'>
+                        <div className='space-x-2 w-[40%] h-[40px] flex items-center justify-start'>
+                            <FaUser className='text-gray-500'/>
+                            <p className='text-[15px] pl-2 pt-[2px] font-inter font-semibold text-gray-800'>{user.email}</p>
+                        </div>
+                        <div className='w-[30%] items-center justify-start flex h-[100%]'>
+                            <p className='text-[15px] pl-2 font-inter font-semibold text-gray-800'>{user.password}</p>
+                        </div>
+                        <div className='w-[20%] flex pl-2 items-center justify-start h-[100%]'>
+                            <div className='border-[1px] border-gray-200  flex flex-row items-center h-[27px] space-x-1 rounded-md p-2'>
+                                <GoDotFill size={12} className={`${user.role === 'super admin' ? 'text-red-800' : user.role === 'admin' ? 'text-green-800' : user.role === 'team lead' ? 'text-purple-800' : 'text-sky-500'}`}/>
+                                <p className='text-[14px] font-inter font-semibold'>{user.role}</p>
+                            </div>
+                        </div>
+                        <div className='w-[10%] flex flex-col pl-2 items-center justify-start h-[100%]'>
+                            <div className='basis-1/2 flex justify-end space-x-3 text-gray-800'>
+                                <p className='text-[14px] text-gray-600 cursor-pointer font-roboto items-center flex' onClick={() => handleEdit(user.email, user.password, user.role)}>
+                                    <FaUserEdit size={20} className='mt-1'/>
+                                </p>
+                                <p className='text-[14px] text-red-500 cursor-pointer font-roboto flex items-center' onClick={() => handleDelete(user.email)}>
+                                    <FaUserMinus size={20} className='mt-1'/>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )) : null
+            }
+        </div>
+        :
+        <div className='w-[100%]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+            <Bars color="#8884d8" height={80} width={80} />
+        </div>
+    }
+</div>
+
         {
             adduser?
             <CreateUser hidenavbar={hidenavbar} handleAddUser={handleAddUser} setAllusers={setAllusers}/>

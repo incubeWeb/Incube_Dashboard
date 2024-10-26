@@ -7,7 +7,7 @@ import { FaRegFileExcel } from 'react-icons/fa'
 import { IoMdArrowBack } from 'react-icons/io'
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useSheet } from '../SheetContext/SheetContext';
-const MeterComponent = ({selectedTab}) => {
+const MeterComponent = ({selectedTab,hidenavbar,realtimeportfoliostate}) => {
   const max = 100;  
   const min = 0;    
  
@@ -29,8 +29,10 @@ const MeterComponent = ({selectedTab}) => {
   const [clickedSheetId,setclickedSheetId]=useState('')
   const [sheetJson,setsheetJson]=useState([])
   const [showValue,setshowvalue]=useState('$0')
-  const [percentage,setpercentage] = useState('')
+  const [percentage, setpercentage] = useState(0);
   const[checkvalue,setcheckvalue]=useState('')
+  const [previousPercentage, setPreviousPercentage] = useState(0);
+  const popupRef = useRef(null);
   const totalArcLength=820;
   
     const { setpercentage1 } = useSheet();
@@ -76,6 +78,7 @@ const MeterComponent = ({selectedTab}) => {
     
     setallsheets(tosetdata)
     setsheetpopup(true)
+    setsheetClicked(false)
  
 } 
 
@@ -110,9 +113,13 @@ const setmeterValue=async()=>{
               })
             
         }
-        if(selectedTab==Logemail){
+        if(selectedTab==Logemail && percentage !=0){
+         
         setmeterValue()
         }
+      
+
+
 },[percentage])
 
 useEffect(()=>{
@@ -127,11 +134,15 @@ useEffect(()=>{
               console.log(response.data)
             if(response.data.status==200)
             {
-              setpercentage(response.data.metervalue)
+              const metervalue = response.data.metervalue;
+              setpercentage(metervalue);
+           
             }
   }
-  insertValue()
-},[selectedTab])
+  if (selectedTab) {
+    insertValue();
+  }
+},[selectedTab,realtimeportfoliostate])
 
 
 
@@ -178,6 +189,7 @@ const handleselectsheetfield = () => {
     setshowvalue(value);
     const ans = Math.max(min, Math.min(value/2, max)); 
     setpercentage(ans);
+  
   } else {
     console.warn("sheetJson is empty");
   }
@@ -314,29 +326,62 @@ const handleGooglesheetclicked=async (id,name)=>{
      
   }
 }
+let label, bgColor;
+  if (percentage*2 >= 80) {
+    label = "Excellent";
+    bgColor = '#054F31'; // Green for excellent
+  } else if (percentage*2 >= 60) {
+    label = "Good";
+    bgColor = '#FDB022'; // Yellow for good
+  } else if (percentage*2 >= 40) {
+    label = "Fine";
+    bgColor = '#ff9800'; // Orange for fine
+  } else {
+    label = "Poor";
+    bgColor = '#D92D20'; // Red for poor
+  }
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+        if (popupRef.current && !popupRef.current.contains(event.target)) {
+          setshowPopupMenu(false)
+          setsheetpopup(false);
+          setsheetClicked(false);
+        }
+    };
 
-
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+    };
+}, []);
   return (
-    <div className='relative'>
-      <HiOutlineDotsVertical size={20} className='absolute -mt-16 right-4' onClick={()=>{setshowPopupMenu(!showPopupMenu)}}/>
+    <div className='relative w-[100%]'>
+       {selectedTab === Logemail && (
+    <HiOutlineDotsVertical 
+      size={20} 
+      className='absolute -mt-16 right-4 cursor-pointer' 
+      onClick={() => { setshowPopupMenu(!showPopupMenu); }}
+    />
+  )}
       {showPopupMenu && (
-    <div className='absolute -mt-10  right-9 w-[150px] bg-white p-3 border-gray-300 border-[1px] rounded-md z-50'>
-    
-        <div
-            className='p-1 hover:bg-blue-400  flex items-center rounded-md  text-[12px] font-semibold font-inter cursor-pointer'
-            onClick={() => {handlePlusClick();setshowPopupMenu(false)}}>
-            <p className='p-1 font-inter font-bold text-[12px] '>Upload Sheet</p>
-        </div>
-       
+        <div ref={popupRef} className='absolute -mt-20 right-9 w-[200px] bg-white p-3 border-gray-300 border-[1px] rounded-md z-50'>
+    <div className='bg-blue-500 rounded-md h-[30px] flex items-center justify-center mb-2'>
+        <p className='text-center text-[12px] font-semibold font-inter text-white'>Select Sheet</p>
     </div>
+    <div
+        className='flex items-center justify-center h-[40px] cursor-pointer hover:bg-gray-100 hover:text-gray-800 rounded-md'
+        onClick={() => { handlePlusClick(); setshowPopupMenu(false) }}>
+        <p className='p-1 font-inter font-bold text-[12px] text-gray-700'>Upload Sheet</p>
+    </div>
+</div>
 )}
 
 
 {
                     sheetClicked?
-                    <div className='left-[20%] w-[80%] h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]'>
-                                    <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
+                    <div className={`${hidenavbar ? 'w-full' : 'left-20 w-[80%]'} fixed top-0  left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center z-50  `}>
+                                    <div  ref={popupRef}  className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' >
                                         
                                         <div className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
                                             <div className='flex items-center justify-center h-[40px]' onClick={(()=>{setsheetClicked(false); setsheetpopup(true)})}>
@@ -384,55 +429,74 @@ const handleGooglesheetclicked=async (id,name)=>{
                 }
 
 
-{
-                    sheetpopup?
-                    <div className='left-[20%] w-[80%]  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]'>
-                        <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
-                            
-                            <div className='h-[50px]'>
-                                <div className='w-[20px] cursor-pointer ' onClick={()=>{setsheetpopup(false);}}>
-                                    <RxCross2 className='w-[20px]'/>
-                                </div>
-                            </div>
-                            
-                            <div  className={`p-1 flex h-[100%]  items-center rounded-md text-[14px] flex-col font-roboto overflow-y-auto`}>
-                            {(sheets||[]).map(doc=>
-                                    doc.fileType=='xlsx'?
-                                    <div key={doc._id}  className='w-[100%] flex flex-col space-y-2'>
-                                            <div onMouseEnter={()=>sethover(true)} onMouseLeave={()=>sethover(false)} onClick={()=>handlesheetclick(doc._id,doc.name)} className='w-[100%] h-[45px] hover:bg-blue-500 p-2 rounded-md select-none cursor-pointer hover:text-white flex flex-row items-center justify-start'>
-                                                <div>
-                                                    <FaRegFileExcel className={` text-green-500`} size={19}/>
-                                                </div>
-                                                <p className={` text-[14px] px-5 tracking-wider`}>{doc.name}</p>
-                                            </div>
-                                    </div>
-                                    :
-                                    <></>
-                                )}  
-                                {
-                                    googlesheetfiles.length>0?
-                                    <div className='w-[100%] font-inter text-[14px] font-semibold mt-4 mb-2 h-[40px] flex items-center pl-2'><p>Google sheets:</p></div>
-                                    :
-                                    <></>
-                                }
-                                {(googlesheetfiles||[]).map(doc=>
-                                    <div key={doc._id}  className='w-[100%] flex flex-col space-y-2'>
-                                            <div onMouseEnter={()=>sethover(true)} onMouseLeave={()=>sethover(false)} onClick={()=>handleGooglesheetclicked(doc.id,doc.name)} className='w-[100%] h-[45px] hover:bg-blue-500 p-2 rounded-md select-none cursor-pointer hover:text-white flex flex-row items-center justify-start'>
-                                                <div>
-                                                    <FaRegFileExcel className={` text-green-500`} size={19}/>
-                                                </div>
-                                                <p className={` text-[14px] px-5 tracking-wider`}>{doc.name}</p>
-                                            </div>
-                                    </div>
-                                )}
-                            </div>
-                            
-                            
-                        </div>
+                {
+    sheetpopup ? (
+        <div className={`${hidenavbar ? 'w-full' : 'left-20 w-[80%]'} fixed top-0 left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center z-50`}>
+            <div ref={popupRef}  className='p-2 flex flex-col w-[400px] h-[400px] space-y-2 bg-white z-[40] rounded-md shadow-lg'>
+            <div className='flex items-center font-inter bg-blue-500 rounded-md px-2 justify-between h-[50px]'>
+                <div className='flex items-center cursor-pointer' >
+                    
+                    <p className='text-[14px] font-semibold flex justify-center text-white  ml-8 items-center'>Select Sheet for Meter</p>
+                </div>
+                <div className='flex items-center space-x-2 ' onClick={()=>{setsheetpopup(false);}}>
+                    <div className='cursor-pointer'>
+                        <RxCross2 size={20} className='text-white' />
                     </div>
-                    :
-                    <></>
-                }
+                </div>
+            </div>
+                {sheets.length === 0 && googlesheetfiles.length === 0 ? (
+    <p className='text-gray-500 text-center font-semibold'>No sheets found</p>
+) : (
+    <>
+        <div className='font-inter text-[16px] font-semibold mb-2'>
+            <p className='border-b pb-2'>Database Sheets:</p>
+        </div>
+        <div className='p-1 flex h-[100%] items-center rounded-md text-[14px] flex-col font-roboto overflow-y-auto scrollbar-hide'>
+            {(sheets || []).map(doc => doc.fileType === 'xlsx' ? (
+                <div key={doc._id} className='w-full flex flex-col space-y-2'>
+                    <div 
+                        onMouseEnter={() => sethover(true)} 
+                        onMouseLeave={() => sethover(false)} 
+                        onClick={() => handlesheetclick(doc._id, doc.name)} 
+                        className='w-full h-[45px] hover:bg-blue-500 p-2 rounded-md select-none cursor-pointer hover:text-white flex items-center'
+                        role="button" 
+                        aria-label={`Open sheet: ${doc.name}`}
+                    >
+                        <FaRegFileExcel className='text-green-500' size={19} />
+                        <span>{doc.name.substring(doc.name.length - 13)}</span>
+                    </div>
+                </div>
+            ) : null)}
+
+            {googlesheetfiles.length > 0 && (
+                <div className='w-full font-inter border-b pb-2 text-[14px] font-semibold mt-4 mb-2 h-[40px] flex items-center pl-2'>
+                    <p className=''>Google sheets:</p>
+                </div>
+            )}
+
+            {(googlesheetfiles || []).map(doc => (
+                <div key={doc._id} className='w-full flex flex-col space-y-2'>
+                    <div 
+                        onMouseEnter={() => sethover(true)} 
+                        onMouseLeave={() => sethover(false)} 
+                        onClick={() => handleGooglesheetclicked(doc.id, doc.name)} 
+                        className='w-full h-[45px] hover:bg-blue-500 p-2 rounded-md select-none cursor-pointer hover:text-white flex items-center'
+                        role="button" 
+                        aria-label={`Open Google sheet: ${doc.name}`}
+                    >
+                        <FaRegFileExcel className='text-green-500' size={19} />
+                        <p className='text-[14px] px-5 tracking-wider'>{doc.name}</p>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </>
+)}
+
+            </div>
+        </div>
+    ) : null
+}
 
     <div className='font-inter tracking-wider text-[14px] flex flex-col items-center p-5'>
     
@@ -471,10 +535,13 @@ const handleGooglesheetclicked=async (id,name)=>{
         </text>
       </svg>
 
-      {/* Additional details below the arc */}
-      <div className="text-center mt-2">
-        <p className='font-inter font-semibold text-xl'>Current Value: {percentage*2}%</p>
-        <p className='text-sm text-gray-500'>Range: {min}% - {max}%</p>
+      <div className="text-center">
+        <div
+          className="rounded-xl font-semibold text-white w-[90px] p-1"
+          style={{ backgroundColor: bgColor }}  // Dynamic background color
+        >
+          <p>{label}</p>
+        </div>
       </div>
 
       {/* Styling to enhance the container */}

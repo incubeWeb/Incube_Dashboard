@@ -86,7 +86,8 @@ console.log("zx",organziationUsers)
       setportfoliosecurity('public')
       handlecancel();
     } else {
-      setPopupType('private'); // Set to private otherwise
+      setPopupType('private');
+      handlecancel() // Set to private otherwise
     }
     const selectedUsers = checkedUsers.filter(val => val.value === true);
     

@@ -21,7 +21,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     const [editLabel,seteditLabel]=useState(false)
     const inputRef=useRef(null)
     const [labelname,setlablename]=useState('Enter Label')
-    const [showValue,setshowvalue]=useState('$0')
+    const [showValue,setshowvalue]=useState('0')
     const [sheetpopup,setsheetpopup]=useState(false)
     const [sheets,setallsheets]=useState([])
     const [sheetname,setsheetname]=useState('')
@@ -37,14 +37,45 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     const Logemail=userdata.userdetails.email
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
-    
+    const popupRef = useRef(null);
+   
     const [selectedIcon, setSelectedIcon] = useState(null);
     const [icon, setIcon] = useState(<RiBarChartFill size={28} className="text-white" />); 
     const [showPopup, setShowPopup] = useState(false);
     const [iconname,seticonname]=useState('')
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const[currencyValue,setcurrencyvalue]=useState('$');
+   
+    
+    const handleCurrencySelect = (currency) => {
+      console.log(currency);
+      setcurrencyvalue(currency) // Handle currency selection here
+      setIsPopupOpen(false);
       
+    
+     
+  };
+      
+ 
     const uniqueIconKey = `selectedIcon-${id}`;
-       
+    const togglePopup = () => {
+      setIsPopupOpen(prev => !prev);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+        if (popupRef.current && !popupRef.current.contains(event.target)) {
+            setIsPopupOpen(false);
+        }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+    };
+}, []);
+
+
     const [selectedFilter, setSelectedFilter] = useState(''); // Selected 
 
         const handleIconClick = (iconName) => {
@@ -52,6 +83,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
           seticonname(iconName)
           setIcon(getIconComponent(iconName)); 
           setShowPopup(false); 
+          setshowvalue(currency)
         };
 
         const handleFilterSelection = (filter) => {
@@ -118,6 +150,8 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                         setshowvalue(val.portfoliowidgit.showValue)
                         seticonname(val.portfoliowidgit.portfolioicon)
                         setIcon(getIconComponent(val.portfoliowidgit.portfolioicon))
+                        setcurrencyvalue(currencyValue)
+                        console.log("zp",capturingPortfoliowidgitvalues)
                     }
                 }
             )
@@ -135,6 +169,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
         setsheetpopup(true)
         setallsheets(response.data.data)
         setLoading(false)
+        console.log("xy",response.data.data)
         
     }
     const handlesheetclick=async(id,name)=>{
@@ -147,11 +182,11 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     {
         const settingvalue=()=>{
             let myid=id+1
-            const isFine=JSON.stringify({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname})===JSON.stringify({id:myid,labelname:'Enter Label',showValue:'$0',portfolioicon:''})
+            const isFine=JSON.stringify({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname,currencyValue:currencyValue})===JSON.stringify({id:myid,labelname:'Enter Label',showValue:'$0',portfolioicon:''})
            if(!isFine)
            {
             
-            setportfoliocardwidgitcount({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname})
+            setportfoliocardwidgitcount({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname,currencyValue:currencyValue})
            }
         }
         if(!editLabel)
@@ -159,7 +194,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
             settingvalue()
         }
         
-    },[editLabel,showValue,iconname])
+    },[editLabel,showValue,iconname,currencyValue])
 
     
 
@@ -214,9 +249,12 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
 
         
         
-        setshowvalue(value)
+        setshowvalue(value);
         
     }
+    useEffect(()=>{
+     
+      },[currencyValue])
 
       const handleEdit=()=>{
         seteditLabel(true)
@@ -227,7 +265,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
             }
         },100)
     }
-    
+ 
     useEffect(()=>{
         const setValues=async()=>{
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:clickedSheetId,organization:Logorganization},{
@@ -265,6 +303,10 @@ const mergedData=[...sheets,
 sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
     },[sheets,sheetKeys,sheetJson])
 
+  useEffect(()=>{
+    console.log("zp",sheets.length)
+  },[])
+
   return (
     <div className='flex h-[100%] flex-col  bg-white cursor-default space-y-2'>
       
@@ -298,10 +340,10 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
     
    
    
-    {
+    {       
                 sheetpopup?
                 
-                    <div className=' flex flex-col space-y-2 overflow-y-auto scrollbar-hide '>
+                    <div className=' flex flex-col space-y-2  overflow-y-auto scrollbar-hide '>
                     <div className='w-[20px] cursor-pointer ' onClick={()=>{setsheetpopup(false);<RxCross2 className='w-[20px]  mt-4'/>}}>
                             <IoMdClose size={20} className='text-black mb-6' />
                             
@@ -310,18 +352,23 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                            
                         </div>
                        
-                        <div  className={`p-1 flex h-[200px]  items-center rounded-md text-[14px] flex-col  font-inter`}>
-                        {(sheets||[]).filter(doc=>doc.fileType=='xlsx').map(doc=>
-                                <div key={doc._id}  className='w-[100%] h-[100px] -mt-8 flex flex-col space-y-2  overflow-y-auto '>
-                                        <div  onClick={()=>handlesheetclick(doc._id,doc.name)} className='w-[100%] h-[25px] hover:bg-blue-500 p-2 rounded-md select-none cursor-pointer hover:text-white flex flex-row items-center justify-start'>
-                                            <div >
-                                                <FaRegFileExcel className={` text-green-500`} size={19}/>
-                                            </div>
-                                            <p className={` text-[14px] px-5  tracking-wider overflow-y-auto`}>{doc.name.substring(doc.name.length-15,doc.name.length)}</p>
-                                        </div>
-                                </div>
-                            )}  
-                        </div>
+                        <div className={`p-1 flex h-[200px] items-center rounded-md text-[14px] flex-col font-inter`}>
+    {sheets.length === 0 ? (
+        <p className='text-gray-500'>No sheets found</p>
+    ) : (
+        (sheets || []).filter(doc => doc.fileType === 'xlsx').map(doc => (
+            <div key={doc._id} className='w-[100%] h-[100px] -mt-8 flex flex-col space-y-2 overflow-y-auto'>
+                <div onClick={() => handlesheetclick(doc._id, doc.name)} className='w-[100%] h-[25px] hover:bg-blue-500 p-2 rounded-md select-none cursor-pointer hover:text-white flex flex-row items-center justify-start'>
+                    <FaRegFileExcel className={`text-green-500`} size={19} />
+                    <p className={`text-[14px] px-5 tracking-wider overflow-y-auto`}>
+                        {doc.name.substring(doc.name.length - 13, doc.name.length)}
+                    </p>
+                </div>
+            </div>
+        ))
+    )}
+</div>
+
                         
                         
                     </div>
@@ -435,8 +482,21 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                     <div className='w-[100%] h-[40%]  flex flex-row'>
                         <div className='w-[70%] '>
                             <div className='flex h-[100%] items-center justify-start'>
-                                <p className='text-[22px] font-inter mt-9 font-bold text-gray-700 ml-2'>{showValue}</p>
+                            
+                                <p  className='text-[22px] font-inter mt-9 font-bold text-gray-700 ml-2'><span onClick={togglePopup} className='mr-1 cursor-pointer' >{currencyValue}</span>{showValue}</p>
                             </div>
+                            {isPopupOpen && (
+                    <div ref={popupRef} className='absolute top-0 left-0 bg-white border h-[160px] scrollbar-hide border-gray-300 rounded overflow-y-auto shadow-md mt-2'>
+                        <ul>
+                        <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('$')}>$</li>
+                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('€')}>€</li>
+                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('₹')}>₹</li>
+                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('£')}>£</li>
+                            
+                        
+                        </ul>
+                    </div>
+                )}
                         </div>
                         <div className='w-[100%] h-[100%] flex items-center justify-end mt-6'>
                         {loading1 ? (

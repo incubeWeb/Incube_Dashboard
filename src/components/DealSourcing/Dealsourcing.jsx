@@ -53,7 +53,7 @@ const Dealsourcing = ({hidenavbar}) => {
 
   const ClearInput=()=>{
     
-    setSearchVal('')
+    //setSearchVal('')
   }
 
   
@@ -73,18 +73,17 @@ const Dealsourcing = ({hidenavbar}) => {
   const handleSearch = async () => {
  
     setLoading(true);   // Set loading to true when search is initiated
-    setCompanies([]); 
+    
     
     try {
      
-      const res = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/scrape/companyData`,{"company": `${searchValue}`},{
+      const res = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/site/get-sitename`,{"companysearch": `${searchValue}`},{
         headers:{
           "Authorization":`Bearer ${token}`
         }
       });
       const data = res.data.data;
    
-    
       setCompanies(data); // Store fetched companies
     } catch (err) {
       console.log("Failed to fetch data. Please try again.");
@@ -95,21 +94,21 @@ const Dealsourcing = ({hidenavbar}) => {
     }
   };
 
-  useEffect(() => {
-    try{
-    if (companies[0]?.Similar_Names) {
-      const ProcessData = companies[0].Similar_Names.map((v, index) => {
+  // useEffect(() => {
+  //   try{
+  //   if (companies[0]?.Similar_Names) {
+  //     const ProcessData = companies[0].Similar_Names.map((v, index) => {
 
-        // Further processing here
-        return v;
-      });
+  //       // Further processing here
+  //       return v;
+  //     });
 
-      // Set the length of ProcessData in state
-      setProcessDataLength(ProcessData.length);
-    }} catch {
-      console.log("server error..")
-    }
-  }, [companies]); // This effect runs when 'companies' changes
+  //     // Set the length of ProcessData in state
+  //     setProcessDataLength(ProcessData.length);
+  //   }} catch {
+  //     console.log("server error..")
+  //   }
+  // }, [companies]); // This effect runs when 'companies' changes
 
 
 
@@ -127,28 +126,32 @@ const Dealsourcing = ({hidenavbar}) => {
 
   let name, photo, funding, LinkedIn_url, Locality, Country;
 
-  try {
-    name = companies[2].LinkedIn.jsonLD.name;
-    photo = companies[1].Company_Info.image_url;
-    funding = companies[1].Company_Info.discription[0]['Total Funding'];
-    LinkedIn_url = companies[2].LinkedIn.jsonLD.url;
-    Locality = companies[2].LinkedIn.jsonLD.address.addressLocality;
-    Country = companies[2].LinkedIn.jsonLD.address.addressCountry;
-  } catch (error) {
-    console.error("Error accessing company data", error);
-    // Provide default values or handle the error gracefully
-    name = "Unknown Company";
-    photo = "default_image_url";
-    funding = "N/A";
-    LinkedIn_url = "#";
-    Locality = "Unknown";
-    Country = "Unknown";
-  }
+//   try {
+//     name = companies[2].LinkedIn.jsonLD.name;
+//     photo = companies[1].Company_Info.image_url;
+//     funding = companies[1].Company_Info.discription[0]['Total Funding'];
+//     LinkedIn_url = companies[2].LinkedIn.jsonLD.url;
+//     Locality = companies[2].LinkedIn.jsonLD.address.addressLocality;
+//     Country = companies[2].LinkedIn.jsonLD.address.addressCountry;
+//   } catch (error) {
+//     console.error("Error accessing company data", error);
+//     // Provide default values or handle the error gracefully
+//     name = "Unknown Company";
+//     photo = "default_image_url";
+//     funding = "N/A";
+//     LinkedIn_url = "#";
+//     Locality = "Unknown";
+//     Country = "Unknown";
+//   }
   
 
+//   useEffect(()=>{
+// const mergedData=[...companies]
+// sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+//   },[companies])
+
   useEffect(()=>{
-const mergedData=[...companies]
-sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+    console.log("her",companies)
   },[companies])
 
   return (
@@ -283,11 +286,11 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                     <p className='text-gray-800 text-[12px] font-inter font-semibold '>Sort by Price</p>
                 </div>
             </div>
-            <div className='w-[100%] h-[90%]  space-y-2 pr-6 font-inter'>
+            
             
            
 
-   {  companies.length>0?  
+   {/* {  companies.length>0?  
      <CompanyTemplate2
      name={name}
      photo={photo}
@@ -310,12 +313,12 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                 
        <p className=' items-center text-[22px] font-inter font-semibold mt-5'> Search for Companies..</p>)}
    
-     </>
+     </> */
    } 
-  </div>
-            <div className='w-[100%] h-[90%] space-y-2 pr-6 font-inter'>
-            <div className='grid w-[100%] h-[90%]  pr-6  pt-6 grid-cols-3   gap-8 font-inter'>
- {
+ 
+            
+            
+ {/* {
                    companies.length>0?
                   (companies[0].Similar_Names).map((val,index)=>
                     
@@ -328,9 +331,16 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                    )
                    :
                    <></>
-               }
-</div>
-            </div>
+               } */}
+
+
+              {
+                <div className='w-[100%]'>
+                  <p className='text-[15px] text-gray-800 font-inter'>{companies}</p>
+                </div>
+              }
+
+           
 
     
 

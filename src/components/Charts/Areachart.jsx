@@ -9,6 +9,7 @@ import { jwtDecode } from 'jwt-decode';
 
 const Areachart = ({investmentchange,id,data01,clickedArea,setClickedArea,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [mydata,setmydata]=useState([])
+  const [thissheetname,setthissheetname]=useState('')
   const [itsfromDatabase,setitsfromdatabase]=useState(false)
   const [mydatatypex,setmydatatypex]=useState(chartDatatypeX)
   const [mydatatypey,setmydatatypey]=useState(chartDatatypeY)
@@ -84,8 +85,8 @@ const Areachart = ({investmentchange,id,data01,clickedArea,setClickedArea,fromAp
 
 
 const fieldConversionsNormal = {
-  pv: chartDatatypeX,  // Convert 'name' field to number
-  uv: chartDatatypeY  // Convert 'value' field to string
+  pv: mydatatypex,  // Convert 'name' field to number
+  uv: mydatatypey  // Convert 'value' field to string
 };
 const fieldConversionsApi={
   pv:chartDatatypeFromApiX,
@@ -121,6 +122,7 @@ const fieldConversionsApi={
             selectedXaxis=m.selectedXAxis
             isSheetchart=m.isSheetChart
             clickedsheetname=m.clickedsheetname
+            setthissheetname(clickedsheetname)
             chartdatatypex=m.chartDatatypeX
             setmydatatypex(chartdatatypex)
             chartdatatypey=m.chartDatatypeY
@@ -326,7 +328,7 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-green-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Database</p>
-
+                  <p className='text-[14px] text-gray-600 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
                 </div>:
                 <></>
             }
@@ -336,7 +338,7 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-orange-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Google Drive</p>
-
+                  <p className='text-[14px] text-gray-600 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
                 </div>:
                 <></>
             }

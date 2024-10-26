@@ -9,6 +9,7 @@ import { jwtDecode } from 'jwt-decode';
 const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setClickedPie, fromApi, setFromApi, chartDatatypeX, chartDatatypeY, chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [loading, setLoading] = useState(true);
   const [mydata, setmydata] = useState([]);
+  const [thissheetname,setthissheetname]=useState('')
   const [selectedValueAxis,setselectedvalueaxis]=useState('');
   const [itsfromDatabase,setitsfromdatabase]=useState(false);
   const [isitfromDrive,setisitfromdrive]=useState(false)
@@ -119,6 +120,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
           selectedXaxis = m.selectedXAxis;
           isSheetchart = m.isSheetChart;
           clickedsheetname = m.clickedsheetname;
+          setthissheetname(clickedsheetname)
           chartdatatypex = m.chartDatatypeX;
           chartdatatypey = m.chartDatatypeY;
           dbCompanyName = m.dbCompanyName;
@@ -283,6 +285,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
           isSheetchart = m.isSheetChart;
           selectedXaxis = m.selectedXAxis;
           clickedsheetname = m.clickedsheetname;
+          setthissheetname(clickedsheetname)
           chartdatatypex = m.chartDatatypeX;
           chartdatatypey = m.chartDatatypeY;
           dbCompanyName = m.dbCompanyName;
@@ -602,12 +605,13 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
             <div className='w-[10px] h-[10px] bg-violet-600 mt-3'></div> 
             <p className='text-[13px] text-gray-07 font-noto text-gray-700'>{selectedValueAxis}</p>
           </div> */}
+           
           {
               itsfromDatabase &&!isitfromDrive?
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-green-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Database</p>
-
+                  <p className='text-[14px] text-gray-900 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
                 </div>:
                 <></>
             }
@@ -617,7 +621,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-orange-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Google Drive</p>
-
+                  <p className='text-[14px] text-gray-900 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
                 </div>:
                 <></>
             }

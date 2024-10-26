@@ -80,6 +80,7 @@ const Ai = ({hidenavbar}) => {
         const filteredSet1 = response.data.data.filter(doc => !set2DocsIds.includes(doc._id));
         const tosetdata = [...response2.data.data, ...filteredSet1];
         setAllDocs(tosetdata);
+       
       }
     };
     handle();
@@ -112,7 +113,7 @@ const Ai = ({hidenavbar}) => {
   };
 
   useEffect(() => {
-    console.log("Merged Data:", MergedData);
+    console.log("Merged Data:", allDocs);
     sessionStorage.setItem("AI_Data",JSON.stringify(MergedData))
   }, [MergedData]);
 
@@ -374,7 +375,9 @@ useEffect(() => {
       console.error("Not enough lines for header and data.");
       return null;
     }
-  
+  useEffect(()=>{
+allDocs
+  },[])
     // Extract the header from the first line
     const header = lines[0].slice(1, -1).split('|').map(item => item.trim());
   
@@ -448,7 +451,6 @@ useEffect(() => {
   };
   
 
-
   return (
     <div className=" flex h-full">
 
@@ -463,32 +465,37 @@ useEffect(() => {
 </div>
 
 <div className='w-full mt-4 h-[25%] overflow-y-auto scrollbar-hide'> {/* Set a fixed height and enable vertical scrolling */}
-{(allDocs || []).map(doc => (
-        <div key={doc._id} className='flex items-center mb-6 justify-between w-full hover:bg-gray-100 rounded-lg transition-all duration-200'>
-          <span className='flex items-center text-[12px] text-gray-700 max-w-[200px] overflow-hidden whitespace-nowrap text-ellipsis'> 
-            <FaRegFileExcel className='mr-2 text-green-500' size={20} />
-            <span className='shrink overflow-hidden text-ellipsis max-w-[200px]'>
-              {doc.name}
-            </span>
-          </span>
-          <label className="ml-auto">
-            <input
-              type="radio"
-              value={doc._id}
-              checked={selectedDocId === doc._id}
-              onChange={() => {
-                if (selectedDocId !== doc._id) {
-                  setSelectedDocId(doc._id);
-                  handleView(doc._id, doc.name);
-                  setSelectedGoogleSheetId(null);
-                }
-              }}
-              name="document"
-              className="form-radio"
-            />
-          </label>
-        </div>
-      ))}
+
+{(allDocs || []).map(doc => {
+  
+  const displayName =doc.name.replace(/^\d+_/, "") || doc.name; // Fallback to original name if no underscore
+  return (
+    <div key={doc._id} className='flex items-center mb-6 justify-between w-full hover:bg-gray-100 rounded-lg transition-all duration-200'>
+      <span className='flex items-center text-[12px] text-gray-700 max-w-[200px] overflow-hidden whitespace-nowrap text-ellipsis'> 
+        <FaRegFileExcel className='mr-2 text-green-500' size={20} />
+        <span className='shrink overflow-hidden text-ellipsis max-w-[200px]'>
+          {displayName}
+        </span>
+      </span>
+      <label className="ml-auto">
+        <input
+          type="radio"
+          value={doc._id}
+          checked={selectedDocId === doc._id}
+          onChange={() => {
+            if (selectedDocId !== doc._id) {
+              setSelectedDocId(doc._id);
+              handleView(doc._id, displayName); // Use displayName here if needed
+              setSelectedGoogleSheetId(null);
+            }
+          }}
+          name="document"
+          className="form-radio"
+        />
+      </label>
+    </div>
+  );
+})}
 </div>
 
 
@@ -500,32 +507,37 @@ useEffect(() => {
         <div className="border border-gray-300 flex-grow ml-2"></div>
     </div>
     <div className='w-full mt-4 max-h-[130px] overflow-y-auto scrollbar-hide'> {/* Using Tailwind CSS classes */}
-    {(gd || []).map(doc => (
-          <div key={doc.id} className='flex items-center mb-6 justify-between w-full hover:bg-gray-100 rounded-lg transition-all duration-200'>
-            <span className='flex items-center text-[12px] text-gray-700 max-w-[180px] whitespace-nowrap text-ellipsis overflow-hidden'>
-              <FaRegFileExcel className='mr-2 text-green-500' size={20} />
-              <span className='shrink overflow-hidden text-ellipsis max-w-[180px]'>
-                {doc.name}
-              </span>
-            </span>
-            <label className="ml-auto">
-              <input
-                type="radio"
-                value={doc.id}
-                checked={selectedGoogleSheetId === doc.id}
-                onChange={() => {
-                  if (selectedGoogleSheetId !== doc.id) {
-                    setSelectedGoogleSheetId(doc.id);
-                    handleAddGoogleSheet(doc.name, doc.id);
-                    setSelectedDocId(null);
-                  }
-                }}
-                name="googleSheet"
-                className="form-radio"
-              />
-            </label>
-          </div>
-        ))}
+    {(gd || []).map(doc => {
+  // Assuming you want to derive displayName from doc.name similarly as before
+  const displayName = doc.name; // Adjust as needed
+
+  return (
+    <div key={doc.id} className='flex items-center mb-6 justify-between w-full hover:bg-gray-100 rounded-lg transition-all duration-200'>
+      <span className='flex items-center text-[12px] text-gray-700 max-w-[180px] whitespace-nowrap text-ellipsis overflow-hidden'>
+        <FaRegFileExcel className='mr-2 text-green-500' size={20} />
+        <span className='shrink overflow-hidden text-ellipsis max-w-[180px]'>
+          {displayName}
+        </span>
+      </span>
+      <label className="ml-auto">
+        <input
+          type="radio"
+          value={doc.id}
+          checked={selectedGoogleSheetId === doc.id}
+          onChange={() => {
+            if (selectedGoogleSheetId !== doc.id) {
+              setSelectedGoogleSheetId(doc.id);
+              handleAddGoogleSheet(doc.name, doc.id);
+              setSelectedDocId(null);
+            }
+          }}
+          name="googleSheet"
+          className="form-radio"
+        />
+      </label>
+    </div>
+  );
+})}
     </div>
 </div>
 

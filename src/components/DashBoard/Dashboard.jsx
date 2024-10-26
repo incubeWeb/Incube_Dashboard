@@ -444,7 +444,7 @@ useEffect(() => {
     <div className=' flex flex-col w-[100%] h-[10%] items-end '>
     
 </div>
-      <div ref={dashboardwidgitref} className='mt-[4%]  flex h-[100%]'>
+      <div ref={dashboardwidgitref} className='  flex h-[100%]'>
         
       <ResponsiveReactGridLayout
       className="layout w-[100%] "

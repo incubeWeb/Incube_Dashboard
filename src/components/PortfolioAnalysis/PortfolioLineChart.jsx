@@ -49,8 +49,8 @@ const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfi
     }, [sheetJson, sheetfieldselectedX, sheetfieldselectedY]);
 
     const fieldConversions = {
-        pv: chartDatatypeX === 'integer' ? 'integer' : 'string',  // X-axis field
-        uv: chartDatatypeY === 'integer' ? 'integer' : 'string'   // Y-axis field
+        pv: chartDatatypeX,   // X-axis field
+        uv: chartDatatypeY   // Y-axis field
     };
     const handleMouseEnter = (index) => {
         setHoveredIndex(index);  // Set the hovered point
@@ -128,7 +128,7 @@ const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfi
                         />
                         <Area
                             type="monotone"
-                            dataKey="uv"
+                            dataKey="pv"
                          
                             fill="#82ca9d"
                             fillOpacity={0.3}

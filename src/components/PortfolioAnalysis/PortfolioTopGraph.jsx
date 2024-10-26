@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState ,useRef} from 'react'
 import { FaChartLine, FaChartPie, FaRegFileExcel } from 'react-icons/fa'
 import { IoMdArrowRoundBack } from 'react-icons/io'
 import { IoBarChart, IoRefresh } from 'react-icons/io5'
@@ -16,6 +16,9 @@ import { BsBarChartFill } from "react-icons/bs";
 import { jwtDecode } from 'jwt-decode'
 import { createSlice } from '@reduxjs/toolkit';
 import { useSheet } from '../SheetContext/SheetContext.jsx';
+import Bar_Chart from '../Icons/Bar_Chart.svg'
+import Pie_Chart from '../Icons/Pie_Chart.svg'
+import Line_Chart from '../Icons/Line_Chart.svg'
 
 
 const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited,realtimeportfoliostate}) => {
@@ -24,7 +27,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
     const [clickedPie,setclickedPie]=useState(false)
     const [clickedLine,setclickedLine]=useState(false)
     const [loading2,setloading2]=useState(true)
-
+    const popupRef = useRef(null);
     const [sheetclicked,setsheetClicked]=useState('')
 
     const [sheetJson,setsheetJson]=useState([])
@@ -59,7 +62,24 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
     const RefreshSheets=()=>{
         setavailableDatabaseSheets()
     }
-    
+   
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        setchangeChart(false);
+      }
+    };
+
+    if (changeChart) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [changeChart]);
+
 
     // useEffect(()=>
     // {
@@ -460,219 +480,254 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
 
 
 
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (popupRef.current && !popupRef.current.contains(event.target)) {
+                        setclickedBar(false);
+                        setchartselectpopup(false);
+                        setclickedPie(false); 
+                        setclickedLine(false);
+                        
+                    }
+                };
+        
+                document.addEventListener('mousedown', handleClickOutside);
+                return () => {
+                    document.removeEventListener('mousedown', handleClickOutside);
+                };
+            }, []);
 
 
     
   return (
-    <div className=' font-roboto h-[300px]  flex flex-col'>
+    <div className=' font-roboto h-[300px] w-[100%] flex flex-col'>
         
-        <div className='flex flex-row h-[100%] space-x-6'>
-            {
-                chartselectpopup?
-                <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
-                        <div className='p-2 flex flex-col  w-[360px] h-[300px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
-                            <div className='h-[50px]'>
-                                    <div className='w-[20px] cursor-pointer ' onClick={()=>{setchartselectpopup(false);}}>
-                                        <RxCross2 className='w-[20px]'/>
-                                    </div>
+        <div className='flex flex-row h-[100%]  space-x-6'>
+        {chartselectpopup ? (
+            <div
+      className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center z-50 ${hidenavbar ? 'w-full' : 'left-20 w-[80%]'}`}
+      >
+                    <div ref={popupRef} className='p-4 flex flex-col w-[360px] h-auto space-y-4 bg-white shadow-xl rounded-lg transition-all duration-300'>
+                        <div className='flex items-center justify-between bg-blue-500 rounded-md p-2 text-white'>
+                            <h2 className='text-[14px] font-semibold'>Select Chart Type</h2>
+                            <button onClick={() => setchartselectpopup(false)}>
+                                <RxCross2 className='w-6 h-6 hover:opacity-75 transition-opacity' />
+                            </button>
+                        </div>
+                        <div className='flex flex-col space-y-2'>
+                            <div 
+                                onClick={() => { setclickedBar(true); setclickedLine(false); setclickedPie(false); setchartselectpopup(false); }} 
+                                className='hover:bg-gray-100  hover:text-gray-800  transition duration-200 cursor-pointer rounded-md text-left p-2 flex items-center justify-between'
+                            >
+                                <span className='text-[14px] font-inter font-semibold text-gray-700'>Bar Chart</span>
+                                <img src={Bar_Chart} className=' w-5 h-5' />
                             </div>
-                            <div className='flex flex-col'>
-                                
-                                <div onClick={()=>{setclickedBar(true);setclickedLine(false);setclickedPie(false);setchartselectpopup(false)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
-                                    <p className='w-[50%]'>Bar chart</p>
-                                    <div className='w-[50%] flex text-blue-700 items-center justify-end'>
-                                            <IoBarChart size={18}/>
-                                    </div>
-                                </div>
-                                <div onClick={()=>{setclickedPie(true);setclickedBar(false);setclickedLine(false);setchartselectpopup(false)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
-                                    <p className='w-[50%]'>Pie chart</p>
-                                    <div className='w-[50%] flex text-blue-700 items-center justify-end'>
-                                            <FaChartPie size={18}/>
-                                    </div>
-                                </div>
-                                <div onClick={()=>{setclickedLine(true);setclickedBar(false);setclickedPie(false);setchartselectpopup(false)}}  className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
-                                    <p className='w-[50%]'>Line chart</p>
-                                    <div className='w-[50%] flex text-blue-700 items-center justify-end'>
-                                            <FaChartLine size={18}/>
-                                    </div>
-                                </div>
+                            <div 
+                                onClick={() => { setclickedPie(true); setclickedBar(false); setclickedLine(false); setchartselectpopup(false); }} 
+                                className='hover:bg-gray-100  hover:text-gray-800  transition duration-200 cursor-pointer rounded-md text-left p-3 flex items-center justify-between'
+                            >
+                                <span className='text-[14px] font-inter font-semibold text-gray-700'>Pie Chart</span>
+                                <img src={Pie_Chart} className=' w-5 h-5' />
+                            </div>
+                            <div 
+                                onClick={() => { setclickedLine(true); setclickedBar(false); setclickedPie(false); setchartselectpopup(false); }} 
+                                className='hover:bg-gray-100 hover:text-gray-800 transition duration-200 cursor-pointer rounded-md text-left p-3 flex items-center justify-between'
+                            >
+                                <span className='text-[14px] font-inter font-semibold text-gray-700'>Line Chart</span>
+                                <img src={Line_Chart} className=' w-5 h-5' />
                             </div>
                         </div>
+                    </div>
                 </div>
-                :
-                <></>
-            }
-            {//showing sheets name here
-                clickedBar?
-                <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
-                        <div className='p-2 flex flex-col  w-[360px] h-[300px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
-                            <div className='h-[50px] flex'>
-                                        <div className='w-[20px] cursor-pointer ' onClick={()=>{setclickedBar(false);setchartselectpopup(true)}}>
-                                            <IoMdArrowRoundBack className='w-[20px]'/>
-                                        </div>
-                                        <div className='w-[100%] flex justify-end'>
-                                            <div className='w-[16px] h-[16px] cursor-pointer' onClick={()=>{RefreshSheets()}}>
-                                                <IoRefresh size={16} />
-                                            </div>
-                                        </div>
-                            </div>
-                            <div className='flex flex-col overflow-y-auto'>
-                                
-                            { loading2 ?
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%',marginTop:'40px' }}>
+            ) : null}
+ 
+            {clickedBar ? (
+                <div
+      className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center z-50 ${hidenavbar ? 'w-full' : 'left-20 w-[80%]'}`}
+  >
+        <div ref={popupRef} className='p-4 flex flex-col w-[400px] h-[400px] space-y-4 bg-white shadow-lg rounded-lg transition-all duration-300'>
+        <div className='flex items-center font-inter bg-blue-500 rounded-md px-2 justify-between h-[50px]'>
+                <div className='flex items-center cursor-pointer' onClick={() => { setclickedBar(false); setchartselectpopup(true); }}>
+                    <IoMdArrowRoundBack className='w-[20px] mr-2 text-white' />
+                    <p className='text-[14px] font-semibold flex justify-center text-white  ml-8 items-center'>Select Sheet for Bar Chart</p>
+                </div>
+                <div className='flex items-center space-x-2'>
+                    <div className='cursor-pointer' onClick={() => { RefreshSheets(); }}>
+                        <IoRefresh size={20} className='text-white hover:text-black' />
+                    </div>
+                </div>
+            </div>
+
+            <div className='flex flex-col overflow-y-auto scrollbar-hide flex-grow'>
+                {loading2 ? (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                         <Bars color="#8884d8" height={40} width={40} />
                     </div>
-                    :  
-                                    (allsheet||[]).map(val=>
-                                        val.fileType=='xlsx'?
-                                        <div key={val._id} onClick={()=>{setsheetrowsselect(true);setclickedBar(false); handlesheetclicked(val._id)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
-                                            <p className='w-[50%] text-[14px]'>{val.name.substring(val.name.length-15,val.name.length)}</p>
-                                            <div className='w-[50%] flex text-green-800 items-center justify-end'>
-                                                <FaRegFileExcel />
-                                            </div>
+                ) : (
+                    <>
+                        {allsheet.length === 0 && googlesheetfiles.length === 0 ? (
+                            <p className='text-gray-500 text-center font-semibold'>No sheets found</p>
+                        ) : (
+                            <>
+                                <div className='font-inter text-[16px] font-semibold mb-2'>
+                                    <p className='border-b pb-2'>Database Sheets:</p>
+                                </div>
+                                {(allsheet || []).map(val => 
+                                    val.fileType === 'xlsx' ? (
+                                        <div 
+                                            key={val._id} 
+                                            onClick={() => { setsheetrowsselect(true); setclickedBar(false); handlesheetclicked(val._id); }} 
+                                            className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'
+                                        >
+                                            <p className='text-[14px]'>{val.name.substring(val.name.length - 13, val.name.length)}</p>
+                                            <FaRegFileExcel className='text-green-700' />
                                         </div>
-                                        :
-                                        <></>
-                                    )
-
-                                    
-                                }
-                                {
-                                    googlesheetfiles.length>0?
-                                    <div className='w-[100%] font-inter text-[14px] font-semibold mt-4 mb-2 h-[40px] flex items-center pl-2'><p>Google sheets:</p></div>
-                                    :
-                                    <></>
-                                }
-                                {
-                                    (googlesheetfiles||[]).map(val=>
-                                        <div key={val._id} onClick={()=>{setsheetrowsselect(true);setclickedBar(false); handleGooglesheetclicked(val.id,val.name)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
-                                            <p className='w-[50%] text-[14px]'>{val.name.substring(val.name.length-15,val.name.length)}</p>
-                                            <div className='w-[50%] flex text-green-800 items-center justify-end'>
-                                                <FaRegFileExcel />
-                                            </div>
-                                        </div>
-                                    )
-
-                                    
-                                }
-                                
-                            </div>
-                        </div>
-                </div>
-                :
-                <></>
-            }
-            {//showing sheets name here
-                clickedLine?
-                <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
-                        <div className='p-2 flex flex-col  w-[360px] h-[300px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
-                            <div className='h-[50px]'>
-                                        <div className='w-[20px] cursor-pointer ' onClick={()=>{setclickedLine(false);setchartselectpopup(true)}}>
-                                            <IoMdArrowRoundBack className='w-[20px]'/>
-                                        </div>
-                            </div>
-                            <div className='flex flex-col overflow-y-auto'>
-                                
-                            { loading2 ?
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%',marginTop:'40px' }}>
-                        <Bars color="#8884d8" height={40} width={40} />
+                                    ) : null
+                                )}
+                            </>
+                        )}
+                    </>
+                )}
+                {googlesheetfiles.length > 0 && (
+                    <div className='font-inter text-[16px] font-semibold mt-4'>
+                        <p className='border-b pb-2'>Google Sheets:</p>
                     </div>
-                    :  
-                                    (allsheet||[]).map(val=>
-                                        val.fileType=='xlsx'?
-                                        <div key={val._id} onClick={()=>{setsheetrowsselectLine(true);setclickedLine(false); handlesheetclickedLine(val._id)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
-                                            <p className='w-[50%] text-[14px]'>{val.name.substring(val.name.length-15,val.name.length)}</p>
-                                            <div className='w-[50%] flex text-green-800 items-center justify-end'>
-                                                <FaRegFileExcel />
-                                            </div>
-                                        </div>
-                                        :
-                                        <></>
-                                    )
-                                }
-                                {
-                                    googlesheetfiles.length>0?
-                                    <div className='w-[100%] font-inter text-[14px] font-semibold mt-4 mb-2 flex items-center pl-2'><p>Google sheets:</p></div>
-                                    :
-                                    <></>
-                                }
-                                {
-                                    (googlesheetfiles||[]).map(val=>
-                                        <div key={val._id} onClick={()=>{setsheetrowsselectLine(true);setclickedLine(false); handleGooglesheetclicked(val.id,val.name)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
-                                            <p className='w-[50%] text-[14px]'>{val.name.substring(val.name.length-15,val.name.length)}</p>
-                                            <div className='w-[50%] flex text-green-800 items-center justify-end'>
-                                                <FaRegFileExcel />
-                                            </div>
-                                        </div>
-                                    )
-
-                                    
-                                }
-                                
-                            </div>
-                        </div>
-                </div>
-                :
-                <></>
-            }
-            {//showing sheets name here
-                clickedPie?
-                <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
-                        <div className='p-2 flex flex-col  w-[360px] h-[300px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
-                            <div className='h-[50px]'>
-                                        <div className='w-[20px] cursor-pointer ' onClick={()=>{setclickedPie(false);setchartselectpopup(true)}}>
-                                            <IoMdArrowRoundBack className='w-[20px]'/>
-                                        </div>
-                            </div>
-                            <div className='flex flex-col overflow-y-auto'>
-                                
-                           { loading2 ?
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%',marginTop:'40px' }}>
-                        <Bars color="#8884d8" height={40} width={40} />
+                )}
+                {(googlesheetfiles || []).map(val => 
+                    <div key={val._id} onClick={() => { setsheetrowsselect(true); setclickedBar(false); handleGooglesheetclicked(val.id, val.name); }} className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'>
+                        <p className='text-[14px]'>{val.name.substring(val.name.length - 15, val.name.length)}</p>
+                        <FaRegFileExcel className='text-green-700' />
                     </div>
-                    :  
-                                    (allsheet||[]).map(val=>
-                                        val.fileType=='xlsx'?
-                                        <div key={val._id} onClick={()=>{setsheetrowsselectPie(true);setclickedPie(false); handlesheetclickedPie(val._id)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
-                                            <p className='w-[50%] text-[14px]'>{val.name.substring(val.name.length-15,val.name.length)}</p>
-                                            <div className='w-[50%] flex text-green-800 items-center justify-end'>
-                                                <FaRegFileExcel />
-                                            </div>
-                                        </div>
-                                        :
-                                        <>
-                                            
-                                        </>
-                                    )
-                                }
-            
+                )}
+            </div>
+        </div>
+    </div>
+) : null}
 
-                                {
-                                    googlesheetfiles.length>0?
-                                    <div className='w-[100%] font-inter text-[14px] font-semibold mt-4 mb-2 flex items-center pl-2'><p>Google sheets:</p></div>
-                                    :
-                                    <></>
-                                }
+{clickedLine ? (
+    <div
+      className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center z-50 ${hidenavbar ? 'w-full' : 'left-20 w-[80%]'}`}
+  >
+<div ref={popupRef} className='p-4 flex flex-col w-[400px] h-[400px] space-y-4 bg-white shadow-lg rounded-lg transition-all duration-300'>
+<div className='flex items-center font-inter bg-blue-500 rounded-md px-2 justify-between h-[50px]'>
+  <div className='flex items-center cursor-pointer' onClick={() => { setclickedLine(false); setchartselectpopup(true); }}>
+      <IoMdArrowRoundBack className='w-[20px] mr-2 text-white' />
+      <p className='text-[14px] font-semibold flex justify-center text-white  ml-8 items-center'>Select Sheet for Line Chart</p>
+  </div>
+  <div className='flex items-center space-x-2'>
+      <div className='cursor-pointer' onClick={() => { RefreshSheets(); }}>
+          <IoRefresh size={20} className='text-white hover:text-black' />
+      </div>
+  </div>
+</div>
 
-                                {
-                                    (googlesheetfiles||[]).map(val=>
-                                        <div key={val._id} onClick={()=>{setsheetrowsselectPie(true);setclickedPie(false); handleGooglesheetclicked(val.id,val.name)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
-                                            <p className='w-[50%] text-[14px]'>{val.name.substring(val.name.length-15,val.name.length)}</p>
-                                            <div className='w-[50%] flex text-green-800 items-center justify-end'>
-                                                <FaRegFileExcel />
-                                            </div>
-                                        </div>
-                                    )
+<div className='flex flex-col overflow-y-auto scrollbar-hide flex-grow'>
+  {loading2 ? (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+          <Bars color="#8884d8" height={40} width={40} />
+      </div>
+  ) : (
+      <>
+          {allsheet.length === 0 && googlesheetfiles.length === 0 ? (
+              <p className='text-gray-500 text-center font-semibold'>No sheets found</p>
+          ) : (
+              <>
+                  <div className='font-inter text-[16px] font-semibold mb-2'>
+                      <p className='border-b pb-2'>Database Sheets:</p>
+                  </div>
+                  {(allsheet || []).map(val => 
+                      val.fileType === 'xlsx' ? (
+                          <div 
+                              key={val._id} 
+                              onClick={() => { setsheetrowsselectLine(true); setclickedLine(false); handlesheetclickedLine(val._id); }} 
+                              className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'
+                          >
+                              <p className='text-[14px]'>{val.name.substring(val.name.length - 13, val.name.length)}</p>
+                              <FaRegFileExcel className='text-green-700' />
+                          </div>
+                      ) : null
+                  )}
+              </>
+          )}
+      </>
+  )}
+  {googlesheetfiles.length > 0 && (
+      <div className='font-inter text-[16px] font-semibold mt-4'>
+          <p className='border-b pb-2'>Google Sheets:</p>
+      </div>
+  )}
+  {(googlesheetfiles || []).map(val => 
+      <div key={val._id} onClick={() => { setsheetrowsselect(true); setclickedLine(false); handleGooglesheetclicked(val.id, val.name); }} className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'>
+          <p className='text-[14px]'>{val.name.substring(val.name.length - 15, val.name.length)}</p>
+          <FaRegFileExcel className='text-green-700' />
+      </div>
+  )}
+</div>
+</div>
+</div>
+) : null}
+            {clickedPie? (
+   <div
+      className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center z-50 ${hidenavbar ? 'w-full' : 'left-20 w-[80%]'}`}
+  >
+      <div  ref={popupRef} className='p-4 flex flex-col w-[400px] h-[400px] space-y-4 bg-white shadow-lg rounded-lg transition-all duration-300'>
+      <div className='flex items-center font-inter bg-blue-500 rounded-md px-2 justify-between h-[50px]'>
+              <div className='flex items-center cursor-pointer' onClick={() => {setclickedPie(false); setchartselectpopup(true); }}>
+                  <IoMdArrowRoundBack className='w-[20px] mr-2 text-white' />
+                  <p className='text-[14px] font-semibold flex justify-center text-white  ml-8 items-center'>Select Sheet for Pie Chart</p>
+              </div>
+              <div className='flex items-center space-x-2'>
+                  <div className='cursor-pointer' onClick={() => { RefreshSheets(); }}>
+                      <IoRefresh size={20} className='text-white hover:text-black' />
+                  </div>
+              </div>
+          </div>
 
-                                    
-                                }
-                                
-                            </div>
-                        </div>
-                </div>
-                :
-                <></>
-            }
+          <div className='flex flex-col overflow-y-auto scrollbar-hide flex-grow'>
+              {loading2 ? (
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                      <Bars color="#8884d8" height={40} width={40} />
+                  </div>
+              ) : (
+                  <>
+                      {allsheet.length === 0 && googlesheetfiles.length === 0 ? (
+                          <p className='text-gray-500 text-center font-semibold'>No sheets found</p>
+                      ) : (
+                          <>
+                              <div className='font-inter text-[16px] font-semibold mb-2'>
+                                  <p className='border-b pb-2'>Database Sheets:</p>
+                              </div>
+                              {(allsheet || []).map(val => 
+                                  val.fileType === 'xlsx' ? (
+                                      <div 
+                                          key={val._id} 
+                                          onClick={() => { setsheetrowsselectPie(true); setclickedPie(false); handlesheetclickedPie(val._id); }} 
+                                          className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'
+                                      >
+                                          <p className='text-[14px]'>{val.name.substring(val.name.length - 13, val.name.length)}</p>
+                                          <FaRegFileExcel className='text-green-700' />
+                                      </div>
+                                  ) : null
+                              )}
+                          </>
+                      )}
+                  </>
+              )}
+              {googlesheetfiles.length > 0 && (
+                  <div className='font-inter text-[16px] font-semibold mt-4'>
+                      <p className='border-b pb-2'>Google Sheets:</p>
+                  </div>
+              )}
+              {(googlesheetfiles || []).map(val => 
+                  <div key={val._id} onClick={() => { setsheetrowsselect(true); setclickedPie(false); handleGooglesheetclicked(val.id, val.name); }} className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'>
+                      <p className='text-[14px]'>{val.name.substring(val.name.length - 15, val.name.length)}</p>
+                      <FaRegFileExcel className='text-green-700' />
+                  </div>
+              )}
+          </div>
+      </div>
+  </div>
+) : null}
             {
                 sheetrowsSelect?
                 <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
@@ -818,12 +873,12 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                       <div><p className="text-[14px]">X-axis</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedX(e.target.value)}>
                                       {Loading1 && sheetKeys.length==0 ? (
-    <option value="">
-      <div className="flex items-center">
-        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
-        Loading...
-      </div>
-    </option>
+                     <option value="">
+                 <div className="flex items-center">
+                  <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+                 Loading...
+                </div>
+                </option>
   ) : (
                                           
                                           (sheetKeys||[]).map(val=>
@@ -869,47 +924,56 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                 :<></>
             }
             <div className='flex w-[30%] h-[420px] bg-white rounded-xl'>
-                <PortfolioMeter selectedTab={selectedTab}/>
+                <PortfolioMeter realtimeportfoliostate={realtimeportfoliostate} selectedTab={selectedTab} hidenavbar={hidenavbar}/>
             </div>
             <div className='w-[70%] h-[420px] bg-white rounded-xl flex flex-col items-center justify-center'>
                     <div className=' w-[100%] relative h-[20px] flex flex-row items-end justify-end pt-2 pr-2'>
-                        {
-                                changeChart&&(showPiechart || showBarchart || showLinechart)?
-                                <div className='w-[250px] overflow-y-auto z-[40] relative top-[133px] flex flex-col  bg-white rounded-md ' style={{boxShadow:'0px 1.2px 5px #6B7280'}}>
-                                    
-                                
-                                        <div onClick={()=>{setclickedBar(true);setclickedLine(false);setclickedPie(false);setchartselectpopup(false);setchangeChart(false)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
-                                            <p className='w-[50%] font-inter'>Bar chart</p>
-                                            <div className='w-[50%]  flex text-blue-800 items-center justify-end'>
-                                                    <IoBarChart/>
-                                            </div>
-                                        </div>
-                                        <div onClick={()=>{setclickedPie(true);setclickedBar(false);setclickedBar(false);setchartselectpopup(false);setchangeChart(false)}} className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
-                                            <p className='w-[50%] font-inter'>Pie chart</p>
-                                            <div className='w-[50%] flex text-blue-800 items-center justify-end'>
-                                                    <FaChartPie />
-                                            </div>
-                                        </div>
-                                        <div onClick={()=>{setclickedLine(true);setclickedBar(false);setclickedPie(false);setchartselectpopup(false);setchangeChart(false)}}  className='hover:bg-sky-500 tracking-wider cursor-pointer rounded-md hover:text-white w-[100%] h-[40px] flex items-center justify-start p-2'>
-                                            <p className='w-[50%] font-inter'>Line chart</p>
-                                            <div className='w-[50%] flex text-blue-800 items-center justify-end'>
-                                                    <FaChartLine />
-                                            </div>
-                                        </div>
-                                    
-                                </div>
-                                :
-                                <></>
-                        }
-                        {
-                            (showBarchart ||showPiechart || showLinechart) && (Logemail==selectedTab)
-                            ?
-                                <div className='cursor-pointer' onClick={()=>setchangeChart(!changeChart)}>
-                                    <HiOutlineDotsVertical size={17}/>
-                                </div>
-                                :
-                        <></>
-                        }
+                    {
+                        
+  changeChart && (showPiechart || showBarchart || showLinechart) ? (
+    <div
+          ref={popupRef}
+      
+          
+        >
+      <div className='w-[250px] overflow-y-auto z-[40] relative top-[133px] flex flex-col bg-white rounded-md' style={{ boxShadow: '0px 1.2px 5px #6B7280' }}>
+          <div className='p-2 font-bold text-center'> <p className=' bg-blue-500 rounded-md flex items-center justify-center text-white h-[30px]'>Select Chart Type</p></div>
+          <div className='flex flex-col'>
+              <div onClick={() => { setclickedBar(true); setclickedLine(false); setclickedPie(false); setchartselectpopup(false); setchangeChart(false); }} className={`hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-800 w-full h-[40px] flex items-center justify-start p-2 ${clickedBar ? 'bg-blue-500 text-white' : 'bg-white'}`}>
+                  <p className='w-[50%] font-inter text-[14px] text-gray-700'>Bar chart</p>
+                  <div className='w-[50%] flex text-blue-800 items-center justify-end'>
+                      <img src={Bar_Chart} className='w-5 h-5' />
+                  </div>
+              </div>
+              <div onClick={() => { setclickedPie(true); setclickedBar(false); setclickedLine(false); setchartselectpopup(false); setchangeChart(false); }} className={`hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-800 w-full h-[40px] flex items-center justify-start p-2 ${clickedPie ? 'bg-blue-500 text-white' : 'bg-white'}`}>
+                  <p className='w-[50%] font-inter  text-[14px] text-gray-700'>Pie chart</p>
+                  <div className='w-[50%] flex text-blue-800 items-center justify-end'>
+                  <img src={Pie_Chart} className='w-5 h-5' />
+                  </div>
+              </div>
+              <div onClick={() => { setclickedLine(true); setclickedBar(false); setclickedPie(false); setchartselectpopup(false); setchangeChart(false); }} className={`hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-800 w-full h-[40px] flex items-center justify-start p-2 ${clickedLine ? 'bg-blue-500 text-white' : 'bg-white'}`}>
+                  <p className='w-[50%] font-inter  text-[14px] text-gray-700'>Line chart</p>
+                  <div className='w-[50%] flex text-blue-800 items-center justify-end'>
+                  <img src={Line_Chart} className='w-5 h-5' />
+                  </div>
+              </div>
+          </div>
+      </div>
+      </div>
+  ) : (
+      <></>
+  )
+}
+{
+  (showBarchart || showPiechart || showLinechart) && (Logemail == selectedTab) ? (
+      <div className='cursor-pointer' onClick={() => setchangeChart(!changeChart)}>
+          <HiOutlineDotsVertical size={17} />
+      </div>
+  ) : (
+      <></>
+  )
+}
+
                     </div>
                 
 

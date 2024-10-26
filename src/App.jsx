@@ -44,6 +44,7 @@ function App() {
   const [realtimeportfoliostate,setrealtimeportfoliostate]=useState([])
   const [showsmallnav,setshowsmallnav]=useState(false)
   
+  const [realtimeuser,setrealtimeuser]=useState([])
   
 
   const [realtimeDealpipelinetabs,setrealtimedealpipelinetabs]=useState([])
@@ -145,6 +146,10 @@ function App() {
           {
             setrealtimedocumentvisibility(change)
           }
+          if(change.ns.coll=='Users')
+            {
+              setrealtimeuser(change)
+            }
           if(change.ns.coll=='PortfolioState')
           {
             
@@ -216,7 +221,7 @@ function App() {
               </ProtectedRoute>} />
             <Route path="/dealsourcing" element={
               <ProtectedRoute login={login}><Dealsourcing hidenavbar={hidenavbar}/></ProtectedRoute>} />
-            <Route path="/adduser" element={<ProtectedRoute login={login}><Addusers setActiveField={setActiveField} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
+            <Route path="/adduser" element={<ProtectedRoute login={login}><Addusers realtimeuser={realtimeuser} setActiveField={setActiveField} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
             <Route path="/allDocs" element={<ProtectedRoute login={login}><Alldocs realtimedocumentvisibility={realtimedocumentvisibility} filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar}/></ProtectedRoute>} />
             <Route path='/portfolio' element={<ProtectedRoute login={login}><Portfolio realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited} hidenavbar={hidenavbar} /></ProtectedRoute>}/>
             <Route path='/keys' element={<ProtectedRoute login={login}><Apikeys realtimecheckAPikeys={realtimecheckAPikeys} hidenavbar={hidenavbar}/></ProtectedRoute>}/>

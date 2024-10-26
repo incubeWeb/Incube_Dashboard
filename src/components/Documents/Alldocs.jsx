@@ -13,6 +13,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { CiLock, CiUnlock } from 'react-icons/ci'
 import { jwtDecode } from 'jwt-decode'
 import PublicPopup from './PublicPopup'
+import Database from '../Icons/Database.svg'
 
 const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocumentvisibility}) => {
 
@@ -327,7 +328,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     
 
   return (
-    <div className={`${hidenavbar?'ml-[4%] w-[96%] h-screen':'ml-[20%] w-[80%] '} pt-[48px] pl-[36px] flex flex-col p-4 items-center justify-start space-y-4 font-sans bg-gray-100`}>
+    <div className={`${hidenavbar?'ml-[4%] w-[96%] h-screen':'ml-[20%] w-[80%] '} pt-[48px] pl-[36px] flex flex-col p-4 items-center justify-start space-y-4 font-sans min-h-screen bg-gray-100`}>
     <div className='w-[100%] h-[10%] flex flex-row space-x-3'>
         <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className='text-gray-500 hover:text-gray-600 font-inter text-[16] font-semibold'>Dashboard</p></Link>
         <p>/</p>
@@ -351,8 +352,9 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         </div>
     </div>
     <div className='w-[100%] h-[80%] space-y-2 rounded-md border-gray-200  bg-white flex flex-col p-4'>
-       
-        <div className='flex flex-row w-[100%] h-[10%]  font-sans font-semibold'>
+       <div className='mb-4 '><p className=' text-[18px] text-gray-700 font-semibold ml-1 font-inter flex items-center'>Database documents <img src={Database} className='ml-2 h-[25px] w-[30px]'/></p></div>
+        <div className='flex flex-row w-[100%] h-[10%]  font-sans font-semibold  text-gray-700 '>
+            
             <div className='w-[15%] h-[100%] flex items-center justify-start'>
                 <p className='text-[16px] pl-2 font-inter'>Uploaded by</p>
             </div>
@@ -383,48 +385,53 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         {
             !loading?
             <div className='flex flex-col w-[100%]  pt-2 font-roboto overflow-auto'>
-                {
-                    (allDocs||[]).map(doc=>
-                    <div key={doc._id} className='flex flex-row w-[100%] h-[100%] font-inter items-center pt-1  border-t border-gray-300 mb-6' >
-                        <div className='w-[15%] h-[100%] scrollbar-hide overflow-x-auto flex items-end justify-start '>
-                            <p className='text-[14px] pl-2 font-inter '>{doc.uploadedBy}</p>
-                        </div>
-                        <div className='w-[15%] h-[100%] scrollbar-hide overflow-x-auto pl-4 flex items-end justify-start'>
-                            <p className='text-[14px] pl-3 font-inter'>{doc.fileType}</p>
-                        </div>
-                        <div className='w-[20%] items-end scrollbar-hide overflow-x-auto justify-start flex h-[100%]'>
-                            <p className='text-[14px] pl-2 font-inter'>{doc.name}</p>
-                        </div>
-                        <div className='w-[15%] flex pl-4 scrollbar-hide overflow-x-auto items-end justify-start h-[100%]'>
-                            <p className='text-[14px] font-inter'>{formatTime(doc.time)}</p>
-                        </div>
-                        <div className='w-[15%] flex pl-2 scrollbar-hide overflow-x-auto items-end justify-start h-[100%]'>
-                            <p className='text-[14px] font-inter'>{doc.CompanyName}</p>
-                        </div>
-                        <div className='w-[15%] flex scrollbar-hide overflow-x-auto  pl-2 items-end justify-start h-[100%]'>
-                            <p className='text-[14px] font-inter'>{doc.tab}</p>
-                        </div>
-                        <div className='w-[15%] flex scrollbar-hide overflow-x-auto  pl-2 items-end justify-start h-[100%]'>
-                        {
-                            !privatefiles.includes(doc._id)?
-                            <div onClick={()=>{setfileprivate(true);setdocId(doc._id)}} className='select-none cursor-pointer  h-[35px] mr-[32px] flex items-center justify-cente rounded-md text-black'>
-                                 <CiUnlock  size={18}/> <p className='text-[14px] font-inter w-[200px] pl-2 font-[300]'> Public</p>
-                           </div>
-                           :
-                           <div onClick={()=>{setshowConfirmPublicPopup(true);setshowconfirmpublicpopupid(doc._id)}} className='select-none cursor-pointer bg-white     h-[35px] mr-[32px] flex items-center justify-center  rounded-md text-black'>
-                          
-                           <CiLock  size={18}/> <p className='text-[14px] font-inter w-[100px] font-[300] pl-2'> Private</p>
-                           </div>
-                           }
-                        </div>
-                        <div className='w-[15%] flex flex-col  items-center justify-start h-[100%]'>
-                            <div className='basis-1/2 flex justify-end space-x-3 '>
-                            <p className='text-[14px] text-sky-600 cursor-pointer font-inter font-semibold ' onClick={()=>handleView(doc._id,doc.name)}>View</p>
-                                <p className='text-[14px] text-red-600 cursor-pointer font-inter font-semibold' onClick={()=>handleDelete(doc._id)}>Remove</p>
+            {
+    (allDocs || []).map(doc => {
+        // Use a regex to remove the numeric pattern followed by an underscore from doc.name
+        const cleanedName = doc.name.replace(/\d+_/g, '');
+        
+        return (
+            <div key={doc._id} className='flex flex-row w-[100%] h-[100%] font-inter items-center pt-1 border-t border-gray-300 mb-6'>
+                <div className='w-[15%] h-[100%] scrollbar-hide overflow-x-auto flex items-end justify-start'>
+                    <p className='text-[14px] pl-2 font-inter'>{doc.uploadedBy}</p>
+                </div>
+                <div className='w-[15%] h-[100%] scrollbar-hide overflow-x-auto pl-4 flex items-end justify-start'>
+                    <p className='text-[14px] pl-3 font-inter'>{doc.fileType}</p>
+                </div>
+                <div className='w-[20%] items-end scrollbar-hide overflow-x-auto justify-start flex h-[100%]'>
+                    <p className='text-[14px] pl-2 font-inter'>{cleanedName}</p>
+                </div>
+                <div className='w-[15%] flex pl-4 scrollbar-hide overflow-x-auto items-end justify-start h-[100%]'>
+                    <p className='text-[14px] font-inter'>{formatTime(doc.time)}</p>
+                </div>
+                <div className='w-[15%] flex pl-2 scrollbar-hide overflow-x-auto items-end justify-start h-[100%]'>
+                    <p className='text-[14px] font-inter'>{doc.CompanyName}</p>
+                </div>
+                <div className='w-[15%] flex scrollbar-hide overflow-x-auto pl-2 items-end justify-start h-[100%]'>
+                    <p className='text-[14px] font-inter'>{doc.tab}</p>
+                </div>
+                <div className='w-[15%] flex scrollbar-hide overflow-x-auto pl-2 items-end justify-start h-[100%]'>
+                    {
+                        !privatefiles.includes(doc._id) ?
+                            <div onClick={() => { setfileprivate(true); setdocId(doc._id) }} className='select-none cursor-pointer h-[35px] mr-[32px] flex items-center justify-center rounded-md text-black'>
+                                <CiUnlock size={18} /> <p className='text-[14px] font-inter w-[200px] pl-2 font-[300]'> Public</p>
                             </div>
-                        </div>       
+                            :
+                            <div onClick={() => { setshowConfirmPublicPopup(true); setshowconfirmpublicpopupid(doc._id) }} className='select-none cursor-pointer bg-white h-[35px] mr-[32px] flex items-center justify-center rounded-md text-black'>
+                                <CiLock size={18} /> <p className='text-[14px] font-inter w-[100px] font-[300] pl-2'> Private</p>
+                            </div>
+                    }
+                </div>
+                <div className='w-[15%] flex flex-col items-center justify-start h-[100%]'>
+                    <div className='basis-1/2 flex justify-end space-x-3'>
+                        <p className='text-[14px] text-sky-600 cursor-pointer font-inter font-semibold' onClick={() => handleView(doc._id, cleanedName)}>View</p>
+                        <p className='text-[14px] text-red-600 cursor-pointer font-inter font-semibold' onClick={() => handleDelete(doc._id)}>Remove</p>
                     </div>
-                )}
+                </div>
+            </div>
+        );
+    })
+}
             </div>
             :<div className='w-[100%]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 <Bars color="#8884d8" height={80} width={80} />
@@ -434,7 +441,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
 
     <div className='w-[100%] h-[80%] space-y-2 rounded-md border-gray-200  bg-white flex flex-col p-4'>
     <div className='w-[100%] h-[40px] mb-4 flex flex-row space-x-2 items-center'>
-    <p className='text-[18px] font-semibold ml-1 font-inter flex items-center w-[45%]'> 
+    <p className='text-[18px] font-semibold ml-1 font-inter flex items-center w-[45%] text-gray-700'> 
         Google Drive Documents <img src={Google_Drive} className='ml-2 h-[30px] w-[30px]' /></p>
          {/* Added margin-left to image */}
   
@@ -449,7 +456,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         </div>
     </div>
 </div>
-       <div className='flex flex-row w-[100%] h-[10%] font-inter font-semibold'>
+       <div className='flex flex-row w-[100%] h-[10%] font-inter font-semibold  text-gray-700 '>
     <div className='w-[20%] h-[100%] flex items-center justify-start'>
         <p className='text-[16px] pl-4 font-inter'>Gmail</p>
     </div>
@@ -467,7 +474,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         <div className='w-[100%] bg-white h-[1px] overflow-auto  '> </div>
         {
             !loading?
-            <div className='flex flex-col w-[100%] h-[10%] pt-2 font-roboto overflow-auto'>
+            <div className='flex flex-col w-[100%] h-[10%]  font-roboto overflow-auto'>
                 {
                     (googleDrivesheets||[]).map(doc=>
                     <div key={doc._id} className='flex flex-row w-[100%] h-[100%] font-inter items-center pt-1  border-t border-gray-300 mb-6' >

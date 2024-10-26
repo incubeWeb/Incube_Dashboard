@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 
 
 const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
-
+  const [thissheetname,setthissheetname]=useState('')
   const [mydata,setmydata]=useState([]);
   const [itsfromDatabase,setitsfromdatabase]=useState(false);
   const token=localStorage.getItem('token')
@@ -85,8 +85,8 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
   }
 
   const fieldConversionsNormal = {
-    name: chartDatatypeX,
-    uv: chartDatatypeY
+    name: mydatatypex,
+    uv: mydatatypey
   };
   const fieldConversionsApi={
     name:chartDatatypeFromApiX,
@@ -119,6 +119,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
           selectedXaxis=m.selectedXAxis;
           isSheetchart=m.isSheetChart;
           clickedsheetname=m.clickedsheetname;
+          setthissheetname(clickedsheetname)
           chartdatatypex=m.chartDatatypeX;
           setmydatatypex(chartdatatypex)
           chartdatatypey=m.chartDatatypeY;
@@ -298,7 +299,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
     <div style={{ width: '100%', height: '95%' ,paddingBottom:'15px'}} className='mt-8  pr-10'>
       
       <div style={{ width: '95%', height: '90%' }} className='mt-2 pr-10 ml-8 '>
-    {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ?
+    {mydatatypex === 'string' && mydatatypey === 'integer' ?
         <div className='pl-4' style={{ paddingBottom: '20px' }}>
             <p className='text-[18px] font-bold font-inter -mt-4'>Vertical Bar Chart</p>
         </div>
@@ -309,7 +310,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
     }
 
     <div style={{ width: '100%', height: '90%' }}>
-        {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ?
+        {mydatatypex === 'string' && mydatatypey === 'integer' ?
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={mydata}>
                     <XAxis dataKey="name" stroke="#8884d8"
@@ -339,7 +340,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                 </BarChart>
             </ResponsiveContainer>
             :
-            chartDatatypeX === 'integer' && chartDatatypeY === 'string' ?
+            mydatatypex === 'integer' && mydatatypey === 'string' ?
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart layout="vertical" data={mydata} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                         <XAxis type="number" tick={true} stroke="#8884d8" />
@@ -394,7 +395,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-green-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Database</p>
-
+                  <p className='text-[14px] text-gray-600 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
                 </div>:
                 <></>
             }
@@ -404,13 +405,14 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-orange-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Google Drive</p>
-
+                  <p className='text-[14px] text-gray-600 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
                 </div>:
                 <></>
             }
 
       <div className='z-[10] cursor-pointer flex pl-[1px] items-center justify-center w-[20px] rounded-xl h-[20px] bg-gray-100 fixed right-[-10px] top-[-15px] mt-4 mr-3' onClick={deleteWidgit}>
         <RxCross2 size={14} className='text-black'/>
+
       </div>
     </div>
   );

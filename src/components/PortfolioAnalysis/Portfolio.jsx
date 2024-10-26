@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState ,useRef} from 'react'
 import { GoDotFill } from 'react-icons/go'
 import { RiFilter3Line } from 'react-icons/ri'
 import DatabaseSheets from './DatabaseSheets'
@@ -30,6 +30,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     const Logemail=userdata.userdetails.email
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
+    const popupRef = useRef(null);
 
     const [sheetmethod,setsheetmethod]=useState('')
     const [allSheets,setallSheets]=useState([])
@@ -572,7 +573,6 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 email:Logemail,
                 organization:organization,
                 portfolioState:JSON.stringify(portfoliocardsdata),
-                security:portfoliosecurity,
                 sharedwith:JSON.stringify(sharedwithusers),
                 organization1:organization1,
                 organization2:organization2
@@ -586,7 +586,6 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             }
         
     }
-    
     const PortfolioCard=[]
     portfoliocardsdata.map((val=>{
         PortfolioCard.push({"Label Name":val.labelname,"Values":val.showValue})
@@ -612,6 +611,37 @@ console.log(mergedData)
 
     },[sheetJson,sheetKeys,portfoliocardsdata,sheetJson1])
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (popupRef.current && !popupRef.current.contains(event.target)) {
+                setclickedDots(false); // Close the popup
+            }
+        };
+
+        if (clickedDots) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [clickedDots]);
+    
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (popupRef.current && !popupRef.current.contains(event.target)) {
+                setclickedPortfolioShared(false)
+            }
+        };
+    
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
   return (
     <div className={`${hidenavbar?'pl-[6%] w-[100%]':'ml-[21%] w-[79%]'} p-4 font-noto  flex flex-col space-y-4 bg-gray-100`}> 
         <div className=' w-[100%] scrollbar-hide  items-end pb-1 pl-2 mt-1 overflow-x-auto h-[40px] bg-white rounded-lg flex flex-row '>
@@ -698,12 +728,12 @@ console.log(mergedData)
                     <div className=' w-[75%]  flex flex-row justify-end '>
                         {
                             clickedDots && showHistory?
-                            <div className='border-[1px] mr-52 mt-8 w-[180px] p-3  h-[120px] z-[40]  bg-white border-gray-300 rounded-md'>
-                                <div onClick={()=>{setsheetmethod('Database'); setselectfield(false);setclickedDots(false);}} className={`${sheetmethod=='Database'?'bg-white':''} p-1 hover:bg-blue-400 flex items-center rounded-md text-[14px] font-roboto`}>
+                            <div ref={popupRef} className='border-[1px] mr-52 mt-8 w-[180px] p-3  h-[120px] z-[40]  bg-white border-gray-300 rounded-md'>
+                                <div onClick={()=>{setsheetmethod('Database'); setselectfield(false);setclickedDots(false);}} className={`${sheetmethod=='Database'?'bg-white':''} p-1 hover:bg-gray-100 flex items-center rounded-md text-[14px] font-roboto`}>
                                                 <FaDatabase className='text-gray-700'/>
                                                 <p className='p-2 cursor-pointer font-inter'>Database</p>
                                             </div>
-                                            <div onClick={()=>{setsheetmethod('Google Sheet'); setselectfield(false);setclickedDots(false)}} className={`${sheetmethod=='Google Sheet'?'bg-white':''} p-1 hover:bg-blue-400 flex items-center rounded-md text-[14px] font-roboto`}>
+                                            <div onClick={()=>{setsheetmethod('Google Sheet'); setselectfield(false);setclickedDots(false)}} className={`${sheetmethod=='Google Sheet'?'bg-white':''} p-1 hover:bg-gray-100 flex items-center rounded-md text-[14px] font-roboto`}>
                                                 <FaDatabase className='text-gray-700'/>
                                                 <p className='p-2 cursor-pointer font-inter'>Google Sheet</p>
                                             </div>
@@ -784,16 +814,16 @@ console.log(mergedData)
                     }
                     {
                         selectfield?
-                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
+                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
                             <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
                                 <div onClick={()=>{setselectfield(false);setsheetmethod('')}} className='cursor-pointer h-[50px]'>
                                     <RxCross2/>
                                 </div>
-                                <div onClick={()=>{setsheetmethod('Database'); setselectfield(false)}} className={`${sheetmethod=='Database'?'bg-white':''} p-1 hover:bg-blue-400 flex items-center rounded-md text-[14px] font-roboto`}>
+                                <div onClick={()=>{setsheetmethod('Database'); setselectfield(false)}} className={`${sheetmethod=='Database'?'bg-white':''} p-1 hover:bg-gray-100 flex items-center rounded-md text-[14px] font-roboto`}>
                                     <FaDatabase className='text-gray-700'/>
                                     <p className='p-2 cursor-pointer'>Database</p>
                                 </div>
-                                <div onClick={()=>{setsheetmethod('Google Sheet'); setselectfield(false)}} className={`${sheetmethod=='Google Sheet'?'bg-white':''} p-1 hover:bg-blue-400 flex items-center rounded-md text-[14px] font-roboto`}>
+                                <div onClick={()=>{setsheetmethod('Google Sheet'); setselectfield(false)}} className={`${sheetmethod=='Google Sheet'?'bg-white':''} p-1 hover:bg-gray-100 flex items-center rounded-md text-[14px] font-roboto`}>
                                     <FaDatabase className='text-gray-700'/>
                                     <p className='p-2 cursor-pointer'>Google Sheet</p>
                                 </div>
@@ -805,7 +835,7 @@ console.log(mergedData)
                     }
                     {
                         !selectfield && sheetmethod!="Google Sheet" && sheetmethod!="" ?
-                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
+                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
                             <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
                                 {
                                     clickedDots?
@@ -835,7 +865,7 @@ console.log(mergedData)
 
                     {
                         !selectfield && sheetmethod!="Database" && sheetmethod!="" ?
-                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
+                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
                             <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
                                 {
                                     clickedDots?
@@ -863,7 +893,7 @@ console.log(mergedData)
 
                             {
                                 showimagepopup && sheetmethod!="Google Sheet" && sheetmethod!=""   ?
-                                <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
+                                <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
                                     <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
                                         
                                         <div className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
@@ -901,7 +931,7 @@ console.log(mergedData)
 
 {
                                 showimagepopup && sheetmethod!="Database" && sheetmethod!=""   ?
-                                <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-white bg-opacity-50  top-0  fixed flex items-center justify-center z-[80]`}>
+                                <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
                                     <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
                                         
                                         <div className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
@@ -966,9 +996,10 @@ console.log(mergedData)
 
         {
             clickedportfolioshared?
-            <div className='fixed overflow-hidden left-0 w-[100%] top-[-20px] h-[100%] bg-opacity-80 bg-gray-50'>
-                
+            <div className='fixed overflow-hidden left-0 w-[100%] top-[-20px] h-[100%] bg-opacity-40 bg-black'>
+            <div ref={popupRef} className=''>
                 <PortfolioShared realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar} setclickedPortfolioShared={setclickedPortfolioShared} handlesavestate={handlesavestate} sharedwithusers={sharedwithusers} />
+            </div>
             </div>
             :
             <></>
