@@ -131,8 +131,9 @@ const fieldConversions = {
     };
 
     const barColor = (index) => {
-        return index === hoveredIndex ? '#FF8042' : '#2970FF';  // Change color on hover
+        return index === hoveredIndex ? '#FF8042' :  COLORS[index % COLORS.length]; // Change color on hover
     };
+    const COLORS = ['#0d47a1', '#42a5f5',];
   return (
     <div style={{ width: '95%', height: '90%' }} className='mt-2 pr-10 ml-8 '>
     {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ?

@@ -815,7 +815,7 @@ console.log(mergedData)
                     {
                         selectfield?
                         <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
-                            <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
+                            <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' >
                                 <div onClick={()=>{setselectfield(false);setsheetmethod('')}} className='cursor-pointer h-[50px]'>
                                     <RxCross2/>
                                 </div>
@@ -836,7 +836,7 @@ console.log(mergedData)
                     {
                         !selectfield && sheetmethod!="Google Sheet" && sheetmethod!="" ?
                         <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
-                            <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
+                            <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' >
                                 {
                                     clickedDots?
                                     <div onClick={()=>{setselectfield(!selectfield);setsheetmethod('Database')}} className='cursor-pointer h-[50px]'>
@@ -847,7 +847,8 @@ console.log(mergedData)
                                         <RxCross2/>
                                     </div>
                                 }
-                                <div  className={`${sheetmethod=='Database'?'bg-white':''} p-1 flex items-center rounded-md text-[14px] flex-col font-roboto`}>
+                                <div className='flex items-center justify-center'><p className='font-inter font-semibold flex justify-center items-center text-white bg-blue-500 p-2 w-[280px] rounded-md mt-4 mb-4'>Select sheet from database</p></div>
+                                <div  className={`${sheetmethod=='Database'?'bg-white':''} p-1 flex items-center rounded-md text-[14px] flex-col font-roboto overflow-y-auto  scrollbar-hide`}style={{ maxHeight: '320px' }}>
                                 {(allSheets||[]).map(doc=>
                                         doc.fileType=='xlsx'?
                                         <DatabaseSheets setsheetname={setsheetname} showimagepopup={showimagepopup} setshowimagePopup={setshowimagePopup} setsheetmethod={setsheetmethod} key={doc._id} sheetKeys={sheetKeys} selectedImageFiled={selectedImageFiled} setselectedImageField={setselectedImageField} id={doc._id} setportfolioHistory={setshowHistory} setshowHistory={setshowHistory} sheetname={doc.name} setselectedSheetId={setselectedSheetId}/>
@@ -866,7 +867,7 @@ console.log(mergedData)
                     {
                         !selectfield && sheetmethod!="Database" && sheetmethod!="" ?
                         <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
-                            <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
+                            <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md'>
                                 {
                                     clickedDots?
                                     <div onClick={()=>{setselectfield(!selectfield);setsheetmethod('Google Sheet')}} className='cursor-pointer h-[50px]'>
@@ -877,7 +878,8 @@ console.log(mergedData)
                                        <RxCross2/>
                                     </div>
                                 }
-                                <div  className={`${sheetmethod=='Google Sheet'?'bg-white':''} p-1 flex items-center rounded-md text-[14px] flex-col font-roboto`}>
+                                <div className='flex items-center justify-center'><p className='font-inter font-semibold flex justify-center items-center text-white bg-blue-500 p-2 w-[280px] rounded-md mt-4 mb-4'>Select from google sheet</p></div>
+                                <div className={`${sheetmethod=='Google Sheet'?'bg-white':''} p-1 flex items-center rounded-md text-[14px] flex-col font-roboto overflow-y-auto scrollbar-hide`}style={{ maxHeight: '320px' }}>
                                 {(allSheets||[]).map(doc=>
                                         <GoogleSheetDatabaseSheets setsheetname={setsheetname} showimagepopup={showimagepopup} setshowimagePopup={setshowimagePopup} setsheetmethod={setsheetmethod} key={doc.id} sheetKeys={sheetKeys} selectedImageFiled={selectedImageFiled} setselectedImageField={setselectedImageField} id={doc.id} setportfolioHistory={setshowHistory} setshowHistory={setshowHistory} sheetname={doc.name} setselectedSheetId={setselectedSheetId}/>
                                         
@@ -894,7 +896,7 @@ console.log(mergedData)
                             {
                                 showimagepopup && sheetmethod!="Google Sheet" && sheetmethod!=""   ?
                                 <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
-                                    <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
+                                    <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' >
                                         
                                         <div className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
                                             <div className='flex items-center justify-center h-[40px]' onClick={(()=>{setshowimagePopup(false); setsheetmethod('Database')})}>
@@ -932,7 +934,7 @@ console.log(mergedData)
 {
                                 showimagepopup && sheetmethod!="Database" && sheetmethod!=""   ?
                                 <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
-                                    <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' style={{boxShadow:'0px 2px 8px #D1D5DB'}}>
+                                    <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' >
                                         
                                         <div className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
                                             <div className='flex items-center justify-center h-[40px]' onClick={(()=>{setshowimagePopup(false); setsheetmethod('Google Sheet')})}>
