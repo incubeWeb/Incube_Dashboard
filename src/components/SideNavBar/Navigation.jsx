@@ -22,7 +22,8 @@ import github from '../../Assets/github.png'
 import outlook from '../../Assets/outlook.png'
 import airtable from '../../Assets/airtable.png'
 import { PiStarFourBold } from 'react-icons/pi';
-
+import  automation from '../Icons/automation.svg'
+import { TbExternalLink } from 'react-icons/tb';
 
 
 const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccountconnected,activeField,setActiveField,hidenavbar,sethidenavbar}) => {
@@ -391,6 +392,12 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
                     <div className='w-[24px] flex justify-center text-[#667085] items-center'><FaPlus size={16}/></div>
                     <div className='text-[14px] font-inter font-semibold'><p>Connect an Application</p></div>
                 </div>
+
+                <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white hover:bg-gray-300 cursor-pointer rounded-md pl-2`} onClick={()=>{window.open('https://workflow.incubewhtsapp.xyz/','_blank')}}>
+                    <div className='w-[24px] flex justify-center items-center'><img src={automation}/></div>
+                    <div className='text-[14px] font-inter font-semibold'><p>Automation</p></div>
+                    <div className='absolute right-12'><TbExternalLink size={18} /></div>
+                </div>
             </div>
 
         
@@ -499,6 +506,10 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
                     </Link>
                     <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white cursor-pointer rounded-md pl-2`} onClick={()=>{ShowApplicationNavfun(true)}}>
                         <div className='w-[24px] flex justify-center text-[#667085] items-center'><FaPlus size={18}/></div>  
+                    </div>
+
+                    <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white cursor-pointer rounded-md pl-2`} onClick={()=>{window.open('https://workflow.incubewhtsapp.xyz/','_blank')}}>
+                    <div className='w-[24px] flex justify-center items-center'><img src={automation}/></div>
                     </div>
 
                     <div className='w-[44px] flex items-end justify-end p-2 pr-0 pb-0  h-[40px]'>
