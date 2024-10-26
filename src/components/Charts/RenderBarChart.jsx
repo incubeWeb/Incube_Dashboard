@@ -283,9 +283,9 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
 const handleMouseLeave = () => {
     setHoveredIndex(null);  // Reset the hovered bar when the mouse leaves
 };
-
+const COLORS = ['#0d47a1', '#42a5f5',];
 const barColor = (index) => {
-    return index === hoveredIndex ? '#FF8042' : '#2970FF';  // Change color on hover
+    return index === hoveredIndex ? '#FF8042' : COLORS[index % COLORS.length];  // Change color on hover
 };
 
 useEffect(()=>{
@@ -298,14 +298,14 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
   return (
     <div style={{ width: '100%', height: '95%' ,paddingBottom:'15px'}} className='mt-8  pr-10'>
       
-      <div style={{ width: '95%', height: '90%' }} className='mt-2 pr-10 ml-8 '>
+      <div style={{ width: '95%', height: '90%' }} className='mt-2 pr-10 ml- 8'>
     {mydatatypex === 'string' && mydatatypey === 'integer' ?
-        <div className='pl-4' style={{ paddingBottom: '20px' }}>
-            <p className='text-[18px] font-bold font-inter -mt-4'>Vertical Bar Chart</p>
+        <div className='' style={{ paddingBottom: '20px' }}>
+            <p className='text-[16px] font-semibold font-inter -mt-4 ml-6'>{thissheetname.replace(/^\d+_/, "")}</p>
         </div>
         :
-        <div className='pl-4 -pt-4' style={{ paddingBottom: '20px' }}>
-            <p className='text-[18px] font-bold font-inter -mt-4'>Horizontal Bar Chart</p>
+        <div className=' -pt-4' style={{ paddingBottom: '20px' }}>
+            <p className='text-[16px] font-semibold font-inter -mt-4 ml-6'>{thissheetname.replace(/^\d+_/, "")}</p>
         </div>
     }
 
@@ -395,7 +395,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-green-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Database</p>
-                  <p className='text-[14px] text-gray-600 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
+                  {/* <p className='text-[14px] text-gray-600 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p> */}
                 </div>:
                 <></>
             }
@@ -405,7 +405,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-orange-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Google Drive</p>
-                  <p className='text-[14px] text-gray-600 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
+                  {/* <p className='text-[14px] text-gray-600 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p> */}
                 </div>:
                 <></>
             }

@@ -13,7 +13,9 @@ const ChatBot = () => {
   const [prompt, setPrompt] = useState(''); // To store the conversation for the API call
   const chatRef=useRef(null);
   const toggleChat = () => setShowChat((prev) => !prev);
-
+  const containerRef = useRef(null);
+  const [loading, setLoading] = useState(false); 
+  const [loadingDots, setLoadingDots] = useState('');
   const handleSend = async () => {
     if (newMessage.trim()) {
       // Create a new user message object
@@ -24,7 +26,7 @@ const ChatBot = () => {
   
       // Clear input field
       setNewMessage('');
-  
+      setLoading(true);
       // Prepare the prompt with only the new user message
       const currentPrompt = `You: ${newMessage}`;
   
@@ -57,10 +59,30 @@ const ChatBot = () => {
         console.error('Error downloading data:', error);
         alert('Failed to get response from bot.');
       }
+      finally {
+        // Set loading state back to false
+        setLoading(false);
+      }
     }
   };
   
-  
+  useEffect(() => {
+    let interval;
+
+    if (loading) {
+      setLoadingDots(''); // Reset dots
+      interval = setInterval(() => {
+        setLoadingDots(prev => {
+          if (prev.length < 3) {
+            return prev + '.';
+          }
+          return '';
+        });
+      }, 500); // Change dots every 500ms
+    }
+
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, [loading]);
   
 
   //   useEffect(()=>{
@@ -78,6 +100,21 @@ const ChatBot = () => {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
   }, [messages, showChat]);
+
+  const handleOutsideClick = (e) => {
+    if (containerRef.current && !containerRef.current.contains(e.target)) {
+      setShowChat(false); // Close chat when clicked outside
+    }
+  };
+
+  useEffect(() => {
+    if (showChat) {
+      document.addEventListener('mousedown', handleOutsideClick);
+    } else {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    }
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [showChat]);
 
   const formatMessage = (text) => {
     // Replace "**text**" with "<strong>text</strong>" for bold formatting
@@ -210,68 +247,79 @@ const ChatBot = () => {
   </div>
 
   
-      {showChat && (
-  <div className="fixed w-[60%] h-[60%] bg-white border border-gray-300 rounded-lg p-10 right-10 bottom-36">
-    <RxCross2 size={20} className='text-black cursor-pointer mr-2 bg-gray-100 rounded-full' onClick={toggleChat} />
-
-    {/* Container for messages and download button */}
-    <div className="flex flex-col h-full">
-      {/* Message area */}
-      <div className="flex-1 overflow-y-auto mb-2" ref={chatRef}>
-        {messages.map((msg, index) => {
-          if (msg.sender === 'You') {
-            return (
-              <div key={index} className="p-2 rounded-lg mb-1 bg-blue-100 text-right">
-                <div dangerouslySetInnerHTML={{ __html: formatMessage(msg.text) }} />
-              </div>
-            );
-          }
-
-          // Handle bot messages
-          if (msg.sender === 'Bot') {
-            if (isTableResponse(msg.text)) {
-              return renderTable(msg.text);
-            } else {
+  {showChat && (
+    <div
+      ref={containerRef}
+      className="fixed w-[60%] h-[60%] bg-white border border-gray-300 rounded-lg p-6 right-10 bottom-36" // Adjusted padding to 6
+    >
+      <div className="flex flex-col h-full space-y-4"> {/* Added space-y-4 for consistent spacing */}
+        
+        {/* Message area */}
+        <div className="flex-1 overflow-y-auto scrollbar-hide mb-2 p-2" ref={chatRef}> {/* Added p-2 for padding within message area */}
+          {messages.map((msg, index) => {
+            if (msg.sender === 'You') {
               return (
-                <div key={index} className="p-2 rounded-lg mb-1 bg-gray-100 text-left">
+                <div
+                  key={index}
+                  className="p-3 rounded-lg mb-2 bg-blue-100 text-right" // Adjusted padding to 3 and margin to 2
+                >
                   <div dangerouslySetInnerHTML={{ __html: formatMessage(msg.text) }} />
                 </div>
               );
             }
-          }
-        })}
-      </div>
-
-      
-      {messages.length > 0 && messages[messages.length - 1].sender === 'Bot' && isTableResponse(messages[messages.length - 1].text) && (
-        <button 
-          className="bg-blue-500 font-inter font-bold text-[12px] mb-2 mt-1 w-[100px] text-white p-2 rounded-lg"
-          onClick={downloadCSV}
-        >
-          Download
-        </button>
-      )}
-
-      
-      <div className="flex mt-2 ">
-        <input
-          type="text"
-          className="flex-1 border border-gray-300 rounded-l-lg p-1   text-sm"
-          placeholder="Type a message..."
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
-        <button
-          className="bg-blue-500 text-white p-2 rounded-r-lg"
-          onClick={handleSend}
-        >
-          <MdSend size={20} />
-        </button>
+  
+            if (msg.sender === 'Bot') {
+              if (isTableResponse(msg.text)) {
+                return renderTable(msg.text);
+              } else {
+                return (
+                  <div
+                    key={index}
+                    className="p-3 rounded-lg mb-2 bg-gray-100 text-left" // Adjusted padding to 3 and margin to 2
+                  >
+                    <div dangerouslySetInnerHTML={{ __html: formatMessage(msg.text) }} />
+                  </div>
+                );
+              }
+            }
+          })}
+        </div>
+  
+        {loading && (
+          <div className="text-start text-gray-600 mb-2"> {/* Added mb-2 for spacing */}
+            <span style={{ fontSize: '18px' }}>Thinking</span>
+            <span style={{ fontSize: '24px' }}>{loadingDots}</span>
+          </div>
+        )}
+  
+        {messages.length > 0 && messages[messages.length - 1].sender === 'Bot' && isTableResponse(messages[messages.length - 1].text) && (
+          <button
+            className="bg-blue-500 font-inter font-bold text-[12px] mb-2 mt-1 w-[100px] text-white p-2 rounded-lg"
+            onClick={downloadCSV}
+          >
+            Download
+          </button>
+        )}
+  
+        <div className="flex mt-2 space-x-2"> {/* Added space-x-2 for horizontal spacing */}
+          <input
+            type="text"
+            className="flex-grow bg-gray-200 text-black outline-none px-4 py-2 rounded-l-lg" // Added padding and rounded corners
+            placeholder="Type a message..."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <button
+            className="bg-blue-500 text-white p-2 rounded-r-lg"
+            onClick={handleSend}
+          >
+            <MdSend size={20} />
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-)}
+  )}
 
 
 <style jsx>{`

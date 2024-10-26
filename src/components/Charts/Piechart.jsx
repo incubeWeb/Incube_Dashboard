@@ -472,6 +472,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         
     const BASE_BLUE = '#528BFF';
     const GRADIENT_BLUE = ['#528BFF', '#85AFFF', '#A1C2FF', '#C3D6FF']; // Gradient shades
+    const COLORS = ['#0d47a1', '#1976d2', '#42a5f5', '#90caf9', '#e3f2fd'];
 
 
 useEffect(()=>{
@@ -482,9 +483,11 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
+     <p className='mt-6 ml-7 font-inter font-semibold'>{thissheetname.replace(/^\d+_/, "")}</p>
       {loading ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
           <Bars color="#8884d8" height={80} width={80} />
+         
         </div>
       ) : (
         <ResponsiveContainer width="100%" height="100%">
@@ -507,7 +510,8 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                                 const fillColor =
                                     hoveredIndex === index || activeIndex === index
                                         ? '#FF8042'  // Apply gradient on hover/click
-                                        : '#528BFF';  // Default to base blue color
+                                          : COLORS[index % COLORS.length];
+                                        // Default to base blue color
 
                                 return (
                                     <Cell
@@ -605,7 +609,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-green-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Database</p>
-                  <p className='text-[14px] text-gray-900 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
+                  {/* <p className='text-[14px] text-gray-900 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p> */}
                 </div>:
                 <></>
             }
@@ -615,7 +619,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-orange-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Google Drive</p>
-                  <p className='text-[14px] text-gray-900 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
+                  {/* <p className='text-[14px] text-gray-900 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p> */}
                 </div>:
                 <></>
             }
