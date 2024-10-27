@@ -398,7 +398,6 @@ useEffect(() => {
 
   // Callback for when the drag event ends
   const onDragStop = (layout, oldItem, newItem) => {
-    console.log("Dragged:", newItem);
     updateLayoutItem(newItem); // Only update x, y, w, h
   };
   
