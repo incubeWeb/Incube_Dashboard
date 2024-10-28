@@ -388,16 +388,18 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
                 </div>
                 </Link>
 
-                <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white hover:bg-gray-300 cursor-pointer rounded-md pl-2`} onClick={()=>{ShowApplicationNavfun(true)}}>
-                    <div className='w-[24px] flex justify-center text-[#667085] items-center'><FaPlus size={16}/></div>
-                    <div className='text-[14px] font-inter font-semibold'><p>Connect an Application</p></div>
-                </div>
-
                 <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white hover:bg-gray-300 cursor-pointer rounded-md pl-2`} onClick={()=>{window.open('https://workflow.incubewhtsapp.xyz/','_blank')}}>
                     <div className='w-[24px] flex justify-center items-center'><img src={automation}/></div>
                     <div className='text-[14px] font-inter font-semibold'><p>Automation</p></div>
                     <div className='absolute right-12'><TbExternalLink size={18} /></div>
                 </div>
+
+                <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white hover:bg-gray-300 cursor-pointer rounded-md pl-2`} onClick={()=>{ShowApplicationNavfun(true)}}>
+                    <div className='w-[24px] flex justify-center text-[#667085] items-center'><FaPlus size={16}/></div>
+                    <div className='text-[14px] font-inter font-semibold'><p>Connect an Application</p></div>
+                </div>
+
+                
             </div>
 
         
@@ -504,13 +506,16 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
                     <Link to="/AI">
                         <PiStarFourBold size={24} className={`mx-auto ${activeField === '/AI' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/AI')} />
                     </Link>
-                    <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white cursor-pointer rounded-md pl-2`} onClick={()=>{ShowApplicationNavfun(true)}}>
-                        <div className='w-[24px] flex justify-center text-[#667085] items-center'><FaPlus size={18}/></div>  
-                    </div>
 
                     <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white cursor-pointer rounded-md pl-2`} onClick={()=>{window.open('https://workflow.incubewhtsapp.xyz/','_blank')}}>
                     <div className='w-[24px] flex justify-center items-center'><img src={automation}/></div>
                     </div>
+                    
+                    <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white cursor-pointer rounded-md pl-2`} onClick={()=>{ShowApplicationNavfun(true)}}>
+                        <div className='w-[24px] flex justify-center text-[#667085] items-center'><FaPlus size={18}/></div>  
+                    </div>
+
+                    
 
                     <div className='w-[44px] flex items-end justify-end p-2 pr-0 pb-0  h-[40px]'>
                         <div className=' font-bold text-[20px]  rounded-[100%] items-center bg-gray-100  flex justify-center border-gray-300 border-[1px] w-[30px] h-[30px] '>
