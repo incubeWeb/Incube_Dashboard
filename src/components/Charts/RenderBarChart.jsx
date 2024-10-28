@@ -111,35 +111,40 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
       let fromdrive='';
       let selectedsheetidfordrive=''
       let selectedsheetfromdbname=''
+      let barchartcount=[]
       
       entireData.map((m,index)=>{
         if(index==id)
         {
-          selectedYaxis=m.selectedYAxis;
-          selectedXaxis=m.selectedXAxis;
-          isSheetchart=m.isSheetChart;
-          clickedsheetname=m.clickedsheetname;
+          selectedYaxis=m?.selectedYAxis || "";
+          selectedXaxis=m?.selectedXAxis || "";
+          isSheetchart=m?.isSheetChart || "";
+          clickedsheetname=m?.clickedsheetname || "";
           setthissheetname(clickedsheetname)
-          chartdatatypex=m.chartDatatypeX;
+          chartdatatypex=m?.chartDatatypeX || "string";
           setmydatatypex(chartdatatypex)
-          chartdatatypey=m.chartDatatypeY;
+          chartdatatypey=m?.chartDatatypeY || "integer";
           setmydatatypey(chartdatatypey)
-          dbCompanyName=m.dbCompanyName;
-          fromdrive=m.fromdrive
+          dbCompanyName=m?.dbCompanyName || "";
+          fromdrive=m?.fromdrive || ""
           setisitfromdrive(fromdrive)
-          selectedsheetidfordrive=m.selectedsheetfromdbname
-          selectedsheetfromdbname=m.selectedsheetfromdbname
-          
+          selectedsheetidfordrive=m?.selectedsheetfromdbname || ""
+          selectedsheetfromdbname=m?.selectedsheetfromdbname || ""
+          barchartcount=m?.barchartCount || []
         }
       });
 
+      if(barchartcount.length>0)
+        {
+          const convertedData= convertDataTypes(barchartcount, {name:chartdatatypex,uv:chartdatatypey});
+          setmydata(convertedData)
+        }
       
-      
-      if(fromApi && !isSheetchart) { 
+      else if(fromApi && !isSheetchart) { 
        
         const convertedData = convertDataTypes(data01[0], {
-          name:chartDatatypeFromApiX,
-          uv:chartDatatypeFromApiY
+          name:chartdatatypex,
+          uv:chartdatatypey
         });
         setmydata(convertedData);
         setFromApi(false);
@@ -176,8 +181,8 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
               dt.map(d => filteredDt.push({ name: d[selectedXaxis], uv: d[selectedYaxis] }));
   
               const convertedData = convertDataTypes(filteredDt, {
-                name:chartDatatypeFromApiX,
-                uv:chartDatatypeFromApiY
+                name:chartdatatypex,
+                uv:chartdatatypey
               });
               setmydata(convertedData);
               setFromApi(false);
@@ -194,8 +199,8 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
         let filteredDt = [];
         dt.map(d => filteredDt.push({name: d[selectedXaxis], uv: d[selectedYaxis]}));
         const convertedData = convertDataTypes(filteredDt, {
-          name:chartDatatypeFromApiX,
-          uv:chartDatatypeFromApiY
+          name:chartdatatypex,
+          uv:chartdatatypey
         });
         setmydata(convertedData);
         setFromApi(false);
@@ -233,8 +238,8 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
               dt.map(d => filteredDt.push({ name: d[selectedXaxis], uv: d[selectedYaxis] }));
   
               const convertedData = convertDataTypes(filteredDt, {
-                name:chartDatatypeFromApiX,
-                uv:chartDatatypeFromApiY
+                name:chartdatatypex,
+                uv:chartdatatypey
               });
               setmydata(convertedData);
               setFromApi(false);
@@ -251,8 +256,8 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
         let filteredDt = [];
         dt.map(d => filteredDt.push({ name: d[selectedXaxis], uv: d[selectedYaxis] }));
         const convertedData = convertDataTypes(filteredDt, {
-          name:chartDatatypeFromApiX,
-          uv:chartDatatypeFromApiY
+          name:chartdatatypex,
+          uv:chartdatatypey
         });
         setmydata(convertedData);
         setFromApi(false);
@@ -265,12 +270,14 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
       }
       else {
         const convertedData = convertDataTypes(data01[0], fieldConversionsNormal);
-       
+      
         setmydata(convertedData);
       }
     };
-    fun();
-  }, [investmentchange]);
+    setTimeout(()=>{
+      fun();
+    },1000)
+  }, []);
 
   const [hoveredIndex, setHoveredIndex] = useState(null); 
 
