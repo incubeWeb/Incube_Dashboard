@@ -303,10 +303,9 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         };
         const scrollLegend = (direction) => {
           if (legendRef.current) {
-              const scrollAmount = direction === 'down' ? 30 : -30; // Use 30 for down, -30 for up
-              if (direction === 'down') {
-                  legendRef.current.scrollBy({ top: scrollAmount, behavior: 'smooth' });
-              }
+              const scrollAmount = direction === 'down' ? legendRef.current.scrollHeight : -legendRef.current.scrollHeight; // Use 30 for down, -30 for up
+              legendRef.current.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+              
           } else {
               console.error('legendRef.current is not defined.');
           }
@@ -317,7 +316,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
           if (legendRef.current) {
               return legendRef.current.scrollHeight > legendRef.current.clientHeight;
           }
-          return false;
+          return true;
         };
         
     const BASE_BLUE = '#528BFF';
@@ -332,24 +331,26 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
 
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
-     <p className='mt-6 ml-7 font-inter font-semibold'>{thissheetname.replace(/^\d+_/, "")}</p>
+    <div style={{ width: '100%', height: '100%',paddingBottom:'15px' }}>
+     <p className='mt-4 ml-7 font-inter font-semibold'>{thissheetname.replace(/^\d+_/, "")}</p>
       {loading ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
           <Bars color="#8884d8" height={80} width={80} />
          
         </div>
       ) : (
-        <ResponsiveContainer width="100%" height="100%">
+        
+        <ResponsiveContainer width="100%" height="95%" className="flex flex-row">
           <PieChart>
-                        <Pie
+                        <Pie 
+                            className='basis-9/12'
                             dataKey="value"
                             isAnimationActive={false}
                             data={mydata}
                             cx="50%"
                             cy="50%"
-                            outerRadius="85%" // Outer radius for doughnut
-                            innerRadius="45%" // Inner radius for the doughnut effect
+                            outerRadius="95%" // Outer radius for doughnut
+                            innerRadius="55%" // Inner radius for the doughnut effect
                             fill={BASE_BLUE}
                             activeIndex={activeIndex}
                             onClick={onPieClick} // Trigger effect on click
@@ -381,73 +382,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                             labelStyle={{ color: '#ccc' }}
                         />
                         
-                        <Legend
-    layout="vertical"
-    align="right"
-    verticalAlign="middle"
-    formatter={legendFormatter}
-    content={props => {
-        const { payload } = props;
-        return (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
-                {isScrollable() && (
-                    <button
-                        style={{
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer',
-                            color: 'black',
-                            fontSize: '20px',
-                            marginBottom: '5px', // Space between the up arrow and the legend
-                        }}
-                        onClick={() => scrollLegend('up')}
-                    >
-                        <MdKeyboardArrowUp size={24}  className='mb-2 mr-3'/>
-                    </button>
-                )}
-                <ul
-                    ref={legendRef}
-                    style={{
-                        listStyleType: 'none',
-                        paddingLeft: 0,
-                        fontFamily: 'Inter',
-                        fontWeight: 600,
-                        maxHeight: '200px',
-                        overflowY: 'auto',
-                        scrollbarWidth: 'none',
-                        msOverflowStyle: 'none',
-                        position: 'relative',
-                        margin: '0', // Remove default margin
-                        marginBottom: '10px', // Space between the legend items and the down arrow
-                    }}
-                    className="hide-scrollbar"
-                >
-                    {payload.map((entry, index) => (
-                        <li key={`item-${index}`} style={{ color: '#8884d8', fontSize: '14px' }}>
-                            {`${entry.value}: ${entry.payload.value}`}
-                        </li>
-                    ))}
-                </ul>
-                {isScrollable() && (
-                    <button
-                        style={{
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer',
-                            color: 'black',
-                            fontSize: '20px',
-                            marginTop: '5px', // Space above the down arrow
-                        }}
-                        onClick={() => scrollLegend('down')}
-                    >
-                        <MdKeyboardArrowDown size={24} className='mt-2 mr-3' />
-                    </button>
-                )}
-            </div>
-        );
-    }}
-    wrapperStyle={{ paddingLeft: '20px', lineHeight: '60px' }}
-/>
+                        
                     </PieChart>
           {/* <div className='fixed right-5 top-3 flex flex-row items-center space-x-2'>
             <div className='w-[10px] h-[10px] bg-violet-600 mt-3'></div> 
@@ -476,7 +411,65 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
           <div className='z-[10] cursor-pointer flex pl-[1px] items-center justify-center w-[20px] rounded-xl h-[20px] bg-gray-100 mt-3 mr-3 fixed right-[-10px] top-[-15px]' onClick={deleteWidgit}>
             <RxCross2 size={14} className='text-black z-[10]' onClick={deleteWidgit}/>
           </div>
+          <div className='w-[100%] h-[100%] basis-3/12 text-[13px] flex items-center justify-center' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center',  }}>
+                {isScrollable() && (
+                    <button 
+                    className='mt-4'
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            color: 'black',
+                            fontSize: '20px',
+                            marginBottom: '5px', // Space between the up arrow and the legend
+                        }}
+                        onClick={() => scrollLegend('up')}
+                    >
+                        <MdKeyboardArrowUp size={24}  className=' mr-3'/>
+                    </button>
+                )}
+                <ul 
+                    ref={legendRef}
+                    style={{
+                        listStyleType: 'none',
+                        paddingLeft: 0,
+                        fontFamily: 'Inter',
+                        fontWeight: 600,
+                        maxHeight: '200px',
+                        overflowY: 'auto',
+                        scrollbarWidth: 'none',
+                        msOverflowStyle: 'none',
+                        position: 'relative',
+                        margin: '0', // Remove default margin
+                        marginBottom: '10px', // Space between the legend items and the down arrow
+                    }}
+                    className="hide-scrollbar"
+                >
+                    {mydata.map((entry, index) => (
+                        <li key={`item-${index}`} className='mt-4' style={{ color: '#8884d8', fontSize: '14px' }}>
+                            {`${entry.name}: ${entry.value}`}
+                        </li>
+                    ))}
+                </ul>
+                {isScrollable() && (
+                    <button 
+                        className='mb-4'
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            color: 'black',
+                            fontSize: '20px',
+                            marginTop: '5px', // Space above the down arrow
+                        }}
+                        onClick={() => scrollLegend('down')}
+                    >
+                        <MdKeyboardArrowDown size={24} className=' mr-3' />
+                    </button>
+                )}
+            </div>
         </ResponsiveContainer>
+        
       )}
     </div>
   );
