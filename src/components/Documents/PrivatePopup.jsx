@@ -138,7 +138,7 @@ const PrivatePopup = ({hidenavbar,setfileprivate,docId}) => {
     setsearchuser(''); 
     setUserList(true); 
     setUsers();  
-  }}  className=' h-[100%] text-[14px] w-full border rounded-lg px-3 py-2 bg-gray-50 text-sm focus:outline-none ' placeholder='Search User'/>
+  }}  className=' h-[100%] text-[14px] w-full border rounded-lg px-3 py-2 bg-gray-50 text-sm focus:outline-none ' placeholder='Search Users'/>
               <div className='w-[16px] h-[16px] cursor-pointer'>
                 <IoRefresh size={16} onClick={()=>handleRefreshUsers()}/>
               </div>
