@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { FiPlus, FiSearch } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import Viewsheet from '../ViewSheet/Viewsheet'
@@ -48,7 +48,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
 
     const [showConfirmPublicPopup,setshowConfirmPublicPopup]=useState(false)
     const [showconfirmpublicpopupid,setshowconfirmpublicpopupid]=useState('')
-    
+    const componentRef = useRef(null);
 
     const GetDriveSheets=async()=>{
         setloading1(true)
@@ -327,6 +327,21 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
 
     
 
+    const handleClickOutside = (event) => {
+      if (componentRef.current && !componentRef.current.contains(event.target)) {
+        setfileprivate(false)
+      }
+    };
+  
+    useEffect(() => {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, []);
+  
+  
+
   return (
     <div className={`${hidenavbar?'ml-[4%] w-[96%] h-screen':'ml-[20%] w-[80%] '} pt-[48px] pl-[36px] flex flex-col p-4 items-center justify-start space-y-4 font-sans min-h-screen bg-gray-100`}>
     <div className='w-[100%] h-[10%] flex flex-row space-x-3'>
@@ -521,8 +536,10 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
     }
     {
         fileprivate?
-        <div className='fixed left-0 w-[100%] top-[-20px] h-[100%] bg-white bg-opacity-80'>
+        <div className='fixed left-0 w-[100%] top-[-20px] h-[100%] bg-black bg-opacity-40'>
+        <div  ref={componentRef}>
             <PrivatePopup docId={docId} hidenavbar={hidenavbar} setfileprivate={setfileprivate}/>
+            </div>
         </div>
         :
         <></>

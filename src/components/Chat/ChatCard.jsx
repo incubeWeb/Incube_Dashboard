@@ -198,7 +198,7 @@ useEffect(() => {
 
 
   return (
-    <div className={` w-[100%] h-[100%] `}>
+    <div className={` w-[100%] h-full `}>
         <div className='w-[100%] h-[100%] rounded-md shadow-md border-[1px] border-gray-300 md:flex md:flex-col space-y-4'>
         <MdFullscreen 
                   className="text-black cursor-pointer  mt-2 ml-2"
@@ -265,21 +265,27 @@ useEffect(() => {
                 </div>
               </div>
               {itsfrom !== 'completed' ? (
-                <div className="w-[100%] pl-2 h-[20%] md:flex md:flex-row space-x-2 md:items-center justify-center ">
-                  <div className="w-[90%] md:space-x-3 h-[100%] md:flex md:flex-row pb-2 pt-1 pr-3">
-                    <div className="w-[95%] h-[40px] border border-gray-300 rounded-full flex items-center  ">
-                      <input
-                        value={mychat}
-                        onChange={(e) => setmychat(e.target.value)}
-                        onKeyPress={(e) => (e.key == 'Enter' ? handleChat() : <></>)}
-                        className="w-[900px] h-[60x] rounded-full outline-none text-[14px] pl-4 py-2 focus:ring-2 focus:ring-blue-500 transition-all"
-                      />
-                    </div>
-                    <div className="w-[5%] justify-end h-[100%] mt-2 flex items-start">
-                      <MdSend size={24} className="cursor-pointer" onClick={handleChat} />
-                    </div>
-                  </div>
-                </div>
+                <div className="w-full pl-2 h-[20%] md:flex md:flex-row space-x-2 md:items-center justify-center">
+  <div className="w-[90%] h-full md:flex md:flex-row pb-2 pt-1 pr-3">
+   <div className="flex-grow h-[50px] border border-gray-300 rounded-full flex items-center bg-white">
+
+      <textarea
+        value={mychat}
+        onChange={(e) =>{ setmychat(e.target.value)
+         
+        }}
+        onKeyPress={(e) => e.key === 'Enter' && handleChat()}
+        className="w-full h-full rounded-full outline-none text-[14px] scrollbar-hide pl-4 py-2 transition-all"
+        placeholder="Type your message..." // Optional placeholder
+      
+      />
+    </div>
+    <div className="w-[5%] flex items-start justify-end h-full mt-2">
+      <MdSend size={24} className="cursor-pointer" onClick={handleChat} />
+    </div>
+  </div>
+</div>
+
               ) : (
                 <></>
               )}
@@ -341,20 +347,26 @@ useEffect(() => {
             </div>
             {
                 itsfrom!='completed'?
-        
-            <div className='w-[100%] pl-2 h-[20%] md:flex md:flex-row space-x-2 md:items-center justify-center'>
-                
-                <div className='w-[90%] md:space-x-3 h-[100%] md:flex md:flex-row pb-2 pt-1 pr-3'>
-                    <div className=' w-[95%] h-[100%]   border-[1px]   border-gray-300 rounded-xl flex flex-row'>
-                        <input value={mychat} onChange={(e)=>setmychat(e.target.value)} onKeyPress={(e)=>e.key=='Enter'?handleChat():<></>}  className='w-[100%] h-[100%]  rounded-xl outline-none text-[14px] pl-2 focus:ring-2 focus:ring-blue-500 transition-all'/>
-                         
-                    </div>
-                    <div className='w-[5%] justify-end h-[100%] flex items-center'>
-                            <MdSend size={23} className='cursor-pointer' onClick={handleChat}/>
-                    </div>
+                <div className='w-[100%] pl-2 h-[20%] md:flex md:flex-row space-x-2 md:items-center justify-center'>
+    <div className='w-[90%] md:space-x-3 h-[100%] md:flex md:flex-row pb-2 pt-1 pr-3'>
+        <div className='w-[95%] h-[100%] border-[1px] border-gray-300 rounded-xl flex flex-row items-start'>
+            <textarea 
+                value={mychat} 
+                onChange={(e) => {
+                    setmychat(e.target.value);
                     
-                </div>
-            </div>
+                }} 
+                onKeyPress={(e) => e.key === 'Enter' ? handleChat() : <></>}  
+                className='w-[100%] h-[100%] rounded-xl outline-none text-[14px] pl-2 scrollbar-hide transition-all mb-2' // Added mb-2 for margin below
+               
+            />
+        </div>
+        <div className='w-[5%] justify-end h-[100%] flex items-center'>
+            <MdSend size={23} className='cursor-pointer' onClick={handleChat} />
+        </div>
+    </div>
+</div>
+
             :
             <></>
         }

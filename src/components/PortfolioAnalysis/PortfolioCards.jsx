@@ -413,9 +413,9 @@ useEffect(() => {
                         <div className='  flex justify-end h-[10px] relative '  >
                             </div>
                         }
-                <div className={style}>
+                <div className={style} >
                 
-                {icon}
+                {icon }
                 </div>
             
     
@@ -569,7 +569,7 @@ useEffect(() => {
                 <div className='w-[100%] flex flex-row items-center justify-start mt-2 space-x-2'>
                     {
                         !editLabel?
-                        <p className='text-[15px] text-gray-700 flex items-center h-[30px] tracking-wider font-inter font-semibold'>{labelname}</p>
+                        <p className='text-[15px] text-gray-700 flex items-center h-[30px] tracking-wider font-inter font-semibold cursor-pointer' onDoubleClick={handleEdit}>{labelname}</p>
                         :
                         <input ref={inputRef} value={labelname} onChange={(e)=>{setlablename(e.target.value) }} onKeyPress={(e)=>e.key=='Enter'?seteditLabel(false):seteditLabel(true)} className='w-[90px] h-[30px] text-[13px] pl-1 outline-none border-[1px] border-gray-300 rounded-md'/>
                     }
@@ -578,7 +578,7 @@ useEffect(() => {
                 <div className='w-[100%] flex flex-row'>
                     <div className='w-[70%] '>
                         <div className='flex h-[100%] items-center justify-start'>
-                            <p className='text-[20px] font-inter font-semibold text-gray-700'><span className='mr-1 cursor-pointer' onClick={togglePopup}>{currencyValue}</span>{showValue}</p>
+                            <p className='text-[20px] font-inter font-semibold text-gray-700'><span className='mr-1 cursor-pointer' onClick={togglePopup}>{currencyValue}</span><span className='cursor-pointer' onClick={handlePlusClick}>{showValue}</span></p>
                         </div>
                         {isPopupOpen && (
                     <div ref={popupRef} className='absolute top-0 left-0 bg-white border h-[160px] scrollbar-hide border-gray-300 rounded overflow-y-auto shadow-md mt-2'>

@@ -23,7 +23,7 @@ const PortfolioShared = ({realtimeportfoliostate,setsharedwithusers,setclickedPo
   const [portfoliosecurity,setportfoliosecurity]=useState('private')
 
   const [popupLoader,setpopupLoader]=useState(true)
-  const componentRef = useRef(null);
+
   const handlecancel=()=>{
     setclickedPortfolioShared(false)
 }
@@ -176,11 +176,14 @@ const handleremoveUser = async (email) => {
   await handlesavestate1(newSharedList);
 };
 
+const componentRef = useRef(null);
+
 const handleClickOutside = (event) => {
   if (componentRef.current && !componentRef.current.contains(event.target)) {
-    handlecancel();
+    setclickedPortfolioShared(false)
   }
 };
+
 useEffect(() => {
   document.addEventListener('mousedown', handleClickOutside);
   return () => {
@@ -226,7 +229,7 @@ const handlesavestate1 = async (selectedUsers) => {
     return (
       <div  ref={componentRef}  className={`${hidenavbar ? 'ml-[2%] w-[90%]' : 'ml-[20%] w-[80%]'} font-inter h-screen pt-[5%] flex flex-col p-4 items-center justify-center space-y-4`}>
      {!popupLoader?
-      <div className='relative flex flex-col  w-[430px] h-[500px] bg-white p-4 border border-gray-100 rounded-lg shadow-lg space-y-4'>
+      <div ref={componentRef} className='relative flex flex-col  w-[430px] h-[500px] bg-white p-4 border border-gray-100 rounded-lg shadow-lg space-y-4'>
       <div className="absolute top-4 right-4 cursor-pointer" onClick={handlecancel}>
         <RxCross2 />
       </div>
