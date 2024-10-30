@@ -27,7 +27,7 @@ function GridTemplate({id,filesadded,realtimeDealpipelinetabs,realtimedealpipeli
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTeams`,{
                 
                 assignedBy:Logemail,
-                mailorganization:Logorganization
+                mainorganization:Logorganization
             },{
                 headers:{
                   "Authorization":`Bearer ${token}`

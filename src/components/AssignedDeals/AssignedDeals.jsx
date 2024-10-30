@@ -8,6 +8,7 @@ import OpenGrid from '../OpenGridTemplate/OpenGrid'
 import OpenCompleteGrid from '../OpenGridTemplate/OpenCompleteGrid'
 import OpenUnassignedGrid from '../OpenGridTemplate/OpenUnassignedGrid'
 import { jwtDecode } from 'jwt-decode'
+import { Link } from 'react-router-dom'
 
 
 const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcompleted,setOpenViewallGrid,setCompanyName,setcompanyDiscription,openViewallGrid,status,TeamLead_status,completed,setassigneddealclicked,setBoxes,boxes,hidenavbar,realtimetabchats,realtimedealpipelinecompanyInfo}) => {
@@ -35,6 +36,7 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
           "Authorization":`Bearer ${token}`
         }
       })
+
        const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`,{
         member:Logemail,
         mainorganization:Logorganization
@@ -43,6 +45,9 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
           "Authorization":`Bearer ${token}`
         }
       })
+
+      
+      
       const filteredArray = response2.data.data.filter(
         obj1 => !response.data.data.some(obj2 => JSON.stringify(obj1) === JSON.stringify(obj2))
       );
@@ -112,6 +117,7 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
 
     return T.toLocaleTimeString()
   }
+
 useEffect(()=>{
 const mergedData=[
   ...asignedDeals,
@@ -120,7 +126,12 @@ const mergedData=[
  sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
 },[asignedDeals,assingedtodeals])
 
+const convertDate=(time)=>{
+  const T=new Date(Number(time))
 
+    return T.toLocaleDateString();
+
+}
 
 
   return (
@@ -151,7 +162,7 @@ const mergedData=[
             (asignedDeals||[]).map(doc=>
               doc.member!=Logemail?
               <div onClick={()=>{handleCompany(doc.organization)}} key={doc._id} className='cursor-pointer w-[100%] h-[18%] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
-                <p className='text-[14px] w-[80%] tracking-wide '> You have assinged <span className='font-bold'>{doc.organization}</span> to {doc.member} at {convertTime(doc.time)} </p>
+                <p className='text-[14px] w-[80%] tracking-wide '> You have assinged <span className='font-bold'>{doc.organization}</span> to {doc.member} at {convertTime(doc.time)} on {convertDate(doc.time)} </p>
                 <div className='w-[20%] pr-2 flex items-center justify-end'>
                   <div className='w-[16px] h-[16px] c'>
                     <FaExternalLinkAlt size={16} className='text-gray-500'/>
@@ -160,7 +171,16 @@ const mergedData=[
                 
             </div>
             :
-            <></>
+            <Link key={doc._id} to='/dealpipeline' onClick={()=>{handleCompany(doc.organization)}}> 
+              <div className='cursor-pointer w-[100%] h-[18%] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
+                  <p className='text-[14px] w-[80%] tracking-wide '> You have assinged <span className='font-bold'>{doc.organization}</span> to Yourself at {convertTime(doc.time)} on {convertDate(doc.time)} </p>
+                  <div className='w-[20%] pr-2 flex items-center justify-end'>
+                    <div className='w-[16px] h-[16px] c'>
+                      <FaExternalLinkAlt size={16} className='text-gray-500'/>
+                    </div>
+                  </div>
+              </div>
+            </Link>
             )
             :
             <></> 
@@ -170,7 +190,7 @@ const mergedData=[
             Logrole=='team lead' || Logrole=='user'?
             (assingedtodeals||[]).map(doc=>
               <div onClick={()=>{handleCompany(doc.organization)}} key={doc._id} className='cursor-pointer w-[100%] h-[18%] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
-                <p className='text-[14px] w-[80%] tracking-wide '><span className='font-bold'>{doc.organization}</span> has been assigned to you at {convertTime(doc.time)} </p>
+                <p className='text-[14px] w-[80%] tracking-wide '><span className='font-bold'>{doc.organization}</span> has been assigned to you at {convertTime(doc.time)} on {convertDate(doc.time)}</p>
                 <div className='w-[20%] pr-2 flex items-center justify-end'>
                   <div className='w-[16px] h-[16px] c'>
                     <FaExternalLinkAlt size={16} className='text-gray-500'/>

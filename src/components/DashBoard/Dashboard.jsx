@@ -123,6 +123,7 @@ const Dashboard = ({navbarref,showsmallnav,realtimetimeline,setActiveField,realt
 }
 
 const dashboardwidgitref=useRef(null)
+const addwidgitref=useRef(null)
 
 useEffect(() => {
   
@@ -133,11 +134,17 @@ useEffect(() => {
     gsap.to(dashboardwidgitref.current,{
       paddingLeft:"21%"
     })
+    gsap.to(addwidgitref.current,{
+      width:"130px"
+    })
     
   }else{
     gsap.to(dashboardwidgitref.current,{
       paddingLeft:"4%"
     }) 
+    gsap.to(addwidgitref.current,{
+      width:"177px"
+    })
       
   }
 }, [hidenavbar,loading]);
@@ -418,7 +425,7 @@ useEffect(() => {
   };
   //{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 } cols
   //{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 } brekpoints
-  const breakpoints={ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }
+  const breakpoints={ lg: 1000, md: 900, sm: 768, xs: 480, xxs: 0 }
   const cols={ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }
   return (
     
@@ -433,14 +440,17 @@ useEffect(() => {
       ):
       
     <div className='w-[100%] h-[100%] flex flex-col  '>
-      <div
-        className='fixed z-[50] top-[20px] right-[20px] flex flex-row w-[130px] h-[33px] rounded-md bg-blue-600  text-[14px] items-center justify-center text-white cursor-pointer'
-        onClick={handleShowPopup}
-      >
-        <p> <span className='text-[20px] font-bold'>+</span>  Add widgets</p>
+      <div  className='w-[100%] h-[7%] flex flex-col items-end pr-4 justify-end'>
+        <div
+        ref={addwidgitref}
+          className=' z-[50] flex flex-row w-[130px] h-[33px] rounded-md bg-blue-600  text-[14px] items-center justify-center text-white cursor-pointer'
+          onClick={handleShowPopup}
+        >
+          <p> <span className='text-[20px] font-bold'>+</span>  Add widgets</p>
+        </div>
       </div>
 
-    <div className=' flex flex-col w-[100%] h-[10%] items-end '>
+    <div className=' flex flex-col w-[100%] h-[0%] items-end '>
     
 </div>
       <div ref={dashboardwidgitref} className='  flex h-[100%]'>
