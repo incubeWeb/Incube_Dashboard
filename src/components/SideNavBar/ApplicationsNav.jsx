@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { IoIosArrowBack } from 'react-icons/io'
 
 import { FaInfo, FaLock } from 'react-icons/fa'
@@ -8,8 +8,26 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { IoLockClosed } from 'react-icons/io5'
 const ApplicationsNav = ({ShowApplicationNavfun,lockedapplist,setlockedapplist,openappList,setopenappList,setshowApplicationNav,setShowPopup,showPopup1, setShowPopup1,googleaccountconnected,handleRemoveGoogleConnect,showPopup,handleGoogleConnect}) => {
 
+    const handleclickoutside=(e)=>{
+        if(appnavref.current && !appnavref.current.contains(e.target))
+        {
+            ShowApplicationNavfun(false)
+        }
+    }
     
+    useEffect(() => {
+        document.addEventListener('mousedown', handleclickoutside);
+        return () => {
+          document.removeEventListener('mousedown', handleclickoutside);
+        };
+      }, []);
 
+
+    const appnavref=useRef(null)
+
+    
+    
+    
     
     const handleopenedapps=(name,active)=>{
         if(name.toLowerCase()=='google' && !active ){
@@ -24,7 +42,7 @@ const ApplicationsNav = ({ShowApplicationNavfun,lockedapplist,setlockedapplist,o
     }
 
   return (
-    <div className='flex font-inter flex-col  shadow-lg h-[100%] w-[100%]'>
+    <div ref={appnavref} className='flex font-inter flex-col  shadow-lg h-[100%] w-[100%]'>
         
         <div className='w-[100%] space-x-2 pt-[10px] flex flex-row items-center justify-start h-[70px] bg-gray-100'>
             <div onClick={()=>{ShowApplicationNavfun(false)}} className=' cursor-pointer ml-3 text-gray-700 w-[16px] h-[20px] flex items-center justify-center'>

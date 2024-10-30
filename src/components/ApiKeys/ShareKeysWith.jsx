@@ -85,19 +85,24 @@ const ShareKeysWith = ({realtimecheckAPikeys,hidenavbar,setsharedwithpopup,Api_v
                   <RxCross2 size={16} className='text-black'/>
                 </div>
           </div>
+          <div className='font-semibold font-inter text-gray-900 text-[18px]'><p>Added Users.</p></div>
           <div className='w-[100%] h-[80%] overflow-y-auto space-y-1 font-inter  mb-2'>
               
+           
+          
             {
               organziationUsers.length>0?
               organziationUsers.filter(val=>val.Member!=Logemail).map(val=>
                 
-                <div key={val._id} className='w-[100%] p-2 h-[40px] border-[1px] border-gray-200 flex flex-row space-x-2'>
-                    <div className='flex w-[50%] items-center justify-start'><p className='text-[14px] font-inter font-semibold mb-2'>{val.Member}</p></div>
-                    <div className='w-[50%] flex items-center justify-end'>
-                        <div className='w-[20px] h-[20px] cursor-pointer' onClick={()=>handleremoveUser(val.Member)}>
-                            <FaMinus size={18} />
-                        </div>
+                <div key={val._id} className='w-[100%] p-2 h-[40px]  flex flex-row space-x-2'>
+<span className='bg-blue-200 flex-wrap  text-blue-500 px-2 py-1 rounded-full text-sm flex items-center whitespace-nowrap'>
+
+                    <p className='text-[14px] font-semibold'>{val.Member}</p>
+                    <div className='ml-2 cursor-pointer' onClick={() => handleremoveUser(val.Member)}>
+                        <RxCross2 size={18} className='text-white'/>
                     </div>
+                </span>
+
                 </div>
                 
               )
@@ -106,6 +111,7 @@ const ShareKeysWith = ({realtimecheckAPikeys,hidenavbar,setsharedwithpopup,Api_v
                 No user added in this
               </div>
             }
+            
                             
           </div>
         </div>

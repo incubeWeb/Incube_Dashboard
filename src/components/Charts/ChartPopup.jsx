@@ -12,6 +12,12 @@ import { jwtDecode } from "jwt-decode";
 import Bar_Chart from '../Icons/Bar_Chart.svg'
 import Pie_Chart from '../Icons/Pie_Chart.svg'
 import Line_Chart from '../Icons/Line_Chart.svg'
+import timeline from '../Icons/timeline.svg'
+import Calendars from '../Icons/Calendars.svg'
+import portfolio_card from '../Icons/portfolio_card.svg'
+import  Assign_Deals from '../Icons/Assign_Deals.svg'
+import chat_popup from '../Icons/Chat_chartpopup.svg'
+import News from '../Icons/News.svg'
 
 import { useSheet } from "../SheetContext/SheetContext";
 
@@ -2015,23 +2021,29 @@ const ChartPopup = ({
         <div className="w-[100%]  flex justify-end pr-3">
           <RxCross2 size={20} className="cursor-pointer bg-gray-100 rounded-full" onClick={showlist} />
         </div>
-        <ul className="mt-10 font-inter space-y-3 p-4 overflow-y-auto ">
+        <ul className="mt-10 font-inter space-y-3 p-4 overflow-y-auto scrollbar-hide ">
           <div
               onClick={handletimelinewidgit}
               className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"
             >
-              <p className="w-[70%] ">Timeline</p>
+             <p className="flex items-center w-[70%]">
+  Timeline
+ 
+</p>
               <div className="w-[30%] flex justify-end">
-                <FaChevronRight className="text-gray-500" />
+              <img src={timeline} className="w-10 h-10 " alt="Timeline" /> 
               </div>
           </div>
           <div
               onClick={handlePortfoliocardwidgit}
               className="hover:text-white w-[100%] flex hover:bg-sky-500 ease-in duration-150 cursor-pointer text-[15px] h-[15%] items-center p-5 border border-gray-400 rounded-lg"
             >
-              <p className="w-[70%]">Portfolio Card</p>
+         <p className="flex items-center w-[70%]">
+  Portfolio Card
+ 
+</p>
               <div className="w-[30%] flex justify-end">
-                <FaChevronRight  className="text-gray-500" />
+              <img src={portfolio_card} className="w-10 h-10 " alt="Timeline" />
               </div>
           </div>
           <div
@@ -2040,7 +2052,7 @@ const ChartPopup = ({
             >
               <p className="w-[70%]">Chat</p>
               <div className="w-[30%] flex justify-end">
-                <FaChevronRight className="text-gray-500" />
+              <img src={chat_popup} className="w-10 h-10 " alt="Timeline" />
               </div>
             </div>
           <div
@@ -2049,7 +2061,7 @@ const ChartPopup = ({
           >
             <p className="w-[70%]">Calendars</p>
             <div className="w-[30%] flex justify-end">
-              <FaChevronRight className="text-gray-500" />
+            <img src={Calendars} className="w-10 h-10 " alt="Timeline" />
             </div>
           </div>
           <div
@@ -2060,7 +2072,7 @@ const ChartPopup = ({
             
             <div className="w-[30%] flex justify-end">
             
-              <FaChevronRight  className="text-gray-500"/>
+            <img src={News} className="w-10 h-10 " alt="Timeline" />
             </div>
           </div>
           <div
@@ -2069,7 +2081,7 @@ const ChartPopup = ({
           >
             <p className="w-[70%]">Assigned deals</p>
             <div className="w-[30%] flex justify-end">
-              <FaChevronRight className="text-gray-500" />
+            <img src={Assign_Deals} className="w-10 h-10 " alt="Timeline" />
             </div>
           </div>
           <div
@@ -2080,7 +2092,7 @@ const ChartPopup = ({
               Pie Chart
             </p>
             <div className="w-[30%] flex justify-end">
-              <FaChevronRight className="text-gray-500" />
+            <img src={Pie_Chart} className="w-10 h-10 " alt="Timeline" />
             </div>
           </div>
           <div
@@ -2091,7 +2103,7 @@ const ChartPopup = ({
               Bar Chart
             </p>
             <div className="w-[30%] flex justify-end">
-              <FaChevronRight className="text-gray-500" />
+            <img src={Bar_Chart} className="w-10 h-10 " alt="Timeline" />
             </div>
           </div>
           <div
@@ -2100,7 +2112,7 @@ const ChartPopup = ({
           >
             <p className="w-[70%]">Line Chart</p>
             <div className="w-[30%] flex justify-end">
-              <FaChevronRight className="text-gray-500" />
+            <img src={Line_Chart} className="w-10 h-10 " alt="Timeline" />
             </div>
           </div>
         </ul>
