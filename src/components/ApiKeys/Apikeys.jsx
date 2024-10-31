@@ -328,7 +328,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
     <FaKey  className='ml-2'/>
 </div>
 
-                    <div  className='space-y-2 w-[100%] flex overflow-y-auto flex-col h-[50px] p-5'>
+                    <div  className='space-y-2 w-[100%] flex overflow-y-auto scrollbar-hide flex-col h-[50px] p-5'>
                 {
                     availablekeys.map(val=>
                     
@@ -366,7 +366,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
                 <div className='text-[16px] font-inter pl-5 font-bold'>
                     <p>Added Keys</p>
                 </div>
-                <div className='w-[100%] flex overflow-y-auto flex-col space-y-2 h-[110px] p-5'>
+                <div className='w-[100%] flex overflow-y-auto scrollbar-hide flex-col space-y-2 h-[110px] p-5'>
                     {/* <div className='text-[14px]'>
                         <p>0 added keys</p>
                     </div> */}
@@ -405,7 +405,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
                 <div className='w-[100%] flex space-y-2 font-inter font-bold'>
                     <p>Create/Edit Keys</p>
                 </div>
-                <div className='h-[100px] overflow-y-auto flex-col flex space-y-3'>
+                <div className='h-[100px] overflow-y-auto  scrollbar-hide flex-col flex space-y-3'>
                 {
                     addField.filter(val=>val.Member==Logemail&& val.Creator==Logemail).map(val=>
                         <div key={val.uniqueid} className='flex flex-row space-x-2  h-[30px]'>

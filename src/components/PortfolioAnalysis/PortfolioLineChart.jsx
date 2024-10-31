@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfieldselectedX, sheetfieldselectedY }) => {
+const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfieldselectedX, sheetfieldselectedY,selectedSheetName }) => {
     const [data, setData] = useState([]);
     const [hoveredIndex, setHoveredIndex] = useState(null); // State to 
     function extractValue(input) {
@@ -67,11 +67,11 @@ const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfi
         <div style={{ width: '95%', height: '90%' }} className='mt-8 pr-10'>
         { chartDatatypeX === 'string' && chartDatatypeY === 'integer' ?   
             <div className='pl-8' style={{ paddingBottom: '30px' }}>
-                <p className='text-[18px] font-bold font-inter -mt-8'>Vertical Line Chart</p>
+                <p className='text-[18px] font-bold font-inter -mt-8'>{selectedSheetName}</p>
             </div> 
             : 
             <div className='pl-8 -pt-4' style={{ paddingBottom: '30px' }}>
-                <p className='text-[18px] font-bold font-inter -mt-8'>Horizontal Line Chart</p>
+                <p className='text-[18px] font-bold font-inter -mt-8'>{selectedSheetName}</p>
             </div>
         }
 

@@ -93,7 +93,7 @@ const Privatekeypopup = ({ Type, uniqueid, apikeyvalue, hidenavbar, setpopup, re
         <div className='flex items-center text-[18px] font-inter font-semibold text-gray-900 relative -mt-2'>
           <p>Share Your API Keys</p>
         </div>
-        <div className='w-[100%] h-[80%] overflow-y-auto space-y-1 font-inter font-semibold mb-2'>
+        <div className='w-[100%] h-[80%] overflow-y-auto scrollbar-hide space-y-1 font-inter font-semibold mb-2'>
           <input 
             value={searchUser} 
             onChange={(e) => setsearchuser(e.target.value)} 

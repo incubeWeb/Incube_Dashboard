@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'; // Use different arrow icons
 import { Pie, PieChart, ResponsiveContainer, Tooltip, Legend, Cell } from 'recharts';
 
-const PortfolioPieChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfieldselectedX, sheetfieldselectedY }) => {
+const PortfolioPieChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfieldselectedX, sheetfieldselectedY ,selectedSheetName}) => {
     const [data, setData] = useState([]);
 
     const extractValue = (input) => {
@@ -83,7 +83,7 @@ const PortfolioPieChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfie
     return (
         <div style={{ width: '90%', height: '90%' }} className='-mt-10 pr-10'>
             <div style={{ width: '100%', height: '100%', display: 'flex' }}>
-                <p className='pt-4 font-inter text-[18px] font-bold'>Pie Chart</p>
+                <p className='pt-4 font-inter text-[18px] font-bold'>{selectedSheetName}</p>
                 <div style={{ flex: 1 }}>
                     <ResponsiveContainer width="100%" height="100%">
                         <PieChart>

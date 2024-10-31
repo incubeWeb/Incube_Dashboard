@@ -54,7 +54,8 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
     const { setSheetJson } = useSheet();
-
+    const[sheetname,setsheetname]=useState([]);
+    const [selectedSheetName, setSelectedSheetName] = useState("");
     
     setSheetJson(sheetJson);
 
@@ -113,6 +114,14 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
     //     }
     //     updateRealtimevalue()
     // },[sheetedited])
+useEffect(()=>{
+console.log("pot",selectedSheetName)
+},[selectedSheetName])
+
+
+sheetname.map((val)=>{
+    console
+})
 
     useEffect(()=>{
         setloading(true)
@@ -146,7 +155,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
             
             }
 
-           console.log("here",response.data.data)
+          
             const data=response.data.data 
             const status=response.data.status
             const stateValues=JSON.parse(data)||{}
@@ -162,6 +171,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
             setsheetfieldselectedX(stateValues.sheetfieldselectedX)
             setsheetfieldselectedY(stateValues.sheetfieldselectedY)
             setsheetClicked(stateValues.sheetclicked)
+            setSelectedSheetName(stateValues.selectedSheetName)
             setTimeout(()=>{
                 setloading(false)
             },1000)
@@ -196,6 +206,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                     },1000)
                 }
             const data=response.data.data 
+            console.log("pp",data)
             const status=response.data.status
             const stateValues=JSON.parse(data)||{}
             
@@ -210,6 +221,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
             setsheetfieldselectedX(stateValues.sheetfieldselectedX)
             setsheetfieldselectedY(stateValues.sheetfieldselectedY)
             setsheetClicked(stateValues.sheetclicked)
+            setSelectedSheetName(stateValues.selectedSheetName)
             setTimeout(()=>{
                 setloading(false)
             },1000)
@@ -236,7 +248,9 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
             headers:{
               "Authorization":`Bearer ${token}`
             }
+            
           })
+         
         const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
             email:Logemail,
             organization:Logorganization
@@ -263,9 +277,11 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
             const files=response3.data.data
             setgooglesheetfiles(files)
         }
-        
+        console.log("tx",response3.data.data)
+        setsheetname(response3.data.data)
         setallSheets(tosetdata)
         setloading2(false)
+        console.log("pk",tosetdata)
 
         
     }
@@ -278,7 +294,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
               "Authorization":`Bearer ${token}`
             }
           })
-        
+         
         const allJson=response.data.data
         const keys=allJson[0].data
         const finalJson=[]
@@ -317,10 +333,10 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                 }
               })
                 const data=JSON.parse(response.data.data)
-              
+             console.log("zt",data)
                 setsheetJson(data)
                 const key=Object.keys(data[0])
-                
+              
                 const fileteredKey=[]
                 data.map(d=>{
                     key.map(k=>{
@@ -342,6 +358,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
             }
           })
             const data=JSON.parse(response.data.data)
+           
             setsheetJson(data)
             const key=Object.keys(data[0])
             
@@ -382,6 +399,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
             setsheetfieldselectedY(fileteredKey[0])
             setsheetKeys(fileteredKey)
             setLoading1(false) 
+            console.log("Line",data)
     }
     const handleSheetCreateBarchart=async()=>{
         //create bar chart Logic
@@ -392,7 +410,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
         setshowPiechart(false)
 
         const organization=`${Logorganization}_ShownGraph`
-            const stateJson={showBarchart:true,showPiechart:false,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
+            const stateJson={showBarchart:true,showPiechart:false,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked,selectedSheetName:selectedSheetName}
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
                 email:Logemail,
                 security:portfoliosecurity,
@@ -416,7 +434,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
         setshowBarchart(false)
 
         const organization=`${Logorganization}_ShownGraph`
-            const stateJson={showBarchart:false,showPiechart:true,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
+            const stateJson={showBarchart:false,showPiechart:true,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked,selectedSheetName:selectedSheetName}
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
                 email:Logemail,
             security:portfoliosecurity,
@@ -438,7 +456,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
         setshowBarchart(false)
 
         const organization=`${Logorganization}_ShownGraph`
-            const stateJson={showBarchart:false,showPiechart:false,showLinechart:true,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked}
+            const stateJson={showBarchart:false,showPiechart:false,showLinechart:true,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked,selectedSheetName:selectedSheetName}
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
                 email:Logemail,
                 security:portfoliosecurity,
@@ -576,10 +594,10 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                     val.fileType === 'xlsx' ? (
                                         <div 
                                             key={val._id} 
-                                            onClick={() => { setsheetrowsselect(true); setclickedBar(false); handlesheetclicked(val._id); }} 
+                                            onClick={() => { setsheetrowsselect(true); setclickedBar(false); handlesheetclicked(val._id);  setSelectedSheetName(val.name.replace(/^\d+_/, ""));}} 
                                             className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'
                                         >
-                                            <p className='text-[14px]'>{val.name.substring(val.name.length - 13, val.name.length)}</p>
+                                            <p className='text-[14px]'>{val.name.replace(/^\d+_/, "")}</p>
                                             <FaRegFileExcel className='text-green-700' />
                                         </div>
                                     ) : null
@@ -594,8 +612,8 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                     </div>
                 )}
                 {(googlesheetfiles || []).map(val => 
-                    <div key={val._id} onClick={() => { setsheetrowsselect(true); setclickedBar(false); handleGooglesheetclicked(val.id, val.name); }} className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'>
-                        <p className='text-[14px]'>{val.name.substring(val.name.length - 15, val.name.length)}</p>
+                    <div key={val._id} onClick={() => { setsheetrowsselect(true); setclickedBar(false); handleGooglesheetclicked(val.id, val.name);  setSelectedSheetName(val.name);}} className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'>
+                        <p className='text-[14px]'>{val.name}</p>
                         <FaRegFileExcel className='text-green-700' />
                     </div>
                 )}
@@ -639,10 +657,10 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                       val.fileType === 'xlsx' ? (
                           <div 
                               key={val._id} 
-                              onClick={() => { setsheetrowsselectLine(true); setclickedLine(false); handlesheetclickedLine(val._id); }} 
+                              onClick={() => { setsheetrowsselectLine(true); setclickedLine(false); handlesheetclickedLine(val._id);setSelectedSheetName(val.name.replace(/^\d+_/, "")); }} 
                               className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'
                           >
-                              <p className='text-[14px]'>{val.name.substring(val.name.length - 13, val.name.length)}</p>
+                              <p className='text-[14px]'>{val.name.replace(/^\d+_/, "")}</p>
                               <FaRegFileExcel className='text-green-700' />
                           </div>
                       ) : null
@@ -657,8 +675,8 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
       </div>
   )}
   {(googlesheetfiles || []).map(val => 
-      <div key={val._id} onClick={() => { setsheetrowsselect(true); setclickedLine(false); handleGooglesheetclicked(val.id, val.name); }} className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'>
-          <p className='text-[14px]'>{val.name.substring(val.name.length - 15, val.name.length)}</p>
+      <div key={val._id} onClick={() => { setsheetrowsselectLine(true); setclickedLine(false); handleGooglesheetclicked(val.id, val.name); setSelectedSheetName(val.name);}} className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'>
+          <p className='text-[14px]'>{val.name}</p>
           <FaRegFileExcel className='text-green-700' />
       </div>
   )}
@@ -701,10 +719,10 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                                   val.fileType === 'xlsx' ? (
                                       <div 
                                           key={val._id} 
-                                          onClick={() => { setsheetrowsselectPie(true); setclickedPie(false); handlesheetclickedPie(val._id); }} 
+                                          onClick={() => { setsheetrowsselectPie(true); setclickedPie(false); handlesheetclickedPie(val._id);setSelectedSheetName(val.name.replace(/^\d+_/, "")); }} 
                                           className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'
                                       >
-                                          <p className='text-[14px]'>{val.name.substring(val.name.length - 13, val.name.length)}</p>
+                                          <p className='text-[14px]'>{val.name.replace(/^\d+_/, "")}</p>
                                           <FaRegFileExcel className='text-green-700' />
                                       </div>
                                   ) : null
@@ -719,8 +737,8 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                   </div>
               )}
               {(googlesheetfiles || []).map(val => 
-                  <div key={val._id} onClick={() => { setsheetrowsselect(true); setclickedPie(false); handleGooglesheetclicked(val.id, val.name); }} className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'>
-                      <p className='text-[14px]'>{val.name.substring(val.name.length - 15, val.name.length)}</p>
+                  <div key={val._id} onClick={() => { setsheetrowsselectPie(true); setclickedPie(false); handleGooglesheetclicked(val.id, val.name);setSelectedSheetName(val.name); }} className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'>
+                      <p className='text-[14px]'>{val.name}</p>
                       <FaRegFileExcel className='text-green-700' />
                   </div>
               )}
@@ -985,13 +1003,13 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                     </div>
                     :  
                     showBarchart &&!loading?
-                        <PortfolioBarChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY}/>   
+                        <PortfolioBarChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY} selectedSheetName={selectedSheetName}/>   
                     :
                     showPiechart &&!loading?
-                    <PortfolioPieChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY}/>
+                    <PortfolioPieChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY} selectedSheetName={selectedSheetName}/>
                     :
                     showLinechart &&!loading?
-                    <PortfolioLineChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY}/>
+                    <PortfolioLineChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY} selectedSheetName={selectedSheetName}/>
                     :
                     selectedTab==Logemail?
                     <div onClick={handleChartSelectPopup} className='w-[150px] h-[40px] bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl text-white'>

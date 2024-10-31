@@ -124,6 +124,13 @@ const Ai = ({hidenavbar}) => {
 
 
   const handleSend = async () => {
+
+    if (newMessage.trim().length === 0) {
+      // Prevent sending an empty message
+      return; // Exit if the message is empty or just whitespace
+  }
+
+
     if (newMessage.trim()) {
       // Create a new user message object
       const userMessage = { text: newMessage, sender: 'You' };

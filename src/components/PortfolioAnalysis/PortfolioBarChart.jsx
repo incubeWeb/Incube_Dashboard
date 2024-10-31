@@ -2,7 +2,7 @@ import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from 'react'
 import { Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
-const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldselectedX,sheetfieldselectedY}) => {
+const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldselectedX,sheetfieldselectedY,selectedSheetName}) => {
     const [data,setdata]=useState([])
     const [hoveredIndex, setHoveredIndex] = useState(null);  // State to 
     const token=localStorage.getItem('token')
@@ -138,11 +138,11 @@ const fieldConversions = {
     <div style={{ width: '95%', height: '90%' }} className='mt-2 pr-10 ml-8 '>
     {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ?
         <div className='pl-4' style={{ paddingBottom: '20px' }}>
-            <p className='text-[18px] font-bold font-inter -mt-4'>Vertical Bar Chart</p>
+            <p className='text-[18px] font-bold font-inter -mt-4'>{selectedSheetName}</p>
         </div>
         :
         <div className='pl-4 -pt-4' style={{ paddingBottom: '20px' }}>
-            <p className='text-[18px] font-bold font-inter -mt-4'>Horizontal Bar Chart</p>
+            <p className='text-[18px] font-bold font-inter -mt-4'>{selectedSheetName}</p>
         </div>
     }
 

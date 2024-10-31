@@ -225,7 +225,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     { 
       
       e.stopPropagation()
-      if(msg.length==0){
+      if(msg.trim().length==0){
         return;
       }
       const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sendChat`,{
@@ -299,9 +299,9 @@ const mergedData={
                     {msg.sender}
                   </div>
                   <div className='flex justify-end items-end rounded-sm'>
-                    <div className='flex bg-blue-400 pl-3 pb-2 mr-2 ml-4 pt-3 pr-3 mb-4 flex-col max-w-xs text-white rounded-lg relative before:content-[""] before:absolute before:top-[-8px] before:right-[10px] before:w-0 before:h-0 before:border-b-[12px] before:border-l-[10px] before:border-r-[0] before:border-b-blue-400 before:border-l-transparent'>
-                      <p className='text-[14px] text-gray-800'>{msg.message}</p>
-                    </div>
+                     <div className='flex bg-blue-400 pl-2 pt-2 pb-2 mr-2 ml-4 max-w-xs text-white rounded-lg relative'>
+              <p className='text-[14px] text-white'>{msg.message}</p>
+            </div>
                   </div>
                   <div className='flex w-full justify-end items-end'>
                     <p className='text-[9px] text-gray-500 mr-5'>{convertTime(msg.time)}</p>
@@ -315,9 +315,9 @@ const mergedData={
                       </div>
                       {msg.sender}
                     </div>
-                    <p className='text-[14px] pl-3 pr-3 pb-2 pt-2 mr-6 mb-3 bg-gray-200 text-black rounded-lg relative before:content-[""] before:absolute before:top-[-8px] before:right-[10px] before:w-0 before:h-0 before:border-b-[12px] before:border-l-[10px] before:border-r-[0] before:border-b-gray-200 before:border-l-transparent border-[1px] border-gray-300'>
-                      {msg.message}
-                    </p>
+                    <p className='text-[14px] pl-2 pr-2 pt-2 pb-2 mr-6 mb-3 bg-gray-200 text-black rounded-lg relative border-[1px] border-gray-300'>
+              {msg.message}
+            </p>
                     <div className='flex w-[60px] items-end justify-start text-[9px]'>
                       <p>{convertTime(msg.time)}</p>
                     </div>

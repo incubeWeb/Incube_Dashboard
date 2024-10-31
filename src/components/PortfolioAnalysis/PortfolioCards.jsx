@@ -413,7 +413,7 @@ useEffect(() => {
                         <div className='  flex justify-end h-[10px] relative '  >
                             </div>
                         }
-                <div className={style} >
+                <div onDoubleClick={()=>{setShowPopup(true)}} className={style} >
                 
                 {icon }
                 </div>
@@ -429,7 +429,7 @@ useEffect(() => {
                                             <IoMdArrowBack  className=' cursor-pointer' size={17}/>
                                             </div>
                                             <div className='text-gray-500 h-[40px] text-[15px] flex items-center justify-center'>
-                                                {sheetname}
+                                                {sheetname.replace(/^\d+_/, "")}
                                             </div>
                                             
                                         </div>
@@ -502,7 +502,7 @@ useEffect(() => {
                             className='w-[100%] h-[45px] hover:bg-gray-100 hover:text-gray-800 p-2 rounded-md select-none cursor-pointer flex flex-row items-center justify-start'
                         >
                             <FaRegFileExcel className='text-green-500' size={19} />
-                            <span className='ml-2'>{doc.name.substring(doc.name.length - 13)}</span>
+                            <span className='ml-2'>{doc.name.replace(/^\d+_/, "")}</span>
                         </div>
                     </div>
                 ) : null

@@ -388,7 +388,7 @@ let label, bgColor;
                                             <IoMdArrowBack  className=' cursor-pointer' size={17}/>
                                             </div>
                                             <div className='text-gray-500 h-[40px] text-[15px] flex items-center justify-center'>
-                                                {sheetname}
+                                                {sheetname.replace(/^\d+_/, "")}
                                             </div>
                                             
                                         </div>
@@ -463,7 +463,7 @@ let label, bgColor;
                         aria-label={`Open sheet: ${doc.name}`}
                     >
                         <FaRegFileExcel className='text-green-500' size={19} />
-                        <span>{doc.name.substring(doc.name.length - 13)}</span>
+                        <span>{doc.name.replace(/^\d+_/, "")}</span>
                     </div>
                 </div>
             ) : null)}

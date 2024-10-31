@@ -17,6 +17,10 @@ const ChatBot = () => {
   const [loading, setLoading] = useState(false); 
   const [loadingDots, setLoadingDots] = useState('');
   const handleSend = async () => {
+    if (newMessage.trim().length==0) {
+     
+      return; 
+  }
     if (newMessage.trim()) {
       // Create a new user message object
       const userMessage = { text: newMessage, sender: 'You' };
