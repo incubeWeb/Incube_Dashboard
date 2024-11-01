@@ -54,6 +54,8 @@ function App() {
   const [realtimetimeline,setrealtimetimeline]=useState([])
   const [error,seterror]=useState(false)
   const navbarref=useRef(null)
+
+  const [mygoogleaccountisconnected,setmygoogleaccountisconnected]=useState(false)
   
 
   useEffect(()=>{
@@ -66,7 +68,6 @@ function App() {
         reconnectionDelayMax: 300,    // Maximum delay (5 seconds)
       })
       socket2.on('Googleconnected',(change)=>{
-        console.log(change,"tyhids")
         setgoogleaccountconnected(change)
       })
     }
@@ -201,10 +202,12 @@ function App() {
     setValues();
   }, []);
 
+  const [dealpipelinefromdashboardcompany,setdealpipelinefromdashboardcompany]=useState([]);
+
 
   return (
     <BrowserRouter>
-          {login? <Navigation navbarref={navbarref} showsmallnav={showsmallnav} setshowsmallnav={setshowsmallnav} login={login} setlogin={setLoginIn} googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />:<></>}
+          {login? <Navigation setmygoogleaccountisconnected={setmygoogleaccountisconnected} navbarref={navbarref} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} showsmallnav={showsmallnav} setshowsmallnav={setshowsmallnav} login={login} setlogin={setLoginIn} googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />:<></>}
          
          {login ? 
           <div className="fixed flex flex-col items-center justify-center h-screen z-50 scrollbar-hide">
@@ -214,10 +217,10 @@ function App() {
           <Routes>
             <Route path="/" element={!login?<Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn}/>:<></>} />
             <Route path="/dashboard" element={
-              <ProtectedRoute login={login}><Dashboard navbarref={navbarref} showsmallnav={showsmallnav} sethidenavbar={sethidenavbar} realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
+              <ProtectedRoute login={login}><Dashboard mygoogleaccountisconnected={mygoogleaccountisconnected} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} navbarref={navbarref} showsmallnav={showsmallnav} sethidenavbar={sethidenavbar} realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
             <Route path="/dealpipeline" element={
               <ProtectedRoute login={login}>
-              <FirstCol filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>
+              <FirstCol setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} dealpipelinefromdashboardcompany={dealpipelinefromdashboardcompany} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>
               </ProtectedRoute>} />
             <Route path="/dealsourcing" element={
               <ProtectedRoute login={login}><Dealsourcing hidenavbar={hidenavbar}/></ProtectedRoute>} />

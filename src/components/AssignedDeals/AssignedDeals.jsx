@@ -11,9 +11,9 @@ import { jwtDecode } from 'jwt-decode'
 import { Link } from 'react-router-dom'
 
 
-const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcompleted,setOpenViewallGrid,setCompanyName,setcompanyDiscription,openViewallGrid,status,TeamLead_status,completed,setassigneddealclicked,setBoxes,boxes,hidenavbar,realtimetabchats,realtimedealpipelinecompanyInfo}) => {
+const AssignedDeals = ({id,setdealpipelinefromdashboardcompany,setActiveField,setTeamLead_status,setstatus,setcompleted,setOpenViewallGrid,setCompanyName,setcompanyDiscription,openViewallGrid,status,TeamLead_status,completed,setassigneddealclicked,setBoxes,boxes,hidenavbar,realtimetabchats,realtimedealpipelinecompanyInfo}) => {
   const [asignedDeals,setassignedDeals]=useState([])
-  
+  const Navigate=useNavigate()
   const [clickedCompany,setclickedCompany]=useState(false)
   const [selectedTab, setSelectedTab] = useState("View All");
   const token=localStorage.getItem('token')
@@ -61,25 +61,24 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
   },[])
  
 
-  const handleCompany=async(companyname)=>{
-    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/searchdealsourcingfiles`,{
-      search:companyname,
-      organization:Logorganization
+  const handleCompany=async(id,companyname)=>{
+    
+    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getdealsourcingcompany`,{
+      id:id
     },{
       headers:{
         "Authorization":`Bearer ${token}`
       }
     })
 
-    setOpenViewallGrid(true)
+    //setOpenViewallGrid(true)
     
+    setdealpipelinefromdashboardcompany([{id:response.data.data[0]._id,Title:response.data.data[0].title,description:response.data.data[0].Description,completed:response.data.data[0].completed,status:response.data.data[0].status,TeamLead_status:response.data.data[0].TeamLead_status}])
+    localStorage.setItem('activeField','/dealpipeline')
+    setActiveField('/dealpipeline')
+    Navigate('/dealpipeline')
     
-    setCompanyName(response.data.data[0].title)
-    setcompanyDiscription(response.data.data[0].Description)
-    setcompleted(response.data.data[0].completed)
-    setstatus(response.data.data[0].status)
-    setTeamLead_status(response.data.data[0].TeamLead_status)
-    setassigneddealclicked(true)
+    //setassigneddealclicked(true)
    
   }
 
@@ -161,7 +160,7 @@ const convertDate=(time)=>{
             Logrole=='admin' || Logrole=='super admin' || Logrole=='team lead'?
             (asignedDeals||[]).map(doc=>
               doc.member!=Logemail?
-              <div onClick={()=>{handleCompany(doc.organization)}} key={doc._id} className='cursor-pointer w-[100%] h-[18%] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
+              <div onClick={()=>{handleCompany(doc._id,doc.organization)}} key={doc._id} className='cursor-pointer w-[100%] h-[18%] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
                 <p className='text-[14px] w-[80%] tracking-wide '> You have assinged <span className='font-bold'>{doc.organization}</span> to {doc.member} at {convertTime(doc.time)} on {convertDate(doc.time)} </p>
                 <div className='w-[20%] pr-2 flex items-center justify-end'>
                   <div className='w-[16px] h-[16px] c'>
@@ -171,8 +170,8 @@ const convertDate=(time)=>{
                 
             </div>
             :
-            <Link key={doc._id} to='/dealpipeline' onClick={()=>{handleCompany(doc.organization)}}> 
-              <div className='cursor-pointer w-[100%] h-[18%] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
+            
+              <div key={doc._id} onClick={()=>{handleCompany(doc._id,doc.organization)}} className='cursor-pointer w-[100%] h-[18%] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
                   <p className='text-[14px] w-[80%] tracking-wide '> You have assinged <span className='font-bold'>{doc.organization}</span> to Yourself at {convertTime(doc.time)} on {convertDate(doc.time)} </p>
                   <div className='w-[20%] pr-2 flex items-center justify-end'>
                     <div className='w-[16px] h-[16px] c'>
@@ -180,7 +179,7 @@ const convertDate=(time)=>{
                     </div>
                   </div>
               </div>
-            </Link>
+            
             )
             :
             <></> 
@@ -189,7 +188,7 @@ const convertDate=(time)=>{
 {
             Logrole=='team lead' || Logrole=='user'?
             (assingedtodeals||[]).map(doc=>
-              <div onClick={()=>{handleCompany(doc.organization)}} key={doc._id} className='cursor-pointer w-[100%] h-[18%] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
+              <div onClick={()=>{handleCompany(doc._id,doc.organization)}} key={doc._id} className='cursor-pointer w-[100%] h-[18%] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
                 <p className='text-[14px] w-[80%] tracking-wide '><span className='font-bold'>{doc.organization}</span> has been assigned to you at {convertTime(doc.time)} on {convertDate(doc.time)}</p>
                 <div className='w-[20%] pr-2 flex items-center justify-end'>
                   <div className='w-[16px] h-[16px] c'>

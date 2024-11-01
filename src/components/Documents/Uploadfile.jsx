@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BsFileEarmarkPdfFill } from "react-icons/bs";
-import { BsFiletypePng } from "react-icons/bs";
-import { BsFiletypeJpg } from "react-icons/bs";
-import { CiFileOn } from "react-icons/ci";
 import { jwtDecode } from 'jwt-decode';
-const FilesDoc = ({id,filesadded, currentTab,CompanyName,itsfrom }) => {
-    const [uploadFile, setUploadFile] = useState(false);
+import React, { useEffect, useRef, useState } from 'react'
+import { BsFileEarmarkPdfFill, BsFiletypeJpg, BsFiletypePng } from 'react-icons/bs';
+import { CiFileOn } from 'react-icons/ci';
+
+const Uploadfile = ({uploadfile,setuploadfile,hidenavbar}) => {
+
+
+    
     const [selectedFile, setSelectedFile] = useState(null);
-    const [uploadedFiles, setUploadedFiles] = useState([]);
+    const [showload,setshowload]=useState(false)
     const token=localStorage.getItem('token')
     const userdata=jwtDecode(token)
     const Logemail=userdata.userdetails.email
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
-
     const handleFileChange = (event) => {
         const file = event.target.files[0];
 
@@ -25,15 +25,31 @@ const FilesDoc = ({id,filesadded, currentTab,CompanyName,itsfrom }) => {
 
     const handleCancel = () => {
         setSelectedFile(null);
+        setuploadfile(!uploadfile)
     };
+    const appnavref=useRef(null);
+    const handleclickoutside=(e)=>{
+        if(appnavref.current && !appnavref.current.contains(e.target))
+        {
+            setuploadfile(false)
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleclickoutside);
+        return () => {
+          document.removeEventListener('mousedown', handleclickoutside);
+        };
+      }, []);
 
     const handleUpload = async () => {
+        setshowload(true)
         if (selectedFile) {
             const formData = new FormData();
-            formData.append('id',id)
+            formData.append('id',"none")
             formData.append('files', selectedFile);
-            formData.append('tab', `Tab${currentTab}`);
-            formData.append('CompanyName',CompanyName);
+            formData.append('tab', "-");
+            formData.append('CompanyName',"-");
             formData.append('uploadedBy',Logemail)
             formData.append('organization',Logorganization)
             try {
@@ -43,72 +59,30 @@ const FilesDoc = ({id,filesadded, currentTab,CompanyName,itsfrom }) => {
                     }
                   });
                
-                setSelectedFile(null);
-                fetchUploadedFiles(); // Clear selected file after upload
-                setUploadFile(!uploadFile)
+                if(response.data.status==200){
+                    setSelectedFile(null);
+                    setuploadfile(!uploadfile)
+                    setshowload(false)
+                }
                
             } catch (error) {
                 console.error('Error uploading file', error);
             }
         }
     };
-
-    const fetchUploadedFiles = async () => {
-        try {
-            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getfiles`, {id:id, CompanyName:CompanyName,tab: `Tab${currentTab}`,organization:Logorganization },{
-                headers:{
-                  "Authorization":`Bearer ${token}`
-                }
-              });
-            setUploadedFiles(response.data.data);
-
-           
-        } catch (error) {
-            console.error('Error fetching uploaded files', error);
-        }
-    };
-    
-    useEffect(()=>{
-        fetchUploadedFiles();
-    },[filesadded])
-
-    useEffect(() => {
-        fetchUploadedFiles();
-    }, [currentTab]);
-
-    useEffect(()=>{
-const mergedData=[...uploadedFiles]
-sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-    },[uploadedFiles])
-
-    return (
-        <div className="w-[100%] h-[100%]">
-            <div className="p-[16px] w-[100%] h-[95%] overflow-y-auto rounded-md shadow-md border-[1px] border-gray-300 md:flex md:flex-col space-y-4">
-                <div className="h-[20%] w-[100%] border-b-[1px] border-gray-300 flex flex-row items-center">
-                    <div className="w-[50%] pl-[7px]">
-                        <p className="text-[14px] font-inter font-semibold">Files</p>
-                    </div>
-                    {
-                        itsfrom!='completed'?
-                    
-                    <div className="w-[50%] pr-[7px] flex justify-end">
-                        <p
-                            className="text-blue-600 text-[13px] font-inter font-semibold cursor-pointer"
-                            onClick={() => setUploadFile(!uploadFile)}
-                        >
-                            {uploadFile ? 'View' : ' Add new'}
-                        </p>
-                    </div>
-                    :
-                    <></>
-                    }
-                </div>
-                <div className="h-[80%] w-[100%]">
-                    {uploadFile ? (
+  return (
+    <div className=" flex w-[100%] h-[100%] items-center justify-center top-[-20px]">
+        <div ref={appnavref} className="bg-white p-6 rounded-lg shadow-lg w-[380px] h-[50%] flex items-center justify-center flex-col">
+            <div className="h-[80%] w-[100%]">
+                    {uploadfile ? (
                         selectedFile ? (
                             <div className="flex flex-col items-center justify-center w-full h-[100%]">
                                 <p className="text-sm text-gray-700">{selectedFile.name}</p>
-                                <div className="flex space-x-4 mt-4">
+                                {
+                                    showload?
+                                    <div><p>Uploading file...</p></div>
+                                    :
+                                    <div className="flex space-x-4 mt-4">
                                     <button
                                         className="px-4 py-2 bg-blue-500 shadow-md border-sky-500 border-[1px] text-white rounded-md text-[12px]"
                                         onClick={handleUpload}
@@ -122,6 +96,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                                         Cancel
                                     </button>
                                 </div>
+                                }
                             </div>
                         ) : (
                             <div className="flex items-center justify-center w-full h-[100%]">
@@ -154,34 +129,15 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                             </div>
                         )
                     ) : null}
-                    {!uploadFile && (
-                        <div className=" overflow-y-auto h-[100%] flex flex-col space-y-2">
-                        
-                                {(uploadedFiles||[]).map((file, index) => (
-                                    <div key={index} className=" flex h-[30px] p-2 rounded-md border-b-gray-300 border-b-[1px] flex-row items-center justify-between">
-                                        <div className='flex flex-row w-[100%] space-x-2 items-center justify-start'>
-                                            {file.fileType=='pdf'?<BsFileEarmarkPdfFill className='text-red-500'/>:
-                                             file.fileType=='png'?<BsFiletypePng className='text-blue-500'/>:
-                                             (file.fileType=='jpg'||file.fileType=='jpeg')?<BsFiletypeJpg  className='text-blue-500' />:
-                                             <CiFileOn />
-                                            
-                                            
-                                            }
-                                            
-                                            <span className='text-[14px] capitalize'>{file.name}</span>
-                                        </div>
-                                        <a href={`${import.meta.env.VITE_HOST_URL}8999/uploads/${file.fileName}`} target="_blank" rel="noopener noreferrer" className='text-blue-600 text-[14px]'>
-                                            Open
-                                        </a>
-                                    </div>
-                                ))}
-                            
-                        </div>
-                    )}
+                    
                 </div>
-            </div>
-        </div>
-    );
-};
 
-export default FilesDoc;
+
+
+        </div>
+        
+    </div>
+  )
+}
+
+export default Uploadfile

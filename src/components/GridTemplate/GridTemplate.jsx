@@ -7,7 +7,7 @@ import axios from 'axios'
 import { FaDownload } from "react-icons/fa6";
 import { jwtDecode } from 'jwt-decode'
 
-function GridTemplate({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompanyInfo,hidenavbar,realtimetabchats,setSelectedTab,selectedTab,setActiveField,Title,description,logo,status,TeamLead_status,pushedby,completed}) {
+function GridTemplate({id,setdealpipelinefromdashboardcompany,dealpipelinefromdashboardcompany,filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompanyInfo,hidenavbar,realtimetabchats,setSelectedTab,selectedTab,setActiveField,Title,description,logo,status,TeamLead_status,pushedby,completed}) {
     const [openGrid,setOpenGrid]=useState(false)
     const [openUnassignedGrid,setopenUnassignedGrid]=useState(false)
     const [openCompleteGrid,setOpenCompleteGrid]=useState(false)
@@ -22,8 +22,10 @@ function GridTemplate({id,filesadded,realtimeDealpipelinetabs,realtimedealpipeli
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
 
+    
     useEffect(()=>{
         const getAssignedTeam=async()=>{
+            
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTeams`,{
                 
                 assignedBy:Logemail,
@@ -39,22 +41,30 @@ function GridTemplate({id,filesadded,realtimeDealpipelinetabs,realtimedealpipeli
     },[])
 
     const handleOpenGrid=async()=>{
-        if(selectedTab=='In Progress')
+        console.log(openGrid,openUnassignedGrid,openCompleteGrid,openViewallGrid)
+        if(dealpipelinefromdashboardcompany.length>0){
+            setdealpipelinefromdashboardcompany([])
+            setOpenViewallGrid(false)
+        }
+        else if(selectedTab=='In Progress')
         {
                 setOpenGrid(!openGrid)
         }
-        if(selectedTab=='Unassigned')
+        else if(selectedTab=='Unassigned')
         {
             setopenUnassignedGrid(!openUnassignedGrid)
         }
-        if(selectedTab=='Completed')
+        else if(selectedTab=='Completed')
         {
             setOpenCompleteGrid(!openCompleteGrid)
         }
-        if(selectedTab=='View All')
+        else if(selectedTab=='View All')
             {
                 setOpenViewallGrid(!openViewallGrid)
             }
+        
+        
+        
     }
     const check=()=>{
         return Logrole=='team lead' || Logrole==='user'
@@ -167,7 +177,7 @@ function GridTemplate({id,filesadded,realtimeDealpipelinetabs,realtimedealpipeli
 
         
 
-        {openGrid?
+        {openGrid ?
             <OpenGrid id={id} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs}  realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :<></>}
 
@@ -207,7 +217,42 @@ function GridTemplate({id,filesadded,realtimeDealpipelinetabs,realtimedealpipeli
         :
             <></>
         }
+        {
+            //from dashboard
+        }
+        
+        {
+           
+        dealpipelinefromdashboardcompany.length>0 && dealpipelinefromdashboardcompany[0].status=='In Progress' && dealpipelinefromdashboardcompany[0].completed=='incomplete' &&(Logrole=='super admin'||Logrole=='admin')?
+            <OpenGrid id={dealpipelinefromdashboardcompany[0].id} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={dealpipelinefromdashboardcompany[0].Title} description={dealpipelinefromdashboardcompany[0].description} handleOpenGrid={handleOpenGrid}/>
+          :
+          dealpipelinefromdashboardcompany.length>0 && dealpipelinefromdashboardcompany[0].status=='In Progress' && dealpipelinefromdashboardcompany[0].completed=='incomplete' &&(Logrole=='super admin'||Logrole=='admin')?
+              <OpenGrid id={dealpipelinefromdashboardcompany[0].id} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={dealpipelinefromdashboardcompany[0].Title} description={dealpipelinefromdashboardcompany[0].description} handleOpenGrid={handleOpenGrid}/>
+          :
+          dealpipelinefromdashboardcompany.length>0 && dealpipelinefromdashboardcompany[0].status=='In Progress' && dealpipelinefromdashboardcompany[0].completed=='completed' &&(Logrole=='super admin'||Logrole=='admin')?
+              <OpenCompleteGrid id={dealpipelinefromdashboardcompany[0].id} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={dealpipelinefromdashboardcompany[0].Title} description={dealpipelinefromdashboardcompany[0].description} handleOpenGrid={handleOpenGrid}/>
+          :
+          dealpipelinefromdashboardcompany.length>0 && dealpipelinefromdashboardcompany[0].status=='Unassigned' && dealpipelinefromdashboardcompany[0].completed=='incomplete' && (Logrole=='super admin'||Logrole=='admin')?
+              <OpenUnassignedGrid id={dealpipelinefromdashboardcompany[0].id} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={dealpipelinefromdashboardcompany[0].Title} description={dealpipelinefromdashboardcompany[0].description} handleOpenGrid={handleOpenGrid}/>
+           :
+           <></>
+        }
 
+          {
+          dealpipelinefromdashboardcompany.length>0 && dealpipelinefromdashboardcompany[0].status=='In Progress' && dealpipelinefromdashboardcompany[0].completed=='incomplete' && dealpipelinefromdashboardcompany[0].TeamLead_status=='In Progress' &&(Logrole=='team lead'||Logrole=='user')?
+              <OpenGrid id={dealpipelinefromdashboardcompany[0].id} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={dealpipelinefromdashboardcompany[0].Title} description={dealpipelinefromdashboardcompany[0].description} handleOpenGrid={handleOpenGrid}/>
+          :
+          dealpipelinefromdashboardcompany.length>0 && dealpipelinefromdashboardcompany.status=='In Progress' && dealpipelinefromdashboardcompany[0].completed=='completed' && dealpipelinefromdashboardcompany[0].TeamLead_status=='In Progress' &&(Logrole=='team lead'||Logrole=='user')?
+              <OpenCompleteGrid id={dealpipelinefromdashboardcompany[0].id} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={dealpipelinefromdashboardcompany[0].Title} description={dealpipelinefromdashboardcompany[0].description} handleOpenGrid={handleOpenGrid}/>
+          :
+          dealpipelinefromdashboardcompany.length>0 && status=='In Progress' && dealpipelinefromdashboardcompany[0].completed=='incomplete' && dealpipelinefromdashboardcompany[0].TeamLead_status=='Unassigned' &&(Logrole=='team lead'||Logrole=='user')?
+              <OpenUnassignedGrid id={dealpipelinefromdashboardcompany[0].id} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={dealpipelinefromdashboardcompany[0].Title} description={dealpipelinefromdashboardcompany[0].description} handleOpenGrid={handleOpenGrid}/>
+          :
+              <></>
+          }
+     
+      
+    
 
     </div>
   )

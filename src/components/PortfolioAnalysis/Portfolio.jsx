@@ -265,7 +265,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                   "Authorization":`Bearer ${token}`
                 }
               })
-            if(response3.data.status==200 && response3.data.message!="no refresh token found")
+            if(response3.data.status==-200 && response3.data.message!="no refresh token found")
             {
                 const files=response3.data.data
                 setallSheets(files)
@@ -334,7 +334,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                   "Authorization":`Bearer ${token}`
                 }
               })
-            if(response3.data.status==200 && response3.data.message!="no refresh token found")
+            if(response3.data.status==-200 && response3.data.message!="no refresh token found")
             {
                 const files=response3.data.data
                 setallSheets(files)
@@ -489,7 +489,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
               alert('Google Session Ended')
               return
           }
-          else if(response.data.status==200 && response.data.msg=="no refresh token found")
+          else if(response.data.status==-200 && response.data.msg=="no refresh token found")
           {
             alert('Google account not connected')
             return

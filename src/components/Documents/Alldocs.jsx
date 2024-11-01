@@ -14,6 +14,8 @@ import { CiLock, CiUnlock } from 'react-icons/ci'
 import { jwtDecode } from 'jwt-decode'
 import PublicPopup from './PublicPopup'
 import Database from '../Icons/Database.svg'
+import { MdOutlineFileUpload } from 'react-icons/md'
+import Uploadfile from './Uploadfile'
 
 const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocumentvisibility}) => {
 
@@ -28,6 +30,8 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
 
     const [fileprivate,setfileprivate]=useState(false)
     const [docId,setdocId]=useState('')
+
+    const [uploadfile,setuploadfile]=useState(false)
     
     /*const jsonData = [
         { name: 'alick', age: 49, city: 'new york' },
@@ -60,7 +64,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
               "Authorization":`Bearer ${token}`
             }
           })
-        if(response.data.status==200 && response.data.message!="no refresh token found")
+        if(response.data.status==-200 && response.data.message!="no refresh token found")
         {
             const files=response.data.data
             
@@ -191,10 +195,14 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
               "Authorization":`Bearer ${token}`
             }
           })
-        const data=JSON.parse(response.data.data)
-        setjsonData(data)
-        setclickedview(!clickedView)
-        setviewedDoc(name)
+        if(response.data.status==200){
+            const data=JSON.parse(response.data.data)
+            setjsonData(data)
+            setclickedview(!clickedView)
+            setviewedDoc(name)
+        }else{
+            window.open(`${import.meta.env.VITE_S3_URL}${Logorganization}/${name}`,'_blank');
+        }
     }
     
     const handleSearch=async(e)=>{
@@ -329,6 +337,15 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
 
   return (
     <div className={`${hidenavbar?'ml-[4%] w-[96%] h-screen':'ml-[20%] w-[80%] '} pt-[48px] pl-[36px] flex flex-col p-4 items-center justify-start space-y-4 font-sans min-h-screen bg-gray-100`}>
+    {
+        uploadfile?
+        <div className='fixed left-0 top-0 w-[100%] h-screen z-[90] flex items-center justify-center bg-opacity-40 bg-black'>
+            <Uploadfile uploadfile={uploadfile} setuploadfile={setuploadfile} hidenavbar={hidenavbar}/>
+        </div>
+        :
+        <></>
+    }
+    
     <div className='w-[100%] h-[10%] flex flex-row space-x-3'>
         <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className='text-gray-500 hover:text-gray-600 font-inter text-[16] font-semibold'>Dashboard</p></Link>
         <p>/</p>
@@ -339,7 +356,11 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
             <p className='text-[30px] font-inter font-semibold'>Documents</p>
         </div>
         <div className={`${hidenavbar?' w-[50%] h-[82%] ':'w-[50%] h-[100%]'} flex flex-row space-x-3 justify-end`}>
-                <div className='ease-linear duration-150 cursor-pointer hover:w-[160px] h-[100%] flex flex-row items-center space-x-2 p-2 rounded-md bg-gradient-to-r from-green-500 to-green-700' onClick={()=>setcreateSheet(true)}>
+                <div className='ease-linear duration-150 cursor-pointer h-[100%] flex flex-row items-center space-x-2 p-2 rounded-md bg-gray-300' onClick={()=>setuploadfile(true)}>
+                <div className='text-white flex items-center'><MdOutlineFileUpload size={20} /></div>
+                <p className='text-[14px] text-white font-inter font-semibold'>Upload file</p>
+                </div>
+                <div className='ease-linear duration-150 cursor-pointer h-[100%] flex flex-row items-center space-x-2 p-2 rounded-md bg-gradient-to-r from-green-500 to-green-700' onClick={()=>setcreateSheet(true)}>
                     <div className='text-white flex items-center'><FaFileExcel/></div>
                     <p className='text-[14px] text-white font-inter font-semibold'>create sheet</p>
                 </div>
@@ -519,6 +540,8 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         :
         <></>
     }
+
+
     {
         fileprivate?
         <div className='fixed left-0 w-[100%] top-[-20px] h-[100%] bg-white bg-opacity-80'>

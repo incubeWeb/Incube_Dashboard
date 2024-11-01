@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { MdDonutLarge } from 'react-icons/md'
 import { RxCross2 } from 'react-icons/rx'
 import { useSelector } from 'react-redux'
@@ -14,6 +14,7 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
     const Logemail=userdata.userdetails.email
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
+    const timelineref=useRef(null);
 
     const deleteWidgit=async()=>{ 
         
@@ -203,6 +204,10 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
             {
                 toSend=`${data.fullDocument.email} has been pushed to completed by ${data.fullDocument.doneBy}`
             }
+            if(data.fullDocument.task=='companynamechanged')
+            {
+              toSend=data.fullDocument.email
+            }
             }catch(e)
             {
                 toSend=`notshow`
@@ -255,6 +260,7 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
           })
           
           settimelinedata(response.data.data)
+          timelineref.current.scrollTop=timelineref.current.scrollHeight
         }
         settimelinedatas()
     },[])
@@ -268,6 +274,7 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
         })
         
         settimelinedata(response.data.data)
+        timelineref.current.scrollTop=timelineref.current.scrollHeight
       }
       settimelinedatas()
     },[realtimetimeline])
@@ -283,10 +290,12 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
   
 {   try{
     return (
-   <div className="flex z-0 flex-col scrollbar-hide w-full max-h-screen h-[100%] overflow-y-auto">
+   <div ref={timelineref} className="flex z-0 flex-col scrollbar-hide w-full max-h-screen h-[100%] overflow-y-auto">
+    
   {timelinedata.map((item) =>
     provideData(item) !== "notshow" ? (
       <div
+      
         key={item.key || item._id}
         className="flex w-[100%] h-auto flex-row space-x-2 items-center"
       >
@@ -328,11 +337,14 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
   
 
   <div
-    className="z-[10] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px] bg-gray-100 mt-4 mr-3 fixed right-[-10px] top-[-15px]"
+    className="z-[20] cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px] bg-gray-100 mt-4 mr-3 fixed right-[-10px] top-[-15px]"
     onClick={deleteWidgit}
   >
     <RxCross2 size={14} className="text-black" />
   </div>
+  <div className='fixed font-inter flex items-center pl-3 shadow-md left-0 top-0 z-[10] w-[100%] h-[13%] rounded-t-md bg-white'>
+      <p className='text-[14px]'>Timeline</p>
+    </div>
 </div>
 
   )}catch(e){

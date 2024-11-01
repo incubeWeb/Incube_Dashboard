@@ -9,7 +9,7 @@ import Unassigned from './Unassigned';
 import Completed from './Completed';
 import { jwtDecode } from 'jwt-decode';
 
-function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,realtimetabchats,realtimeDealpipelinetabs,realtimedealpipelinecompany}) {
+function FirstCol({filesadded,setdealpipelinefromdashboardcompany,dealpipelinefromdashboardcompany,realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,realtimetabchats,realtimeDealpipelinetabs,realtimedealpipelinecompany}) {
   const [selectedTab, setSelectedTab] = useState("View All");
   const [companyData, setCompanyData] = useState([]);
   const[company,setcompany]=useState([]);
@@ -168,7 +168,7 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
       </div>
 
       {
-        selectedTab === 'View All' ? <Viewall realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimetabchats={realtimetabchats} realtimedealpipelinecompany={realtimedealpipelinecompany} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
+        selectedTab === 'View All' ? <Viewall setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} dealpipelinefromdashboardcompany={dealpipelinefromdashboardcompany} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimetabchats={realtimetabchats} realtimedealpipelinecompany={realtimedealpipelinecompany} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
       {
         selectedTab === 'In Progress' ? <Inprogrss realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimetabchats={realtimetabchats}  realtimedealpipelinecompany={realtimedealpipelinecompany} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null

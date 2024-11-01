@@ -36,7 +36,7 @@ import 'react-resizable/css/styles.css';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 
-const Dashboard = ({navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
+const Dashboard = ({mygoogleaccountisconnected,setdealpipelinefromdashboardcompany,navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
   const [boxes, setBoxes] = useState([]);
   const [openChatbar,setopenChatbar]=useState(false)
   const [showPopup, setShowPopup] = useState(false);
@@ -111,6 +111,8 @@ const Dashboard = ({navbarref,showsmallnav,realtimetimeline,setActiveField,realt
     { id: 3, name: 'Card Three' },
     // This array can grow infinitely
   ];
+
+
   const Navigate=useNavigate()
   const handleOpenGrid=async()=>{
     
@@ -425,8 +427,8 @@ useEffect(() => {
   };
   //{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 } cols
   //{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 } brekpoints
-  const breakpoints={ lg: 1000, md: 900, sm: 768, xs: 480, xxs: 0 }
-  const cols={ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }
+  const breakpoints={ lg: 992, md: 768, sm: 576, xs: 0 }
+  const cols={ lg: 12, md: 10, sm: 6, xs: 4, }
   return (
     
     <div className={`w-[100%] h-screen bg-white space-x-4 flex flex-row   font-roboto`}>
@@ -476,6 +478,7 @@ useEffect(() => {
          <div
          key={box.id}
         data-grid={box}
+        onClick={(e)=>e.stopPropagation()}
         className="dev-box z-20 border-gray-300 bg-white border-[0.5px] rounded-lg p-4 pt-7"
   
          >
@@ -527,6 +530,7 @@ useEffect(() => {
                       id={index}
                       setBoxes={setBoxes}
                       boxes={boxes}
+                      mygoogleaccountisconnected={mygoogleaccountisconnected}
                     />
                   )
                 
@@ -534,7 +538,9 @@ useEffect(() => {
                   return(
                     <AssignedDeals
                       id={index}
+                      
                       setBoxes={setBoxes}
+                      setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany}
                       boxes={boxes}
                       hidenavbar={hidenavbar}
                       realtimetabchats={realtimetabchats}
@@ -697,41 +703,7 @@ useEffect(() => {
       </div>
     } 
 
-    {
-      assigneddealclicked?
-      <div className='w-[100%] h-screen fixed left-[-10px] '>
-          {
-              assigneddealclicked && status=='In Progress' && completed=='incomplete' &&(Logrole=='super admin'||Logrole=='admin')?
-              <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
-          :
-              assigneddealclicked && status=='In Progress' && completed=='incomplete' &&(Logrole=='super admin'||Logrole=='admin')?
-              <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
-          :
-              assigneddealclicked && status=='In Progress' && completed=='completed' &&(Logrole=='super admin'||Logrole=='admin')?
-              <OpenCompleteGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab="View All" setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
-          :
-              assigneddealclicked && status=='Unassigned' && completed=='incomplete' && (Logrole=='super admin'||Logrole=='admin')?
-              <OpenUnassignedGrid hidenavbar={hidenavbar} setSelectedTab="View All" setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
-          :
-          <></>
-          }
-
-          {
-              assigneddealclicked && status=='In Progress' && completed=='incomplete' && TeamLead_status=='In Progress' &&(Logrole=='team lead'||Logrole=='user')?
-              <OpenGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
-          :
-              assigneddealclicked && status=='In Progress' && completed=='completed' && TeamLead_status=='In Progress' &&(Logrole=='team lead'||Logrole=='user')?
-              <OpenCompleteGrid realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab="View All" setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
-          :
-              assigneddealclicked && status=='In Progress' && completed=='incomplete' && TeamLead_status=='Unassigned' &&(Logrole=='team lead'||Logrole=='user')?
-              <OpenUnassignedGrid hidenavbar={hidenavbar} setSelectedTab='View All' setActiveField='/dealpipeline' companyName={companyName} description={companyDiscription} handleOpenGrid={handleOpenGrid}/>
-          :
-              <></>
-          }
-      </div>
-      :
-      <></>
-    }
+    
     
     </div>
   );

@@ -26,7 +26,7 @@ import  automation from '../Icons/automation.svg'
 import { TbExternalLink } from 'react-icons/tb';
 
 
-const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccountconnected,activeField,setActiveField,hidenavbar,sethidenavbar}) => {
+const Navigation = ({setmygoogleaccountisconnected,navbarref,setdealpipelinefromdashboardcompany,showsmallnav,setshowsmallnav,setlogin,googleaccountconnected,activeField,setActiveField,hidenavbar,sethidenavbar}) => {
   
     
     const location=useLocation()
@@ -34,7 +34,7 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
     const [openappList,setopenappList]=useState([{"id":1,"image":googleLogo,"name":"Google","active":false}])
     const [lockedapplist,setlockedapplist]=useState([{"id":1,"name":"Airtable","image":airtable},{"id":2,"name":"GitHub","image":github},{"id":3,"name":"Microsoft Outlook","image":outlook}])
 
-    
+    const [showappnav,setshowappnav]=useState(false)
 
     const [showApplicationNav,setshowApplicationNav]=useState(false)
 
@@ -73,8 +73,10 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
 
     const ShowApplicationNavfun=(val)=>{
         
+        
+
         if(val){
-            setshowApplicationNav(true)
+            setshowApplicationNav(!showApplicationNav)
             if(hidenavbar){
                 gsap.to(applicationNavRef.current,{
                     x:"18%",
@@ -88,7 +90,7 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
                 })    
             }
         }else{
-            setshowApplicationNav(false)
+            setshowApplicationNav(!showApplicationNav)
             gsap.to(applicationNavRef.current,{
                 x:"-100%",
                 duration:0.4
@@ -184,10 +186,11 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
                     }
                  })
                 
-                if(response.data.status==200 &&response.data.msg=="Valid Refresh token")
+                if(response.data.status==200 &&response.data.message=="Valid Refresh token")
                 {
                     setopenappList(prevApps => prevApps.map(app => {
                         if (app.name === "Google") {
+                            setmygoogleaccountisconnected(true)
                           return { ...app, active: true };
                         }
                         return app;
@@ -198,6 +201,7 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
                 {
                     setopenappList(prevApps => prevApps.map(app => {
                         if (app.name === "Google") {
+                            setmygoogleaccountisconnected(false)
                           return { ...app, active: false };
                         }
                         return app;
@@ -208,6 +212,7 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
                 {
                     setopenappList(prevApps => prevApps.map(app => {
                         if (app.name === "Google") {
+                            setmygoogleaccountisconnected(false)
                           return { ...app, active: false };
                         }
                         return app;
@@ -244,6 +249,7 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
                     {
                         setopenappList(prevApps => prevApps.map(app => {
                             if (app.name === "Google") {
+                                setmygoogleaccountisconnected(true)
                               return { ...app, active: true };
                             }
                             return app;
@@ -254,6 +260,7 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
                     {
                         setopenappList(prevApps => prevApps.map(app => {
                             if (app.name === "Google") {
+                                setmygoogleaccountisconnected(false)
                               return { ...app, active: false };
                             }
                             return app;
@@ -263,6 +270,7 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
                     else{
                         setopenappList(prevApps => prevApps.map(app => {
                             if (app.name === "Google") {
+                                setmygoogleaccountisconnected(false)
                               return { ...app, active: false };
                             }
                             return app;
@@ -295,6 +303,7 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
             setShowPopup1(false)
             setopenappList(prevApps => prevApps.map(app => {
                 if (app.name === "Google") {
+                    setmygoogleaccountisconnected(false)
                   return { ...app, active: false };
                 }
                 return app;
@@ -337,7 +346,7 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
             <div className=' flex flex-col space-y-2 w-[100%] h-[80%] pt-2'>
 
                 <Link to='/dashboard'>
-                    <div className={`${activeField=='/dashboard'?'bg-blue-600 text-white':'select-none hover:bg-gray-300 cursor-pointer hover:text-white'} flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`}  onClick={()=>setActiveField('/dashboard')}>
+                    <div className={`${activeField=='/dashboard'?'bg-blue-600 text-white':'select-none hover:bg-gray-300 cursor-pointer hover:text-white'} flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`}  onClick={()=>{setActiveField('/dashboard');setdealpipelinefromdashboardcompany([])}}>
                         <div><RiHome6Line  size={24}  className={`${activeField=='/dashboard'?' text-white ':'text-[#667085]'} `}/> </div>
                     <div className='text-[14px] font-inter font-semibold'><p>Dashboard</p></div>
                     
@@ -351,38 +360,38 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
                 </div>
                 </Link>
                 <Link to='/dealsourcing'>
-                <div className={`${activeField=='/dealsourcing'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/dealsourcing')}>
+                <div className={`${activeField=='/dealsourcing'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>{setActiveField('/dealsourcing');setdealpipelinefromdashboardcompany([])}}>
                     <div><SlSocialDropbox size={24} className={`${activeField=='/dealsourcing'?' text-white ':'text-[#667085]'} `}/></div>
                     <div className='text-[14px] font-inter font-semibold'><p>Deal sourcing (<span className='text-[12px]'>Beta)</span></p></div>
                 </div>
                 </Link>
                 <Link to='/portfolio'>
-                <div className={`${activeField=='/portfolio'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/portfolio')}>
+                <div className={`${activeField=='/portfolio'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>{setActiveField('/portfolio');setdealpipelinefromdashboardcompany([])}}>
                     <div><RiCheckboxMultipleLine  size={24} className={`${activeField=='/portfolio'?' text-white ':'text-[#667085]'} `}/> </div>
                     <div className='text-[14px] font-inter font-semibold'><p>Portfolio analysis</p></div>
                 </div>
                 </Link>
                 <Link to='/adduser'>
-                <div className={`${activeField=='/adduser'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/adduser')}>
+                <div className={`${activeField=='/adduser'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>{setActiveField('/adduser');setdealpipelinefromdashboardcompany([])}}>
                     <div><HiOutlineUserAdd size={24} className={`${activeField=='/adduser'?' text-white ':'text-[#667085]'} `} /></div>
                     <div className='text-[14px] font-inter font-semibold'><p className='-mb-1'>Add Users</p></div>
                 </div>
                 </Link>
                 <Link to='/allDocs'>
-                <div className={`${activeField=='/allDocs'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/allDocs')}>
+                <div className={`${activeField=='/allDocs'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>{setActiveField('/allDocs');setdealpipelinefromdashboardcompany([])}}>
                     <div><IoDocumentOutline  className={`${activeField=='/allDocs'?' text-white ':'text-[#667085]'} `} size={24}/></div>
                     <div className='text-[14px] font-inter font-semibold'><p>Documents</p></div>
                 </div>
                 </Link>
                 <Link to='/keys'>
-                <div className={`${activeField=='/keys'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/keys')}>
+                <div className={`${activeField=='/keys'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>{setActiveField('/keys');setdealpipelinefromdashboardcompany([])}}>
                     <div><IoKeyOutline   className={`${activeField=='/keys'?' text-white ':'text-[#667085]'} `} size={24}/></div>
                     <div className='text-[14px] font-inter font-semibold'><p>Api Keys</p></div>
                 </div>
                 </Link>
 
                 <Link to='/AI'>
-                <div className={`${activeField=='/AI'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>setActiveField('/AI')}>
+                <div className={`${activeField=='/AI'?'bg-blue-600 text-white ':' select-none hover:bg-gray-300 cursor-pointer hover:text-white'}  flex flex-row h-[40px] items-center space-x-2  rounded-md pl-2`} onClick={()=>{setActiveField('/AI');setdealpipelinefromdashboardcompany([])}}>
                     <div> <PiStarFourBold  className={`${activeField=='/AI'?' text-white ':'text-[#667085]'} `} size={24}/></div>
                     <div className='text-[14px] font-inter font-semibold'><p>AI</p></div>
                 </div>
@@ -482,29 +491,29 @@ const Navigation = ({navbarref,showsmallnav,setshowsmallnav,setlogin,googleaccou
                 
                     <div className={`${showsmallnav?'opacity-100 w-[100%] h-[100%]':'opacity-0 w-[0px] h-[0px]'} transition-all  relative  flex flex-col items-end space-y-6 mt-[49px]`}>
                     <Link to="/dashboard">
-                        <RiHome6Line size={24} className={`mx-auto ${activeField === '/dashboard' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/dashboard')} />
+                        <RiHome6Line size={24} className={`mx-auto ${activeField === '/dashboard' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => {setActiveField('/dashboard');setdealpipelinefromdashboardcompany([])}} />
                     </Link>
                     <Link to="/dealpipeline">
                         <HiOutlineChartBarSquare size={24} className={`mx-auto ${activeField === '/dealpipeline' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/dealpipeline')} />
                     </Link>
                     <Link to="/dealsourcing">
-                        <SlSocialDropbox size={24} className={`mx-auto ${activeField === '/dealsourcing' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/dealsourcing')} />
+                        <SlSocialDropbox size={24} className={`mx-auto ${activeField === '/dealsourcing' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => {setActiveField('/dealsourcing');setdealpipelinefromdashboardcompany([])}} />
                     </Link>
                     <Link to="/portfolio">
-                        <RiCheckboxMultipleLine size={24} className={`mx-auto ${activeField === '/portfolio' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/portfolio')} />
+                        <RiCheckboxMultipleLine size={24} className={`mx-auto ${activeField === '/portfolio' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => {setActiveField('/portfolio');setdealpipelinefromdashboardcompany([])}} />
                     </Link>
                     <Link to="/adduser">
-                        <HiOutlineUserAdd size={24} className={`mx-auto ${activeField === '/adduser' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/adduser')} />
+                        <HiOutlineUserAdd size={24} className={`mx-auto ${activeField === '/adduser' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => {setActiveField('/adduser');setdealpipelinefromdashboardcompany([])}} />
                     </Link>
                     <Link to="/allDocs">
-                        <IoDocumentOutline size={24} className={`mx-auto ${activeField === '/allDocs' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/allDocs')} />
+                        <IoDocumentOutline size={24} className={`mx-auto ${activeField === '/allDocs' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => {setActiveField('/allDocs');setdealpipelinefromdashboardcompany([])}} />
                     </Link>
                     <Link to="/keys">
-                        <IoKeyOutline size={24} className={`mx-auto ${activeField === '/keys' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/keys')} />
+                        <IoKeyOutline size={24} className={`mx-auto ${activeField === '/keys' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => {setActiveField('/keys');setdealpipelinefromdashboardcompany([])}} />
                     </Link>
                     
                     <Link to="/AI">
-                        <PiStarFourBold size={24} className={`mx-auto ${activeField === '/AI' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => setActiveField('/AI')} />
+                        <PiStarFourBold size={24} className={`mx-auto ${activeField === '/AI' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => {setActiveField('/AI');setdealpipelinefromdashboardcompany([])}} />
                     </Link>
 
                     <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white cursor-pointer rounded-md pl-2`} onClick={()=>{window.open('https://workflow.incubewhtsapp.xyz/','_blank')}}>

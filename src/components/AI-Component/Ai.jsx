@@ -281,7 +281,7 @@ const Ai = ({hidenavbar}) => {
             }
         });
 
-        if (response.data.status === 200 && response.data.message !== "no refresh token found") {
+        if (response.data.status === -200 && response.data.message !== "no refresh token found") {
             const files = response.data.data;
               
             // Filter only Excel sheets
