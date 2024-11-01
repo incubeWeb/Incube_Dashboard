@@ -310,7 +310,7 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
   return (
     <div className='flex h-[100%] flex-col  bg-white cursor-default space-y-2'>
       
-    <div className='-mt-4'  ><HiOutlineDotsVertical onClick={()=>{setshowFilterMenu(true)}} size={20}/></div>
+    <div className='-mt-4 cursor-pointer'  ><HiOutlineDotsVertical onClick={()=>{setshowFilterMenu(true)}} size={20}/></div>
     {showFilterMenu && (
 <div className='absolute left-1 top-0 w-[150px] p-3 bg-white border-gray-300 border-[1px] rounded-md z-50'>
 <RxCross2 onClick={()=>{setshowFilterMenu(false)}} className='absolute right-2 top-1 cursor-ponter' />
@@ -361,7 +361,7 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                 <div onClick={() => handlesheetclick(doc._id, doc.name)} className='w-[100%] h-[25px] hover:bg-blue-500 p-2 rounded-md select-none cursor-pointer hover:text-white flex flex-row items-center justify-start'>
                     <FaRegFileExcel className={`text-green-500`} size={19} />
                     <p className={`text-[14px] px-5 tracking-wider overflow-y-auto`}>
-                        {doc.name.substring(doc.name.length - 13, doc.name.length)}
+                        {doc.name.replace(/^\d+_/, "")}
                     </p>
                 </div>
             </div>
@@ -383,7 +383,7 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                             <IoMdArrowBack  className=' cursor-pointer' size={17}/>
                             </div>
                             <div className='text-gray-500 h-[40px] text-[15px] flex items-center justify-center'>
-                                {sheetname}
+                                {sheetname.replace(/^\d+_/, "")}
                             </div>
                             
                         </div>
@@ -463,12 +463,12 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
 
 
                     <div className='w-[100%] h-[30%] flex flex-row items-center justify-start space-x-2 mt-2'>
-                    <div className="bg-blue-500 w-[20%] glow h-[50px]  shadow-[0_0_15px_rgba(59,130,246,1)] rounded-full flex items-center justify-center mr-4 "onClick={() => setShowPopup(!showPopup)}>
+                    <div className="bg-blue-500 w-[20%] glow h-[50px]  shadow-[0_0_15px_rgba(59,130,246,1)] rounded-full flex items-center justify-center cursor-pointer mr-4 "onDoubleClick={() => setShowPopup(!showPopup)}>
                   {icon }
                 </div>
                                 {
                                     !editLabel?
-                                    <p className='text-[18px] font-inter font-bold text-gray-700 w-[50%] flex items-center h-[30px]  tracking-wider'>{labelname}</p>
+                                    <p className='text-[18px] font-inter font-bold text-gray-700 w-[50%] flex items-center h-[30px]  tracking-wider cursor-pointer' onDoubleClick={handleEdit}>{labelname}</p>
                                     :
                                     <input ref={inputRef}  onChange={(e)=>{setlablename(e.target.value) }} onKeyPress={(e)=>e.key=='Enter'?seteditLabel(false):seteditLabel(true)} className='w-[90px] h-[30px] text-[13px] pl-1 outline-none border-[1px] border-gray-300 rounded-md'/>
                                 }
@@ -483,18 +483,20 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                         <div className='w-[70%] '>
                             <div className='flex h-[100%] items-center justify-start'>
                             
-                                <p  className='text-[22px] font-inter mt-9 font-bold text-gray-700 ml-2'><span onClick={togglePopup} className='mr-1 cursor-pointer' >{currencyValue}</span>{showValue}</p>
+                                <p  className='text-[22px] font-inter mt-9 font-bold text-gray-700 ml-2'><span onClick={togglePopup} className='mr-1 cursor-pointer' >{currencyValue}</span><span className='cursor-pointer' onDoubleClick={handlePlusClick}>{showValue }</span></p>
                             </div>
                             {isPopupOpen && (
-                    <div ref={popupRef} className='absolute top-0 left-0 bg-white border h-[160px] scrollbar-hide border-gray-300 rounded overflow-y-auto shadow-md mt-2'>
+                    <div ref={popupRef} className='absolute top-4 left-0 bg-white border h-[160px] scrollbar-hide border-gray-300 rounded overflow-y-auto shadow-md mt-2'>
                         <ul>
                         <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('$')}>$</li>
                             <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('€')}>€</li>
                             <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('₹')}>₹</li>
                             <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('£')}>£</li>
+                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('%')}>%</li> {/* Percentage selection */}
+</ul>
                             
                         
-                        </ul>
+                     
                     </div>
                 )}
                         </div>

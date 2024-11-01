@@ -501,6 +501,7 @@ useEffect(() => {
                   )
                 case 'portfoliocard':
                   return (
+                    
                     <Portfoliocard 
                     id={index}
                      setBoxes={setBoxes} 
@@ -511,7 +512,7 @@ useEffect(() => {
                      setcapturingPortfoliowidgitvalues={setcapturingPortfoliowidgitvalues}
                      
                      />
-
+              
                   )
                 case 'chat':
                   return (

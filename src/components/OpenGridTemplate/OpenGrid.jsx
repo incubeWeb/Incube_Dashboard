@@ -459,7 +459,7 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
                 
                 
                 
-                <div className='w-[100%] h-[50%]'>
+                <div className='w-[100%] h-[60%]'>
                 {
                     
                         <ChatCard id={id} realtimetabchats={realtimetabchats} currentTab={currentTab} CompanyName={companyname}/>

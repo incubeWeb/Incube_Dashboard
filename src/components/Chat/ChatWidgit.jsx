@@ -225,6 +225,9 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     { 
       
       e.stopPropagation()
+      if(msg.trim().length==0){
+        return;
+      }
       const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sendChat`,{
         sender:Logemail,
         receiver:openuser,
@@ -263,10 +266,10 @@ const mergedData={
 },[sendedMsg,receivedMsg])
     
   return (
-    <div className=' bg-white space-y-2 font-inter shadow-gray-400 w-[100%]  h-[100%] flex flex-col'>
+    <div className=' bg-white space-y-2 font-inter shadow-gray-400 w-full  h-[100%] flex flex-col'>
         {
                       clickedUser&&openChat!=''?
-                      <div className='flex flex-col space-y-4 font-noto p-[20px] fixed  w-[100%] h-[100%] top-0 left-0 rounded-md  bg-white scrollbar-hide  shadow-lg overflow-y-auto mb-4 ' onClick={(e)=>e.stopPropagation()}>
+                      <div className='flex flex-col space-y-4 font-noto p-[20px] fixed  w-[100%] h-[120%] top-0 left-0 rounded-md  bg-white scrollbar-hide  shadow-lg  mb-4 ' onClick={(e)=>e.stopPropagation()}>
                         <div className='flex flex-row items-center h-[40px]'>
                           <div className='flex w-[30%] text-gray-400'>
                             <IoArrowBack size={18} className='cursor-pointer' onClick={()=>handleBackButton()} />
@@ -296,9 +299,9 @@ const mergedData={
                     {msg.sender}
                   </div>
                   <div className='flex justify-end items-end rounded-sm'>
-                    <div className='flex bg-blue-400 pl-3 pb-2 mr-2 ml-4 pt-3 pr-3 mb-4 flex-col max-w-xs text-white rounded-lg relative before:content-[""] before:absolute before:top-[-8px] before:right-[10px] before:w-0 before:h-0 before:border-b-[12px] before:border-l-[10px] before:border-r-[0] before:border-b-blue-400 before:border-l-transparent'>
-                      <p className='text-[14px] text-gray-800'>{msg.message}</p>
-                    </div>
+                     <div className='flex bg-blue-400 pl-2 pt-2 pb-2 mr-2 ml-4 max-w-xs text-white rounded-lg relative'>
+              <p className='text-[14px] text-white'>{msg.message}</p>
+            </div>
                   </div>
                   <div className='flex w-full justify-end items-end'>
                     <p className='text-[9px] text-gray-500 mr-5'>{convertTime(msg.time)}</p>
@@ -312,9 +315,9 @@ const mergedData={
                       </div>
                       {msg.sender}
                     </div>
-                    <p className='text-[14px] pl-3 pr-3 pb-2 pt-2 mr-6 mb-3 bg-gray-200 text-black rounded-lg relative before:content-[""] before:absolute before:top-[-8px] before:right-[10px] before:w-0 before:h-0 before:border-b-[12px] before:border-l-[10px] before:border-r-[0] before:border-b-gray-200 before:border-l-transparent border-[1px] border-gray-300'>
-                      {msg.message}
-                    </p>
+                    <p className='text-[14px] pl-2 pr-2 pt-2 pb-2 mr-6 mb-3 bg-gray-200 text-black rounded-lg relative border-[1px] border-gray-300'>
+              {msg.message}
+            </p>
                     <div className='flex w-[60px] items-end justify-start text-[9px]'>
                       <p>{convertTime(msg.time)}</p>
                     </div>
@@ -332,16 +335,28 @@ const mergedData={
                         </div>
                        
           
-                       
-                       
-                        <div className='w-[100%] h-[30px] space-x-2 items-center justify-center flex flex-row'>
-                            <div className='w-[95%] h-[100%] ml-2'>
-                              <input id={`text${id}`} className='w-[100%] text-[14px] pl-2 h-[100%]  px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 ' placeholder='Enter your message here....' onKeyPress={(e)=>e.key=='Enter'?handleSendChat(e):handleTypedMsg(e)} onChange={(e)=>handleTypedMsg(e)}/>
-                            </div>
-                            <div className='w-[5%] h-[100%] flex items-center justify-center'>
-                              <IoSend size={18} className='cursor-pointer' onClick={(e)=>handleSendChat(e)}/>
-                            </div>
-                        </div>
+                        <div className='w-full h-50 flex items-center justify-between'>
+  <div className='flex-grow ml-2 mb-4 '>
+    <textarea
+      id={`text${id}`}
+      className='w-full text-14 pl-2 h-auto px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:outline-none scrollbar-hide'
+      placeholder='Enter your message here....'
+      onKeyPress={(e) => (e.key === 'Enter' ? handleSendChat(e) : handleTypedMsg(e))}
+      onChange={(e) => {
+        handleTypedMsg(e);
+        e.target.style.height = 'auto'; // Reset height
+        const maxHeight = 80; // Set your max height here
+        e.target.style.height = `${Math.min(e.target.scrollHeight, maxHeight)}px`;
+      }}
+      rows={1} // Minimum number of rows
+      style={{ maxHeight: '80px', overflowY: 'auto' }}
+    />
+  </div>
+  <div className='flex items-center justify-center ml-2'>
+    <IoSend size={18} className='cursor-pointer' onClick={(e) => handleSendChat(e)} />
+  </div>
+</div>
+
                       </div>
                       :
                       <></>

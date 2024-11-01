@@ -17,6 +17,10 @@ const ChatBot = () => {
   const [loading, setLoading] = useState(false); 
   const [loadingDots, setLoadingDots] = useState('');
   const handleSend = async () => {
+    if (newMessage.trim().length==0) {
+     
+      return; 
+  }
     if (newMessage.trim()) {
       // Create a new user message object
       const userMessage = { text: newMessage, sender: 'You' };
@@ -214,7 +218,7 @@ const ChatBot = () => {
   return (
     <div className="fixed flex flex-col items-center justify-center  h-screen ">
 
-<div className="fixed right-10 bottom-20 flex items-end" onClick={toggleChat}>
+<div className="fixed right-10 bottom-20 cursor-pointer flex items-end" onClick={toggleChat}>
 <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-blue-200 to-blue-300 opacity-50 shadow-lg flex items-center justify-center">
   {/* Inner Shadow to create depth for the inner cube effect */}
   <div
@@ -301,22 +305,28 @@ const ChatBot = () => {
           </button>
         )}
   
-        <div className="flex mt-2 space-x-2"> {/* Added space-x-2 for horizontal spacing */}
-          <input
-            type="text"
-            className="flex-grow bg-gray-200 text-black outline-none px-4 py-2 rounded-l-lg" // Added padding and rounded corners
-            placeholder="Type a message..."
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <button
-            className="bg-blue-500 text-white p-2 rounded-r-lg"
-            onClick={handleSend}
-          >
-            <MdSend size={20} />
-          </button>
-        </div>
+        <div className="flex mt-2 space-x-2 items-center"> {/* Added items-center to center vertically */}
+  <textarea
+    className="flex-grow bg-gray-200 text-black outline-none px-4 py-2 rounded-lg resize-none overflow-hidden scrollbar-hide"
+    placeholder="Type a message..."
+    value={newMessage}
+    onChange={(e) => {
+      setNewMessage(e.target.value);
+      e.target.style.height = 'auto'; // Reset height
+      const maxHeight = 200; // Set your max height here
+      e.target.style.height = `${Math.min(e.target.scrollHeight, maxHeight)}px`; // Set new height with max height
+    }}
+    onKeyDown={handleKeyDown}
+    rows={1} // Minimum number of rows
+    style={{ maxHeight: '200px', overflowY: 'auto' }} // Ensure overflow is handled
+  />
+  <button
+    className=" text-gray-600 p-2 rounded-r-lg h-10 flex items-center justify-center" // Added flex for centering
+    onClick={handleSend}
+  >
+    <MdSend size={22} />
+  </button>
+</div>
       </div>
     </div>
   )}

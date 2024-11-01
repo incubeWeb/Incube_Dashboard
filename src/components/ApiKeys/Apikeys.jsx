@@ -7,6 +7,7 @@ import axios from 'axios'
 import ShareKeysWith from './ShareKeysWith'
 import { jwtDecode } from 'jwt-decode'
 import ChatBot from '../GenaiBox/ChatBot'
+import { FaKey } from "react-icons/fa";
 
 const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
     const token=localStorage.getItem('token')
@@ -307,7 +308,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
         <div className='w-[100%] flex flex-col h-[100%] justify-center'>
         <div className='w-[100%] pt-[33px] h-[50px] flex flex-row items-center justify-start'>
                 <div className='w-[20px] h-[20px] text-gray-500'><IoInformationCircle size={20} /></div>
-                <div className='text-[16px] pl-2 font-bold text-gray-500'>
+                <div className='text-[16px] pl-2 font-bold font-inter text-gray-500'>
                     {
                         !checkisusingownkey?
                             <p>You are currently using Incube Api</p>
@@ -318,39 +319,46 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
                 
             </div>
         <div className='w-[100%] pt-[33px] h-[300px] flex flex-col'>
-                <div className='text-[16px] font-inter pl-5 font-bold'>
-                    <p>Available Keys</p>
-                </div>
+                
                 {
                     availablekeys.length>0?
-                    <div  className='space-y-2 w-[100%] flex overflow-y-auto flex-col h-[130px] p-5'>
+                    <div>
+                     <div className='text-[14px] flex items-center font-inter font-semibold pl-5 text-gray-500'>
+    <p className=''>Available Keys</p>
+    <FaKey  className='ml-2'/>
+</div>
+
+                    <div  className='space-y-2 w-[100%] flex overflow-y-auto scrollbar-hide flex-col h-[50px] p-5'>
                 {
                     availablekeys.map(val=>
                     
                         <div key={val._id} className='text-[14px] font-inter flex flex-row space-x-3'>
                             <div><p className='font-bold'>{val.Type}</p></div>
-                            <div><p>{val.Api_value}</p></div>
-                            <div><p>created by {val.Creator}</p></div>
+                            <div className='font-inter '><p>{val.Api_value}</p></div>
+                            <div className='font-inter'><p>created by <span className='font-inter font-semibold'>{val.Creator}</span></p></div>
                             <div className='flex space-x-2 text-[13px] text-green-500'><input type='radio' checked={val.active=='yes'?true:false} onChange={(e)=>handleActivebtn(e)} value={JSON.stringify({uniqueid:val.uniqueid,Type:val.Type,Api_value:val.Api_value,security:val.security,Creator:val.Creator,Member:Logemail,active:'yes'})} name='activekey'/> <p>activate</p></div>
-                            <div><p className='text-[14px] text-gray-400'>{val.security}</p></div>
+                            <div className='font-inter'><p className='text-[14px] text-gray-400'>{val.security}</p></div>
                         </div>
                     
                     )
                 }
-                <div className=' w-[100%] h-[50px] mt-4 flex flex-row space-x-2'>
-                    <div onClick={handleActiveKey} className='w-[120px] h-[30px] mt-2 font-semibold font-inter text-[14px] bg-blue-500 text-white rounded-l flex items-center justify-center'>
+               
+                </div>
+                <div className=' w-[100%] h-[30px] mt-4 flex flex-row space-x-2 cursor-pointer ml-5'>
+                    <div onClick={handleActiveKey} className='w-[120px] h-[30px] mt-2 font-semibold font-inter text-[14px] bg-blue-500 text-white rounded-md flex items-center justify-center'>
                         <p>Active key</p>
                     </div>
                     <div onClick={handleDefaultActiveKey} className='w-[120px] h-[30px] mt-2 font-semibold
-                     font-inter text-[14px] bg-blue-500 text-white rounded-l  flex items-center justify-center'>
+                     font-inter text-[14px] bg-blue-500 text-white rounded-md  flex items-center justify-center'>
                         <p>Set to Incubes</p>
                     </div>
                 </div>
                 </div>
                 :
-                <div  className='space-y-2 w-[100%] flex overflow-y-auto font-inter flex-col h-[130px] p-5'>
-                    No avaible key
-                </div>
+                <div className='text-[14px] flex items-center font-inter font-semibold pl-5 text-gray-500'>
+    <p className=''>No Available Key</p>
+    <FaKey  className='ml-2'/>
+</div>
                 }
             </div>
 
@@ -358,7 +366,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
                 <div className='text-[16px] font-inter pl-5 font-bold'>
                     <p>Added Keys</p>
                 </div>
-                <div className='w-[100%] flex overflow-y-auto flex-col space-y-2 h-[110px] p-5'>
+                <div className='w-[100%] flex overflow-y-auto scrollbar-hide flex-col space-y-2 h-[110px] p-5'>
                     {/* <div className='text-[14px]'>
                         <p>0 added keys</p>
                     </div> */}
@@ -397,7 +405,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
                 <div className='w-[100%] flex space-y-2 font-inter font-bold'>
                     <p>Create/Edit Keys</p>
                 </div>
-                <div className='h-[100px] overflow-y-auto flex-col flex space-y-3'>
+                <div className='h-[100px] overflow-y-auto  scrollbar-hide flex-col flex space-y-3'>
                 {
                     addField.filter(val=>val.Member==Logemail&& val.Creator==Logemail).map(val=>
                         <div key={val.uniqueid} className='flex flex-row space-x-2  h-[30px]'>
