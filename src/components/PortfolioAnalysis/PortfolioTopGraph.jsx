@@ -126,15 +126,15 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                   "Authorization":`Bearer ${token}`
                 }
               })
-            console.log("chjasdf",response.data.data)
+            
             if(response.data.status==-200 || response.data.data==undefined)
             {
 
                 setshowBarchart(false)
                 setshowPiechart(false)
                 setshowLinechart(false)
-                setchartDatatypeX('')
-                setchartDatatypeY('')
+                setchartDatatypeX('string')
+                setchartDatatypeY('string')
                 setsheetJson([])
                 setsheetfieldselectedX('')
                 setsheetfieldselectedY('')
@@ -588,7 +588,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                         )}
                     </>
                 )}
-                {googlesheetfiles.length > 0 && (
+                {googlesheetfiles?.length > 0 && (
                     <div className='font-inter text-[16px] font-semibold mt-4'>
                         <p className='border-b pb-2'>Google Sheets:</p>
                     </div>
@@ -651,7 +651,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
           )}
       </>
   )}
-  {googlesheetfiles.length > 0 && (
+  {googlesheetfiles?.length > 0 && (
       <div className='font-inter text-[16px] font-semibold mt-4'>
           <p className='border-b pb-2'>Google Sheets:</p>
       </div>
@@ -713,7 +713,7 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
                       )}
                   </>
               )}
-              {googlesheetfiles.length > 0 && (
+              {googlesheetfiles?.length > 0 && (
                   <div className='font-inter text-[16px] font-semibold mt-4'>
                       <p className='border-b pb-2'>Google Sheets:</p>
                   </div>

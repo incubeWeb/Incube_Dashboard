@@ -187,7 +187,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
            
         }
     }
-    const handleView=async (id,name)=>{
+    const handleView=async (id,name,filename)=>{
         
         setid(id)
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:id,organization:Logorganization},{
@@ -201,7 +201,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
             setclickedview(!clickedView)
             setviewedDoc(name)
         }else{
-            window.open(`${import.meta.env.VITE_S3_URL}${Logorganization}/${name}`,'_blank');
+            window.open(`${import.meta.env.VITE_S3_URL}${Logorganization}/${filename}`,'_blank');
         }
     }
     
@@ -291,13 +291,13 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
 
     },[realtimedocumentvisibility])
 
-    useEffect(()=>{
-        const mergedData=[...allDocs,
-            ...privatefiles,
-            ...googleDrivesheets
-        ]
-         sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))   
-        },[allDocs,privatefiles,googleDrivesheets])
+    // useEffect(()=>{
+    //     const mergedData=[...allDocs,
+    //         ...privatefiles,
+    //         ...googleDrivesheets
+    //     ]
+    //      sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))   
+    //     },[allDocs,privatefiles,googleDrivesheets])
 
     useEffect(()=>{
         const checkIfSelected=async()=>{
@@ -445,7 +445,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
                 </div>
                 <div className='w-[15%] flex flex-col items-center justify-start h-[100%]'>
                     <div className='basis-1/2 flex justify-end space-x-3'>
-                        <p className='text-[14px] text-sky-600 cursor-pointer font-inter font-semibold' onClick={() => handleView(doc._id, cleanedName)}>View</p>
+                        <p className='text-[14px] text-sky-600 cursor-pointer font-inter font-semibold' onClick={() => handleView(doc._id, cleanedName,doc.fileName)}>View</p>
                         <p className='text-[14px] text-red-600 cursor-pointer font-inter font-semibold' onClick={() => handleDelete(doc._id)}>Remove</p>
                     </div>
                 </div>
@@ -497,7 +497,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
             !loading?
             <div className='flex flex-col w-[100%] h-[10%]  font-roboto overflow-auto'>
                 {
-                    (googleDrivesheets||[]).map(doc=>
+                    (googleDrivesheets||[])?.map(doc=>
                     <div key={doc._id} className='flex flex-row w-[100%] h-[100%] font-inter items-center pt-1  border-t border-gray-300 mb-6' >
                         <div className='w-[15%] h-[100%] scrollbar-hide overflow-x-auto  flex items-end justify-start '>
                             <p className='text-[14px] pl-4 '>{gmailname}</p>

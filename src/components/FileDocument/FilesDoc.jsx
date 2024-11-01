@@ -170,9 +170,9 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                                             
                                             <span className='text-[14px] capitalize'>{file.name}</span>
                                         </div>
-                                        <a href={`${import.meta.env.VITE_HOST_URL}8999/uploads/${file.fileName}`} target="_blank" rel="noopener noreferrer" className='text-blue-600 text-[14px]'>
+                                        <p onClick={()=>{window.open(`${import.meta.env.VITE_S3_URL}${Logorganization}/${file.fileName}`,'_blank')}} target="_blank" rel="noopener noreferrer" className='text-blue-600 text-[14px]'>
                                             Open
-                                        </a>
+                                        </p>
                                     </div>
                                 ))}
                             

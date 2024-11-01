@@ -290,7 +290,7 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
   
 {   try{
     return (
-   <div ref={timelineref} className="flex z-0 flex-col scrollbar-hide w-full max-h-screen h-[100%] overflow-y-auto">
+   <div  className="flex z-0 flex-col scrollbar-hide w-full max-h-screen h-[100%] overflow-y-auto">
     
   {timelinedata.map((item) =>
     provideData(item) !== "notshow" ? (
