@@ -97,6 +97,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
 
   useEffect(() => {
     const fun = async () => {
+      
       const dashboard_response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDashboardData`, { email: Logemail,organization:Logorganization },{
         headers:{
           "Authorization":`Bearer ${token}`
@@ -141,12 +142,15 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       if(piechartcount.length>0)
         {
           const convertedData= convertDataTypes(piechartcount, {name:chartdatatypex,value:chartdatatypey});
-          
+          console.log(piechartcount,"here this pie")
           setmydata(convertedData)
         }
-       else if(sheetdbdata.length>0)
+       else if(sheetdbdata.length>0 && selectedsheetfromdbname.length<=0)
           {
-            const convertedData= convertDataTypes(sheetdbdata, {name:chartdatatypex,value:chartdatatypey});
+            let filteredDt = [];
+            sheetdbdata.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
+              
+            const convertedData= convertDataTypes(filteredDt, {name:chartdatatypex,value:chartdatatypey});
             
             setmydata(convertedData)
           }
@@ -203,6 +207,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
               let dt = JSON.parse(response.data.data);
               let filteredDt = [];
               dt.map(d => filteredDt.push({ name: d[selectedXaxis], value: d[selectedYaxis] }));
+              
               
               const convertedData = convertDataTypes(filteredDt, {name: chartdatatypex,
                 value: chartdatatypey});

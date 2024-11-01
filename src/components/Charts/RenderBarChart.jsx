@@ -141,9 +141,14 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
           const convertedData= convertDataTypes(barchartcount, {name:chartdatatypex,uv:chartdatatypey});
           setmydata(convertedData)
         }
-        else if(sheetdbdata.length>0)
+        else if(sheetdbdata.length>0 && selectedsheetfromdbname.length<=0)
           {
-            const convertedData= convertDataTypes(sheetdbdata, {name:chartdatatypex,uv:chartdatatypey});
+            let filteredDt = [];
+            sheetdbdata.map(d => filteredDt.push({ name: d[selectedXaxis], uv: d[selectedYaxis] }));
+              
+            const convertedData= convertDataTypes(filteredDt, {name:chartdatatypex,uv:chartdatatypey});
+           
+            
             setmydata(convertedData)
           }
       

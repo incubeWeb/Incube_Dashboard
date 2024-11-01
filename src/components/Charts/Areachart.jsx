@@ -149,10 +149,13 @@ const fieldConversionsApi={
       const convertedData= convertDataTypes(areachartcount, {pv:chartdatatypex,uv:chartdatatypey});
       setmydata(convertedData)
     }
-   else if(sheetdbdata.length>0)
+   else if(sheetdbdata.length>0 && selectedsheetfromdbname.length<=0)
       {
-        
-        const convertedData= convertDataTypes(sheetdbdata, {pv:chartdatatypex,uv:chartdatatypey});
+        let filteredDt = [];
+        sheetdbdata.map(d => filteredDt.push({ pv: d[selectedXaxis], uv: d[selectedYaxis] }));
+          
+        const convertedData= convertDataTypes(filteredDt, {pv:chartdatatypex,uv:chartdatatypey});
+       
         setmydata(convertedData)
       }
     else if(fromApi&&!isSheetchart)
