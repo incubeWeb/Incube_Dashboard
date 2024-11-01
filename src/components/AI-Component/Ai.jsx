@@ -453,7 +453,7 @@ useEffect(() => {
     link.click();
     document.body.removeChild(link);
   };
-  
+  const [textareaHeight, setTextareaHeight] = useState(0);
 
 
   return (
@@ -579,27 +579,32 @@ useEffect(() => {
     <div className="mt-2">
       {messages.length === 0 ? (
         <div className="flex flex-col items-center justify-center text-center h-full">
-          <div className="font-inter font-bold text-[22px] mb-4 mt-64">What can I help with?</div>
-          <div className="flex items-center bg-gray-200 rounded-full py-2 p-2 px-4 w-full">
-            <textarea
-              type="text"
-              value={newMessage}
-              onChange={(e) => {setNewMessage(e.target.value)
-                e.target.style.height = 'auto'; // Reset height
-      const maxHeight = 80; // Set your max height here
-      e.target.style.height = `${Math.min(e.target.scrollHeight, maxHeight)}px`; 
-              }}
-              onKeyDown={handleKeyDown}
-              placeholder="Type a message..."
-              className="flex-grow bg-gray-200 p-4 text-black outline-none scrollbar-hide"
-              rows={1} // Minimum number of rows
-              style={{ maxHeight: '80px', overflowY: 'auto' }}
-            />
-            <div className="text-gray-100 bg-gray-300 rounded-full p-1">
-              <FaArrowUp size={26} />
-            </div>
-          </div>
-        </div>
+      <div className="font-inter font-bold text-[22px] mb-4 mt-64">What can I help with?</div>
+      <div className={`flex items-center bg-gray-200 border border-gray-300 ${textareaHeight > 40 ? 'rounded-xl' : 'rounded-full'} py-2 p-2 px-4 w-full`}>
+        <textarea
+          type="text"
+          value={newMessage}
+          onChange={(e) => {
+            setNewMessage(e.target.value);
+            e.target.style.height = 'auto'; // Reset height
+            const maxHeight = 100; // Set your max height here
+            const newHeight = Math.min(e.target.scrollHeight, maxHeight);
+            setTextareaHeight(newHeight); // Update state with new height
+            e.target.style.height = `${newHeight}px`;
+          }}
+          onKeyDown={handleKeyDown}
+          placeholder="Type a message..."
+          className="flex-grow bg-gray-200 p-2 text-black outline-none scrollbar-hide"
+          rows={1} // Minimum number of rows
+          style={{ maxHeight: '100px', overflowY: 'auto', resize: 'none' }}
+        />
+        <div  onClick={() => {
+     handleSend();
+    }} className={`rounded-full  cursor-pointer p-1 ${newMessage ? 'bg-white text-gray-900' : 'bg-gray-300 text-gray-100'}`}>
+    <FaArrowUp size={26} />
+  </div>
+      </div>
+    </div>
       ) : (
         <>
           {/* Message list */}
@@ -643,26 +648,31 @@ useEffect(() => {
           )}
 
           {/* Input field */}
-          <div className="absolute bottom-10 flex items-center bg-gray-200 rounded-full py-2 px-4 w-full">
-            <textarea
-              type="text"
-              value={newMessage}
-              onChange={(e) => {setNewMessage(e.target.value)
-                e.target.style.height = 'auto'; // Reset height
-      const maxHeight = 80; // Set your max height here
-      e.target.style.height = `${Math.min(e.target.scrollHeight, maxHeight)}px`; 
-              
-              }}
-              onKeyDown={handleKeyDown}
-              placeholder="Type a message..."
-              className="flex-grow bg-gray-200 text-black outline-none scrollbar-hide"
-              rows={1} // Minimum number of rows
-              style={{ maxHeight: '80px', overflowY: 'auto' }}
-            />
-            <div className="text-gray-100 bg-gray-300 rounded-full p-1">
-              <FaArrowUp size={26} />
-            </div>
-          </div>
+          <div className={`absolute bottom-10 flex items-center bg-gray-200 border border-gray-300 ${textareaHeight > 40 ? 'rounded-xl' : 'rounded-full'} py-2 p-2 px-4 w-full`}>
+          <textarea
+          type="text"
+          value={newMessage}
+          onChange={(e) => {
+            setNewMessage(e.target.value);
+            e.target.style.height = 'auto'; // Reset height
+            const maxHeight = 100; // Set your max height here
+            const newHeight = Math.min(e.target.scrollHeight, maxHeight);
+            setTextareaHeight(newHeight); // Update state with new height
+            e.target.style.height = `${newHeight}px`;
+          }}
+          onKeyDown={handleKeyDown}
+          placeholder="Type a message..."
+          className="flex-grow bg-gray-200 p-2 text-black outline-none scrollbar-hide"
+          rows={1} // Minimum number of rows
+          style={{ maxHeight: '100px', overflowY: 'auto',resize: 'none' }}
+        />
+  <div  onClick={() => {
+     handleSend();
+    }} className={`rounded-full cursor-pointer p-1 ${newMessage ? 'bg-white text-gray-900' : 'bg-gray-300 text-gray-100'}`}>
+    <FaArrowUp size={26} />
+  </div>
+</div>
+
         </>
       )}
     </div>

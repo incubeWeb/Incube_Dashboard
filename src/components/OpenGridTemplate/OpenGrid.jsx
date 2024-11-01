@@ -241,10 +241,12 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
                             </div>
                         </div>
                     </div>
-                    <div><p className='md:text-[14px] text-[14px] font-inter font-semibold'>{description}</p></div>
+                    <div>
+        <p className='md:text-[14px] text-[14px] font-inter font-semibold overflow-hidden h-[15%] mt-2  w-[70%] text-left mb-4 overflow-y-auto scrollbar-hide'>{description}</p>
+    </div>
             </div>
             <div className='flex flex-row w-[100%] h-[50px] space-x-2'>
-                    <div className='w-[85%] h-[100%] bg-gray-100 rounded-md flex flex-row items-center pl-2 space-x-5'>
+                    <div className='w-[85%] h-[100%] mt-5 bg-gray-100 rounded-md flex flex-row items-center pl-2 space-x-5'>
                         <div className='w-[100%] h-[75%] rounded-md flex items-center justify-start flex-row space-x-2'>
                             {(Tabs||[]).map(Tab=>
                                 
@@ -265,7 +267,7 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
                         
                     </div> 
                     <div className='flex flex-row h-[100%] justify-end w-[12%] md:space-x-2' onClick={openAddNewWindow}>
-                        <div className='w-[130px] border-sky-600 border-[1px] h-[80%] flex items-center justify-center rounded-md cursor-pointer'><p className='md:text-[13px] text-[9px] font-bold text-blue-600 font-inter'>Add details</p></div>
+                        <div className='w-[130px] mt-6 border-sky-600 border-[1px] h-[80%] flex items-center justify-center rounded-md cursor-pointer'><p className='md:text-[13px] text-[9px]  font-bold text-blue-600 font-inter'>Add details</p></div>
                     </div>   
             </div>
         </div>
@@ -299,7 +301,7 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
                 
                 
                 
-                <div className='w-[100%] h-[50%] '>
+                <div className='w-[100%] h-[50%]  mt-6'>
                 {
                     
                         <ChatCard id={id} realtimetabchats={realtimetabchats} currentTab={currentTab} CompanyName={companyName}/>

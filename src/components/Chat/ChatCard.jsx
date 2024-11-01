@@ -198,7 +198,7 @@ useEffect(() => {
 }, []);
 
 
-
+const [textareaHeight, setTextareaHeight] = useState(0);
 
   return (
     <div className={` w-[100%] h-full `}>
@@ -269,30 +269,32 @@ useEffect(() => {
               </div>
               {itsfrom !== 'completed' ? (
                 <div className="w-full pl-2 h-[20%] md:flex md:flex-row space-x-2 md:items-center justify-center">
-  <div className="w-[90%] h-full md:flex md:flex-row pb-2 pt-1 pr-3">
-    <div className="flex-grow h-full flex items-center">
-      <div className="border border-gray-300 rounded-full flex-grow overflow-hidden flex items-center"> {/* Ensure it flexes to center items */}
-        <textarea
-          value={mychat}
-          onChange={(e) => {
-            setmychat(e.target.value);
-            e.target.style.height = 'auto'; // Reset height
-            const maxHeight = 100; // Set your max height here
-            e.target.style.height = `${Math.min(e.target.scrollHeight, maxHeight)}px`; 
-          }}
-          onKeyPress={(e) => e.key === 'Enter' && handleChat()}
-          className="w-full h-full rounded-full outline-none text-[14px] scrollbar-hide pl-4 py-2 transition-all resize-none" // Added resize-none to prevent manual resizing
-          placeholder="Type your message..."
-          rows={1} // Minimum number of rows
-          style={{ maxHeight: '100px', overflowY: 'auto' }}
-        />
+      <div className="w-[90%] h-full md:flex md:flex-row pb-2 pt-1 pr-3">
+        <div className="flex-grow h-full flex items-center">
+          <div className={`border border-gray-300 ${textareaHeight > 40 ? 'rounded-xl' : 'rounded-full'} flex-grow overflow-hidden flex items-center`}>
+            <textarea
+              value={mychat}
+              onChange={(e) => {
+                setmychat(e.target.value);
+                e.target.style.height = 'auto'; // Reset height
+                const maxHeight = 100; // Set your max height here
+                const newHeight = Math.min(e.target.scrollHeight, maxHeight);
+                setTextareaHeight(newHeight); // Update state with new height
+                e.target.style.height = `${newHeight}px`;
+              }}
+              onKeyPress={(e) => e.key === 'Enter' && handleChat()}
+              className="w-full h-full rounded-full outline-none text-[14px] scrollbar-hide pl-5 pr-5 py-2 transition-all resize-none"
+              placeholder="Type your message..."
+              rows={1} // Minimum number of rows
+              style={{ maxHeight: '100px', overflowY: 'auto', resize: 'none' }}
+            />
+          </div>
+        </div>
+        <div className="flex items-center justify-center w-[5%] h-full">
+          <MdSend size={24} className="cursor-pointer" onClick={handleChat} />
+        </div>
       </div>
     </div>
-    <div className="flex items-center justify-center w-[5%] h-full "> {/* Center the send button */}
-      <MdSend size={24} className="cursor-pointer" onClick={handleChat} />
-    </div>
-  </div>
-</div>
 
 
 
@@ -359,27 +361,29 @@ useEffect(() => {
             {
                 itsfrom!='completed'?
                 <div className='w-full pl-2 h-auto md:flex md:flex-row space-x-2 md:items-center justify-center'>
-    <div className='w-[90%] md:space-x-3 h-auto md:flex md:flex-row pb-2 pt-1 pr-3'>
-        <div className='flex-grow border border-gray-300 rounded-xl flex flex-row items-start'>
-            <textarea 
-                value={mychat} 
-                onChange={(e) => {
-                    setmychat(e.target.value);
-                    e.target.style.height = 'auto'; // Reset height
-                    const maxHeight = 60; // Set your max height here (increased for visibility)
-                    e.target.style.height = `${Math.min(e.target.scrollHeight, maxHeight)}px`; 
-                }} 
-                onKeyPress={(e) => e.key === 'Enter' ? handleChat() : null}  
-                className='w-full h-auto rounded-xl outline-none text-[14px] pl-2 scrollbar-hide transition-all mb-2' // Removed fixed height
-                rows={1} // Minimum number of rows
-                style={{ maxHeight: '60px', overflowY: 'auto' }} // Adjusted for max height
-            />
+      <div className='w-[90%] md:space-x-3 h-auto md:flex md:flex-row pb-2 pt-1 pr-3'>
+        <div className={`flex-grow border border-gray-300 ${textareaHeight > 20 ? 'rounded-xl' : 'rounded-xl'} flex flex-row items-start`}>
+          <textarea 
+            value={mychat} 
+            onChange={(e) => {
+              setmychat(e.target.value);
+              e.target.style.height = 'auto'; // Reset height
+              const maxHeight = 60; // Set your max height here
+              const newHeight = Math.min(e.target.scrollHeight, maxHeight);
+              setTextareaHeight(newHeight); // Update state with new height
+              e.target.style.height = `${newHeight}px`;
+            }} 
+            onKeyPress={(e) => e.key === 'Enter' ? handleChat() : null}  
+            className='w-full h-auto rounded-xl outline-none text-[14px] pl-4 pr-4 scrollbar-hide transition-all mb-2'
+            rows={1} // Minimum number of rows
+            style={{ maxHeight: '60px', overflowY: 'auto', resize: 'none' }} // Adjusted for max height
+          />
         </div>
         <div className='w-[5%] justify-end h-auto flex items-center'>
-            <MdSend size={23} className='cursor-pointer' onClick={handleChat} />
+          <MdSend size={23} className='cursor-pointer' onClick={handleChat} />
         </div>
+      </div>
     </div>
-</div>
 
             :
             <></>

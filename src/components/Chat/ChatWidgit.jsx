@@ -375,7 +375,7 @@ useEffect(() => {
         e.target.style.height = `${Math.min(e.target.scrollHeight, maxHeight)}px`;
       }}
       rows={1} // Minimum number of rows
-      style={{ maxHeight: '70%', overflowY: 'auto' }}
+      style={{ maxHeight: '70%', overflowY: 'auto', resize: 'none' }}
     />
   </div>
   <div className='flex items-center justify-center ml-2'>

@@ -258,7 +258,7 @@ const ChatBot = () => {
       <div className="flex flex-col h-full space-y-4"> {/* Added space-y-4 for consistent spacing */}
         
         {/* Message area */}
-        <div className="flex-1 overflow-y-auto scrollbar-hide mb-2 p-2" ref={chatRef}> {/* Added p-2 for padding within message area */}
+        <div className="flex-1 overflow-y-auto scrollbar-hide  mb-2 p-2" ref={chatRef}> {/* Added p-2 for padding within message area */}
           {messages.map((msg, index) => {
             if (msg.sender === 'You') {
               return (
@@ -306,7 +306,7 @@ const ChatBot = () => {
   
         <div className="flex mt-2 space-x-2 items-center"> {/* Added items-center to center vertically */}
   <textarea
-    className="flex-grow bg-gray-200 text-black outline-none px-4 py-2 rounded-lg resize-none overflow-hidden scrollbar-hide"
+    className="flex-grow bg-gray-200 text-black outline-none px-4  py-2 rounded-lg resize-none overflow-hidden scrollbar-hide"
     placeholder="Type a message..."
     value={newMessage}
     onChange={(e) => {
@@ -317,7 +317,7 @@ const ChatBot = () => {
     }}
     onKeyDown={handleKeyDown}
     rows={1} // Minimum number of rows
-    style={{ maxHeight: '200px', overflowY: 'auto' }} // Ensure overflow is handled
+    style={{ maxHeight: '200px', overflowY: 'auto', resize: 'none' }} // Ensure overflow is handled
   />
   <button
     className=" text-gray-600 p-2 rounded-r-lg h-10 flex items-center justify-center" // Added flex for centering
