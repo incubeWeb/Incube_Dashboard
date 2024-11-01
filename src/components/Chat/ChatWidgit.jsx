@@ -33,7 +33,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
   const Logemail=userdata.userdetails.email
   const Logorganization=userdata.userdetails.organization
   const Logrole=userdata.userdetails.role
-
+  const chatEndRef = useRef(null);
   const handleSearchUser=(e)=>{
     setSearchUser(e.target.value)
   }
@@ -240,6 +240,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
       })
       if(response.data.status==200)
       {
+        
         setmsg('')
         document.getElementById(`text${id}`).value=''
       }
@@ -254,6 +255,17 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     const handleBackButton=()=>{
         setopenChat(false)
     }
+    useEffect(() => {
+      // This effect runs when sendedMsg changes
+      const handleNewMessage = () => {
+          if (sendedMsg.length > 0) {
+              // Handle any side effects here, like scrolling to the bottom
+              console.log('New message sent:', sendedMsg[sendedMsg.length - 1]);
+          }
+      };
+    
+      handleNewMessage(); // Call the function to handle new messages
+    }, [sendedMsg]); // Depend on sendedMsg to trigger the effect
     
    
     useEffect(()=>{
@@ -265,6 +277,19 @@ const mergedData={
   sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
 },[sendedMsg,receivedMsg])
     
+useEffect(() => {
+  const scrollToBottom = () => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  scrollToBottom();
+}, [sendedMsg, receivedMsg]); // Run whenever messages change
+
+
+
+
   return (
     <div className=' bg-white space-y-2 font-inter shadow-gray-400 w-full  h-[100%] flex flex-col'>
         {
@@ -325,6 +350,7 @@ const mergedData={
                 </div>
             )
           }
+          <div ref={chatEndRef} />
         </div>
       )
   }
@@ -353,7 +379,7 @@ const mergedData={
     />
   </div>
   <div className='flex items-center justify-center ml-2'>
-    <IoSend size={18} className='cursor-pointer' onClick={(e) => handleSendChat(e)} />
+    <IoSend size={24} className='cursor-pointer ' onClick={(e) => handleSendChat(e)} />
   </div>
 </div>
 

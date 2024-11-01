@@ -70,38 +70,41 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
         }
         
         const availableKeys=async()=>{
-            const response1=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/get-public-apikeys`,{
-                organization:Logorganization
-            },{
-                headers:{
-                  "Authorization":`Bearer ${token}`
+            const response1 = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/get-public-apikeys`, {
+                organization: Logorganization
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
                 }
-              })
-            const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/get-private-apikeys`,{
-                organization:Logorganization,
-                Member:Logemail
-            },{
-                headers:{
-                  "Authorization":`Bearer ${token}`
+            });
+        
+            const response2 = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/get-private-apikeys`, {
+                organization: Logorganization,
+                Member: Logemail
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
                 }
-              })
-            const data1=response1.data.data
-            const data2=response2.data.data
-            const merged=[...data1,...data2]
-            const lenactive=merged.filter(val=>
-                val.active=='yes'
-            )
+            });
+        
+            const data1 = response1.data.data;
+            const data2 = response2.data.data;
+            const merged = [...data1, ...data2];
+        
+            // Update based on active keys
+            const lenactive = merged.filter(val => val.active === 'yes');
+            setisusingownkey(lenactive.length > 0);
+        
+            const filter = getUniqueActiveValues(merged);
             
-            if(lenactive.length>0)
-            {
-                setisusingownkey(true)
+            // Show "No Available Key" if filter is empty
+            if (filter.length === 0) {
+                setavailablekeys([]);
+            } else {
+                setavailablekeys(filter);
             }
-            else{
-                setisusingownkey(false)
-            }
-            const filter=getUniqueActiveValues(merged)
-            setavailablekeys(filter)
-        }
+        };
+        
 
         fieldadd()
         availableKeys()
@@ -174,23 +177,36 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
         const id=parseInt(lastIndex.uniqueid)+1
         setaddField(prev=>[...prev,{uniqueid:id,Type:'Gemini',Api_value:'',security:'private',Creator:Logemail,Member:Logemail,active:'no'}])
     }
-    const handledeletefield=async(id,value)=>{
-
-        const organization=Logorganization
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/delete-apikey`,{
-            organization:organization,
-            Member:Logemail,
-            Api_value:value
-        },{
-            headers:{
-              "Authorization":`Bearer ${token}`
+    const handledeletefield = async (id, value) => {
+        const organization = Logorganization;
+        
+        // Delete the key from the server
+        const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/delete-apikey`, {
+            organization: organization,
+            Member: Logemail,
+            Api_value: value
+        }, {
+            headers: {
+                "Authorization": `Bearer ${token}`
             }
-          })
-        if(response.data.status==200)
-        {
-            setaddField(addField.filter(val=>val.uniqueid!=id))
+        });
+    
+        // Check if the deletion was successful
+        if (response.data.status == 200) {
+            // Update the available keys after deletion
+            const updatedKeys = addField.filter(val => val.uniqueid !== id);
+            setaddField(updatedKeys);
+    
+            // If no keys remain, update the display to show "No Available Key"
+            if (updatedKeys.length === 0) {
+                setavailablekeys([]);
+                setisusingownkey(false);
+            } else {
+                setavailablekeys(updatedKeys);
+            }
         }
-    }
+    };
+    
 
     const handlesecurityChange = (id, value) => {
         setaddField(prevFields =>
@@ -232,11 +248,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
         if(response.data.status==200)
         {    
             
-            if(response.data.status==200)
-            {
-                alert('key saved')
-            }
-            
+           console.log("save")
         }
        // alert(JSON.stringify(addField))
     }
@@ -304,155 +316,120 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
     }
 
   return (
-    <div className={`${hidenavbar?'ml-[4%] w-[96%]':'ml-[22%] w-[78%]'} select-none h-screen p-4 font-noto  flex flex-col space-y-4 font-inter bg-white`}>
-        <div className='w-[100%] flex flex-col h-[100%] justify-center'>
-        <div className='w-[100%] pt-[33px] h-[50px] flex flex-row items-center justify-start'>
-                <div className='w-[20px] h-[20px] text-gray-500'><IoInformationCircle size={20} /></div>
-                <div className='text-[16px] pl-2 font-bold font-inter text-gray-500'>
-                    {
-                        !checkisusingownkey?
-                            <p>You are currently using Incube Api</p>
-                        :
-                            <p>You are currently using Manual APi</p>
-                    }
-                </div>
-                
-            </div>
-        <div className='w-[100%] pt-[33px] h-[300px] flex flex-col'>
-                
-                {
-                    availablekeys.length>0?
-                    <div>
-                     <div className='text-[14px] flex items-center font-inter font-semibold pl-5 text-gray-500'>
-    <p className=''>Available Keys</p>
-    <FaKey  className='ml-2'/>
-</div>
-
-                    <div  className='space-y-2 w-[100%] flex overflow-y-auto scrollbar-hide flex-col h-[50px] p-5'>
-                {
-                    availablekeys.map(val=>
-                    
-                        <div key={val._id} className='text-[14px] font-inter flex flex-row space-x-3'>
-                            <div><p className='font-bold'>{val.Type}</p></div>
-                            <div className='font-inter '><p>{val.Api_value}</p></div>
-                            <div className='font-inter'><p>created by <span className='font-inter font-semibold'>{val.Creator}</span></p></div>
-                            <div className='flex space-x-2 text-[13px] text-green-500'><input type='radio' checked={val.active=='yes'?true:false} onChange={(e)=>handleActivebtn(e)} value={JSON.stringify({uniqueid:val.uniqueid,Type:val.Type,Api_value:val.Api_value,security:val.security,Creator:val.Creator,Member:Logemail,active:'yes'})} name='activekey'/> <p>activate</p></div>
-                            <div className='font-inter'><p className='text-[14px] text-gray-400'>{val.security}</p></div>
-                        </div>
-                    
-                    )
-                }
-               
-                </div>
-                <div className=' w-[100%] h-[30px] mt-4 flex flex-row space-x-2 cursor-pointer ml-5'>
-                    <div onClick={handleActiveKey} className='w-[120px] h-[30px] mt-2 font-semibold font-inter text-[14px] bg-blue-500 text-white rounded-md flex items-center justify-center'>
-                        <p>Active key</p>
-                    </div>
-                    <div onClick={handleDefaultActiveKey} className='w-[120px] h-[30px] mt-2 font-semibold
-                     font-inter text-[14px] bg-blue-500 text-white rounded-md  flex items-center justify-center'>
-                        <p>Set to Incubes</p>
-                    </div>
-                </div>
-                </div>
-                :
-                <div className='text-[14px] flex items-center font-inter font-semibold pl-5 text-gray-500'>
-    <p className=''>No Available Key</p>
-    <FaKey  className='ml-2'/>
-</div>
-                }
-            </div>
-
-            <div className='w-[100%] pt-[33px] h-[300px]  flex flex-col'>
-                <div className='text-[16px] font-inter pl-5 font-bold'>
-                    <p>Added Keys</p>
-                </div>
-                <div className='w-[100%] flex overflow-y-auto scrollbar-hide flex-col space-y-2 h-[110px] p-5'>
-                    {/* <div className='text-[14px]'>
-                        <p>0 added keys</p>
-                    </div> */}
-                    {
-                    createdKeys.length>0?
-                        createdKeys.filter(val=>val.Member==Logemail && val.Creator==Logemail).map(val=>
-                            <div key={val._id} className='text-[14px] flex flex-row space-x-3'>
-                            <div><p className='font-bold'>{val.Type}</p></div>
-                            <div><p>{val.Api_value}</p></div>
-                            <div>
-                                <div onClick={()=>{setpopup(true);setapikeyvalue(val.Api_value);setuniqueid(val.uniqueid);setType(val.Type)}} className='cursor-pointer w-[20px] h-[20px] text-gray-700'>
-                                    <IoShareSocial size={20} />
-                                </div>
-                                
-                            </div>
-                            <div>
-                            <div onClick={()=>{setsharedwithpopup(true);setapikeyvalue(val.Api_value);setuniqueid(val.uniqueid);setType(val.Type)}} className='cursor-pointer w-[20px] h-[20px] text-gray-700'>
-                                    <IoPersonRemove size={20} />
-                                </div>
-                            </div>
-                            
-                        </div>
-                        )
-                        :
-                        <div className='text-[14px] font-inter'>
-                            <p>0 added keys</p>
-                        </div>
-                    }
-                    
-                    
-                    
-                </div>
-            </div>
-
-            <div className='h-[500px] p-5 flex flex-col space-y-2'>
-                <div className='w-[100%] flex space-y-2 font-inter font-bold'>
-                    <p>Create/Edit Keys</p>
-                </div>
-                <div className='h-[100px] overflow-y-auto  scrollbar-hide flex-col flex space-y-3'>
-                {
-                    addField.filter(val=>val.Member==Logemail&& val.Creator==Logemail).map(val=>
-                        <div key={val.uniqueid} className='flex flex-row space-x-2  h-[30px]'>
-                                <select onChange={(e)=>handleApitype(val.uniqueid,e.target.value)} className='border-[1px] border-gray-100 font-inter  text-[14px]'>
-                                    <option>Gemini</option>
-                                    <option>Google</option>
-                                </select>
-                                <div className='w-[390px] h-[30px] text-[14px]'>
-                                    <input onChange={(e)=>handlefieldkey(val.uniqueid,e.target.value)} value={val.Api_value} type='text' placeholder='paste your api key' className='rounded-md flex items-center border-[1px] w-[100%] h-[100%] pl-2'/>
-                                </div>
-                                {
-                                    addField.length>1?
-                                    <div onClick={()=>handledeletefield(val.uniqueid,val.Api_value)} className='w-[20px] cursor-pointer flex items-center hover:text-red-500 text-gray-500'>
-                                        <MdDelete size={20}/>
-
-                                    </div>
-                                    :
-                                    <></>
-                                }
-                                <div className='w-[80px] space-x-2  rounded-md justify-center items-center flex flex-row h-[30px]'>
-                                    <input name={`security-${val.uniqueid}`} onChange={(e)=>handlesecurityChange(val.uniqueid,e.target.value)} checked={val.security=='private'} value='private' type='radio' />
-                                    <p className='text-[14px] font-semibold font-inter '>private</p>
-                                </div>
-
-                                <div className='w-[80px] space-x-2  rounded-md justify-center items-center flex flex-row h-[30px]'>
-                                    <input name={`security-${val.uniqueid}`}  onChange={(e)=>handlesecurityChange(val.uniqueid,e.target.value)} value='public' checked={val.security=='public'} type='radio'/>
-                                    <p className='text-[14px] font-semibold font-inter'>public</p>
-                                </div>
-
-                        </div>
-                    )
-                }
-                </div>
-                <div onClick={handlenewfield} className='cursor-pointer w-[100px] items-center justify-center space-x-2 h-[35px] flex flex-row bg-white ' style={{boxShadow: '0px 0px 4px #D1D5DB'}}>
-                    <div className='text-blue-500'><FaPlus className='text-[14px]' /></div>
-                    <div className='text-[14px] text-blue-500 font-bold font-inter'><p>Add Field</p></div>
-                </div>
-                <div onClick={handleSave} className='flex flex-row h-[120px] ml-1 items-center'>
-                        <div className='w-[60px] flex items-center justify-center rounded-md h-[30px] bg-blue-500 font-bold font-inter text-white'>
-                            <p>Save</p>
-                        </div>
-                </div>
-            </div>
+ 
+        
+        
+        <div className={`${hidenavbar ? 'ml-[4%] w-[96%]' : 'ml-[22%] w-[78%]'} select-none h-screen p-4 font-noto flex flex-col space-y-4 bg-gray-50`}>
+    <div className='w-full flex flex-col bg-white rounded-lg shadow-lg p-6'>
+        <div className='flex items-center text-gray-500 mb-4'>
+            <IoInformationCircle size={20} className="mr-2" />
+            <span className="text-lg font-bold">
+                {checkisusingownkey ? 'You are currently using Manual API' : 'You are currently using Incube API'}
+            </span>
         </div>
+
+        <div className='mb-8'>
+           
+        {availablekeys.length > 0 ? (
+    <>
+        <h2 className="text-gray-500 text-md font-semibold mb-2">
+            Available Keys 
+            <FaKey className="inline ml-2 text-gray-600" />
+        </h2>
+        <div className="space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 p-2">
+            {availablekeys.map((val) => (
+                <div key={val._id} className="flex items-center justify-between bg-gray-100 p-3 rounded-md">
+                    <span className="text-sm font-bold">{val.Type}</span>
+                    <span className="text-gray-500">{val.Api_value}</span>
+                    <span className="text-gray-400">Created by {val.Creator}</span>
+                    <input
+                        type="radio"
+                        id={`active-${val._id}`}
+                        checked={val.active === 'yes'}
+                        onChange={() => handleActivebtn(val._id)}
+                        value={val._id}
+                        name="activekey"
+                    />
+                    <label htmlFor={`active-${val._id}`} className="text-xs text-green-500 cursor-pointer">
+                        Activate
+                    </label>
+                </div>
+            ))}
+        </div>
+    </>
+) : (
+    <p className="flex items-center text-gray-500 text-md font-semibold">
+        No Available Key
+        <FaKey className="ml-2 text-gray-600" />
+    </p>
+)}
+
+
+        </div>
+
+        <div className='mb-8'>
+            <h2 className="text-gray-800 text-md font-bold mb-2">Added Keys</h2>
+            {createdKeys.length > 0 ? (
+                <div className='space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 p-2'>
+                    {createdKeys.filter(val => val.Member === Logemail && val.Creator === Logemail).map((val) => (
+                        <div key={val._id} className='flex items-center justify-between bg-gray-100 p-3 rounded-md'>
+                            <span className='text-sm font-bold'>{val.Type}</span>
+                            <span className='text-gray-500'>{val.Api_value}</span>
+                            <IoShareSocial size={20} className="text-gray-700 cursor-pointer" onClick={() => setpopup(true)} />
+                            <IoPersonRemove size={20} className="text-gray-700 cursor-pointer" onClick={() => setsharedwithpopup(true)} />
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <p className="text-gray-500 text-md font-semibold">0 added keys</p>
+            )}
+        </div>
+
+        <div className='flex flex-col space-y-4'>
+            <h2 className="font-bold text-gray-800">Create/Edit Keys</h2>
+            
+            {/* Field Inputs */}
+            {addField.map((val) => (
+                <div key={val.uniqueid} className='flex items-center space-x-4'>
+                    <select onChange={(e) => handleApitype(val.uniqueid, e.target.value)} className='border-gray-300 text-sm rounded-md'>
+                        <option>Gemini</option>
+                        <option>Google</option>
+                    </select>
+                    <input onChange={(e) => handlefieldkey(val.uniqueid, e.target.value)} value={val.Api_value} placeholder='Paste your API key' className='border rounded-md p-2 w-64' />
+                    {addField.length > 1 && (
+                        <MdDelete size={20} className="text-red-500 cursor-pointer" onClick={() => handledeletefield(val.uniqueid, val.Api_value)} />
+                    )}
+                    <div className='flex space-x-2'>
+                        <label className='flex items-center space-x-1'>
+                            <input type='radio' name={`security-${val.uniqueid}`} value='private' checked={val.security === 'private'} onChange={(e) => handlesecurityChange(val.uniqueid, e.target.value)} />
+                            <span className='text-gray-600 text-sm'>Private</span>
+                        </label>
+                        <label className='flex items-center space-x-1'>
+                            <input type='radio' name={`security-${val.uniqueid}`} value='public' checked={val.security === 'public'} onChange={(e) => handlesecurityChange(val.uniqueid, e.target.value)} />
+                            <span className='text-gray-600 text-sm'>Public</span>
+                        </label>
+                    </div>
+                </div>
+            ))}
+            
+            {/* Add Field Button */}
+            <div onClick={handlenewfield} className='cursor-pointer w-[100px] items-center justify-center space-x-2 h-[35px] flex flex-row bg-white' style={{ boxShadow: '0px 0px 4px #D1D5DB' }}>
+                <div className='text-blue-500'><FaPlus className='text-[14px]' /></div>
+                <div className='text-[14px] text-blue-500 font-bold font-inter'><p>Add Field</p></div>
+            </div>
+
+            {/* Save Button */}
+            <button onClick={handleSave} className='w-20 p-2 bg-blue-500 text-white font-bold rounded-md hover:bg-blue-600'>
+                Save
+            </button>
+        </div>
+    </div>
+
+
+        
         {
             popup?
-            <div className='fixed left-0 w-[100%] top-[-20px] h-[100%] bg-white bg-opacity-80'>
+            <div className='fixed left-0 w-[100%] top-[-20px] h-[100%] bg-black bg-opacity-40'>
                 <Privatekeypopup realtimecheckAPikeys={realtimecheckAPikeys} Type={Type} uniqueid={uniqueid} apikeyvalue={apikeyvalue} hidenavbar={hidenavbar} setpopup={setpopup}/>
             </div>
             :
@@ -461,7 +438,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
 
         {
             sharewithpopup?
-            <div className='fixed left-0 w-[100%] top-[-20px] h-[100%] bg-white bg-opacity-80'>
+            <div className='fixed left-0 w-[100%] top-[-20px] h-[100%] bg-black bg-opacity-40'>
                 <ShareKeysWith realtimecheckAPikeys={realtimecheckAPikeys} Type={Type} Api_value={apikeyvalue} hidenavbar={hidenavbar} setsharedwithpopup={setsharedwithpopup}/>
             </div>
             :

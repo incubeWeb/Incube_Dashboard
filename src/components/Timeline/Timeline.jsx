@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux'
 const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
     
     const [timelinedata,settimelinedata]=useState([])
+    const[timelineMini,settimelineMini]=useState([]);
     const token=localStorage.getItem('token')
     const userdata=jwtDecode(token)
     const Logemail=userdata.userdetails.email
@@ -253,7 +254,8 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
               "Authorization":`Bearer ${token}`
             }
           })
-          
+          const limitedTimelineData = response.data.data.slice(0, 10);
+          settimelineMini(limitedTimelineData)
           settimelinedata(response.data.data)
         }
         settimelinedatas()
@@ -275,9 +277,12 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
     
 
     useEffect(()=>{
-      const mergedData=[...timelinedata]
+      const mergedData={
+        
+        timelinedata:timelineMini}
       
       sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+      console.log("timeline",mergedData)
           },[timelinedata])
     
   

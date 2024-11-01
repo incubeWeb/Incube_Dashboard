@@ -580,7 +580,7 @@ useEffect(() => {
       {messages.length === 0 ? (
         <div className="flex flex-col items-center justify-center text-center h-full">
           <div className="font-inter font-bold text-[22px] mb-4 mt-64">What can I help with?</div>
-          <div className="flex items-center bg-gray-200 rounded-full py-2 px-4 w-full">
+          <div className="flex items-center bg-gray-200 rounded-full py-2 p-2 px-4 w-full">
             <textarea
               type="text"
               value={newMessage}
@@ -591,7 +591,7 @@ useEffect(() => {
               }}
               onKeyDown={handleKeyDown}
               placeholder="Type a message..."
-              className="flex-grow bg-gray-200 text-black outline-none scrollbar-hide"
+              className="flex-grow bg-gray-200 p-4 text-black outline-none scrollbar-hide"
               rows={1} // Minimum number of rows
               style={{ maxHeight: '80px', overflowY: 'auto' }}
             />

@@ -113,10 +113,10 @@ const AssignedDeals = ({id,setActiveField,setTeamLead_status,setstatus,setcomple
     return T.toLocaleTimeString()
   }
 useEffect(()=>{
-const mergedData=[
-  ...asignedDeals,
-  ...assingedtodeals
- ]
+const mergedData={
+  AssignedDeals:asignedDeals,
+  Assignedtodeals:assingedtodeals
+}
  sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
 },[asignedDeals,assingedtodeals])
 

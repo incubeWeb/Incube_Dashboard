@@ -13,7 +13,7 @@ import { CiShare2 } from 'react-icons/ci'
 import { jwtDecode } from 'jwt-decode'
 
 const PortfolioTop = ({selectedTab,setportfoliocardsdata,portfoliosecurity,realtimeportfoliostate,hidenavbar,sheetedited,selectedSheetId}) => {
-    const [valueid,setvalueid]=useState([{id:1,labelname:'Total fund',showValue:'$0'},{id:2,labelname:'Fund utilized',showValue:'$0'},{id:3,labelname:'Funds remaining',showValue:'$0'},{id:4,labelname:'ROI',showValue:'$0'}])
+    const [valueid,setvalueid]=useState([{id:1,labelname:'Total fund',showValue:'0'},{id:2,labelname:'Fund utilized',showValue:'0'},{id:3,labelname:'Funds remaining',showValue:'0'},{id:4,labelname:'ROI',showValue:'0'}])
     
     const [changevalue,setchangevalue]=useState(false)
     const token=localStorage.getItem('token')
@@ -39,7 +39,7 @@ const PortfolioTop = ({selectedTab,setportfoliocardsdata,portfoliosecurity,realt
             })
             if(response.data.status==-200)
             {
-              setvalueid([{id:1,labelname:'Total fund',showValue:'$0'},{id:2,labelname:'Fund utilized',showValue:'$0'},{id:3,labelname:'Funds remaining',showValue:'$0'},{id:4,labelname:'ROI',showValue:'$0'}])
+              setvalueid([{id:1,labelname:'Total fund',showValue:'0'},{id:2,labelname:'Fund utilized',showValue:'0'},{id:3,labelname:'Funds remaining',showValue:'0'},{id:4,labelname:'ROI',showValue:'0'}])
               return
             }
             
@@ -94,10 +94,10 @@ const PortfolioTop = ({selectedTab,setportfoliocardsdata,portfoliosecurity,realt
         
         <div className='grid grid-cols-4 gap-6'> 
            
-            <PortfolioCards selectedTab={selectedTab} portfoliosecurity={portfoliosecurity} selectedSheetId={selectedSheetId}  sheetedited={sheetedited} id={1} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-yellow-400 cursor-pointer rounded-[50%] shadow-[0_0_15px_rgba(255,255,0,1)]' valueid={valueid} setvalueid={setvalueid} component={ <BsCurrencyDollar  size={24} className='text-white'/>}/>
-            <PortfolioCards selectedTab={selectedTab} portfoliosecurity={portfoliosecurity} selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={2} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] h-[40px] flex items-center justify-center bg-violet-500  cursor-pointer rounded-[50%] shadow-[0_0_15px_rgba(138,43,226,1)]' valueid={valueid} setvalueid={setvalueid} component={<BsBox size={24} className='text-white'/>}/>
-            <PortfolioCards selectedTab={selectedTab} portfoliosecurity={portfoliosecurity} selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={3} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] h-[40px] flex items-center justify-center bg-pink-400  cursor-pointer rounded-[50%] shadow-[0_0_15px_rgba(255,20,147,1)]' valueid={valueid} setvalueid={setvalueid} component={<HiChartBar size={24} className='text-white' />}/>
-            <PortfolioCards selectedTab={selectedTab} portfoliosecurity={portfoliosecurity} selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={4} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] h-[40px] flex items-center justify-center bg-sky-400  cursor-pointer rounded-[50%] shadow-[0_0_15px_rgba(135,206,235,1)]' valueid={valueid} setvalueid={setvalueid} component={<IoPeople size={24} className='text-white' />}/>
+            <PortfolioCards selectedTab={selectedTab} portfoliosecurity={portfoliosecurity} selectedSheetId={selectedSheetId}  sheetedited={sheetedited} id={1} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] items-center flex justify-center h-[40px] bg-yellow-400 rounded-[50%] shadow-[0_0_15px_rgba(255,255,0,1)] cursor-pointer' valueid={valueid} setvalueid={setvalueid} component={ <BsCurrencyDollar  size={24} className='text-white'/>}/>
+            <PortfolioCards selectedTab={selectedTab} portfoliosecurity={portfoliosecurity} selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={2} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] h-[40px] flex items-center justify-center bg-violet-500 rounded-[50%] shadow-[0_0_15px_rgba(138,43,226,1)] cursor-pointer' valueid={valueid} setvalueid={setvalueid} component={<BsBox size={24} className='text-white'/>}/>
+            <PortfolioCards selectedTab={selectedTab} portfoliosecurity={portfoliosecurity} selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={3} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] h-[40px] flex items-center justify-center bg-pink-400 rounded-[50%] shadow-[0_0_15px_rgba(255,20,147,1)] cursor-pointer' valueid={valueid} setvalueid={setvalueid} component={<HiChartBar size={24} className='text-white' />}/>
+            <PortfolioCards selectedTab={selectedTab} portfoliosecurity={portfoliosecurity} selectedSheetId={selectedSheetId} sheetedited={sheetedited} id={4} setchangevalue={setchangevalue} changevalue={changevalue} hidenavbar={hidenavbar}  style='w-[40px] h-[40px] flex items-center justify-center bg-sky-400 rounded-[50%] shadow-[0_0_15px_rgba(135,206,235,1)] cursor-pointer' valueid={valueid} setvalueid={setvalueid} component={<IoPeople size={24} className='text-white' />}/>
                 
             
             

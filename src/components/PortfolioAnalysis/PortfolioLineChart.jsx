@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfieldselectedX, sheetfieldselectedY,selectedSheetName }) => {
+const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfieldselectedX, sheetfieldselectedY ,selectedSheetName}) => {
     const [data, setData] = useState([]);
     const [hoveredIndex, setHoveredIndex] = useState(null); // State to 
     function extractValue(input) {
         const continuousDigitsPattern = /^\D*(\d+)\D*$/;
         const str = String(input);
-        const match = str.match(continuousDigitsPattern);
+        const match = str.match(continuousDigitsPattern)
 
         return str.replace(/\D/g, '').length==0?0:parseInt(str.replace(/\D/g, ''))
     }

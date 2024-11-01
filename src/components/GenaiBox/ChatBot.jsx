@@ -12,7 +12,10 @@ const ChatBot = () => {
   const [newMessage, setNewMessage] = useState('');
   const [prompt, setPrompt] = useState(''); // To store the conversation for the API call
   const chatRef=useRef(null);
-  const toggleChat = () => setShowChat((prev) => !prev);
+  const toggleChat = (e) => {
+    e.stopPropagation(); // Prevent the event from bubbling up
+    setShowChat((prev) => !prev);
+  };
   const containerRef = useRef(null);
   const [loading, setLoading] = useState(false); 
   const [loadingDots, setLoadingDots] = useState('');
@@ -98,12 +101,6 @@ const ChatBot = () => {
       handleSend();
     }
   };
-
-  useEffect(() => {
-    if (showChat && chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
-    }
-  }, [messages, showChat]);
 
   const handleOutsideClick = (e) => {
     if (containerRef.current && !containerRef.current.contains(e.target)) {
@@ -216,12 +213,12 @@ const ChatBot = () => {
 
 
   return (
-    <div className="fixed flex flex-col items-center justify-center  h-screen ">
+    <div className="fixed flex flex-col items-center justify-center  h-screen " onClick={toggleChat}>
 
-<div className="fixed right-10 bottom-20 cursor-pointer flex items-end" onClick={toggleChat}>
-<div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-blue-200 to-blue-300 opacity-50 shadow-lg flex items-center justify-center">
+<div  className="fixed right-10 bottom-20 cursor-pointer flex items-end" >
+<div  className="relative w-16 h-16 rounded-full bg-gradient-to-br from-blue-200 to-blue-300 opacity-50 shadow-lg flex items-center justify-center">
   {/* Inner Shadow to create depth for the inner cube effect */}
-  <div
+  <div 
     className="absolute inset-0 rounded-full"
     style={{
       boxShadow: 'inset 0px 0px 15px rgba(0, 0, 0, 0.7)', // Inner shadow for depth effect
@@ -273,19 +270,19 @@ const ChatBot = () => {
             }
   
             if (msg.sender === 'Bot') {
-              if (isTableResponse(msg.text)) {
-                return renderTable(msg.text);
-              } else {
-                return (
-                  <div
-                    key={index}
-                    className="p-3 rounded-lg mb-2 bg-gray-100 text-left" // Adjusted padding to 3 and margin to 2
-                  >
-                    <div dangerouslySetInnerHTML={{ __html: formatMessage(msg.text) }} />
-                  </div>
-                );
-              }
-            }
+  if (isTableResponse(msg.text)) {
+    return renderTable(msg.text);
+  } else {
+    return (
+      <div
+        key={index}
+        className="p-3 rounded-lg mb-2 bg-gray-100 text-left"
+      >
+        <div dangerouslySetInnerHTML={{ __html: formatMessage(msg.text) }} />
+      </div>
+    );
+  }
+}
           })}
         </div>
   

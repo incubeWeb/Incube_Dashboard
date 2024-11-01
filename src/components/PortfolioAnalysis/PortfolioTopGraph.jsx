@@ -119,9 +119,7 @@ console.log("pot",selectedSheetName)
 },[selectedSheetName])
 
 
-sheetname.map((val)=>{
-    console
-})
+
 
     useEffect(()=>{
         setloading(true)
@@ -142,8 +140,8 @@ sheetname.map((val)=>{
                 setshowBarchart(false)
                 setshowPiechart(false)
                 setshowLinechart(false)
-                setchartDatatypeX('')
-                setchartDatatypeY('')
+                setchartDatatypeX('string')
+                setchartDatatypeY('string')
                 setsheetJson([])
                 setsheetfieldselectedX('')
                 setsheetfieldselectedY('')

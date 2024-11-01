@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import { RxCross2 } from 'react-icons/rx';
 
 const Privatekeypopup = ({ Type, uniqueid, apikeyvalue, hidenavbar, setpopup, realtimecheckAPikeys }) => {
@@ -12,7 +12,7 @@ const Privatekeypopup = ({ Type, uniqueid, apikeyvalue, hidenavbar, setpopup, re
   const userdata = jwtDecode(token);
   const Logemail = userdata.userdetails.email;
   const Logorganization = userdata.userdetails.organization;
-
+  const popupRef = useRef(null);
   const handlecancel = () => {
     setpopup(false);
   };
@@ -82,9 +82,22 @@ const Privatekeypopup = ({ Type, uniqueid, apikeyvalue, hidenavbar, setpopup, re
     user.email.toLowerCase().includes(searchUser.toLowerCase()) && user.email !== Logemail
   );
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        handlecancel();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className={`${hidenavbar ? 'ml-[2%] w-[90%]' : 'ml-[20%] w-[80%]'} font-inter h-screen pt-[5%] flex flex-col p-4 items-center justify-center space-y-4 font-sans`}>
-      <div className='space-y-2 flex flex-col w-[430px] h-[500px] rounded-md bg-white p-4 border-[1px] border-gray-100'>
+      <div  ref={popupRef} className='space-y-2 flex flex-col w-[430px] h-[500px] rounded-md bg-white p-4 border-[1px] border-gray-100'>
         <div className='w-[100%] h-[40px] flex items-center justify-end'>
           <div className='w-[16px] h-[16px] cursor-pointer' onClick={handlecancel}>
             <RxCross2 size={16} className='text-black' />

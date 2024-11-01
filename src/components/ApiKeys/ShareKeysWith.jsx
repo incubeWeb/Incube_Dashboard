@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useRef } from 'react'
 import { FaMinus } from 'react-icons/fa'
 import { RxCross2 } from 'react-icons/rx'
 
@@ -12,6 +12,8 @@ const ShareKeysWith = ({realtimecheckAPikeys,hidenavbar,setsharedwithpopup,Api_v
     const Logemail=userdata.userdetails.email
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
+    const popupRef = useRef(null); 
+    const [userDeleted, setUserDeleted] = useState(false);
     useEffect(()=>{
         const getMember=async()=>{
             
@@ -31,7 +33,9 @@ const ShareKeysWith = ({realtimecheckAPikeys,hidenavbar,setsharedwithpopup,Api_v
             }
         }
         getMember()
-    },[])
+    },[realtimecheckAPikeys, userDeleted])
+
+
 
     useEffect(()=>{
         const getMember=async()=>{
@@ -72,20 +76,34 @@ const ShareKeysWith = ({realtimecheckAPikeys,hidenavbar,setsharedwithpopup,Api_v
           })
         if(response.data.status==200)
         {
-            alert('removed key access')
-            //setsharedwithpopup(false)
+          
+        
+            setUserDeleted(!userDeleted); // Toggle userDeleted state to trigger useEffect
+        
         }
     }
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (popupRef.current && !popupRef.current.contains(event.target)) {
+          handlecancel();
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
     
   return (
    <div className={`${hidenavbar?'ml-[2%] w-[90%]':'ml-[20%] w-[80%] '} font-inter h-screen pt-[5%] flex flex-col p-4 items-center justify-center space-y-4 font-sans `}>
-        <div className='space-y-2 flex flex-col w-[430px] h-[470px] rounded-md bg-white p-4 border-[1px] border-gray-100'>
+        <div  ref={popupRef} className='space-y-2 flex flex-col w-[430px] h-[470px] rounded-md bg-white p-4 border-[1px] border-gray-100'>
         <div className='w-[100%] h-[40px] flex items-center justify-end' >
                 <div className='w-[16px] h-[16px] cursor-pointer' onClick={handlecancel}>
                   <RxCross2 size={16} className='text-black'/>
                 </div>
           </div>
-          <div className='font-semibold font-inter text-gray-900 text-[18px]'><p>Added Users.</p></div>
+          <div className='font-semibold font-inter text-gray-600 text-[18px] '><p>Shared With</p></div>
           <div className='w-[100%] h-[80%] overflow-y-auto space-y-1 font-inter  mb-2'>
               
            
@@ -107,8 +125,8 @@ const ShareKeysWith = ({realtimecheckAPikeys,hidenavbar,setsharedwithpopup,Api_v
                 
               )
               :
-              <div>
-                No user added in this
+              <div className='text-gray-500 text-[16px] mt-4 font-semibold'>
+                No user added 
               </div>
             }
             

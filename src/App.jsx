@@ -204,32 +204,38 @@ function App() {
 
   return (
     <BrowserRouter>
-          {login? <Navigation navbarref={navbarref} showsmallnav={showsmallnav} setshowsmallnav={setshowsmallnav} login={login} setlogin={setLoginIn} googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />:<></>}
-         
-         {login ? 
-          <div className="fixed flex flex-col items-center justify-center h-screen z-50 scrollbar-hide">
- <ChatBot/>
-  </div>
-         :<></>}
-          <Routes>
-            <Route path="/" element={!login?<Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn}/>:<></>} />
-            <Route path="/dashboard" element={
-              <ProtectedRoute login={login}><Dashboard navbarref={navbarref} showsmallnav={showsmallnav} sethidenavbar={sethidenavbar} realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
-            <Route path="/dealpipeline" element={
-              <ProtectedRoute login={login}>
-              <FirstCol filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>
-              </ProtectedRoute>} />
-            <Route path="/dealsourcing" element={
-              <ProtectedRoute login={login}><Dealsourcing hidenavbar={hidenavbar}/></ProtectedRoute>} />
-            <Route path="/adduser" element={<ProtectedRoute login={login}><Addusers realtimeuser={realtimeuser} setActiveField={setActiveField} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
-            <Route path="/allDocs" element={<ProtectedRoute login={login}><Alldocs realtimedocumentvisibility={realtimedocumentvisibility} filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar}/></ProtectedRoute>} />
-            <Route path='/portfolio' element={<ProtectedRoute login={login}><Portfolio realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited} hidenavbar={hidenavbar} /></ProtectedRoute>}/>
-            <Route path='/keys' element={<ProtectedRoute login={login}><Apikeys realtimecheckAPikeys={realtimecheckAPikeys} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
-            <Route path='/AI' element={<ProtectedRoute login={login}><Ai realtimecheckAPikeys={realtimecheckAPikeys} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
-          
-          </Routes>
+      {login ? (
+        <Navigation
+          navbarref={navbarref}
+          showsmallnav={showsmallnav}
+          setshowsmallnav={setshowsmallnav}
+          login={login}
+          setlogin={setLoginIn}
+          googleaccountconnected={googleaccountconnected}
+          activeField={activeField}
+          hidenavbar={hidenavbar}
+          sethidenavbar={sethidenavbar}
+          setActiveField={setActiveField}
+        />
+      ) : <></>}
       
-      
+      {login && location.pathname !== '/AI' ? (
+        <div className="fixed flex flex-col items-center justify-center h-screen z-50 scrollbar-hide">
+          <ChatBot />
+        </div>
+      ) : <></>}
+
+      <Routes>
+        <Route path="/" element={!login ? <Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn} /> : <></>} />
+        <Route path="/dashboard" element={<ProtectedRoute login={login}><Dashboard navbarref={navbarref} showsmallnav={showsmallnav} sethidenavbar={sethidenavbar} realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar} /></ProtectedRoute>} />
+        <Route path="/dealpipeline" element={<ProtectedRoute login={login}><FirstCol filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar} /></ProtectedRoute>} />
+        <Route path="/dealsourcing" element={<ProtectedRoute login={login}><Dealsourcing hidenavbar={hidenavbar} /></ProtectedRoute>} />
+        <Route path="/adduser" element={<ProtectedRoute login={login}><Addusers realtimeuser={realtimeuser} setActiveField={setActiveField} hidenavbar={hidenavbar} /></ProtectedRoute>} />
+        <Route path="/allDocs" element={<ProtectedRoute login={login}><Alldocs realtimedocumentvisibility={realtimedocumentvisibility} filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar} /></ProtectedRoute>} />
+        <Route path='/portfolio' element={<ProtectedRoute login={login}><Portfolio realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited} hidenavbar={hidenavbar} /></ProtectedRoute>} />
+        <Route path='/keys' element={<ProtectedRoute login={login}><Apikeys realtimecheckAPikeys={realtimecheckAPikeys} hidenavbar={hidenavbar} /></ProtectedRoute>} />
+        <Route path='/AI' element={<ProtectedRoute login={login}><Ai realtimecheckAPikeys={realtimecheckAPikeys} hidenavbar={hidenavbar} /></ProtectedRoute>} />
+      </Routes>
     </BrowserRouter>
   );
 }
