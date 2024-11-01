@@ -254,7 +254,16 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     const handleBackButton=()=>{
         setopenChat(false)
     }
+    const chatEndRef=useRef(null)
+    useEffect(() => {
+      const scrollToBottom = () => {
+        if (chatEndRef.current) {
+          chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+      };
     
+      scrollToBottom();
+    }, [sendedMsg, receivedMsg]); 
    
     useEffect(()=>{
 const mergedData={
@@ -324,7 +333,9 @@ const mergedData={
                   </div>
                 </div>
             )
+            
           }
+          <div ref={chatEndRef}></div>
         </div>
       )
   }

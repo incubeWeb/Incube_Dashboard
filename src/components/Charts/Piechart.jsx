@@ -114,6 +114,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
       let selectedsheetidfordrive=''
       let selectedsheetfromdbname=''
       let piechartcount=[]
+      let sheetdbdata=[]
 
       entireData.map((m, index) => {
         if (index === id) {
@@ -130,6 +131,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
           selectedsheetidfordrive=m?.selectedsheetfromdbname || ""
           selectedsheetfromdbname=m?.selectedsheetfromdbname || ""
           piechartcount=m?.piechartCount || []
+          sheetdbdata=m?.sheetdbdata || []
           
         }
       });
@@ -142,6 +144,12 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
           
           setmydata(convertedData)
         }
+       else if(sheetdbdata.length>0)
+          {
+            const convertedData= convertDataTypes(sheetdbdata, {name:chartdatatypex,value:chartdatatypey});
+            
+            setmydata(convertedData)
+          }
       
      else if (fromApi && !isSheetchart) {
       

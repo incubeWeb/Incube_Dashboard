@@ -40,9 +40,7 @@ const CalendarWidgit = ({id,setBoxes,boxes,mygoogleaccountisconnected}) => {
   const [saveingooglecalendar,setsaveingooglecalendar]=useState(false)
 
   // Sample events
-  const [events, setEvents] = useState([
-    
-  ]);
+  const [events, setEvents] = useState([]);
 
   useEffect(()=>{
     const setAllEventsfromdb=async()=>{
@@ -138,6 +136,7 @@ const CalendarWidgit = ({id,setBoxes,boxes,mygoogleaccountisconnected}) => {
         })
       }
 
+
     }
     if(mygoogleaccountisconnected)
     {
@@ -193,6 +192,7 @@ const CalendarWidgit = ({id,setBoxes,boxes,mygoogleaccountisconnected}) => {
 
         if(response.data.status==200){
           setEvents((prevEvents) => [...prevEvents, {
+            Gid:"",
             title: newEventtitle,
             description:newEventdescription,
             fromgoogle:true,
@@ -409,7 +409,7 @@ const CalendarWidgit = ({id,setBoxes,boxes,mygoogleaccountisconnected}) => {
     setCurrentEvent(event); // Set the event to be edited
     console.log(event)
     
-    setNewEvent({ title: event.title,description:event.description ,start: event.start, end: event.end,Gid:event.Gid });
+    setNewEvent({ title: event.title,description:event.description ,start: event.start, end:event.end, Gid:event.Gid });
     setIsEditing(true);
   };
 

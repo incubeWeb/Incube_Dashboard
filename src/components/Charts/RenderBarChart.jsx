@@ -112,6 +112,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
       let selectedsheetidfordrive=''
       let selectedsheetfromdbname=''
       let barchartcount=[]
+      let sheetdbdata=[]
       
       entireData.map((m,index)=>{
         if(index==id)
@@ -131,6 +132,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
           selectedsheetidfordrive=m?.selectedsheetfromdbname || ""
           selectedsheetfromdbname=m?.selectedsheetfromdbname || ""
           barchartcount=m?.barchartCount || []
+          sheetdbdata=m?.sheetdbdata || []
         }
       });
 
@@ -139,6 +141,11 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
           const convertedData= convertDataTypes(barchartcount, {name:chartdatatypex,uv:chartdatatypey});
           setmydata(convertedData)
         }
+        else if(sheetdbdata.length>0)
+          {
+            const convertedData= convertDataTypes(sheetdbdata, {name:chartdatatypex,uv:chartdatatypey});
+            setmydata(convertedData)
+          }
       
       else if(fromApi && !isSheetchart) { 
        

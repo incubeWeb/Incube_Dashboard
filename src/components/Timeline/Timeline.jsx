@@ -279,6 +279,31 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
       settimelinedatas()
     },[realtimetimeline])
 
+    const timelineEndRef=useRef(null);
+
+    useEffect(() => {
+      const scrollToBottom = () => {
+        if (timelineEndRef.current) {
+          timelineEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+      };
+    
+      scrollToBottom();
+    }, [realtimetimeline]); 
+
+
+    useEffect(() => {
+      const scrollToBottom = () => {
+        if (timelineEndRef.current) {
+          timelineEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+      };
+
+      setTimeout(()=>{
+        scrollToBottom();
+      },300)
+      
+    }, []); 
     
 
     useEffect(()=>{
@@ -295,7 +320,6 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
   {timelinedata.map((item) =>
     provideData(item) !== "notshow" ? (
       <div
-      
         key={item.key || item._id}
         className="flex w-[100%] h-auto flex-row space-x-2 items-center"
       >
@@ -331,6 +355,7 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
             <p className="text-[12px]">{timeData(item)}</p>
           </div>
         </div>
+        <div ref={timelineEndRef}></div>
       </div>
     ) : null
   )}

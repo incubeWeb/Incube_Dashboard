@@ -115,11 +115,12 @@ const fieldConversionsApi={
       let selectedsheetidfordrive=''
       let selectedsheetfromdbname=''
       let areachartcount=[]
+      let sheetdbdata=[]
         entireData.map((m,index)=>
         {
           if(index==id)
           {
-            console.log(m.areachartCount)
+            
             selectedYaxis=m?.selectedYAxis || ""
             selectedXaxis=m?.selectedXAxis || ""
             isSheetchart=m?.isSheetChart || ""
@@ -135,6 +136,7 @@ const fieldConversionsApi={
           selectedsheetidfordrive=m?.selectedsheetfromdbname || ""
           selectedsheetfromdbname=m?.selectedsheetfromdbname || ""
           areachartcount=m?.areachartCount || []
+          sheetdbdata=m?.sheetdbdata||[]
            
           }
         }
@@ -143,10 +145,16 @@ const fieldConversionsApi={
     
    if(areachartcount.length>0)
     {
-      console.log("bhavesh here area",areachartcount)
+      
       const convertedData= convertDataTypes(areachartcount, {pv:chartdatatypex,uv:chartdatatypey});
       setmydata(convertedData)
     }
+   else if(sheetdbdata.length>0)
+      {
+        
+        const convertedData= convertDataTypes(sheetdbdata, {pv:chartdatatypex,uv:chartdatatypey});
+        setmydata(convertedData)
+      }
     else if(fromApi&&!isSheetchart)
     { 
       

@@ -65,7 +65,9 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
   useEffect(() => {
     const handleClickOutside = (event) => {
         if (popupRef.current && !popupRef.current.contains(event.target)) {
-            setIsPopupOpen(false);
+          setIsPopupOpen(false);
+          setsheetpopup(false)
+          setsheetClicked(false)
         }
     };
 
@@ -150,8 +152,8 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                         setshowvalue(val.portfoliowidgit.showValue)
                         seticonname(val.portfoliowidgit.portfolioicon)
                         setIcon(getIconComponent(val.portfoliowidgit.portfolioicon))
-                        setcurrencyvalue(currencyValue)
-                        console.log("zp",capturingPortfoliowidgitvalues)
+                        setcurrencyvalue(val.portfoliowidgit.currencyValue)
+                        
                     }
                 }
             )
@@ -182,7 +184,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     {
         const settingvalue=()=>{
             let myid=id+1
-            const isFine=JSON.stringify({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname,currencyValue:currencyValue})===JSON.stringify({id:myid,labelname:'Enter Label',showValue:'$0',portfolioicon:''})
+            const isFine=JSON.stringify({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname,currencyValue:currencyValue})===JSON.stringify({id:myid,labelname:'Enter Label',showValue:'$0',portfolioicon:'',currencyValue:currencyValue})
            if(!isFine)
            {
             
@@ -308,116 +310,136 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
   },[])
 
   return (
-    <div className='flex h-[100%] flex-col  bg-white cursor-default space-y-2'>
+    <div ref={popupRef} className='flex h-[100%] flex-col  bg-white cursor-default space-y-2'>
       
     <div className='-mt-4 cursor-pointer'  ><HiOutlineDotsVertical onClick={()=>{setshowFilterMenu(true)}} size={20}/></div>
     {showFilterMenu && (
-<div className='absolute left-1 top-0 w-[150px] p-3 bg-white border-gray-300 border-[1px] rounded-md z-50'>
-<RxCross2 onClick={()=>{setshowFilterMenu(false)}} className='absolute right-2 top-1 cursor-ponter' />
-    <div
-        className='p-1 hover:bg-blue-400  flex items-center rounded-md  text-[12px] font-semibold font-inter cursor-pointer'
-        onClick={() => {setShowPopup(!showPopup);setshowFilterMenu(false) }}>
-        <p className='p-1 '>Change Icon</p>
-    </div>
-    <div
+  <div className="">
+    <div className='absolute left-1 top-0 w-[150px] p-3 bg-white border-gray-300 border-[1px] rounded-md z-50'>
+      <RxCross2 onClick={() => { setshowFilterMenu(false) }} className='absolute right-2 top-1 cursor-pointer' />
+      <div
+        className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-semibold font-inter cursor-pointer'
+        onClick={() => { setShowPopup(!showPopup); setshowFilterMenu(false) }}>
+        <p className='p-1'>Change Icon</p>
+      </div>
+      <div
         className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-inter font-semibold cursor-pointer'
-        onClick={() =>{handleEdit();setshowFilterMenu(false)}}>
+        onClick={() => { handleEdit(); setshowFilterMenu(false) }}>
         <p className='p-1'>Edit Label</p>
-    </div>
-    <div
+      </div>
+      <div
         className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-inter h-[40px] font-semibold cursor-pointer'
-        onClick={() =>{  handlePlusClick() ;setshowFilterMenu(false)} }>
+        onClick={() => { handlePlusClick(); setshowFilterMenu(false) }}>
         <p className='p-1'>Add Sheet</p>
+      </div>
     </div>
-</div>
+  </div>
 )}
+
     <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px]  rounded-full bg-gray-100 h-[20px] fixed right-0 mt-4 mr-3 top-[1px]' onClick={deleteWidgit}>
     <IoMdClose size={20} className='text-black' />
     </div> 
     
     
    
-    
-   
+{/*     
+    <div className="flex items-center justify-end pr-2">
+        <IoMdClose 
+            size={18} 
+            className="text-black cursor-pointer hover:text-gray-600 transition-colors duration-200" 
+            onClick={() => {
+                setsheetpopup(false);
+            }} 
+        />
+    </div> */}
    
     {       
                 sheetpopup?
                 
-                    <div className=' flex flex-col space-y-2  overflow-y-auto scrollbar-hide '>
-                    <div className='w-[20px] cursor-pointer ' onClick={()=>{setsheetpopup(false);<RxCross2 className='w-[20px]  mt-4'/>}}>
-                            <IoMdClose size={20} className='text-black mb-6' />
-                            
-                            </div>
-                        <div className='h-[100px]'>
-                           
+                <div ref={popupRef} className="flex flex-col space-y-2 overflow-y-auto scrollbar-hide bg-white">
+    {/* Close Button */}
+    <div className="flex items-center justify-end pr-2">
+        <IoMdClose 
+            size={20} 
+            className="text-gray-700 cursor-pointer hover:text-gray-500 transition duration-200 ease-in-out transform hover:scale-105" 
+            onClick={() => {
+                setsheetpopup(false);
+            }} 
+        />
+    </div>
+
+    {/* Main Content */}
+    <div className="h-[100px] flex items-center justify-center text-gray-500 font-medium italic">
+        {sheets.length === 0 ? (
+            <p className="text-gray-500">No sheets found</p>
+        ) : (
+            <div className="w-full mt-6 space-y-4 overflow-y-auto scrollbar-hide">
+                <div className="mt-6" /> {/* Added margin-top to provide space */}
+                {sheets
+                    .filter((doc) => doc.fileType === 'xlsx')
+                    .map((doc) => (
+                        <div 
+                            key={doc._id} 
+                            onClick={() => handlesheetclick(doc._id, doc.name)}
+                            className="w-full h-[60px] p-6 bg-gray-100 rounded-lg shadow-md cursor-pointer flex items-center space-x-4 transition-transform duration-200 transform hover:scale-105 hover:bg-white hover:gray-600"
+                        >
+                            <FaRegFileExcel className="text-green-600" size={22} />
+                            <p className="text-[15px] tracking-wider font-semibold truncate">
+                                {doc.name.replace(/^\d+_/, "")}
+                            </p>
                         </div>
-                       
-                        <div className={`p-1 flex h-[200px] items-center rounded-md text-[14px] flex-col font-inter`}>
-    {sheets.length === 0 ? (
-        <p className='text-gray-500'>No sheets found</p>
-    ) : (
-        (sheets || []).filter(doc => doc.fileType === 'xlsx').map(doc => (
-            <div key={doc._id} className='w-[100%] h-[100px] -mt-8 flex flex-col space-y-2 overflow-y-auto'>
-                <div onClick={() => handlesheetclick(doc._id, doc.name)} className='w-[100%] h-[25px] hover:bg-blue-500 p-2 rounded-md select-none cursor-pointer hover:text-white flex flex-row items-center justify-start'>
-                    <FaRegFileExcel className={`text-green-500`} size={19} />
-                    <p className={`text-[14px] px-5 tracking-wider overflow-y-auto`}>
-                        {doc.name.replace(/^\d+_/, "")}
-                    </p>
-                </div>
+                    ))
+                }
             </div>
-        ))
-    )}
+        )}
+    </div>
 </div>
 
-                        
-                        
-                    </div>
+
                
                 :
                 sheetClicked?
                 
-                    <div className='p-2 flex flex-col space-y-2  z-[40] '>
-                        
-                        <div className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
-                            <div className='flex items-center justify-center h-[40px]' onClick={(()=>{setsheetClicked(false); setsheetpopup(true)})}>
-                            <IoMdArrowBack  className=' cursor-pointer' size={17}/>
-                            </div>
-                            <div className='text-gray-500 h-[40px] text-[15px] flex items-center justify-center'>
-                                {sheetname.replace(/^\d+_/, "")}
-                            </div>
-                            
-                        </div>
-                        <div className=' w-[100%] h-[40%] flex flex-col items-center justify-center space-y-8 space-x-2'>
-                            
-                            <select onChange={(e)=>setsheetfieldselected(e.target.value)} className='w-[220px] h-[30px] text-[14px] text-gray-700 rounded-md border-gray-300 border-[1px]'>
-                            {Loading2 ? (
-            <option value="">
-         <div className="flex items-center">
-          <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
-         Loading...
-         </div>
-        </option>
-) : (                
-                                (sheetKeys||[]
-                                    
-                                ).map(k=>
-                                    <option key={k._id}>{k}</option>
-                                    )
-                               ) }
+                <div ref={popupRef} className='p-4 flex flex-col w-full h-full bg-white rounded-lg shadow-lg fixed top-0 left-0 z-[40] overflow-y-auto'>
+    
+    <div className='w-full flex space-x-2 items-center justify-start'>
+        <div className='flex items-center justify-center h-[40px] transition-transform transform hover:scale-110 cursor-pointer' onClick={(() => {setsheetClicked(false); setsheetpopup(true)})}>
+            <IoMdArrowBack className='text-gray-700' size={20} />
+        </div>
+        <div className='text-gray-800 font-semibold text-[16px] flex items-center justify-center'>
+            {sheetname.replace(/^\d+_/, "")}
+        </div>
+    </div>
 
-                            </select>
-                        </div>
-                        <div className='w-[100%] mt-[14px] flex flex-row items-center justify-center'>
-                            <div onClick={handleselectsheetfield} className='select-none cursor-pointer flex flex-row w-[120px] rounded-md h-[40px] items-center justify-center bg-gradient-to-r from-green-500 to-green-800 spae-x-2'>
-                            {Loading2 ? (
-        <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
-      ) : (
-                                <p className='text-[14px] text-white'>Set sheet field</p>)}
-                                
-                            </div>
-                        </div>
-                        
+    <div className='w-full flex mt-6 flex-col items-center justify-center space-y-6'>
+        <select onChange={(e) => setsheetfieldselected(e.target.value)} className='w-[220px] h-[35px] text-[14px] text-gray-700 rounded-md border-gray-300 border-2 transition duration-200 ease-in-out outline-none '>
+            {Loading2 ? (
+                <option value="" disabled>
+                    <div className="flex items-center">
+                        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+                        Loading...
                     </div>
+                </option>
+            ) : (
+                (sheetKeys || []).map(k =>
+                    <option key={k._id} className="text-gray-700">{k}</option>
+                )
+            )}
+        </select>
+    </div>
+
+    <div className='w-full flex flex-row items-center justify-center'>
+        <div onClick={handleselectsheetfield} className='select-none mt-2 cursor-pointer flex flex-row w-[120px] rounded-md h-[40px] items-center justify-center bg-gradient-to-r from-green-500 to-green-800 space-x-2 transition duration-200 ease-in-out transform hover:scale-105 hover:shadow-lg'>
+            {Loading2 ? (
+                <AiOutlineLoading3Quarters className="animate-spin text-[14px] text-white" />
+            ) : (
+                <p className='text-[14px] text-white font-semibold'>Set sheet field</p>
+            )}
+        </div>
+    </div>
+    
+</div>
+
                 
                 :
                  
@@ -514,8 +536,7 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
             }
     
     
-    
-    
+          
     
 </div>
 

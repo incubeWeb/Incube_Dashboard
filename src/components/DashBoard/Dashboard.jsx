@@ -343,7 +343,7 @@ useEffect(() => {
       setBoxes(prev=>
       prev.map(b=>
         b.id===portfoliocardwidgitcount.id
-        ? { ...b, portfoliowidgitcount: {id:portfoliocardwidgitcount.id,labelname:portfoliocardwidgitcount.labelname,showValue:portfoliocardwidgitcount.showValue,portfolioicon:portfoliocardwidgitcount.portfolioicon} } 
+        ? { ...b, portfoliowidgitcount: {id:portfoliocardwidgitcount.id,labelname:portfoliocardwidgitcount.labelname,showValue:portfoliocardwidgitcount.showValue,portfolioicon:portfoliocardwidgitcount.portfolioicon,currencyValue:portfoliocardwidgitcount.currencyValue} } 
         : b
       )
       )
