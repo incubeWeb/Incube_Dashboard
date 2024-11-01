@@ -371,11 +371,11 @@ useEffect(() => {
       onChange={(e) => {
         handleTypedMsg(e);
         e.target.style.height = 'auto'; // Reset height
-        const maxHeight = 80; // Set your max height here
+        const maxHeight = 70; // Set your max height here
         e.target.style.height = `${Math.min(e.target.scrollHeight, maxHeight)}px`;
       }}
       rows={1} // Minimum number of rows
-      style={{ maxHeight: '80px', overflowY: 'auto' }}
+      style={{ maxHeight: '70%', overflowY: 'auto' }}
     />
   </div>
   <div className='flex items-center justify-center ml-2'>

@@ -12,13 +12,11 @@ const ChatBot = () => {
   const [newMessage, setNewMessage] = useState('');
   const [prompt, setPrompt] = useState(''); // To store the conversation for the API call
   const chatRef=useRef(null);
-  const toggleChat = (e) => {
-    e.stopPropagation(); // Prevent the event from bubbling up
-    setShowChat((prev) => !prev);
-  };
-  const containerRef = useRef(null);
+
   const [loading, setLoading] = useState(false); 
   const [loadingDots, setLoadingDots] = useState('');
+  const toggleChat = () => setShowChat((prev) => !prev);
+  const containerRef = useRef(null);
   const handleSend = async () => {
     if (newMessage.trim().length==0) {
      
@@ -102,21 +100,7 @@ const ChatBot = () => {
     }
   };
 
-  const handleOutsideClick = (e) => {
-    if (containerRef.current && !containerRef.current.contains(e.target)) {
-      setShowChat(false); // Close chat when clicked outside
-    }
-  };
-
-  useEffect(() => {
-    if (showChat) {
-      document.addEventListener('mousedown', handleOutsideClick);
-    } else {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    }
-    return () => document.removeEventListener('mousedown', handleOutsideClick);
-  }, [showChat]);
-
+  
   const formatMessage = (text) => {
     // Replace "**text**" with "<strong>text</strong>" for bold formatting
     // Replace "\n" with "<br />" for line breaks
@@ -209,13 +193,31 @@ const ChatBot = () => {
     link.click();
     document.body.removeChild(link);
   };
-  
+  useEffect(() => {
+    if (showChat && chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [messages, showChat]);
 
+  const handleOutsideClick = (e) => {
+    if (containerRef.current && !containerRef.current.contains(e.target)) {
+      setShowChat(false); // Close chat when clicked outside
+    }
+  };
+
+  useEffect(() => {
+    if (showChat) {
+      document.addEventListener('mousedown', handleOutsideClick);
+    } else {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    }
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [showChat]);
 
   return (
-    <div className="fixed flex flex-col items-center justify-center  h-screen " onClick={toggleChat}>
+    <div className="fixed flex flex-col items-center justify-center  h-screen " >
 
-<div  className="fixed right-10 bottom-20 cursor-pointer flex items-end" >
+<div  className="fixed right-10 bottom-20 cursor-pointer flex items-end" onClick={toggleChat} >
 <div  className="relative w-16 h-16 rounded-full bg-gradient-to-br from-blue-200 to-blue-300 opacity-50 shadow-lg flex items-center justify-center">
   {/* Inner Shadow to create depth for the inner cube effect */}
   <div 
