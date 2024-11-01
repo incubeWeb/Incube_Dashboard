@@ -189,7 +189,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     {
         const settingvalue=()=>{
             let myid=id+1
-            const isFine=JSON.stringify({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname+""+currencyValue})===JSON.stringify({id:myid,labelname:'Enter Label',showValue:'$0',portfolioicon:'',currencyValue:''})
+            const isFine=JSON.stringify({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname+""+currencyValue})===JSON.stringify({id:myid,labelname:'Enter Label',showValue:'$0',portfolioicon:'',currencyValue:'$'})
            if(!isFine)
            {
             
