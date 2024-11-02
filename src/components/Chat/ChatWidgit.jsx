@@ -334,7 +334,7 @@ useEffect(() => {
                   </div>
                   <div className='flex justify-end items-end rounded-sm'>
                      <div className='flex bg-blue-400 pl-2 pt-2 pr-2 pb-2 mr-2 ml-4 max-w-xs text-white rounded-lg relative'>
-              <p className='text-[14px] text-white'>{msg.message}</p>
+              <p className='text-[12px] text-white'>{msg.message}</p>
             </div>
                   </div>
                   <div className='flex w-full justify-end items-end'>
@@ -349,7 +349,7 @@ useEffect(() => {
                       </div>
                       {msg.sender}
                     </div>
-                    <p className='text-[14px] pl-2 pr-2 pt-2 pb-2 mr-6 mb-3 bg-gray-200 text-black rounded-lg relative border-[1px] border-gray-300'>
+                    <p className='text-[12px] pl-2 pr-2 pt-2 pb-2 mr-6 mb-3 max-w-xs bg-gray-200 text-black rounded-lg relative border-[1px] border-gray-300'>
               {msg.message}
             </p>
                     <div className='flex w-[60px] items-end justify-start text-[9px]'>
