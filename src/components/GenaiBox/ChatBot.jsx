@@ -304,9 +304,9 @@ const ChatBot = () => {
           </button>
         )}
   
-        <div className="flex mt-2 space-x-2 items-center"> {/* Added items-center to center vertically */}
+        <div className="flex mt-2 space-x-2 items-center">
   <textarea
-    className="flex-grow bg-gray-200 text-black outline-none px-4  py-2 rounded-lg resize-none overflow-hidden scrollbar-hide"
+    className="flex-grow bg-gray-200 text-black outline-none px-4 py-2 rounded-lg resize-none overflow-hidden scrollbar-hide"
     placeholder="Type a message..."
     value={newMessage}
     onChange={(e) => {
@@ -315,17 +315,25 @@ const ChatBot = () => {
       const maxHeight = 200; // Set your max height here
       e.target.style.height = `${Math.min(e.target.scrollHeight, maxHeight)}px`; // Set new height with max height
     }}
-    onKeyDown={handleKeyDown}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent the default action (inserting a new line)
+        handleSend(); // Optionally send the message when Enter is pressed
+      } else {
+        handleKeyDown(e); // Call your existing handler for other keys
+      }
+    }}
     rows={1} // Minimum number of rows
     style={{ maxHeight: '200px', overflowY: 'auto', resize: 'none' }} // Ensure overflow is handled
   />
   <button
-    className=" text-gray-600 p-2 rounded-r-lg h-10 flex items-center justify-center" // Added flex for centering
+    className="text-gray-600 p-2 rounded-r-lg h-10 flex items-center justify-center"
     onClick={handleSend}
   >
     <MdSend size={22} />
   </button>
 </div>
+
       </div>
     </div>
   )}
