@@ -333,7 +333,7 @@ useEffect(() => {
                     {msg.sender}
                   </div>
                   <div className='flex justify-end items-end rounded-sm'>
-                     <div className='flex bg-blue-400 pl-2 pt-2 pb-2 mr-2 ml-4 max-w-xs text-white rounded-lg relative'>
+                     <div className='flex bg-blue-400 pl-2 pt-2 pr-2 pb-2 mr-2 ml-4 max-w-xs text-white rounded-lg relative'>
               <p className='text-[14px] text-white'>{msg.message}</p>
             </div>
                   </div>
