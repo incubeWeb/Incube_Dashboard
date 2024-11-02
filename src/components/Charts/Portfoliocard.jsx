@@ -184,7 +184,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     {
         const settingvalue=()=>{
             let myid=id+1
-            const isFine=JSON.stringify({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname,currencyValue:currencyValue})===JSON.stringify({id:myid,labelname:'Enter Label',showValue:'$0',portfolioicon:'',currencyValue:currencyValue})
+            const isFine=JSON.stringify({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname,currencyValue:currencyValue})===JSON.stringify({id:myid,labelname:'Enter Label',showValue:'0',portfolioicon:'',currencyValue:currencyValue})
            if(!isFine)
            {
             
@@ -241,12 +241,12 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
             
             if(isNaN(sheetJson[0][sheetfieldselected]))
             {
-                value='$0'
+                value='0'
             }
         }
         catch(e)
         {
-            value='$0'
+            value='0'
         }
 
         
@@ -299,11 +299,15 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     const[showFilterMenu,setshowFilterMenu]=useState(false)
 
     useEffect(()=>{
-const mergedData=[...sheets,
-  ...sheetKeys,
-...sheetJson]
-sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
-    },[sheets,sheetKeys,sheetJson])
+      const mergedData={
+        
+        portfoliocard:boxes}
+      sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
+      console.log("MergedData",boxes)
+          },[boxes])
+
+
+    
 
   useEffect(()=>{
     console.log("zp",sheets.length)

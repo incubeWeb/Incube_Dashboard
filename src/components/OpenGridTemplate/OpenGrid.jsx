@@ -340,7 +340,7 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
                             </div>
                         </div>
                         }
-                        <div className='absolute right-0 flex flex-row h-[100%] justify-end w-[48%] pl-4 pt-2'>
+                        <div className='absolute right-0 flex flex-row h-[100%] justify-end w-[28%] pl-4 pt-2'>
                      
                             <div className=' cursor-pointer flex flex-row space-x-10 mr-4 bg-gradient-to-r from-blue-600 to-blue-800 w-[150px] h-[35px] rounded-md items-center justify-center text-white border-blue-600 border-[1px] shadow-gray-300 shadow-md' onClick={(e)=>handleDownloadDealsourcefile(e)}>
                                 <p className='text-[13px] font-inter font-semibold'>Download</p>
@@ -360,16 +360,16 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
                             <div>
                                 <p>Setting Description ...</p>
                             </div>:
-                            <div className=' w-[50%] flex flex-row items-center justify-start space-x-2'>
+                            <div className=' w-[70%] flex flex-row items-start justify-start space-x-2'>
                         {
                             Editcompanydescription?
-                            <div>
-                                <input value={editedcompanydescription} className='w-[180px] h-[40px] border-[1px] border-gray-300 rounded-md pl-1 text-[14px] ' onChange={(e)=>seteditedcompanydescription(e.target.value)} onKeyPress={(e)=>{e.key=='Enter'?handleEditcompanydescription():<></>}}/>
+                            <div className='w-[100%]'>
+                                <input value={editedcompanydescription} className='w-[100%] h-[40px] border-[1px] border-gray-300 rounded-md pl-1 text-[14px] ' onChange={(e)=>seteditedcompanydescription(e.target.value)} onKeyPress={(e)=>{e.key=='Enter'?handleEditcompanydescription():<></>}}/>
                             </div>
                             :
-                            <p className='md:text-[14px] text-[14px] font-inter font-semibold'>{companydescription}</p>
+                            <p className='md:text-[14px] overflow-y-auto scrollbar-hide h-[40px]  text-[14px] font-inter font-semibold'>{companydescription}</p>
                         }
-                            <div className='w-[16px] h-[16px] cursor-pointer' onClick={()=>seteditcompanydescription(!Editcompanydescription)}>
+                            <div className='w-[16px] z-[10] h-[16px] cursor-pointer' onClick={()=>seteditcompanydescription(!Editcompanydescription)}>
                                 <MdOutlineEdit size={16}/>
                             </div>
                         </div>
@@ -378,7 +378,7 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
                     </div>
             </div>
             <div className='flex flex-row w-[100%] h-[50px] space-x-2'>
-                    <div className='w-[85%] h-[100%] bg-gray-100 rounded-md flex flex-row items-center pl-2 space-x-5'>
+                    <div className='w-[85%] h-[100%] z-[10] mt-2 bg-gray-100 rounded-md flex flex-row items-center pl-2 space-x-5'>
                         <div className='w-[100%] h-[75%] rounded-md flex items-center justify-start flex-row space-x-2'>
                             {(Tabs||[]).map(Tab=>
                                 
@@ -391,7 +391,7 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
                                 
                             )}
                             
-                            <div className='md:w-[75px] w-[60px] h-[80%] text-blue-600 rounded-md bg-white flex items-center justify-center shadow-lg' onClick={()=>addTabs()} >
+                            <div className='md:w-[75px] w-[60px] h-[80%] text-blue-600 rounded-md bg-white flex items-center  justify-center shadow-lg' onClick={()=>addTabs()} >
                                 <p className='text-[12px] font-semibold font-inter'>Add new</p>
                             </div>
                             
@@ -436,14 +436,14 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
                 <div className='w-[100%] h-[50%] '>
                 {
                     
-                        <ChatCard id={id} realtimetabchats={realtimetabchats} currentTab={currentTab} CompanyName={companyname}/>
+                        <ChatCard id={id} hidenavbar={hidenavbar} realtimetabchats={realtimetabchats} currentTab={currentTab} CompanyName={companyname}/>
                 
                 }
                 </div>
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <FilesDoc id={id} filesadded={filesadded} CompanyName={companyname} currentTab={currentTab}/>
+                        <FilesDoc id={id}  filesadded={filesadded} CompanyName={companyname} currentTab={currentTab}/>
                 
                 }
                 </div>
@@ -462,7 +462,7 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
                 <div className='w-[100%] h-[60%]'>
                 {
                     
-                        <ChatCard id={id} realtimetabchats={realtimetabchats} currentTab={currentTab} CompanyName={companyname}/>
+                        <ChatCard id={id} hidenavbar={hidenavbar} realtimetabchats={realtimetabchats} currentTab={currentTab} CompanyName={companyname}/>
                 
                 }
                 </div>

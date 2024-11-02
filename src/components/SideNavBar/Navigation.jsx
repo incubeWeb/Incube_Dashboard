@@ -34,7 +34,9 @@ const Navigation = ({setmygoogleaccountisconnected,navbarref,setdealpipelinefrom
     const [openappList,setopenappList]=useState([{"id":1,"image":googleLogo,"name":"Google","active":false}])
     const [lockedapplist,setlockedapplist]=useState([{"id":1,"name":"Airtable","image":airtable},{"id":2,"name":"GitHub","image":github},{"id":3,"name":"Microsoft Outlook","image":outlook}])
 
-    const [showappnav,setshowappnav]=useState(false)
+    const connectanappRef=useRef(null)
+    const connectanappRef2=useRef(null)
+    const [showappnav,setshowappnav]=useState(true)
 
     const [showApplicationNav,setshowApplicationNav]=useState(false)
 
@@ -72,11 +74,9 @@ const Navigation = ({setmygoogleaccountisconnected,navbarref,setdealpipelinefrom
     
 
     const ShowApplicationNavfun=(val)=>{
-        
-        
-
         if(val){
             setshowApplicationNav(!showApplicationNav)
+            setshowappnav(false)
             if(hidenavbar){
                 gsap.to(applicationNavRef.current,{
                     x:"18%",
@@ -91,6 +91,7 @@ const Navigation = ({setmygoogleaccountisconnected,navbarref,setdealpipelinefrom
             }
         }else{
             setshowApplicationNav(!showApplicationNav)
+            setshowappnav(true)
             gsap.to(applicationNavRef.current,{
                 x:"-100%",
                 duration:0.4
@@ -101,6 +102,7 @@ const Navigation = ({setmygoogleaccountisconnected,navbarref,setdealpipelinefrom
    
     const hideNav=()=>{
         ShowApplicationNavfun(false)
+
         if(!hidenavbar)
         {
             setshowsmallnav(true)
@@ -403,7 +405,7 @@ const Navigation = ({setmygoogleaccountisconnected,navbarref,setdealpipelinefrom
                     <div className='absolute right-12'><TbExternalLink size={18} /></div>
                 </div>
 
-                <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white hover:bg-gray-300 cursor-pointer rounded-md pl-2`} onClick={()=>{ShowApplicationNavfun(true)}}>
+                <div ref={connectanappRef} className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white hover:bg-gray-300 cursor-pointer rounded-md pl-2`} onClick={()=>{ShowApplicationNavfun(showappnav)}}>
                     <div className='w-[24px] flex justify-center text-[#667085] items-center'><FaPlus size={16}/></div>
                     <div className='text-[14px] font-inter font-semibold'><p>Connect an Application</p></div>
                 </div>
@@ -433,7 +435,7 @@ const Navigation = ({setmygoogleaccountisconnected,navbarref,setdealpipelinefrom
 
     
         <div ref={applicationNavRef} className='w-[21%] h-[100%] z-[80] bg-white fixed' >
-            <ApplicationsNav ShowApplicationNavfun={ShowApplicationNavfun} lockedapplist={lockedapplist} setlockedapplist={setlockedapplist} openappList={openappList} setopenappList={setopenappList} setshowApplicationNav={setshowApplicationNav} setShowPopup={setShowPopup} showPopup1={showPopup1} setShowPopup1={setShowPopup1} googleaccountconnected={googleaccountconnected} handleRemoveGoogleConnect={handleRemoveGoogleConnect} showPopup={showPopup} handleGoogleConnect={handleGoogleConnect}/>
+            <ApplicationsNav connectanappRef={connectanappRef} connectanappRef2={connectanappRef2} ShowApplicationNavfun={ShowApplicationNavfun} lockedapplist={lockedapplist} showApplicationNav={showApplicationNav} setlockedapplist={setlockedapplist} openappList={openappList} setopenappList={setopenappList} setshowApplicationNav={setshowApplicationNav} setShowPopup={setShowPopup} showPopup1={showPopup1} setShowPopup1={setShowPopup1} googleaccountconnected={googleaccountconnected} handleRemoveGoogleConnect={handleRemoveGoogleConnect} showPopup={showPopup} handleGoogleConnect={handleGoogleConnect}/>
         </div>
        
     {showPopup1 && (
@@ -516,13 +518,21 @@ const Navigation = ({setmygoogleaccountisconnected,navbarref,setdealpipelinefrom
                         <PiStarFourBold size={24} className={`mx-auto ${activeField === '/AI' ? 'text-blue-600' : 'text-gray-500'}`} onClick={() => {setActiveField('/AI');setdealpipelinefromdashboardcompany([])}} />
                     </Link>
 
-                    <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white cursor-pointer rounded-md pl-2`} onClick={()=>{window.open('https://workflow.incubewhtsapp.xyz/','_blank')}}>
+                    {
+                        showsmallnav?
+                        <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white cursor-pointer rounded-md pl-2`} onClick={()=>{window.open('https://workflow.incubewhtsapp.xyz/','_blank')}}>
                     <div className='w-[24px] flex justify-center items-center'><img src={automation}/></div>
                     </div>
-                    
-                    <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white cursor-pointer rounded-md pl-2`} onClick={()=>{ShowApplicationNavfun(true)}}>
+                    :<></>
+                    }
+                    {
+                        showsmallnav?
+                    <div ref={connectanappRef2} className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white cursor-pointer rounded-md pl-2`} onClick={()=>{ShowApplicationNavfun(showappnav)}}>
                         <div className='w-[24px] flex justify-center text-[#667085] items-center'><FaPlus size={18}/></div>  
                     </div>
+                    :
+                    <></>
+                    }
 
                     
 

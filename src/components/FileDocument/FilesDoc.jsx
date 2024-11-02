@@ -168,7 +168,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                                             
                                             }
                                             
-                                            <span className='text-[14px] capitalize'>{file.name}</span>
+                                            <span className='text-[14px] capitalize'>{file.name.split('-')[1]}</span>
                                         </div>
                                         <p onClick={()=>{window.open(`${import.meta.env.VITE_S3_URL}${Logorganization}/${file.fileName}`,'_blank')}} target="_blank" rel="noopener noreferrer" className='text-blue-600 text-[14px]'>
                                             Open

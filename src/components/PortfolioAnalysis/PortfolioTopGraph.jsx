@@ -119,9 +119,7 @@ console.log("pot",selectedSheetName)
 },[selectedSheetName])
 
 
-sheetname.map((val)=>{
-    console
-})
+
 
     useEffect(()=>{
         setloading(true)
@@ -135,7 +133,7 @@ sheetname.map((val)=>{
                   "Authorization":`Bearer ${token}`
                 }
               })
-            
+            console.log("chjasdf",response.data.data)
             if(response.data.status==-200 || response.data.data==undefined)
             {
 
@@ -272,7 +270,7 @@ sheetname.map((val)=>{
               "Authorization":`Bearer ${token}`
             }
           })
-        if(response3.data.status==-200 && response3.data.message!="no refresh token found")
+        if(response3.data.status==200 && response3.data.message!="no refresh token found")
         {
             const files=response3.data.data
             setgooglesheetfiles(files)
@@ -606,7 +604,7 @@ sheetname.map((val)=>{
                         )}
                     </>
                 )}
-                {googlesheetfiles?.length > 0 && (
+                {googlesheetfiles.length > 0 && (
                     <div className='font-inter text-[16px] font-semibold mt-4'>
                         <p className='border-b pb-2'>Google Sheets:</p>
                     </div>
@@ -669,7 +667,7 @@ sheetname.map((val)=>{
           )}
       </>
   )}
-  {googlesheetfiles?.length > 0 && (
+  {googlesheetfiles.length > 0 && (
       <div className='font-inter text-[16px] font-semibold mt-4'>
           <p className='border-b pb-2'>Google Sheets:</p>
       </div>
@@ -731,7 +729,7 @@ sheetname.map((val)=>{
                       )}
                   </>
               )}
-              {googlesheetfiles?.length > 0 && (
+              {googlesheetfiles.length > 0 && (
                   <div className='font-inter text-[16px] font-semibold mt-4'>
                       <p className='border-b pb-2'>Google Sheets:</p>
                   </div>

@@ -6,12 +6,14 @@ import { jwtDecode } from 'jwt-decode'
 import axios from 'axios'
 import { AiOutlineClose } from 'react-icons/ai'
 import { IoLockClosed } from 'react-icons/io5'
-const ApplicationsNav = ({ShowApplicationNavfun,lockedapplist,setlockedapplist,openappList,setopenappList,setshowApplicationNav,setShowPopup,showPopup1, setShowPopup1,googleaccountconnected,handleRemoveGoogleConnect,showPopup,handleGoogleConnect}) => {
+const ApplicationsNav = ({connectanappRef,connectanappRef2,showappnav,setshowappnav,ShowApplicationNavfun,lockedapplist,setlockedapplist,openappList,setopenappList,setshowApplicationNav,setShowPopup,showPopup1, setShowPopup1,googleaccountconnected,handleRemoveGoogleConnect,showPopup,handleGoogleConnect}) => {
 
     const handleclickoutside=(e)=>{
-        if(appnavref.current && !appnavref.current.contains(e.target))
+        if(appnavref.current && !appnavref.current.contains(e.target) && !(connectanappRef2.current && connectanappRef2.current.contains(e.target)) && !(connectanappRef.current && connectanappRef.current.contains(e.target)))
         {
-            ShowApplicationNavfun(false)
+               
+                ShowApplicationNavfun(false)
+            
         }
     }
     

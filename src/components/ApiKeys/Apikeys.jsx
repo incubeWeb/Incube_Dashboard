@@ -61,6 +61,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
             if(response.data.data.length<=0)
             {
                 setaddField([{uniqueid:1,Type:'Gemini',Api_value:'',security:'private',Creator:Logemail,Member:Logemail,active:'no'}])
+                setcreatedKeys([])
             }
             else{
                 setaddField(response.data.data)
@@ -122,6 +123,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
             if(response.data.data.length<=0)
             {
                 setaddField([{uniqueid:1,Type:'Gemini',Api_value:'',security:'private',Creator:Logemail,Member:Logemail,active:'no'}])
+                setcreatedKeys([])
             }
             else{
                 setaddField(response.data.data)
@@ -170,11 +172,22 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
 
 
     const handlenewfield=()=>{
+        if(addField.length<=0)
+        {
+            setaddField([{uniqueid:1,Type:'Gemini',Api_value:'',security:'private',Creator:Logemail,Member:Logemail,active:'no'}]);
+            return 
+        }
+
         const lastIndex=addField[addField.length-1]
         const id=parseInt(lastIndex.uniqueid)+1
         setaddField(prev=>[...prev,{uniqueid:id,Type:'Gemini',Api_value:'',security:'private',Creator:Logemail,Member:Logemail,active:'no'}])
     }
     const handledeletefield=async(id,value)=>{
+        if(value.trim().length==0)
+        {
+            setaddField(addField.filter(val=>val.uniqueid!=id))
+            return
+        }
 
         const organization=Logorganization
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/delete-apikey`,{
@@ -218,8 +231,12 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
         setaddField([...fieldwithout,...newfield])
     }
     const handleSave=async()=>{
+        const filetered=addField.filter(val=>val.Api_value.trim().length>0)
+        if(filetered.length<=0){
+            return
+        }
         const organization=Logorganization
-        const Members=addField
+        const Members=filetered
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/api-keys/save-apikeys`,{
             organization:organization,
             Members:Members,
@@ -304,7 +321,7 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
     }
 
   return (
-    <div className={`${hidenavbar?'ml-[4%] w-[96%]':'ml-[22%] w-[78%]'} select-none h-screen p-4 font-noto  flex flex-col space-y-4 font-inter bg-white`}>
+    <div className={`${hidenavbar?'ml-[4%] w-[96%]':'ml-[21%] w-[78%]'} select-none h-screen p-4 font-noto  flex flex-col space-y-4 font-inter bg-white`}>
         <div className='w-[100%] flex flex-col h-[100%] justify-center'>
         <div className='w-[100%] pt-[33px] h-[50px] flex flex-row items-center justify-start'>
                 <div className='w-[20px] h-[20px] text-gray-500'><IoInformationCircle size={20} /></div>
@@ -416,15 +433,11 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
                                 <div className='w-[390px] h-[30px] text-[14px]'>
                                     <input onChange={(e)=>handlefieldkey(val.uniqueid,e.target.value)} value={val.Api_value} type='text' placeholder='paste your api key' className='rounded-md flex items-center border-[1px] w-[100%] h-[100%] pl-2'/>
                                 </div>
-                                {
-                                    addField.length>1?
+                                
                                     <div onClick={()=>handledeletefield(val.uniqueid,val.Api_value)} className='w-[20px] cursor-pointer flex items-center hover:text-red-500 text-gray-500'>
                                         <MdDelete size={20}/>
-
                                     </div>
-                                    :
-                                    <></>
-                                }
+                                    
                                 <div className='w-[80px] space-x-2  rounded-md justify-center items-center flex flex-row h-[30px]'>
                                     <input name={`security-${val.uniqueid}`} onChange={(e)=>handlesecurityChange(val.uniqueid,e.target.value)} checked={val.security=='private'} value='private' type='radio' />
                                     <p className='text-[14px] font-semibold font-inter '>private</p>

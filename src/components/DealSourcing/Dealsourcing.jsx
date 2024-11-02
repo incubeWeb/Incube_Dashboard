@@ -147,14 +147,12 @@ const Dealsourcing = ({hidenavbar}) => {
 //   }
   
 
-//   useEffect(()=>{
-// const mergedData=[...companies]
-// sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-//   },[companies])
-
   useEffect(()=>{
-    console.log("her",companies)
-  },[companies])
+const mergedData=[...companies]
+ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+   },[companies])
+
+ 
 
   return (
     <div className={`${hidenavbar?'ml-[2%] w-[100%]':'ml-[20%] w-[80%]'}select-none text-gray-800 flex flex-col p-[63px] pt-[30px] h-screen`}>

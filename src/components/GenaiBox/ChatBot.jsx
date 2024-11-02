@@ -12,10 +12,11 @@ const ChatBot = () => {
   const [newMessage, setNewMessage] = useState('');
   const [prompt, setPrompt] = useState(''); // To store the conversation for the API call
   const chatRef=useRef(null);
-  const toggleChat = () => setShowChat((prev) => !prev);
-  const containerRef = useRef(null);
+
   const [loading, setLoading] = useState(false); 
   const [loadingDots, setLoadingDots] = useState('');
+  const toggleChat = () => setShowChat((prev) => !prev);
+  const containerRef = useRef(null);
   const handleSend = async () => {
     if (newMessage.trim().length==0) {
      
@@ -99,27 +100,7 @@ const ChatBot = () => {
     }
   };
 
-  useEffect(() => {
-    if (showChat && chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
-    }
-  }, [messages, showChat]);
-
-  const handleOutsideClick = (e) => {
-    if (containerRef.current && !containerRef.current.contains(e.target)) {
-      setShowChat(false); // Close chat when clicked outside
-    }
-  };
-
-  useEffect(() => {
-    if (showChat) {
-      document.addEventListener('mousedown', handleOutsideClick);
-    } else {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    }
-    return () => document.removeEventListener('mousedown', handleOutsideClick);
-  }, [showChat]);
-
+  
   const formatMessage = (text) => {
     // Replace "**text**" with "<strong>text</strong>" for bold formatting
     // Replace "\n" with "<br />" for line breaks
@@ -212,16 +193,35 @@ const ChatBot = () => {
     link.click();
     document.body.removeChild(link);
   };
-  
+  useEffect(() => {
+    if (showChat && chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [messages, showChat]);
 
+  const Cuberef=useRef(null);
+  const handleOutsideClick = (e) => {
+    if (containerRef.current && !containerRef.current.contains(e.target) && !(Cuberef.current && Cuberef.current.contains(e.target))) {
+      setShowChat(false); // Close chat when clicked outside
+    }
+  };
+
+  useEffect(() => {
+    if (showChat) {
+      document.addEventListener('mousedown', handleOutsideClick);
+    } else {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    }
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [showChat]);
 
   return (
-    <div className="fixed flex flex-col items-center justify-center  h-screen ">
+    <div className="fixed flex z-[1000] flex-col items-center justify-center  h-screen " >
 
-<div className="fixed right-10 bottom-20 cursor-pointer flex items-end" onClick={toggleChat}>
-<div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-blue-200 to-blue-300 opacity-50 shadow-lg flex items-center justify-center">
+<div ref={Cuberef} className="fixed right-10 bottom-20 cursor-pointer flex items-end" onClick={toggleChat} >
+<div  className="relative w-16 h-16  rounded-full bg-gradient-to-br from-blue-200 to-blue-300 opacity-50 shadow-lg flex items-center justify-center">
   {/* Inner Shadow to create depth for the inner cube effect */}
-  <div
+  <div 
     className="absolute inset-0 rounded-full"
     style={{
       boxShadow: 'inset 0px 0px 15px rgba(0, 0, 0, 0.7)', // Inner shadow for depth effect
@@ -254,12 +254,12 @@ const ChatBot = () => {
   {showChat && (
     <div
       ref={containerRef}
-      className="fixed w-[60%] h-[60%] bg-white border border-gray-300 rounded-lg p-6 right-10 bottom-36" // Adjusted padding to 6
+      className="fixed w-[60%] h-[60%]  bg-white border border-gray-300 rounded-lg p-6 right-10 bottom-36" // Adjusted padding to 6
     >
       <div className="flex flex-col h-full space-y-4"> {/* Added space-y-4 for consistent spacing */}
         
         {/* Message area */}
-        <div className="flex-1 overflow-y-auto scrollbar-hide mb-2 p-2" ref={chatRef}> {/* Added p-2 for padding within message area */}
+        <div className="flex-1 overflow-y-auto scrollbar-hide  mb-2 p-2" ref={chatRef}> {/* Added p-2 for padding within message area */}
           {messages.map((msg, index) => {
             if (msg.sender === 'You') {
               return (
@@ -273,19 +273,19 @@ const ChatBot = () => {
             }
   
             if (msg.sender === 'Bot') {
-              if (isTableResponse(msg.text)) {
-                return renderTable(msg.text);
-              } else {
-                return (
-                  <div
-                    key={index}
-                    className="p-3 rounded-lg mb-2 bg-gray-100 text-left" // Adjusted padding to 3 and margin to 2
-                  >
-                    <div dangerouslySetInnerHTML={{ __html: formatMessage(msg.text) }} />
-                  </div>
-                );
-              }
-            }
+  if (isTableResponse(msg.text)) {
+    return renderTable(msg.text);
+  } else {
+    return (
+      <div
+        key={index}
+        className="p-3 rounded-lg mb-2 bg-gray-100 text-left"
+      >
+        <div dangerouslySetInnerHTML={{ __html: formatMessage(msg.text) }} />
+      </div>
+    );
+  }
+}
           })}
         </div>
   
@@ -305,7 +305,7 @@ const ChatBot = () => {
           </button>
         )}
   
-        <div className="flex mt-2 space-x-2 items-center"> {/* Added items-center to center vertically */}
+        <div className="flex mt-2 space-x-2 items-center">
   <textarea
     className="flex-grow bg-gray-200 text-black outline-none px-4 py-2 rounded-lg resize-none overflow-hidden scrollbar-hide"
     placeholder="Type a message..."
@@ -316,17 +316,25 @@ const ChatBot = () => {
       const maxHeight = 200; // Set your max height here
       e.target.style.height = `${Math.min(e.target.scrollHeight, maxHeight)}px`; // Set new height with max height
     }}
-    onKeyDown={handleKeyDown}
+    onKeyDown={(e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent the default action (inserting a new line)
+        handleSend(); // Optionally send the message when Enter is pressed
+      } else {
+        handleKeyDown(e); // Call your existing handler for other keys
+      }
+    }}
     rows={1} // Minimum number of rows
-    style={{ maxHeight: '200px', overflowY: 'auto' }} // Ensure overflow is handled
+    style={{ maxHeight: '200px', overflowY: 'auto', resize: 'none' }} // Ensure overflow is handled
   />
   <button
-    className=" text-gray-600 p-2 rounded-r-lg h-10 flex items-center justify-center" // Added flex for centering
+    className="text-gray-600 p-2 rounded-r-lg h-10 flex items-center justify-center"
     onClick={handleSend}
   >
     <MdSend size={22} />
   </button>
 </div>
+
       </div>
     </div>
   )}

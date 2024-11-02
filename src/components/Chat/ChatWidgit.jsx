@@ -28,12 +28,14 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
   const [receivedMsg,setreceivedMsg]=useState([])
   const [msg,setmsg]=useState('')
 
+  
+
   const token=localStorage.getItem('token')
   const userdata=jwtDecode(token)
   const Logemail=userdata.userdetails.email
   const Logorganization=userdata.userdetails.organization
   const Logrole=userdata.userdetails.role
-
+  const chatEndRef = useRef(null);
   const handleSearchUser=(e)=>{
     setSearchUser(e.target.value)
   }
@@ -53,12 +55,43 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
      
       setUsers(users)
     }
+
+    const fetchall=async()=>{
+      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/fetchallusers`,{organization:Logorganization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
+      const users=response.data.data
+    
+      setUsers(users)
+      const UserChatpositionRes=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/chatwidgituserpositionvalues`,{
+        email:Logemail+`${id}`,
+        organization:Logorganization
+      },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
+      if(UserChatpositionRes.data.status==200)
+      {
+       
+        const ans=UserChatpositionRes.data.data
+        setUsers(ans)
+      }
+      if(localStorage.getItem(`Chatwidgituserorder${id}`))
+      {
+        setUsers(JSON.parse(localStorage.getItem(`Chatwidgituserorder${id}`)))
+      }
+    }
+    
     
     if(searchUser!='')
     {
-      console.log(response.data)
     fun()
-    
+    }
+    else{
+      fetchall()
     }
     
   },[searchUser])
@@ -240,6 +273,7 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
       })
       if(response.data.status==200)
       {
+        
         setmsg('')
         document.getElementById(`text${id}`).value=''
       }
@@ -254,32 +288,56 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     const handleBackButton=()=>{
         setopenChat(false)
     }
-    const chatEndRef=useRef(null)
     useEffect(() => {
-      const scrollToBottom = () => {
-        if (chatEndRef.current) {
-          chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
+      // This effect runs when sendedMsg changes
+      const handleNewMessage = () => {
+          if (sendedMsg.length > 0) {
+              // Handle any side effects here, like scrolling to the bottom
+              console.log('New message sent:', sendedMsg[sendedMsg.length - 1]);
+          }
       };
     
-      scrollToBottom();
-    }, [sendedMsg, receivedMsg]); 
+      handleNewMessage(); // Call the function to handle new messages
+    }, [sendedMsg]); // Depend on sendedMsg to trigger the effect
+    
    
     useEffect(()=>{
-const mergedData={
-  sendmessage:{sendedMsg},
-  receivedMessage:{receivedMsg}
-  
-    }
-  sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-},[sendedMsg,receivedMsg])
+        const mergedData={
+          sendmessage:{sendedMsg},
+          receivedMessage:{receivedMsg}
+          
+            }
+          sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+        },[sendedMsg,receivedMsg])
     
+useEffect(() => {
+  const scrollToBottom = () => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  scrollToBottom();
+}, [sendedMsg, receivedMsg]); // Run whenever messages change
+
+useEffect(() => {
+  if (openChat) {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }
+}, [openChat]);
+
+useEffect(() => {
+  chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+}, [sendedMsg, receivedMsg]);
+
+
+
   return (
-    <div className=' bg-white space-y-2 font-inter shadow-gray-400 w-full  h-[100%] flex flex-col'>
+    <div className=' bg-white space-y-2 font-inter shadow-gray-400 w-full relative  h-[100%] flex flex-col'>
         {
                       clickedUser&&openChat!=''?
-                      <div className='flex flex-col space-y-4 font-noto p-[20px] fixed  w-[100%] h-[120%] top-0 left-0 rounded-md  bg-white scrollbar-hide  shadow-lg  mb-4 ' onClick={(e)=>e.stopPropagation()}>
-                        <div className='flex flex-row items-center h-[40px]'>
+                      <div className='flex flex-col space-y-4 font-noto p-[20px] fixed  w-[100%] h-[100%] top-0 left-0 rounded-md  bg-white scrollbar-hide  shadow-lg  mb-4 ' onClick={(e)=>e.stopPropagation()}>
+                        <div className='flex flex-row items-center h-[2%]'>
                           <div className='flex w-[30%] text-gray-400'>
                             <IoArrowBack size={18} className='cursor-pointer' onClick={()=>handleBackButton()} />
                           </div>
@@ -308,8 +366,8 @@ const mergedData={
                     {msg.sender}
                   </div>
                   <div className='flex justify-end items-end rounded-sm'>
-                     <div className='flex bg-blue-400 pl-2 pt-2 pb-2 mr-2 ml-4 max-w-xs text-white rounded-lg relative'>
-              <p className='text-[14px] text-white'>{msg.message}</p>
+                     <div className='flex bg-blue-400 pl-2 pt-2 pr-2 pb-2 mr-2 ml-4 max-w-xs text-white rounded-lg relative'>
+              <p className='text-[12px] text-white'>{msg.message}</p>
             </div>
                   </div>
                   <div className='flex w-full justify-end items-end'>
@@ -324,7 +382,7 @@ const mergedData={
                       </div>
                       {msg.sender}
                     </div>
-                    <p className='text-[14px] pl-2 pr-2 pt-2 pb-2 mr-6 mb-3 bg-gray-200 text-black rounded-lg relative border-[1px] border-gray-300'>
+                    <p className='text-[12px] pl-2 pr-2 pt-2 pb-2 mr-6 mb-3 max-w-xs bg-gray-200 text-black rounded-lg relative border-[1px] border-gray-300'>
               {msg.message}
             </p>
                     <div className='flex w-[60px] items-end justify-start text-[9px]'>
@@ -333,9 +391,8 @@ const mergedData={
                   </div>
                 </div>
             )
-            
           }
-          <div ref={chatEndRef}></div>
+          <div ref={chatEndRef} />
         </div>
       )
   }
@@ -346,34 +403,42 @@ const mergedData={
                         </div>
                        
           
-                        <div className='w-full h-50 flex items-center justify-between'>
-  <div className='flex-grow ml-2 mb-4 '>
+                        <div className=' absolute left-0 w-[100%] p-2 bottom-1 h-[15%] flex items-center justify-center'>
+  <div className='flex-grow  items-center justify-center'>
     <textarea
       id={`text${id}`}
-      className='w-full text-14 pl-2 h-auto px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:outline-none scrollbar-hide'
+      className='w-full text-[14px] pl-2 h-auto px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:outline-none scrollbar-hide'
       placeholder='Enter your message here....'
-      onKeyPress={(e) => (e.key === 'Enter' ? handleSendChat(e) : handleTypedMsg(e))}
+      onKeyPress={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault(); // Prevent new line
+          handleSendChat(e);
+        } else {
+          handleTypedMsg(e);
+        }
+      }}
       onChange={(e) => {
         handleTypedMsg(e);
         e.target.style.height = 'auto'; // Reset height
-        const maxHeight = 80; // Set your max height here
+        const maxHeight = 50; // Set your max height here
         e.target.style.height = `${Math.min(e.target.scrollHeight, maxHeight)}px`;
       }}
       rows={1} // Minimum number of rows
-      style={{ maxHeight: '80px', overflowY: 'auto' }}
+      style={{ maxHeight: '70%', overflowY: 'auto', resize: 'none' }}
     />
   </div>
   <div className='flex items-center justify-center ml-2'>
-    <IoSend size={18} className='cursor-pointer' onClick={(e) => handleSendChat(e)} />
+    <IoSend size={24} className='cursor-pointer' onClick={(e) => handleSendChat(e)} />
   </div>
 </div>
+
 
                       </div>
                       :
                       <></>
         }
         <div className='w-[100%] h-[45px] '>
-          <input className='w-[100%] h-[45px] border-[1px] border-gray-500    rounded-md text-[14px] pl-2' placeholder='Search' onChange={handleSearchUser}/> 
+          <input className='w-[100%] outline-none h-[45px] border-[1px] border-gray-500    rounded-md text-[14px] pl-2' placeholder='Search' onChange={handleSearchUser}/> 
         </div>
           <div className=' flex w-[100%] h-[70%] flex-row  '>
             {

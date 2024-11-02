@@ -70,7 +70,7 @@ const MeterComponent = ({selectedTab,hidenavbar,realtimeportfoliostate}) => {
           "Authorization":`Bearer ${token}`
         }
       })
-    if(response3.data.status==-200 && response3.data.message!="no refresh token found")
+    if(response3.data.status==200 && response3.data.message!="no refresh token found")
     {
         const files=response3.data.data
         setgoogledriveSheets(files)

@@ -209,11 +209,11 @@ function App() {
     <BrowserRouter>
           {login? <Navigation setmygoogleaccountisconnected={setmygoogleaccountisconnected} navbarref={navbarref} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} showsmallnav={showsmallnav} setshowsmallnav={setshowsmallnav} login={login} setlogin={setLoginIn} googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />:<></>}
          
-         {login ? 
-          <div className="fixed flex flex-col items-center justify-center h-screen z-50 scrollbar-hide">
- <ChatBot/>
-  </div>
-         :<></>}
+          {login && location.pathname !== '/AI' ? (
+        <div className="fixed flex flex-col items-center justify-center h-screen z-50 scrollbar-hide">
+          <ChatBot />
+        </div>
+      ) : <></>}
           <Routes>
             <Route path="/" element={!login?<Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn}/>:<></>} />
             <Route path="/dashboard" element={

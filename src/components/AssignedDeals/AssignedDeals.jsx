@@ -117,13 +117,16 @@ const AssignedDeals = ({id,setdealpipelinefromdashboardcompany,setActiveField,se
     return T.toLocaleTimeString()
   }
 
-useEffect(()=>{
-const mergedData=[
-  ...asignedDeals,
-  ...assingedtodeals
- ]
- sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-},[asignedDeals,assingedtodeals])
+  useEffect(()=>{
+    
+    
+    const mergedData={
+      AssignedDealsData:asignedDeals,
+     
+    }
+     sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+    
+    },[asignedDeals])
 
 const convertDate=(time)=>{
   const T=new Date(Number(time))
@@ -138,7 +141,7 @@ const convertDate=(time)=>{
         <div className='z-[10] mt-3 mr-2 cursor-pointer flex items-center justify-center w-[20px] rounded-xl h-[20px]  bg-gray-100 fixed right-[-2px] top-[-8px] ' onClick={deleteWidgit}>
               <RxCross2 size={14} className='text-black' />
         </div> 
-        <div className=' w-[100%] space-y-2 select-noneflex flex-col overflow-y-auto h-[100%]'>
+        <div className=' w-[100%] space-y-2 select-noneflex flex-col scrollbar-hide overflow-y-auto h-[100%]'>
            {
             Logrole=='admin' || Logrole=='super admin' ?
             <div className='flex flex-col'>
@@ -149,7 +152,7 @@ const convertDate=(time)=>{
             <></>
            }
            { Logrole=='team lead' || Logrole=='user'?
-            <div className='flex flex-col'>
+            <div className='flex flex-col overflow-auto scrollbar-hide'>
                 <p className='text-[16px]  font-semibold'>Related Deals:</p>
                 <p className='text-[14px] mb-4'>Your have total {[...assingedtodeals,...asignedDeals].filter(val=>val.member!=Logemail).length} deals</p>
             </div>
@@ -160,8 +163,8 @@ const convertDate=(time)=>{
             Logrole=='admin' || Logrole=='super admin' || Logrole=='team lead'?
             (asignedDeals||[]).map(doc=>
               doc.member!=Logemail?
-              <div onClick={()=>{handleCompany(doc._id,doc.organization)}} key={doc._id} className='cursor-pointer w-[100%] h-[18%] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
-                <p className='text-[14px] w-[80%] tracking-wide '> You have assinged <span className='font-bold'>{doc.organization}</span> to {doc.member} at {convertTime(doc.time)} on {convertDate(doc.time)} </p>
+              <div onClick={()=>{handleCompany(doc._id,doc.organization)}} key={doc._id} className='cursor-pointer w-[100%] h-[70px] overflow-auto scrollbar-hide flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
+                <p className='text-[13px] w-[80%] tracking-wide '> You have assinged <span className='font-bold'>{doc.organization}</span> to {doc.member} at {convertTime(doc.time)} on {convertDate(doc.time)} </p>
                 <div className='w-[20%] pr-2 flex items-center justify-end'>
                   <div className='w-[16px] h-[16px] c'>
                     <FaExternalLinkAlt size={16} className='text-gray-500'/>
@@ -171,8 +174,8 @@ const convertDate=(time)=>{
             </div>
             :
             
-              <div key={doc._id} onClick={()=>{handleCompany(doc._id,doc.organization)}} className='cursor-pointer w-[100%] h-[18%] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
-                  <p className='text-[14px] w-[80%] tracking-wide '> You have assinged <span className='font-bold'>{doc.organization}</span> to Yourself at {convertTime(doc.time)} on {convertDate(doc.time)} </p>
+              <div key={doc._id} onClick={()=>{handleCompany(doc._id,doc.organization)}} className='cursor-pointer w-[100%] h-[70px] flex flex-row border-[1px] border-gray-300 rounded-md items-center pl-2'>
+                  <p className='text-[13px] w-[80%] tracking-wide '> You have assinged <span className='font-bold'>{doc.organization}</span> to Yourself at {convertTime(doc.time)} on {convertDate(doc.time)} </p>
                   <div className='w-[20%] pr-2 flex items-center justify-end'>
                     <div className='w-[16px] h-[16px] c'>
                       <FaExternalLinkAlt size={16} className='text-gray-500'/>

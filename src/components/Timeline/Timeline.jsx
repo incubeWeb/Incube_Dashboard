@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux'
 const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
     
     const [timelinedata,settimelinedata]=useState([])
+    const[timelineMini,settimelineMini]=useState([]);
     const token=localStorage.getItem('token')
     const userdata=jwtDecode(token)
     const Logemail=userdata.userdetails.email
@@ -250,6 +251,49 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
 
         return toSend || `notshow`
     }
+
+    useEffect(()=>{
+      const fun=()=>{
+        if (timelineEndRef.current) {
+          timelineEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+        else{
+          setTimeout(()=>{
+            fun()
+          },500)
+          
+        }
+      }
+      
+        fun()
+      
+    },[])
+
+    useEffect(()=>{
+      const fun=()=>{
+        if (timelineEndRef.current) {
+          timelineEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+        else{
+          setTimeout(()=>{
+            fun()
+          },500)
+        }
+      }
+      
+        fun()
+      
+    },[realtimetimeline])
+
+
+    useEffect(()=>{
+      const mergedData={
+        
+        timelinedata:timelineMini}
+      
+        sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+        console.log("timeline",mergedData)
+        },[timelinedata])
     
     useEffect(()=>{
       const settimelinedatas=async()=>{
@@ -258,9 +302,13 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
               "Authorization":`Bearer ${token}`
             }
           })
+          const limitedTimelineData = response.data.data.slice(0, 10);
+          settimelineMini(limitedTimelineData)
           
           settimelinedata(response.data.data)
           timelineref.current.scrollTop=timelineref.current.scrollHeight
+
+          
         }
         settimelinedatas()
     },[])
@@ -275,6 +323,7 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
         
         settimelinedata(response.data.data)
         timelineref.current.scrollTop=timelineref.current.scrollHeight
+        
       }
       settimelinedatas()
     },[realtimetimeline])

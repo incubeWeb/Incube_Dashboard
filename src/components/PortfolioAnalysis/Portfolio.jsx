@@ -110,8 +110,13 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 return
             }
             const data=response.data.data
+           
+            if(response.data.security==undefined)
+            {
+                setportfoliosecurity('private')
+            }else{
             setportfoliosecurity(response.data.security)
-          
+            }
             
            // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
            const stateValues=JSON.parse(data)||[]
@@ -153,8 +158,10 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 }
               })
            
+              
             if(response.data.status==-200 || response.data.data==undefined)
             {
+                
                 setsheetmethod('')
                 setallSheets([])
                 setselectedSheetId('')
@@ -172,7 +179,12 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             }
             
             const data=response.data.data
+            if(response.data.security==undefined)
+                {
+                    setportfoliosecurity('private')
+                }else{
             setportfoliosecurity(response.data.security)
+                }
            // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
            const stateValues=JSON.parse(data)||[]
           
@@ -265,7 +277,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                   "Authorization":`Bearer ${token}`
                 }
               })
-            if(response3.data.status==-200 && response3.data.message!="no refresh token found")
+            if(response3.data.status==200 && response3.data.message!="no refresh token found")
             {
                 const files=response3.data.data
                 setallSheets(files)
@@ -334,7 +346,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                   "Authorization":`Bearer ${token}`
                 }
               })
-            if(response3.data.status==-200 && response3.data.message!="no refresh token found")
+            if(response3.data.status==200 && response3.data.message!="no refresh token found")
             {
                 const files=response3.data.data
                 setallSheets(files)
@@ -489,7 +501,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
               alert('Google Session Ended')
               return
           }
-          else if(response.data.status==-200 && response.data.msg=="no refresh token found")
+          else if(response.data.status==200 && response.data.msg=="no refresh token found")
           {
             alert('Google account not connected')
             return
@@ -575,12 +587,16 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 portfolioState:JSON.stringify(portfoliocardsdata),
                 sharedwith:JSON.stringify(sharedwithusers),
                 organization1:organization1,
-                organization2:organization2
+                organization2:organization2,
+                
+                
             },{
                 headers:{
                   "Authorization":`Bearer ${token}`
                 }
               })
+
+            console.log(response)
             if(response.data.status==200){
                 alert("State Saved")
             }

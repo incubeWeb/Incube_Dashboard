@@ -12,7 +12,7 @@ import { MdFullscreen } from "react-icons/md";
 import { MdFullscreenExit } from "react-icons/md";
 import { jwtDecode } from 'jwt-decode';
 
-const ChatCard = ({id,currentTab,CompanyName,itsfrom,realtimetabchats}) => {
+const ChatCard = ({id,hidenavbar,currentTab,CompanyName,itsfrom,realtimetabchats}) => {
     const [chat,setChat]=useState([])
     const [countChat,setCountChat]=useState(0)
     const [mychat,setmychat]=useState('')
@@ -180,25 +180,29 @@ const fetchCompanyData = async () => {
 
 useEffect(() => {
   const fetchData = async () => {
+    const ChatData = await fetchCaht();
    const CompanyData = await fetchCompanyData();
-   const ChatData = await fetchCaht();
+  
    
    
-   // corrected from fetchCaht to
-     const mergedData = [
-       CompanyData['data']['data'],
-       ChatData['data']['data'][0].chats
-       
-     ];
+   const mergedData = [
+    CompanyData?.data?.data || [], 
+    ChatData?.data?.data[0]?.chats || [] // Provide a default empty array
+    // Provide a default empty array
+];
    sessionStorage.setItem("Bot_Data", JSON.stringify(mergedData));
    console.log("Chatting_Value",mergedData)
 
   };
   fetchData();
-}, []);
+}, [realtimetabchats]);
 
 
 
+
+
+
+const [textareaHeight, setTextareaHeight] = useState(0);
 
   return (
     <div className={` w-[100%] h-full `}>
@@ -210,9 +214,9 @@ useEffect(() => {
                 />
 
 {showChatModal && (
-        <div className="fixed inset-0 bg-white z-50 flex items-center justify-end  ">
+        <div className={` fixed inset-0 bg-white z-50 flex items-center justify-end  `}>
           {/* Chat modal */}
-          <div className=" h-[100%] w-[80%]  bg-white rounded-md shadow-lg p-4 relative z-10">
+          <div className={`${!hidenavbar?'w-[79%]':'w-[96%]'} h-[100%]   bg-white rounded-md  p-4 relative z-10`}>
             <div className="w-[100%] h-[100%] rounded-md shadow-md border-[1px] border-gray-300 md:flex md:flex-col  space-y-4">
               <div className="mt-2 mb-4 ml-2">
                 <MdFullscreenExit  size={26}
@@ -269,30 +273,38 @@ useEffect(() => {
               </div>
               {itsfrom !== 'completed' ? (
                 <div className="w-full pl-2 h-[20%] md:flex md:flex-row space-x-2 md:items-center justify-center">
-  <div className="w-[90%] h-full md:flex md:flex-row pb-2 pt-1 pr-3">
-    <div className="flex-grow h-full flex items-center">
-      <div className="border border-gray-300 rounded-full flex-grow overflow-hidden flex items-center"> {/* Ensure it flexes to center items */}
-        <textarea
-          value={mychat}
-          onChange={(e) => {
-            setmychat(e.target.value);
-            e.target.style.height = 'auto'; // Reset height
-            const maxHeight = 100; // Set your max height here
-            e.target.style.height = `${Math.min(e.target.scrollHeight, maxHeight)}px`; 
-          }}
-          onKeyPress={(e) => e.key === 'Enter' && handleChat()}
-          className="w-full h-full rounded-full outline-none text-[14px] scrollbar-hide pl-4 py-2 transition-all resize-none" // Added resize-none to prevent manual resizing
-          placeholder="Type your message..."
-          rows={1} // Minimum number of rows
-          style={{ maxHeight: '100px', overflowY: 'auto' }}
-        />
-      </div>
-    </div>
-    <div className="flex items-center justify-center w-[5%] h-full "> {/* Center the send button */}
-      <MdSend size={24} className="cursor-pointer" onClick={handleChat} />
-    </div>
+      <div className="w-[90%] h-full md:flex md:flex-row pb-2 pt-1 pr-3">
+      <div className="flex-grow h-full flex items-center">
+  <div className={`border border-gray-300 ${textareaHeight > 40 ? 'rounded-xl' : 'rounded-full'} flex-grow overflow-hidden flex items-center`}>
+    <textarea
+      value={mychat}
+      onChange={(e) => {
+        setmychat(e.target.value);
+        e.target.style.height = 'auto'; // Reset height
+        const maxHeight = 100; // Set your max height here
+        const newHeight = Math.min(e.target.scrollHeight, maxHeight);
+        setTextareaHeight(newHeight); // Update state with new height
+        e.target.style.height = `${newHeight}px`;
+      }}
+      onKeyPress={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault(); // Prevent default Enter key behavior
+          handleChat(); // Call your function to handle the chat submission
+        }
+      }}
+      className="w-full h-full rounded-full outline-none text-[14px] scrollbar-hide pl-5 pr-5 py-2 transition-all resize-none"
+      placeholder="Type your message..."
+      rows={1} // Minimum number of rows
+      style={{ maxHeight: '100px', overflowY: 'auto', resize: 'none' }}
+    />
   </div>
 </div>
+
+        <div className="flex items-center justify-center w-[5%] h-full">
+          <MdSend size={24} className="cursor-pointer" onClick={handleChat} />
+        </div>
+      </div>
+    </div>
 
 
 
@@ -359,27 +371,34 @@ useEffect(() => {
             {
                 itsfrom!='completed'?
                 <div className='w-full pl-2 h-auto md:flex md:flex-row space-x-2 md:items-center justify-center'>
-    <div className='w-[90%] md:space-x-3 h-auto md:flex md:flex-row pb-2 pt-1 pr-3'>
-        <div className='flex-grow border border-gray-300 rounded-xl flex flex-row items-start'>
-            <textarea 
-                value={mychat} 
-                onChange={(e) => {
-                    setmychat(e.target.value);
-                    e.target.style.height = 'auto'; // Reset height
-                    const maxHeight = 60; // Set your max height here (increased for visibility)
-                    e.target.style.height = `${Math.min(e.target.scrollHeight, maxHeight)}px`; 
-                }} 
-                onKeyPress={(e) => e.key === 'Enter' ? handleChat() : null}  
-                className='w-full h-auto rounded-xl outline-none text-[14px] pl-2 scrollbar-hide transition-all mb-2' // Removed fixed height
-                rows={1} // Minimum number of rows
-                style={{ maxHeight: '60px', overflowY: 'auto' }} // Adjusted for max height
-            />
+      <div className='w-[90%] md:space-x-3 h-auto md:flex md:flex-row pb-2 pt-1 pr-3'>
+        <div className={`flex-grow border border-gray-300 ${textareaHeight > 20 ? 'rounded-xl' : 'rounded-xl'} flex flex-row items-start`}>
+          <textarea 
+            value={mychat} 
+            onChange={(e) => {
+              setmychat(e.target.value);
+              e.target.style.height = 'auto'; // Reset height
+              const maxHeight = 60; // Set your max height here
+              const newHeight = Math.min(e.target.scrollHeight, maxHeight);
+              setTextareaHeight(newHeight); // Update state with new height
+              e.target.style.height = `${newHeight}px`;
+            }} 
+            onKeyPress={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault(); // Prevent default Enter key behavior
+          handleChat(); // Call your function to handle the chat submission
+        }
+      }}  
+            className='w-full h-auto rounded-xl outline-none text-[14px] pl-4 pt-1 pr-4 scrollbar-hide transition-all mb-2'
+            rows={1} // Minimum number of rows
+            style={{ maxHeight: '60px', overflowY: 'auto', resize: 'none' }} // Adjusted for max height
+          />
         </div>
         <div className='w-[5%] justify-end h-auto flex items-center'>
-            <MdSend size={23} className='cursor-pointer' onClick={handleChat} />
+          <MdSend size={23} className='cursor-pointer' onClick={handleChat} />
         </div>
+      </div>
     </div>
-</div>
 
             :
             <></>

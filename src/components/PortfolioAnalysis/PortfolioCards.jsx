@@ -44,12 +44,15 @@ const PortfolioCards = ({selectedTab,id,portfoliosecurity,sheetedited,selectedSh
     const [showPopup, setShowPopup] = useState(false);
     const [iconname,seticonname]=useState('')
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const[currencyValue,setcurrencyvalue]=useState('');
+    const[currencyValue,setcurrencyvalue]=useState('$');
     const FilterRef = useRef(null);
     
 
 const togglePopup = () => {
-    setIsPopupOpen(prev => !prev);
+    if(selectedTab === Logemail) 
+    {
+        setIsPopupOpen(prev => !prev);
+    }
 };
 
     // State for filter pop-up
@@ -72,6 +75,7 @@ const togglePopup = () => {
             setShowPopup(false);
             setsheetpopup(false);
             setsheetClicked(false);
+            setIsPopupOpen(false)
             
         }
     };
@@ -113,12 +117,12 @@ const togglePopup = () => {
                         if (exists) {
                           return prev.map(val =>
                             val.id === id
-                              ? { ...val, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected } // Update the existing object
+                              ? { ...val, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue } // Update the existing object
                               : val
                           );
                         } else {
                           // Insert new object if id is not found
-                          return [...prev, { id: id, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected }];
+                          return [...prev, { id: id, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue }];
                         }
                       });
                 }
@@ -126,7 +130,7 @@ const togglePopup = () => {
            fun()
             
             
-        },[editLabel,showValue,iconname])
+        },[editLabel,showValue,iconname,currencyValue])
    
     const getIconComponent = (iconName) => {
         switch (iconName) {
@@ -176,6 +180,7 @@ const togglePopup = () => {
                     setshowvalue(val.showValue)
                     seticonname(val.portfolioicon)
                     setIcon(getIconComponent(val.portfolioicon))
+                    setcurrencyvalue(val.currencyValue)
                     setTimeout(()=>{
                         setloading(false)
                     },1000)
@@ -215,7 +220,7 @@ const togglePopup = () => {
               "Authorization":`Bearer ${token}`
             }
           })
-        if(response3.data.status==-200 && response3.data.message!="no refresh token found")
+        if(response3.data.status==200 && response3.data.message!="no refresh token found")
         {
             const files=response3.data.data
             setgoogledriveSheets(files)
@@ -413,10 +418,13 @@ useEffect(() => {
                         <div className='  flex justify-end h-[10px] relative '  >
                             </div>
                         }
-                <div onDoubleClick={()=>{setShowPopup(true)}} className={style} >
+                    <div
+                        onDoubleClick={()=>{selectedTab === Logemail ?  setShowPopup(true) : undefined}}
+                        className={style}
+                    >
                 
-                {icon }
-                </div>
+                    {icon}
+                    </div>
             
     
                 {
@@ -429,7 +437,7 @@ useEffect(() => {
                                             <IoMdArrowBack  className=' cursor-pointer' size={17}/>
                                             </div>
                                             <div className='text-gray-500 h-[40px] text-[15px] flex items-center justify-center'>
-                                                {sheetname.replace(/^\d+_/, "")}
+                                                {sheetname}
                                             </div>
                                             
                                         </div>
@@ -569,7 +577,7 @@ useEffect(() => {
                 <div className='w-[100%] flex flex-row items-center justify-start mt-2 space-x-2'>
                     {
                         !editLabel?
-                        <p className='text-[15px] text-gray-700 flex items-center h-[30px] tracking-wider font-inter font-semibold cursor-pointer' onDoubleClick={handleEdit}>{labelname}</p>
+                        <p onDoubleClick={()=>{selectedTab === Logemail ?  handleEdit() : undefined}} className='text-[15px] text-gray-700 flex items-center h-[30px] tracking-wider font-inter font-semibold cursor-pointer'>{labelname}</p>
                         :
                         <input ref={inputRef} value={labelname} onChange={(e)=>{setlablename(e.target.value) }} onKeyPress={(e)=>e.key=='Enter'?seteditLabel(false):seteditLabel(true)} className='w-[90px] h-[30px] text-[13px] pl-1 outline-none border-[1px] border-gray-300 rounded-md'/>
                     }
@@ -578,16 +586,16 @@ useEffect(() => {
                 <div className='w-[100%] flex flex-row'>
                     <div className='w-[70%] '>
                         <div className='flex h-[100%] items-center justify-start'>
-                            <p className='text-[20px] font-inter font-semibold text-gray-700'><span className='mr-1 cursor-pointer' onClick={togglePopup}>{currencyValue}</span><span className='cursor-pointer' onClick={handlePlusClick}>{showValue}</span></p>
+                            <p className='text-[20px] font-inter font-semibold text-gray-700'><span className='mr-1 cursor-pointer' onClick={togglePopup} >{currencyValue}</span><span onDoubleClick={()=>{selectedTab === Logemail ?  handlePlusClick() : undefined}} className='cursor-pointer'>{showValue}</span></p>
                         </div>
                         {isPopupOpen && (
-                    <div ref={popupRef} className='absolute top-0 left-0 bg-white border h-[160px] scrollbar-hide border-gray-300 rounded overflow-y-auto shadow-md mt-2'>
+                    <div  ref={FilterRef} className='absolute top-0 left-0 bg-white border h-[160px] scrollbar-hide border-gray-300 rounded overflow-y-auto shadow-md '>
                         <ul>
                         <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('$')}>$</li>
                             <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('€')}>€</li>
                             <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('₹')}>₹</li>
                             <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('£')}>£</li>
-                            
+                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('%')}>%</li> 
                         
                         </ul>
                     </div>
