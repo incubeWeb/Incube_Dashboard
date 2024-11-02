@@ -27,49 +27,45 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
 
-  useEffect(() => {
-
-    fetchCompanyData();
-
-  }, []);
-
- 
-
-  
-
-  const fetchCompanyData = async () => {
-    try {
-      const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-        headers:{
-          "Authorization":`Bearer ${token}`
-        }
-      });
-      const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
-        member: Logemail,
-        mainorganization:Logorganization
-      },{
-        headers:{
-          "Authorization":`Bearer ${token}`
-        }
-      });
-      const organizationNames=[]
-      
-      Teamresponse.data.data.map(val=>{
-        organizationNames.push(val.organization)
-      })
-      
-      const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
     
-      setCompanyData(filteredData);
-      setcompany(response.data.data)
-    } catch (error) {
-      console.log("server error")
-    }
-  };
-
-  useEffect(() => {
-    fetchCompanyData();
-  }, [realtimedealpipelinecompany]);
+  
+   
+  
+    
+  
+    const fetchCompanyData = async () => {
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        });
+        const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
+          member: Logemail,
+          mainorganization:Logorganization
+        },{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        });
+        const organizationNames=[]
+        
+        Teamresponse.data.data.map(val=>{
+          organizationNames.push(val.organization)
+        })
+        
+        const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
+      
+        setCompanyData(filteredData);
+        setcompany(response.data.data)
+      } catch (error) {
+        console.log("server error")
+      }
+    };
+  
+    useEffect(() => {
+      fetchCompanyData();
+    }, [realtimedealpipelinecompany]);
 
   useEffect(() => {
     if (selectedTab === "View All") moveBackground(viewRef.current, "View All");
@@ -99,6 +95,7 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
       }}
     sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
   },[company])
+
 
 
   return (

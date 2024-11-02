@@ -68,6 +68,26 @@ function GridTemplate({id,filesadded,realtimeDealpipelinetabs,realtimedealpipeli
         setimgsrc('https://i.pinimg.com/originals/ec/d9/c2/ecd9c2e8ed0dbbc96ac472a965e4afda.jpg')
     }
    
+    const fetchCompanyData = async () => {
+        try {
+          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          });
+              // console.log("Response data:", response.data.data); // Check the response structure
+          return response
+          // Setcompany(
+          //   JSON.stringify(
+          //     response.data)
+          //   )
+        } catch (error) {
+          console.log("server error")
+        }
+      };
+
+
+
   return (
     <div className='shadow-md md:shadow-none  h-[200px]  md:h-[233px] border-[1px] border-gray-200 rounded-md flex flex-col md:hover:shadow-xl duration-75 md:hover:border-0 select-none cursor-pointer ml-2 md:ml-0 mr-2 md:mr-2' onClick={handleOpenGrid}>
     <div className="flex justify-end">

@@ -25,7 +25,7 @@ const ChatCard = ({id,currentTab,CompanyName,itsfrom,realtimetabchats}) => {
     const[chatting,setChatting]=useState([])
    const [company,Setcompany]=useState([])
    const chatEndRef = useRef(null);
-
+   
     useEffect(()=>{
         const fun=async()=>{
            // console.log(currentTab)
@@ -130,74 +130,68 @@ const ChatCard = ({id,currentTab,CompanyName,itsfrom,realtimetabchats}) => {
         return time1.toLocaleTimeString()
     }
 
-// useEffect(()=>{
-// const mergedData=[...chatting]
-// sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-// console.log("zy",mergedData)
-// },[chatting])
 
-const fetchCaht= async()=>{
-  let organization=Logorganization
 
-  try{
-    const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{id:id,CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization},{
-      headers:{
-        "Authorization":`Bearer ${token}`
-      }
+    const fetchCaht= async()=>{
+      let organization=Logorganization
     
-    })
-    return response
-    // setChatting(JSON.stringify(
-    //   response))
-    // console.log("Chahat data:", response);
+      try{
+        const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{id:id,CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        
+        })
+        return response
+        // setChatting(JSON.stringify(
+        //   response))
+        // console.log("Chahat data:", response);
+        
+    }catch(error){
+      console.log("server error")
+    }
+    };
     
-}catch(error){
-  console.log("server error")
-}
-};
-
-const fetchCompanyData = async () => {
-  try {
-    const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-      headers:{
-        "Authorization":`Bearer ${token}`
+    const fetchCompanyData = async () => {
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        });
+            // console.log("Response data:", response.data.data); // Check the response structure
+        return response
+        // Setcompany(
+        //   JSON.stringify(
+        //     response.data)
+        //   )
+      } catch (error) {
+        console.log("server error")
       }
-    });
-        // console.log("Response data:", response.data.data); // Check the response structure
-    return response
-    // Setcompany(
-    //   JSON.stringify(
-    //     response.data)
-    //   )
-  } catch (error) {
-    console.log("server error")
-  }
-};
-// const chatData=[]
-// chatting.map((val=>{
-//   chatData.push(val.chats)
-// }))
-
-useEffect(() => {
-  const fetchData = async () => {
-   const CompanyData = await fetchCompanyData();
-   const ChatData = await fetchCaht();
-   
-   
-   // corrected from fetchCaht to
-     const mergedData = [
-       CompanyData['data']['data'],
-       ChatData['data']['data'][0].chats
+    };
+    // const chatData=[]
+    // chatting.map((val=>{
+    //   chatData.push(val.chats)
+    // }))
+    
+    useEffect(() => {
+      const fetchData = async () => {
+        const ChatData = await fetchCaht();
+       const CompanyData = await fetchCompanyData();
+      
        
-     ];
-   sessionStorage.setItem("Bot_Data", JSON.stringify(mergedData));
-   console.log("Chatting_Value",mergedData)
-
-  };
-  fetchData();
-}, []);
-
-
+       
+       const mergedData = [
+        CompanyData?.data?.data || [], 
+        ChatData?.data?.data[0]?.chats || [] // Provide a default empty array
+        // Provide a default empty array
+    ];
+       sessionStorage.setItem("Bot_Data", JSON.stringify(mergedData));
+       console.log("Chatting_Value",mergedData)
+    
+      };
+      fetchData();
+    }, [realtimetabchats]);
 const [textareaHeight, setTextareaHeight] = useState(0);
 
   return (
