@@ -592,7 +592,14 @@ useEffect(() => {
             setTextareaHeight(newHeight); // Update state with new height
             e.target.style.height = `${newHeight}px`;
           }}
-          onKeyDown={handleKeyDown}
+          onKeyDown={(e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); // Prevents the textarea from growing
+        handleSend(); // Send the message or handle any action you want
+      } else {
+        handleKeyDown(e); // Handle other keys if necessary
+      }
+    }}
           placeholder="Type a message..."
           className="flex-grow bg-gray-200 p-2 text-black outline-none scrollbar-hide"
           rows={1} // Minimum number of rows

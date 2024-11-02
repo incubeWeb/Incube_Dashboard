@@ -27,7 +27,11 @@ function FirstCol({filesadded,realtimedealpipelinecompanyInfo,setActiveField,hid
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
 
-    
+    useEffect(() => {
+
+      fetchCompanyData();
+  
+    }, []);
   
    
   
