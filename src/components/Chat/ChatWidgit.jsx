@@ -287,6 +287,15 @@ useEffect(() => {
   scrollToBottom();
 }, [sendedMsg, receivedMsg]); // Run whenever messages change
 
+useEffect(() => {
+  if (openChat) {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }
+}, [openChat]);
+
+useEffect(() => {
+  chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+}, [sendedMsg, receivedMsg]);
 
 
 
@@ -362,12 +371,19 @@ useEffect(() => {
                        
           
                         <div className='w-full h-50 flex items-center justify-between'>
-  <div className='flex-grow ml-2 mb-4 '>
+  <div className='flex-grow ml-2 mb-4'>
     <textarea
       id={`text${id}`}
       className='w-full text-14 pl-2 h-auto px-4 py-2 rounded-lg shadow-sm border border-gray-300 focus:outline-none scrollbar-hide'
       placeholder='Enter your message here....'
-      onKeyPress={(e) => (e.key === 'Enter' ? handleSendChat(e) : handleTypedMsg(e))}
+      onKeyPress={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault(); // Prevent new line
+          handleSendChat(e);
+        } else {
+          handleTypedMsg(e);
+        }
+      }}
       onChange={(e) => {
         handleTypedMsg(e);
         e.target.style.height = 'auto'; // Reset height
@@ -379,9 +395,10 @@ useEffect(() => {
     />
   </div>
   <div className='flex items-center justify-center ml-2'>
-    <IoSend size={24} className='cursor-pointer ' onClick={(e) => handleSendChat(e)} />
+    <IoSend size={24} className='cursor-pointer' onClick={(e) => handleSendChat(e)} />
   </div>
 </div>
+
 
                       </div>
                       :

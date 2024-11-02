@@ -242,7 +242,7 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
                         </div>
                     </div>
                     <div>
-        <p className='md:text-[14px] text-[14px] font-inter font-semibold overflow-hidden h-[15%] mt-2  w-[70%] text-left mb-4 overflow-y-auto scrollbar-hide'>{description}</p>
+        <p className='md:text-[14px] text-[14px] font-inter font-semibold overflow-hidden h-[40px] mt-1  w-[70%] text-left mb-4 overflow-y-auto scrollbar-hide'>{description}</p>
     </div>
             </div>
             <div className='flex flex-row w-[100%] h-[50px] space-x-2'>
