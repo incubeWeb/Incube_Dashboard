@@ -608,25 +608,6 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     }))
 
 
-    useEffect(()=>{
-    const mergedData = {
-        investmentHistory: {
-            keys: sheetKeys,
-            data: sheetJson,
-            
-           
-        },
-            PortfolioCard,
-           ChartData:{ sheetJson1
-           },
-           MeterPercentage:{percentage1}
-        
-    };
-sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-console.log(mergedData)
-
-    },[sheetJson,sheetKeys,portfoliocardsdata,sheetJson1])
-
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (popupRef.current && !popupRef.current.contains(event.target)) {
@@ -658,6 +639,26 @@ console.log(mergedData)
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+
+    useEffect(()=>{
+        const mergedData = {
+            investmentHistory: {
+                keys: sheetKeys,
+                data: sheetJson,
+                
+               
+            },
+                PortfolioCard,
+               ChartData:{ sheetJson1
+               },
+               MeterPercentage:{percentage1}
+            
+        };
+    sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+    console.log(mergedData)
+    
+        },[sheetJson,sheetKeys,portfoliocardsdata,sheetJson1])
   return (
     <div className={`${hidenavbar?'pl-[6%] w-[100%]':'ml-[21%] w-[79%]'} p-4 font-noto  flex flex-col space-y-4 bg-gray-100`}> 
         <div className=' w-[100%] scrollbar-hide  items-end pb-1 pl-2 mt-1 overflow-x-auto h-[40px] bg-white rounded-lg flex flex-row '>

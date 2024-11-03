@@ -18,6 +18,10 @@ import Apikeys from "./components/ApiKeys/Apikeys";
 import { jwtDecode } from "jwt-decode";
 import ChatBot from "./components/GenaiBox/ChatBot";
 import Ai from "./components/AI-Component/Ai";
+import { FaRegFileExcel } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { IoMdArrowBack } from "react-icons/io";
 
 
 
@@ -28,8 +32,7 @@ function App() {
   const changes=useSelector((state)=>state.timelinestate)
   const dispatch=useDispatch()
 
-  
-  
+  const [boxes, setBoxes] = useState([]);
   
   
   const [investmentchange,setinvestmentchange]=useState([])
@@ -203,21 +206,371 @@ function App() {
   }, []);
 
   const [dealpipelinefromdashboardcompany,setdealpipelinefromdashboardcompany]=useState([]);
+  
+  
+  const token=localStorage.getItem('token')
+
+  
+  let Logemail=""
+  let Logorganization=""
+  let Logrole=""
+  try{
+    const userdata=jwtDecode(token)
+     Logemail=userdata.userdetails.email
+    Logorganization=userdata.userdetails.organization
+    Logrole=userdata.userdetails.role
+  }catch(e){
+    localStorage.clear()
+  }
+
+  const [sheetpopup,setsheetpopup]=useState(false)
+  const [sheetClicked,setsheetClicked]=useState(false)
+  const [sheetJson,setsheetJson]=useState([])
+  const [sheetfieldselected,setsheetfieldselected]=useState('')
+  const [sheetKeys,setsheetKeys]=useState([])
+  const [loading2,setLoading2]=useState(true)
+  const [sheets,setallsheets]=useState([])
+  const [googlesheetfiles,setgoogledriveSheets]=useState([])
+  const [clickedSheetId,setclickedSheetId]=useState('')
+  const FilterRef = useRef(null);
+
+
+  const [hover,sethover]=useState(false)
+  const [sheetname,setsheetname]=useState('')
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+
+  const [loading1,setLoading1]=useState(false)
+
+  const [showValue,setshowvalue]=useState('0')
+
+  const handlesheetclick=async(id,name)=>{
+    
+    setsheetname(name)
+    setclickedSheetId(id)       
+    setsheetClicked(true)
+    setsheetpopup(false)
+    
+}
+
+useEffect(()=>{
+  const setValues=async()=>{
+      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:clickedSheetId,organization:Logorganization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        })
+      const data=JSON.parse(response.data.data)
+      setsheetJson(data)
+      const key=Object.keys(data[0])
+      
+      const fileteredKey=[]
+      data.map(d=>{
+          key.map(k=>{
+              if(d[k]!=""&&!fileteredKey.includes(k)){
+              fileteredKey.push(k)
+              }
+          }
+          )
+      })
+      
+      setsheetfieldselected(fileteredKey[0])
+      setsheetKeys(fileteredKey)
+      setLoading2(false)
+  }
+ 
+  setValues()
+  
+},[clickedSheetId])
+
+  const handleGooglesheetclicked=async (id,name)=>{
+            
+    setsheetClicked(true)
+    setsheetpopup(false)
+    
+    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-google-sheet-json`,{sheetId:id,email:Logemail,organization:Logorganization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
+    if(response.data.status==200)
+    {
+    const allJson=response.data.data
+  
+    await Promise.all(allJson)
+
+    const keys=allJson[0].data
+    const showdata=allJson[1].data[0]
+    const finalJson=[]
+    allJson.map(val=>{
+        if(val.rowIndex!=1)
+        {
+            const result=keys.reduce((obj,key,value)=>{obj[key]=val.data[value]; return obj},{})
+            finalJson.push(result)
+        }
+    })
+    setsheetJson(finalJson)
+    const key_=Object.keys(finalJson[0])
+            
+    const fileteredKey=[]
+            finalJson.map(d=>{
+                key_.map(k=>{
+                    if(d[k]!=""&&!fileteredKey.includes(k)){
+                    fileteredKey.push(k)
+                    }
+                }
+                )
+            })
+
+        setsheetfieldselected(fileteredKey[0])
+        setsheetKeys(fileteredKey)
+        setLoading2(false)
+
+    }
+    else{
+        setsheetfieldselected('wrong sheet format')
+        setsheetKeys(['none'])
+        setLoading2(false)
+    }
+}
+const popupref2=useRef(null)
+
+
+
+
+useEffect(() => {
+  const handleClickOutside2 = (event) => {
+      // Check if the click is outside the popup and filter menu
+      if (FilterRef.current && !FilterRef.current.contains(event.target) && popupref2.current && !popupref2.current.contains(event.target)){
+          alert("hi")
+          
+      }
+
+      
+  };
+
+  document.addEventListener('mousedown', handleClickOutside2);
+  return () => {
+      document.removeEventListener('mousedown', handleClickOutside2);
+  };
+}, []);
+
+const [widgitid,setwidgitid]=useState(1)
+
+
+
+
+const handlePlusClick=async(widgitid)=>{
+  
+  let myid=widgitid+1
+  setwidgitid(myid)
+
+  setLoading1(true)
+  const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:Logorganization},{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
+    })
+  const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
+      email:Logemail,
+      organization:Logorganization
+  },{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
+    })
+  const set2DocsIds=response2.data.allfiles.map(doc=>doc.Document_id)
+  
+  const filteredSet1=response.data.data.filter(doc=>!set2DocsIds.includes(doc._id))
+  const tosetdata=[...response2.data.data,...filteredSet1]
+
+  const response3=await axios.post(`${import.meta.env.VITE_HOST_URL}1222/get-drivesheets`,{
+      email:Logemail,
+      organization:Logorganization
+  },{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
+    })
+  if(response3.data.status==200 && response3.data.message!="no refresh token found")
+  {
+      const files=response3.data.data
+      setgoogledriveSheets(files)
+  }
+  
+  setallsheets(tosetdata)
+  setsheetpopup(true)
+  setLoading1(false)
+}
+
+const handleselectsheetfield=()=>{
+  setsheetClicked(false)
+  setsheetpopup(false)
+  
+  let value=''
+  try{
+      value=parseInt(sheetJson[0][sheetfieldselected]) 
+      
+      if(isNaN(sheetJson[0][sheetfieldselected]))
+      {
+          value='0'
+      }
+  }
+  catch(e)
+  {
+      value='0'
+  }
+  console.log("the value is",value)
+  
+  
+  setshowvalue(value);
+  setBoxes(boxes.map(box =>
+    box.id === widgitid ? { ...box, showValue:value } : box
+  ));
+  
+}
+
+useEffect(()=>{
+  console.log("sheet is clicke")
+},[sheetClicked])
+
 
 
   return (
     <BrowserRouter>
-          {login? <Navigation setmygoogleaccountisconnected={setmygoogleaccountisconnected} navbarref={navbarref} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} showsmallnav={showsmallnav} setshowsmallnav={setshowsmallnav} login={login} setlogin={setLoginIn} googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} />:<></>}
+          {login? <div onClick={()=>setsheetClicked(false)}> <Navigation setmygoogleaccountisconnected={setmygoogleaccountisconnected} navbarref={navbarref} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} showsmallnav={showsmallnav} setshowsmallnav={setshowsmallnav} login={login} setlogin={setLoginIn} googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} /></div>:<></>}
          
           {login && location.pathname !== '/AI' ? (
         <div className="fixed flex flex-col items-center justify-center h-screen z-50 scrollbar-hide">
           <ChatBot />
         </div>
       ) : <></>}
+
+        
+
+          {
+                    sheetpopup?
+                    <div className={`${hidenavbar ? 'w-full' : 'left-20 w-[80%]'} fixed z-[60] top-0 left-0 w-full h-full bg-black bg-opacity-40 flex items-center justify-center `}>
+                        <div  className='p-2 flex flex-col  w-[400px] h-[400px] space-y-2 bg-white z-[40]  rounded-md' >
+                            
+                        <div className='flex items-center font-inter bg-blue-500 rounded-md px-2 justify-between h-[50px]'>
+                <div className='flex items-center cursor-pointer' >
+                    
+                    <p className='text-[14px] font-semibold flex justify-center text-white  ml-8 items-center'>Select Sheet for Portfolio card</p>
+                </div>
+                <div className='flex items-center space-x-2 ' onMouseDown={()=>{setsheetpopup(false);}}>
+                    <div className='cursor-pointer'>
+                        <RxCross2 size={20} className='text-white' />
+                    </div>
+                </div>
+            </div>
+            {sheets.length === 0 && googlesheetfiles.length === 0 ? (
+                  <p className='text-gray-500 text-center font-semibold'>No sheets found</p>
+                ) : (
+                  <>
+              <div className='font-inter text-[16px] font-semibold mb-2'>
+                  <p className='border-b pb-2'>Database Sheets:</p>
+              </div>
+              <div ref={popupref2} className={`p-1 flex h-[100%] items-center rounded-md text-[14px] flex-col font-roboto overflow-y-auto scrollbar-hide bg-white z-[60]`}>
+                  {(sheets || []).map(doc => (
+                      doc.fileType === 'xlsx' ? (
+                          <div key={doc._id} className='w-[100%] flex flex-col space-y-2'>
+                              <div 
+                                  onMouseEnter={() => sethover(true)} 
+                                  onMouseLeave={() => sethover(false)} 
+                                  onMouseDown={() => handlesheetclick(doc._id, doc.name)} 
+                                  className='w-[100%] h-[45px] hover:bg-gray-100 hover:text-gray-800 p-2 rounded-md select-none cursor-pointer flex flex-row items-center justify-start'
+                              >
+                                  <FaRegFileExcel className='text-green-500' size={19} />
+                                  <span className='ml-2'>{doc.name.replace(/^\d+_/, "")}</span>
+                              </div>
+                          </div>
+                      ) : null
+                  ))}
+                  {googlesheetfiles.length > 0 && (
+                      <div className='w-[100%] font-inter   border-b pb-2 text-[14px] font-semibold mt-4 mb-2 h-[40px] flex items-center pl-2'>
+                          <p  className=''>Google sheets:</p>
+                      </div>
+                  )}
+                  {(googlesheetfiles || []).map(doc => (
+                      <div key={doc._id} className='w-[100%] flex flex-col space-y-2'>
+                          <div 
+                              onMouseEnter={() => sethover(true)} 
+                              onMouseLeave={() => sethover(false)} 
+                              onMouseDown={() => handleGooglesheetclicked(doc.id, doc.name)} 
+                              className='w-[100%] h-[45px] hover:bg-gray-100 hover:text-gray-800 p-2 rounded-md select-none cursor-pointer flex flex-row items-center justify-start'
+                          >
+                              <FaRegFileExcel className='text-green-500' size={19} />
+                              <span className='ml-2'>{doc.name}</span>
+                          </div>
+                      </div>
+                  ))}
+              </div>
+          </>
+      )}
+                            
+                        </div>
+                    </div>
+                    :
+                    <></>
+                }
+
+                {
+                    sheetClicked?
+                    <div onClick={()=>setsheetClicked(false)} className={`${hidenavbar ? 'w-full' : 'left-20 w-[80%]'} fixed top-0 left-0 w-full h-full  bg-black bg-opacity-40 flex items-center justify-center z-[65]`}>
+                                    <div ref={FilterRef} className='p-2 flex flex-col  w-[400px] h-[400px] space-y-2 bg-white rounded-md'>
+                                        
+                                        <div  className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
+                                            <div className='flex items-center justify-center h-[40px]' onMouseDown={(()=>{setsheetClicked(false); setsheetpopup(true)})}>
+                                            <IoMdArrowBack  className=' cursor-pointer' size={17}/>
+                                            </div>
+                                            <div className='text-gray-500 h-[40px] text-[15px] flex items-center justify-center'>
+                                                {sheetname}
+                                            </div>
+                                            
+                                        </div>
+                                        <div  className=' w-[100%] h-[40%] flex flex-col items-center justify-center space-y-8 space-x-2'>
+                                            
+                                            <select value={sheetfieldselected}  onChange={(e)=>setsheetfieldselected(e.target.value)} className='w-[220px] h-[30px] text-[14px] text-gray-700 rounded-md border-gray-300 border-[1px]'>
+                                            {loading2 ? (
+    <option value="">
+      <div className="flex items-center">
+        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+        Loading...
+      </div>
+    </option>
+  ) : (
+                                                
+                                                            
+                                                sheetKeys.map(k=>
+                                                    <option key={k._id}>{k}</option>
+                                                    )
+                                              )  }
+
+                                            </select>
+                                        </div>
+                                        <div className='w-[100%] mt-[14px] flex flex-row items-center justify-center'>
+                                            <div onMouseDown={handleselectsheetfield} className='select-none cursor-pointer flex flex-row w-[120px] rounded-md h-[40px] items-center justify-center bg-gradient-to-r from-green-500 to-green-800 spae-x-2'>
+                                            {loading2 ? (
+                                     <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
+                                ) : (<p className='text-[14px] text-white'>Set sheet field</p>)
+                                            }
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                :
+                                <></>
+                }
+
+  
+
           <Routes>
             <Route path="/" element={!login?<Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn}/>:<></>} />
             <Route path="/dashboard" element={
-              <ProtectedRoute login={login}><Dashboard mygoogleaccountisconnected={mygoogleaccountisconnected} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} navbarref={navbarref} showsmallnav={showsmallnav} sethidenavbar={sethidenavbar} realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
+              <ProtectedRoute login={login}><Dashboard boxes={boxes} setBoxes={setBoxes} setshowvalue={setshowvalue} showvalue={showValue} handlePlusClick={handlePlusClick} setsheetpopup={setsheetpopup} mygoogleaccountisconnected={mygoogleaccountisconnected} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} navbarref={navbarref} showsmallnav={showsmallnav} sethidenavbar={sethidenavbar} realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
             <Route path="/dealpipeline" element={
               <ProtectedRoute login={login}>
               <FirstCol setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} dealpipelinefromdashboardcompany={dealpipelinefromdashboardcompany} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>

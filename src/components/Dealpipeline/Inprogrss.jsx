@@ -8,7 +8,7 @@ import { Bars } from 'react-loader-spinner';
 import { GrAlert } from 'react-icons/gr';
 import { jwtDecode } from 'jwt-decode';
 
-function Inprogrss({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,realtimetabchats,hidenavbar, filter, selectedTab, fetchCompanyData, setActiveField }) {
+function Inprogrss({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,realtimetabchats,hidenavbar, filter, selectedTab, fetchCompanyData, setActiveField,companyData }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [compData,setcompData]=useState([])
@@ -25,111 +25,31 @@ function Inprogrss({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecomp
     const fetchcompanydata=async()=>{
       if(Logrole=='admin' || Logrole=='super admin')
         {
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
+          
         
-          const filteredData=response.data.data.filter(val=>val.status=='In Progress' && val.completed=='incomplete')
+          const filteredData=companyData.filter(val=>val.status=='In Progress' && val.completed=='incomplete')
           setcompData(filteredData)
         }
         else{
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
+          
          
         
-          const morefilteredData=response.data.data.filter(val=>val.TeamLead_status=='In Progress' && val.completed=='incomplete')
+          const morefilteredData=companyData.filter(val=>val.TeamLead_status=='In Progress' && val.completed=='incomplete')
           setcompData(morefilteredData);
           
         }
-        setTimeout(()=>{  
-          setloading(false)
-        },1000)
-
-    }
-    try{
-    fetchcompanydata()
-    }catch(e){
-      seterror(!error)
-    }
-  },[error])
-
-
-  useEffect(()=>{
-    const fetchcompanydata=async()=>{
-      if(Logrole=='admin' || Logrole=='super admin')
-        {
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
         
-          const filteredData=response.data.data.filter(val=>val.status=='In Progress' && val.completed=='incomplete')
-          setcompData(filteredData)
-        }
-        else{
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-          
-        
-          const morefilteredData=response.data.data.filter(val=>val.TeamLead_status=='In Progress' && val.completed=='incomplete')
-          setcompData(morefilteredData);
-          
-        }
-
-        setTimeout(()=>{  
           setloading(false)
-        },1000)
+      
+
     }
-    try{
+    
     fetchcompanydata()
-  
-    }catch(e)
-    { 
-      seterror(!error)
-    }
-  },[])
+    
+  },[companyData])
 
 
-  useEffect(()=>{
-    const fetchcompanydata=async()=>{
-      if(Logrole=='admin' || Logrole=='super admin')
-        {
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-
-          const filteredData=response.data.data.filter(val=>val.status=='In Progress' && val.completed=='incomplete')
-          setcompData(filteredData)
-        }
-        else{
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-          
-          const morefilteredData=response.data.data.filter(val=>val.TeamLead_status=='In Progress' && val.completed=='incomplete')
-          setcompData(morefilteredData);
-        }
-
-    }
-    try{
-    fetchcompanydata()
-    }catch(e){
-      seterror(!error)
-    }
-  },[realtimedealpipelinecompany])
+ 
 
   const handlePageChange = (page) => {
     if (page <= 0) {
@@ -169,6 +89,7 @@ function Inprogrss({filesadded,realtimeDealpipelinetabs,realtimedealpipelinecomp
             
               <GridTemplate
                 key={company._id}
+                companyData={companyData}
                 id={company._id}
                 selectedTab={selectedTab}
                 setActiveField={setActiveField}

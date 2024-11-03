@@ -36,8 +36,8 @@ import 'react-resizable/css/styles.css';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 
-const Dashboard = ({mygoogleaccountisconnected,setdealpipelinefromdashboardcompany,navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
-  const [boxes, setBoxes] = useState([]);
+const Dashboard = ({boxes, setBoxes,handlePlusClick,setshowvalue,showValue,setsheetpopup,mygoogleaccountisconnected,setdealpipelinefromdashboardcompany,navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
+  
   const [openChatbar,setopenChatbar]=useState(false)
   const [showPopup, setShowPopup] = useState(false);
   const [Useremail,setUseremail]=useState('')
@@ -506,6 +506,10 @@ useEffect(() => {
                     id={index}
                      setBoxes={setBoxes} 
                      boxes={boxes}
+                     showValue={box.showValue}
+                     setshowvalue={setshowvalue}
+                     setsheetpopup={setsheetpopup}
+                     handlePlusClick={handlePlusClick}
                      setportfoliocardwidgitcount={setportfoliocardwidgitcount}
                      portfoliocardwidgitcount={portfoliocardwidgitcount}
                      capturingPortfoliowidgitvalues={capturingPortfoliowidgitvalues}
@@ -652,6 +656,7 @@ useEffect(() => {
       </div>
       {showPopup && (
         <ChartPopup
+        showValue={showValue}
         dashboardwidgitref={dashboardwidgitref}
           showlist={handleShowPopup}
           addComponent={addBox}

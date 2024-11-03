@@ -81,6 +81,68 @@ function OpenCompleteGrid({id,realtimedealpipelinecompanyInfo,hidenavbar,setActi
         setTotalCards(data)
     }
 
+
+    const [chatdata,setchatdata]=useState([])
+    
+
+    useEffect(()=>{
+      const fun=async()=>{
+        let organization=Logorganization
+            const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{id:id,CompanyName:companyName,tab:`Tab${currentTab}`,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
+     
+        
+            if(doc.data.data.length>0){
+                doc.data.data.map(d=>
+                  {
+                  let chat=JSON.parse(d.chats)
+                  
+                  setchatdata(chat)
+                 
+                  }
+              )
+             
+            }else{
+              setchatdata([])
+             
+            }
+      }
+      fun()
+    },[currentTab])
+
+    
+    useEffect(()=>{
+        const fun=async()=>{
+          let organization=Logorganization
+              const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{id:id,CompanyName:companyName,tab:`Tab${currentTab}`,organization:organization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        })
+       
+          
+              if(doc.data.data.length>0){
+                  doc.data.data.map(d=>
+                    {
+                    let chat=JSON.parse(d.chats)
+                    
+                    setchatdata(chat)
+                   
+                    }
+                )
+               
+              }else{
+                setchatdata([])
+               
+              }
+        }
+        fun()
+      },[])
+
+
     
     useEffect(()=>{
         const fun=async()=>{
@@ -158,6 +220,37 @@ function OpenCompleteGrid({id,realtimedealpipelinecompanyInfo,hidenavbar,setActi
         })
     })
 
+    const [allcompanyuploadedfile,setcompanyuploadedfile]=useState([])
+    const fetchUploadedFiles = async () => {
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getfiles`, {id:id, CompanyName:companyName,tab: `Tab${currentTab}`,organization:Logorganization },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              });
+            setcompanyuploadedfile(response.data.data);
+
+           
+        } catch (error) {
+            console.error('Error fetching uploaded files', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchUploadedFiles();
+    }, [currentTab]);
+   
+
+    useEffect(()=>{
+        const mergedData={
+            CompanyInfo:{
+              Chats:chatdata,
+              uploadedFiles:allcompanyuploadedfile,
+              companyName:companyName,
+              companydescription:description
+            }}
+          sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+    },[chatdata,allcompanyuploadedfile])
 
   return (
     <div className={` ${hidenavbar?'ml-[4%] w-[96%]':'ml-[22%] w-[78%]'} h-screen z-50 space-y-7 bg-white absolute top-0 right-0 overflow-hidden p-[23px] pt-[17px] md:flex md:flex-col cursor-default`} onClick={handleBubbling}>
@@ -237,14 +330,14 @@ function OpenCompleteGrid({id,realtimedealpipelinecompanyInfo,hidenavbar,setActi
                 <div className='w-[100%] h-[50%] '>
                 {
                     
-                        <ChatCard id={id} hidenavbar={hidenavbar} itsfrom='completed' currentTab={currentTab} CompanyName={companyName}/>
+                        <ChatCard id={id} chatdata={chatdata} hidenavbar={hidenavbar} itsfrom='completed' currentTab={currentTab} CompanyName={companyName}/>
                 
                 }
                 </div>
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <FilesDoc id={id} itsfrom='completed' CompanyName={companyName} currentTab={currentTab}/>
+                        <FilesDoc id={id} allcompanyuploadedfile={allcompanyuploadedfile} itsfrom='completed' CompanyName={companyName} currentTab={currentTab}/>
                 
                 }
                 </div>
@@ -263,14 +356,14 @@ function OpenCompleteGrid({id,realtimedealpipelinecompanyInfo,hidenavbar,setActi
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <ChatCard id={id} hidenavbar={hidenavbar} itsfrom='completed' currentTab={currentTab} CompanyName={companyName}/>
+                        <ChatCard id={id} chatdata={chatdata} hidenavbar={hidenavbar} itsfrom='completed' currentTab={currentTab} CompanyName={companyName}/>
                 
                 }
                 </div>
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <FilesDoc id={id} itsfrom='completed' CompanyName={companyName} currentTab={currentTab}/>
+                        <FilesDoc id={id} itsfrom='completed' allcompanyuploadedfile={allcompanyuploadedfile} CompanyName={companyName} currentTab={currentTab}/>
                 
                 }
                 </div>

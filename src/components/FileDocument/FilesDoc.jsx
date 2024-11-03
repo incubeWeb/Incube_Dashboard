@@ -5,7 +5,7 @@ import { BsFiletypePng } from "react-icons/bs";
 import { BsFiletypeJpg } from "react-icons/bs";
 import { CiFileOn } from "react-icons/ci";
 import { jwtDecode } from 'jwt-decode';
-const FilesDoc = ({id,filesadded, currentTab,CompanyName,itsfrom }) => {
+const FilesDoc = ({id,filesadded,allcompanyuploadedfile, currentTab,CompanyName,itsfrom }) => {
     const [uploadFile, setUploadFile] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -43,9 +43,15 @@ const FilesDoc = ({id,filesadded, currentTab,CompanyName,itsfrom }) => {
                     }
                   });
                
-                setSelectedFile(null);
-                fetchUploadedFiles(); // Clear selected file after upload
-                setUploadFile(!uploadFile)
+                if(response.data.status===200)
+                {
+                    setSelectedFile(null);
+                    setUploadFile(!uploadFile)
+                }else{
+                    alert('unable to update file please tryagain later')
+                    setSelectedFile(null);
+                    setUploadFile(!uploadFile)
+                }
                
             } catch (error) {
                 console.error('Error uploading file', error);
@@ -53,33 +59,16 @@ const FilesDoc = ({id,filesadded, currentTab,CompanyName,itsfrom }) => {
         }
     };
 
-    const fetchUploadedFiles = async () => {
-        try {
-            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getfiles`, {id:id, CompanyName:CompanyName,tab: `Tab${currentTab}`,organization:Logorganization },{
-                headers:{
-                  "Authorization":`Bearer ${token}`
-                }
-              });
-            setUploadedFiles(response.data.data);
-
-           
-        } catch (error) {
-            console.error('Error fetching uploaded files', error);
-        }
-    };
     
-    useEffect(()=>{
-        fetchUploadedFiles();
-    },[filesadded])
+    
+    useEffect(()=>{ 
+        console.log("myfiles",allcompanyuploadedfile)
+        setUploadedFiles(allcompanyuploadedfile)
+    },[allcompanyuploadedfile])
 
-    useEffect(() => {
-        fetchUploadedFiles();
-    }, [currentTab]);
+    
 
-    useEffect(()=>{
-const mergedData=[...uploadedFiles]
-sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-    },[uploadedFiles])
+    
 
     return (
         <div className="w-[100%] h-[100%]">

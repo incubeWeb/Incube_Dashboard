@@ -195,6 +195,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
               "Authorization":`Bearer ${token}`
             }
           })
+
         if(response.data.status==200){
             const data=JSON.parse(response.data.data)
             setjsonData(data)

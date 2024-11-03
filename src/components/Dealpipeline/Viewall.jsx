@@ -8,7 +8,7 @@ import { Bars } from 'react-loader-spinner';
 import { GrAlert } from 'react-icons/gr';
 import { jwtDecode } from 'jwt-decode';
 
-function Viewall({setdealpipelinefromdashboardcompany,dealpipelinefromdashboardcompany,realtimedealpipelinecompanyInfo,hidenavbar,filesadded,realtimeDealpipelinetabs,realtimetabchats,realtimedealpipelinecompany,filter, selectedTab,setActiveField }) {
+function Viewall({companyData,setdealpipelinefromdashboardcompany,dealpipelinefromdashboardcompany,realtimedealpipelinecompanyInfo,hidenavbar,filesadded,realtimeDealpipelinetabs,realtimetabchats,realtimedealpipelinecompany,filter, selectedTab,setActiveField }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [compData,setcompData]=useState([])
@@ -22,80 +22,21 @@ function Viewall({setdealpipelinefromdashboardcompany,dealpipelinefromdashboardc
     const Logrole=userdata.userdetails.role
 
 
+  
+
+
+
   useEffect(()=>{
     const fetchcompanydata=async()=>{
-      
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-          
-          setcompData(response.data.data)
-        
-        setTimeout(()=>{  
+       
+          setcompData(companyData)
           setloading(false)
-        },1000)
     }
-    try{
+    
     fetchcompanydata()
     
-  }catch(e)
-  {
-    seterror(!error)
-    setloading(true)
-  }
-  },[])
 
-  
-
-  useEffect(()=>{
-    const fetchcompanydata=async()=>{
-      
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-      
-          setcompData(response.data.data)
-           setTimeout(()=>{  
-          setloading(false)
-        },1000)
-    }
-    try{
-    fetchcompanydata()
-    }catch(e)
-    {
-      seterror(!error)
-    }
-  
-  },[error])
-
-
-
-  useEffect(()=>{
-    const fetchcompanydata=async()=>{
-     
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-         
-          console.log("chak")
-          
-          setcompData(response.data.data)
-        
-        
-      
-    }
-    try{
-    fetchcompanydata()
-    }catch(e)
-    {seterror(!error)}
-
-  },[realtimedealpipelinecompany])
+  },[companyData])
 
   const handlePageChange = (page) => {
     if (page <= 0) {
@@ -128,7 +69,7 @@ function Viewall({setdealpipelinefromdashboardcompany,dealpipelinefromdashboardc
        <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
         {(currentData||[]).map(company => (
           
-          <GridTemplate id={company._id} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} dealpipelinefromdashboardcompany={dealpipelinefromdashboardcompany} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimetabchats={realtimetabchats} completed={company.completed} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
+          <GridTemplate id={company._id} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} dealpipelinefromdashboardcompany={dealpipelinefromdashboardcompany} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimetabchats={realtimetabchats} completed={company.completed} companyData={companyData} selectedTab={selectedTab} key={company._id} setActiveField={setActiveField} Title={company.title} description={company.Description} logo={company.photolink} status={company.status} TeamLead_status={company.TeamLead_status}/>
           
         ))}
         </div>

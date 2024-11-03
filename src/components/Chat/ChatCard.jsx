@@ -12,7 +12,7 @@ import { MdFullscreen } from "react-icons/md";
 import { MdFullscreenExit } from "react-icons/md";
 import { jwtDecode } from 'jwt-decode';
 
-const ChatCard = ({id,hidenavbar,currentTab,CompanyName,itsfrom,realtimetabchats}) => {
+const ChatCard = ({id,hidenavbar,chatdata,currentTab,CompanyName,itsfrom,realtimetabchats}) => {
     const [chat,setChat]=useState([])
     const [countChat,setCountChat]=useState(0)
     const [mychat,setmychat]=useState('')
@@ -28,57 +28,18 @@ const ChatCard = ({id,hidenavbar,currentTab,CompanyName,itsfrom,realtimetabchats
 
     useEffect(()=>{
         const fun=async()=>{
-           // console.log(currentTab)
-            let organization=Logorganization
-            const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{id:id,CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization},{
-        headers:{
-          "Authorization":`Bearer ${token}`
-        }
-      })
+           console.log(chatdata,"this is chat data")
           
           
-            doc.data.data.map(d=>
-                {
-                let chat=JSON.parse(d.chats)
-                
-                setChat(chat)
-               
-                }
-            )
+            setChat(chatdata)
             
             
         }
         fun()
       
-    },[realtimetabchats])
+    },[chatdata])
 
-    useEffect(()=>{
-      const fun=async()=>{
-        let organization=Logorganization
-            const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{id:id,CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization},{
-        headers:{
-          "Authorization":`Bearer ${token}`
-        }
-      })
-     
-        
-            if(doc.data.data.length>0){
-                doc.data.data.map(d=>
-                  {
-                  let chat=JSON.parse(d.chats)
-                  
-                  setChat(chat)
-                 
-                  }
-              )
-             
-            }else{
-              setChat([])
-             
-            }
-      }
-      fun()
-    },[currentTab])
+   
 
 
     const scrollToBottom = () => {
@@ -92,113 +53,41 @@ const ChatCard = ({id,hidenavbar,currentTab,CompanyName,itsfrom,realtimetabchats
     }, [chat]);
 
 
-    useEffect(()=>{
-        const fun=async()=>{
-            if(chat.length!=0)
-            {
-                let organization=Logorganization
-                await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setTabChats`,{
-                    id:id,
-                    CompanyName:CompanyName,
-                    tab:`Tab${currentTab}`,
-                    chats:JSON.stringify(chat),
-                    organization:organization
-                    },{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          })
-            }
-        }
-        fun()
-    },[chat])
+    
 
     
 
 
-    const handleChat = () => {
+    const handleChat = async() => {
       if (mychat.trim().length === 0) {
         return; 
     }
       let sender = Logemail;
       setCountChat(countChat + 1);
+      const latestvalue=[...chat,{ id: countChat, chat: mychat, sender: sender, time: Date.now() }]
       setChat((prevChat) => [...prevChat, { id: countChat, chat: mychat, sender: sender, time: Date.now() }]);
+
+      if(chat.length!=0)
+        {
+            let organization=Logorganization
+            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setTabChats`,{
+                id:id,
+                CompanyName:CompanyName,
+                tab:`Tab${currentTab}`,
+                chats:JSON.stringify(latestvalue),
+                organization:organization
+                },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
+        }
       setmychat('');
     };
     const ReadableTime=(time)=>{
         const time1=new Date(time)
         return time1.toLocaleTimeString()
     }
-
-// useEffect(()=>{
-// const mergedData=[...chatting]
-// sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-// console.log("zy",mergedData)
-// },[chatting])
-
-const fetchCaht= async()=>{
-  let organization=Logorganization
-
-  try{
-    const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{id:id,CompanyName:CompanyName,tab:`Tab${currentTab}`,organization:organization},{
-      headers:{
-        "Authorization":`Bearer ${token}`
-      }
-    
-    })
-    return response
-    // setChatting(JSON.stringify(
-    //   response))
-    // console.log("Chahat data:", response);
-    
-}catch(error){
-  console.log("server error")
-}
-};
-
-const fetchCompanyData = async () => {
-  try {
-    const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-      headers:{
-        "Authorization":`Bearer ${token}`
-      }
-    });
-        // console.log("Response data:", response.data.data); // Check the response structure
-    return response
-    // Setcompany(
-    //   JSON.stringify(
-    //     response.data)
-    //   )
-  } catch (error) {
-    console.log("server error")
-  }
-};
-// const chatData=[]
-// chatting.map((val=>{
-//   chatData.push(val.chats)
-// }))
-
-useEffect(() => {
-  const fetchData = async () => {
-    const ChatData = await fetchCaht();
-   const CompanyData = await fetchCompanyData();
-  
-   
-   
-   const mergedData = [
-    CompanyData?.data?.data || [], 
-    ChatData?.data?.data[0]?.chats || [] // Provide a default empty array
-    // Provide a default empty array
-];
-   sessionStorage.setItem("Bot_Data", JSON.stringify(mergedData));
-   console.log("Chatting_Value",mergedData)
-
-  };
-  fetchData();
-}, [realtimetabchats]);
-
-
-
 
 
 

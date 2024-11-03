@@ -45,6 +45,9 @@ const Uploadfile = ({uploadfile,setuploadfile,hidenavbar}) => {
     const handleUpload = async () => {
         setshowload(true)
         if (selectedFile) {
+            const fileType=selectedFile.name.split('.')[selectedFile.name.length-1]
+
+            
             const formData = new FormData();
             formData.append('id',"none")
             formData.append('files', selectedFile);

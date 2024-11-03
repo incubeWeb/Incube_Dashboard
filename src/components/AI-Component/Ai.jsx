@@ -306,8 +306,10 @@ const Ai = ({hidenavbar}) => {
 
 
 
-
-
+const fileNamefilter=(fileName)=>{
+  console.log(fileName.split("-")[1],"this")
+  return String(fileName.split("-")[1])=='undefined'?'Untitled.xlsx':fileName.split("-")[1]
+}
 
 
 useEffect(() => {
@@ -471,11 +473,12 @@ useEffect(() => {
 
 <div className='w-full mt-4 h-[25%] overflow-y-auto scrollbar-hide'> {/* Set a fixed height and enable vertical scrolling */}
 {(allDocs || []).map(doc => (
+        doc.fileType.includes('xlsx')?
         <div key={doc._id} className='flex items-center mb-6 justify-between w-full hover:bg-gray-100 rounded-lg transition-all duration-200'>
           <span className='flex items-center text-[12px] text-gray-700 max-w-[200px] overflow-hidden whitespace-nowrap text-ellipsis'> 
             <FaRegFileExcel className='mr-2 text-green-500' size={20} />
             <span className='shrink overflow-hidden text-ellipsis max-w-[200px]'>
-              {doc.name}
+              {fileNamefilter(doc.fileName)}
             </span>
           </span>
           <label className="ml-auto">
@@ -495,6 +498,8 @@ useEffect(() => {
             />
           </label>
         </div>
+        :
+        <></>
       ))}
 </div>
 

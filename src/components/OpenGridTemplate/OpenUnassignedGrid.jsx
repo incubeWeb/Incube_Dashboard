@@ -8,7 +8,7 @@ import { Bars } from 'react-loader-spinner';
 import { jwtDecode } from 'jwt-decode';
 import ChatBot from '../GenaiBox/ChatBot';
 
-function OpenUnassignedGrid({id,hidenavbar, setSelectedTab, setActiveField, companyName, description, handleOpenGrid }) {
+function OpenUnassignedGrid({id,hidenavbar,companyData, setSelectedTab, setActiveField, companyName, description, handleOpenGrid }) {
     const [users, setAllUsers] = useState([]);
     const [roles, setRoles] = useState({});
     const [rolesAndComp, setRolesAndComp] = useState([]);
@@ -210,6 +210,14 @@ function OpenUnassignedGrid({id,hidenavbar, setSelectedTab, setActiveField, comp
         }
         
     }
+
+    useEffect(()=>{
+        const mergedData={
+            CompanyInfo:{
+              companydata:companyData
+            }}
+          sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+    },[])
 
     
 

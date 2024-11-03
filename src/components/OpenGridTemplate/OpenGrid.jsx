@@ -30,6 +30,8 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
     const [companydescription,setcompanydescription]=useState(description)
     const [editedcompanydescription,seteditedcompanydescription]=useState(description)
 
+
+    const [allcompanyuploadedfile,setcompanyuploadedfile]=useState([])
     const [Editcompanyname,seteditcompanyname]=useState(false)
     const [Editcompanydescription,seteditcompanydescription]=useState(false)
     const [TotalCards,setTotalCards]=useState([])
@@ -53,6 +55,94 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
         setTotalCards(data)
     }
 
+    const [chatdata,setchatdata]=useState([])
+    
+    useEffect(()=>{
+        const fun=async()=>{
+           // console.log(currentTab)
+            let organization=Logorganization
+            const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{id:id,CompanyName:companyName,tab:`Tab${currentTab}`,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
+          
+          
+            doc.data.data.map(d=>
+                {
+                let chat=JSON.parse(d.chats)
+                
+                setchatdata(chat)
+               
+                }
+            )
+            
+            
+        }
+        fun()
+      
+    },[realtimetabchats])
+
+    useEffect(()=>{
+      const fun=async()=>{
+        let organization=Logorganization
+            const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{id:id,CompanyName:companyName,tab:`Tab${currentTab}`,organization:organization},{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
+     
+        
+            if(doc.data.data.length>0){
+                doc.data.data.map(d=>
+                  {
+                  let chat=JSON.parse(d.chats)
+                  
+                  setchatdata(chat)
+                 
+                  }
+              )
+             
+            }else{
+              setchatdata([])
+             
+            }
+      }
+      fun()
+    },[currentTab])
+
+    
+    useEffect(()=>{
+        const fun=async()=>{
+          let organization=Logorganization
+              const doc=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTabChats`,{id:id,CompanyName:companyName,tab:`Tab${currentTab}`,organization:organization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        })
+       
+          
+              if(doc.data.data.length>0){
+                  doc.data.data.map(d=>
+                    {
+                    let chat=JSON.parse(d.chats)
+                    
+                    setchatdata(chat)
+                   
+                    }
+                )
+               
+              }else{
+                setchatdata([])
+               
+              }
+        }
+        fun()
+      },[])
+
+
+
+    
    
 
     useEffect(()=>{
@@ -145,7 +235,28 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
         fun()
     },[])
    
-   
+    const fetchUploadedFiles = async () => {
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getfiles`, {id:id, CompanyName:companyName,tab: `Tab${currentTab}`,organization:Logorganization },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              });
+            setcompanyuploadedfile(response.data.data);
+
+           
+        } catch (error) {
+            console.error('Error fetching uploaded files', error);
+        }
+    };
+
+    useEffect(()=>{
+        fetchUploadedFiles();
+    },[filesadded])
+
+    useEffect(() => {
+        fetchUploadedFiles();
+    }, [currentTab]);
     
 
     useEffect(()=>{
@@ -288,11 +399,7 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
                 if(resposne.data.status==200)
                 {
                     seteditcompanydescription(false)
-                   
-    
                     setdescriptionload(false)
-                    
-    
                 }
             }
             else{
@@ -304,6 +411,17 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
             
         }
 
+
+    useEffect(()=>{
+        const mergedData={
+            CompanyInfo:{
+              Chats:chatdata,
+              uploadedFiles:allcompanyuploadedfile,
+              companyName:companyName,
+              companydescription:description
+            }}
+          sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+    },[chatdata,allcompanyuploadedfile])
 
 
   return (
@@ -436,14 +554,14 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
                 <div className='w-[100%] h-[50%] '>
                 {
                     
-                        <ChatCard id={id} hidenavbar={hidenavbar} realtimetabchats={realtimetabchats} currentTab={currentTab} CompanyName={companyname}/>
+                        <ChatCard id={id} chatdata={chatdata} hidenavbar={hidenavbar} realtimetabchats={realtimetabchats} currentTab={currentTab} CompanyName={companyname}/>
                 
                 }
                 </div>
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <FilesDoc id={id}  filesadded={filesadded} CompanyName={companyname} currentTab={currentTab}/>
+                        <FilesDoc id={id} allcompanyuploadedfile={allcompanyuploadedfile}  filesadded={filesadded} CompanyName={companyname} currentTab={currentTab}/>
                 
                 }
                 </div>
@@ -462,14 +580,14 @@ function OpenGrid({id,filesadded,realtimeDealpipelinetabs,realtimedealpipelineco
                 <div className='w-[100%] h-[60%]'>
                 {
                     
-                        <ChatCard id={id} hidenavbar={hidenavbar} realtimetabchats={realtimetabchats} currentTab={currentTab} CompanyName={companyname}/>
+                        <ChatCard id={id} chatdata={chatdata} hidenavbar={hidenavbar} realtimetabchats={realtimetabchats} currentTab={currentTab} CompanyName={companyname}/>
                 
                 }
                 </div>
                 <div className='w-[100%] h-[50%]'>
                 {
                     
-                        <FilesDoc id={id} filesadded={filesadded} CompanyName={companyname} currentTab={currentTab}/>
+                        <FilesDoc id={id} allcompanyuploadedfile={allcompanyuploadedfile} filesadded={filesadded} CompanyName={companyname} currentTab={currentTab}/>
                 
                 }
                 </div>

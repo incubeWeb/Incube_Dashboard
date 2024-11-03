@@ -8,7 +8,7 @@ import { Bars } from 'react-loader-spinner';
 import { GrAlert } from 'react-icons/gr';
 import { jwtDecode } from 'jwt-decode';
 
-function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,hidenavbar,filter, selectedTab, fetchCompanyData, setActiveField, }) {
+function Completed({realtimedealpipelinecompanyInfo,companyData,realtimedealpipelinecompany,hidenavbar,filter, selectedTab, fetchCompanyData, setActiveField, }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [loading,setloading]=useState(true)
@@ -27,113 +27,28 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
       
       if(Logrole=='admin' || Logrole=='super admin')
         {
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
+          
    
-          const filteredData=response.data.data.filter(val=>val.completed=='completed')
+          const filteredData=companyData.filter(val=>val.completed=='completed')
           setcompData(filteredData)
         }
         else{
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
           
-          const morefilteredData=response.data.filter(val=>val.completed=='completed')
+          
+          const morefilteredData=companyData.filter(val=>val.completed=='completed')
          
           setcompData(morefilteredData);
         }
-        setTimeout(()=>{  
+        
           setloading(false)
-        },1000)
+        
     }
-    try{
+    
     fetchcompanydata()
     
-  }catch(e)
-  {
-    seterror(!error)
-  }
-  },[])
-
-  useEffect(()=>{
-    const fetchcompanydata=async()=>{
-      
-      if(Logrole=='admin' || Logrole=='super admin')
-        {
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-   
-          const filteredData=response.data.data.filter(val=>val.completed=='completed')
-          setcompData(filteredData)
-        }
-        else{
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-          
-          const morefilteredData=response.data.data.filter(val=>val.completed=='completed')
-         
-          setcompData(morefilteredData);
-        }
-        setTimeout(()=>{  
-          setloading(false)
-        },1000)
-    }
-    try{
-    fetchcompanydata()
-    }catch(e)
-    {
-      seterror(!error)
-    }
-  },[error])
-
-  useEffect(()=>{
-    const fetchcompanydata=async()=>{
-      
-      if(Logrole=='admin' || Logrole=='super admin')
-        {
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-       
-          const filteredData=response.data.data.filter(val=> val.completed=='completed')
-          setcompData(filteredData)
-        }
-        else{
-          const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getDealpipelineCompany`,{organization:Logorganization},{
-            headers:{
-              "Authorization":`Bearer ${token}`
-            }
-          });
-          
-        
-          const morefilteredData=response.data.data.filter(val=> val.completed=='completed')
-          setcompData(morefilteredData);
-        }
-    }
-    try{
-    fetchcompanydata()
-    }catch(e)
-    {
-      seterror(!error)
-    }
-  },[realtimedealpipelinecompany])
-
   
+  },[companyData])
 
-  
 
   const handlePageChange = (page) => {
     if (page <= 0) {
@@ -169,6 +84,7 @@ function Completed({realtimedealpipelinecompanyInfo,realtimedealpipelinecompany,
           currentData.map(company => 
               <GridTemplate
                 key={company._id}
+                companyData={companyData}
                  id={company._id}
                 selectedTab={selectedTab}
                 setActiveField={setActiveField}

@@ -8,6 +8,7 @@ import Inprogrss from './Inprogrss';
 import Unassigned from './Unassigned';
 import Completed from './Completed';
 import { jwtDecode } from 'jwt-decode';
+import { Bars } from 'react-loader-spinner';
 
 function FirstCol({filesadded,setdealpipelinefromdashboardcompany,dealpipelinefromdashboardcompany,realtimedealpipelinecompanyInfo,setActiveField,hidenavbar,realtimetabchats,realtimeDealpipelinetabs,realtimedealpipelinecompany}) {
   const [selectedTab, setSelectedTab] = useState("View All");
@@ -35,26 +36,30 @@ function FirstCol({filesadded,setdealpipelinefromdashboardcompany,dealpipelinefr
             "Authorization":`Bearer ${token}`
           }
         });
-        const Teamresponse = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getUserfromTeam`, {
-          member: Logemail,
-          mainorganization:Logorganization
-        },{
-          headers:{
-            "Authorization":`Bearer ${token}`
-          }
-        });
-        const organizationNames=[]
         
-        Teamresponse.data.data.map(val=>{
-          organizationNames.push(val.organization)
-        })
+        const filteredData=response.data.data
         
-        const filteredData=response.data.data.filter(val=>organizationNames.includes(val.title))
-      
         setCompanyData(filteredData);
         setcompany(response.data.data)
+        setloading(false)
+
+        const mergedData={
+          CompanyDetails:{
+            filteredData
+          }}
+        sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+
+
       } catch (error) {
-        console.log("server error")
+       
+        setCompanyData([])
+        setcompany([])
+        setloading(false)
+        const mergedData={
+          CompanyDetails:{
+            "message":"no company present"
+          }}
+        sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
       }
     };
   
@@ -166,7 +171,9 @@ function FirstCol({filesadded,setdealpipelinefromdashboardcompany,dealpipelinefr
           </div>
         </div>
       </div>
-
+        {
+          !loading?
+          <div>
       {
         selectedTab === 'View All' ? <Viewall setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} dealpipelinefromdashboardcompany={dealpipelinefromdashboardcompany} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimetabchats={realtimetabchats} realtimedealpipelinecompany={realtimedealpipelinecompany} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }
@@ -182,6 +189,12 @@ function FirstCol({filesadded,setdealpipelinefromdashboardcompany,dealpipelinefr
       {
         createNew ? <CreateNew  setCreateNew={setCreateNew} hidenavbar={hidenavbar} fetchCompanyData={fetchCompanyData} /> : null
       }
+
+</div>
+:
+<div className='w-[100%] h-[450px]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+<Bars color="#8884d8" height={80} width={80} /> </div>
+        }
       
       </div>
       

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FaImages } from 'react-icons/fa'
 import { IoMdImage } from 'react-icons/io'
 import { IoArrowBackSharp } from 'react-icons/io5'
@@ -13,6 +13,33 @@ const PortfolioHistory = ({setportfolioHistory,sheetKeys,sheetJson,selectedImage
     const[showSortMenu,setshowSortMenu]=useState(false)
     const[value,setValue]=useState('');
     const[sortValue,setsortValue]=useState('');
+
+    const sortref=useRef(null)
+    const filterref=useRef(null)
+
+    
+
+    const sortbtnref=useRef(null)
+    const filterbtnref=useRef(null)
+
+    
+
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (sortbtnref.current && !sortbtnref.current.contains(event.target) && (sortref.current && !(sortref.current.contains(event.target)))) {
+          setshowSortMenu(false);
+          }
+          if (filterbtnref.current && !filterbtnref.current.contains(event.target) && (filterref.current && !(filterref.current.contains(event.target)))) {
+            setshowFilterMenu(false);
+        }
+      };
+  
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+      };
+  }, []);
+
     useEffect(() => {
         const initialImageUrls = {};
         (sheetJson || []).forEach((val,index) => {
@@ -69,23 +96,23 @@ const PortfolioHistory = ({setportfolioHistory,sheetKeys,sheetJson,selectedImage
         if (!value) return 0; // No sorting key selected
         return mixedTypeSort(a, b);
       });
+
+
     
     return (
     <div className=' w-[100%] flex flex-col '>
-         <div className='w-[90px] text-[14px] rounded-md absolute right-6 -mt-16  h-[30px] border-[1px] border-gray-300 items-center justify-center font-inter font-semibold flex flex-row cursor-pointer'onClick={()=>{setshowFilterMenu(true)}}>
+         <div ref={filterref} className=' w-[90px] text-[14px] rounded-md absolute right-6 -mt-16  h-[30px] border-[1px] border-gray-300 items-center justify-center font-inter font-semibold flex flex-row cursor-pointer'onClick={()=>{setshowFilterMenu(!showFilterMenu)}}>
                                         <RiFilter3Line size={15} />
                                         <p  >Filters</p>
                                        
                                         </div>
-                                        <div className='w-[90px] text-[14px] absolute -mt-16 right-32 rounded-md    h-[30px] border-[1px] border-gray-300 items-center justify-center font-inter font-semibold flex flex-row cursor-pointer'onClick={()=>{setshowSortMenu(true)}}>
+                                        <div ref={sortref} className='w-[90px] text-[14px] absolute -mt-16 right-32 rounded-md    h-[30px] border-[1px] border-gray-300 items-center justify-center font-inter font-semibold flex flex-row cursor-pointer'onClick={()=>{setshowSortMenu(!showSortMenu)}}>
                                         <RiFilter3Line size={15}  />
                                        <p >Sort</p> </div>
                                        
                                        {showFilterMenu && (
-        <div className='absolute  right-20 z-50 -mt-6  w-[150px] bg-white p-3 border-gray-300 border-[1px] rounded-md'>
-          <div className='cursor-pointer'>
-            <RxCross2 size={22} onClick={() => { setshowFilterMenu(false) }} />
-          </div>
+        <div ref={filterbtnref} className='absolute  right-20 z-50 -mt-6  w-[150px] bg-white p-3 border-gray-300 border-[1px] rounded-md'>
+          
           <div>
             {sheetKeys.map((k, index) =>
               <div key={index} className='p-1 hover:bg-blue-400 items-center rounded-md text-[12px] font-semibold font-inter cursor-pointer' onClick={() => { setshowFilterMenu(false); setValue(k) }}>
@@ -97,10 +124,8 @@ const PortfolioHistory = ({setportfolioHistory,sheetKeys,sheetJson,selectedImage
       )}
 
       {showSortMenu && (
-        <div className='absolute  right-36 z-50 w-[150px] -mt-6 mr-8 bg-white p-3 border-gray-300 border-[1px] rounded-md'>
-          <div className='cursor-pointer'>
-            <RxCross2 size={22} onClick={() => { setshowSortMenu(false) }} />
-          </div>
+        <div ref={sortbtnref} className='absolute  right-36 z-50 w-[150px] -mt-6 mr-8 bg-white p-3 border-gray-300 border-[1px] rounded-md'>
+          
           <div className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-semibold font-inter cursor-pointer' onClick={() => { setshowSortMenu(false); setsortValue('Ascending') }}>
             <p className='p-1'>Ascending</p>
           </div>

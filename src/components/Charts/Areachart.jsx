@@ -323,7 +323,7 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                         // Standard layout: String on X-axis, Integer on Y-axis
                         <AreaChart
                             data={mydata}
-                            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                            margin={{ top: 5, right: 30, left: -20, bottom: 5 }}
                         >
                             <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
                             <XAxis dataKey="pv" tickCount={4}/>
@@ -339,7 +339,7 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                         <AreaChart
                             layout="vertical"
                             data={mydata}
-                            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                            margin={{ top: 5, right: 30, left: -20, bottom: 5 }}
                         >
                              <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
                             <XAxis type="number" dataKey="pv" />
@@ -352,7 +352,7 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                     :
                     (<AreaChart
                       data={mydata}
-                      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                      margin={{ top: 5, right: 30, left: -20, bottom: 5 }}
                   >
                       <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
                       <XAxis dataKey="pv" tickCount={4}/>

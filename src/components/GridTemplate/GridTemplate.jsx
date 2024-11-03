@@ -7,7 +7,7 @@ import axios from 'axios'
 import { FaDownload } from "react-icons/fa6";
 import { jwtDecode } from 'jwt-decode'
 
-function GridTemplate({id,setdealpipelinefromdashboardcompany,dealpipelinefromdashboardcompany,filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompanyInfo,hidenavbar,realtimetabchats,setSelectedTab,selectedTab,setActiveField,Title,description,logo,status,TeamLead_status,pushedby,completed}) {
+function GridTemplate({id,setdealpipelinefromdashboardcompany,companyData,dealpipelinefromdashboardcompany,filesadded,realtimeDealpipelinetabs,realtimedealpipelinecompanyInfo,hidenavbar,realtimetabchats,setSelectedTab,selectedTab,setActiveField,Title,description,logo,status,TeamLead_status,pushedby,completed}) {
     const [openGrid,setOpenGrid]=useState(false)
     const [openUnassignedGrid,setopenUnassignedGrid]=useState(false)
     const [openCompleteGrid,setOpenCompleteGrid]=useState(false)
@@ -23,25 +23,18 @@ function GridTemplate({id,setdealpipelinefromdashboardcompany,dealpipelinefromda
     const Logrole=userdata.userdetails.role
 
     
-    useEffect(()=>{
-        const getAssignedTeam=async()=>{
-            
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getTeams`,{
-                
-                assignedBy:Logemail,
-                mainorganization:Logorganization
-            },{
-                headers:{
-                  "Authorization":`Bearer ${token}`
-                }
-              })
-            setassignedList(response.data.data)
-        }
-        getAssignedTeam()
-    },[])
+   
 
     const handleOpenGrid=async()=>{
-        console.log(openGrid,openUnassignedGrid,openCompleteGrid,openViewallGrid)
+        console.log(openGrid,"hitted",companyData)
+
+        const mergedData={
+            CompanyDetails:{
+                companyData
+            }}
+          sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+
+          
         if(dealpipelinefromdashboardcompany?.length>0){
             setdealpipelinefromdashboardcompany([])
             setOpenViewallGrid(false)
@@ -49,18 +42,22 @@ function GridTemplate({id,setdealpipelinefromdashboardcompany,dealpipelinefromda
         }
          if(selectedTab=='In Progress')
         {
+                
                 setOpenGrid(!openGrid)
         }
         else if(selectedTab=='Unassigned')
         {
+            
             setopenUnassignedGrid(!openUnassignedGrid)
         }
         else if(selectedTab=='Completed')
         {
+            
             setOpenCompleteGrid(!openCompleteGrid)
         }
         else if(selectedTab=='View All')
             {
+                
                 setOpenViewallGrid(!openViewallGrid)
             }
         
@@ -71,9 +68,7 @@ function GridTemplate({id,setdealpipelinefromdashboardcompany,dealpipelinefromda
         return Logrole=='team lead' || Logrole==='user'
     }
 
-    const checkerforTeam=()=>{
-        return assignedList.some(val=>val.mainorganization==Logorganization && val.organization==Title)
-    }
+    
 
     const handleImageError=()=>{
         setimgsrc('https://i.pinimg.com/originals/ec/d9/c2/ecd9c2e8ed0dbbc96ac472a965e4afda.jpg')
@@ -185,7 +180,7 @@ function GridTemplate({id,setdealpipelinefromdashboardcompany,dealpipelinefromda
         :<></>}
 
         {openUnassignedGrid?
-            <OpenUnassignedGrid id={id} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+            <OpenUnassignedGrid id={id} companyData={companyData} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :<></>}
 
         {openCompleteGrid?
@@ -193,7 +188,7 @@ function GridTemplate({id,setdealpipelinefromdashboardcompany,dealpipelinefromda
         :<></>}
 
         {
-            openViewallGrid &&checkerforTeam() && status=='In Progress' && completed=='incomplete' &&(Logrole=='super admin'||Logrole=='admin')?
+            openViewallGrid && status=='In Progress' && completed=='incomplete' &&(Logrole=='super admin'||Logrole=='admin')?
             <OpenGrid id={id} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimetabchats={realtimetabchats} hidenavbar={hidenavbar} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
             openViewallGrid && status=='In Progress' && completed=='incomplete' &&(Logrole=='super admin'||Logrole=='admin')?
@@ -203,7 +198,7 @@ function GridTemplate({id,setdealpipelinefromdashboardcompany,dealpipelinefromda
             <OpenCompleteGrid id={id} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
             openViewallGrid && status=='Unassigned' && completed=='incomplete' && (Logrole=='super admin'||Logrole=='admin')?
-            <OpenUnassignedGrid id={id} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+            <OpenUnassignedGrid id={id} companyData={companyData} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
         <></>
         }
@@ -216,7 +211,7 @@ function GridTemplate({id,setdealpipelinefromdashboardcompany,dealpipelinefromda
             <OpenCompleteGrid id={id} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
             openViewallGrid && status=='In Progress' && completed=='incomplete' && TeamLead_status=='Unassigned' &&(Logrole=='team lead'||Logrole=='user')?
-            <OpenUnassignedGrid id={id} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
+            <OpenUnassignedGrid id={id} companyData={companyData} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={Title} description={description} handleOpenGrid={handleOpenGrid}/>
         :
             <></>
         }
@@ -238,7 +233,7 @@ function GridTemplate({id,setdealpipelinefromdashboardcompany,dealpipelinefromda
               <OpenCompleteGrid id={dealpipelinefromdashboardcompany[0].id} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={dealpipelinefromdashboardcompany[0].Title} description={dealpipelinefromdashboardcompany[0].description} handleOpenGrid={handleOpenGrid}/>
           :
           dealpipelinefromdashboardcompany?.length>0 && dealpipelinefromdashboardcompany[0]?.status=='Unassigned' && dealpipelinefromdashboardcompany[0]?.completed=='incomplete' && (Logrole=='super admin'||Logrole=='admin')?
-              <OpenUnassignedGrid id={dealpipelinefromdashboardcompany[0].id} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={dealpipelinefromdashboardcompany[0].Title} description={dealpipelinefromdashboardcompany[0].description} handleOpenGrid={handleOpenGrid}/>
+              <OpenUnassignedGrid id={dealpipelinefromdashboardcompany[0].id} companyData={companyData} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={dealpipelinefromdashboardcompany[0].Title} description={dealpipelinefromdashboardcompany[0].description} handleOpenGrid={handleOpenGrid}/>
            :
            <></>
         }
@@ -251,7 +246,7 @@ function GridTemplate({id,setdealpipelinefromdashboardcompany,dealpipelinefromda
               <OpenCompleteGrid id={dealpipelinefromdashboardcompany[0].id} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={dealpipelinefromdashboardcompany[0].Title} description={dealpipelinefromdashboardcompany[0].description} handleOpenGrid={handleOpenGrid}/>
           :
           dealpipelinefromdashboardcompany?.length>0 && status=='In Progress' && dealpipelinefromdashboardcompany[0]?.completed=='incomplete' && dealpipelinefromdashboardcompany[0]?.TeamLead_status=='Unassigned' &&(Logrole=='team lead'||Logrole=='user')?
-              <OpenUnassignedGrid id={dealpipelinefromdashboardcompany[0].id} hidenavbar={hidenavbar} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={dealpipelinefromdashboardcompany[0].Title} description={dealpipelinefromdashboardcompany[0].description} handleOpenGrid={handleOpenGrid}/>
+              <OpenUnassignedGrid id={dealpipelinefromdashboardcompany[0].id} hidenavbar={hidenavbar} companyData={companyData} setSelectedTab={setSelectedTab} setActiveField={setActiveField} companyName={dealpipelinefromdashboardcompany[0].Title} description={dealpipelinefromdashboardcompany[0].description} handleOpenGrid={handleOpenGrid}/>
           :
               <></>
           }

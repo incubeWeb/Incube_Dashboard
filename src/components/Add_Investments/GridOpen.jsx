@@ -71,6 +71,8 @@ function GridOpen({hidenavbar,companyName,description,handleOpenGrid}) {
         fun()
     },[search,TotalCards])
 
+    
+
 
   return (
     <div className={`${hidenavbar?'ml-[4%] w-[100%]':'ml-[22%] w-[80%]'} h-screen z-50 space-y-7 bg-white absolute top-0 right-0 pt-[45px] overflow-hidden p-[23px] md:flex md:flex-col cursor-default`} onClick={handleBubbling}>

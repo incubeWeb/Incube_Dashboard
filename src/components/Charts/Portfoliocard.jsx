@@ -17,12 +17,13 @@ import { LuTriangle } from "react-icons/lu";
 import { HiOutlineDotsVertical } from 'react-icons/hi'
 import { jwtDecode } from 'jwt-decode'
 
-const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfoliocardwidgitcount,capturingPortfoliowidgitvalues,setcapturingPortfoliowidgitvalues}) => {
+const Portfoliocard = ({id,setsheetpopup,handlePlusClick,portfoliocardwidgitcount,boxes,setBoxes,setportfoliocardwidgitcount,capturingPortfoliowidgitvalues,setcapturingPortfoliowidgitvalues,setshowvalue,showValue}) => {
     const [editLabel,seteditLabel]=useState(false)
     const inputRef=useRef(null)
     const [labelname,setlablename]=useState('Enter Label')
-    const [showValue,setshowvalue]=useState('0')
-    const [sheetpopup,setsheetpopup]=useState(false)
+
+    
+    
     const [sheets,setallsheets]=useState([])
     const [sheetname,setsheetname]=useState('')
     const [clickedSheetId,setclickedSheetId]=useState('')
@@ -55,6 +56,9 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     
      
   };
+
+
+
       
  
     const uniqueIconKey = `selectedIcon-${id}`;
@@ -85,7 +89,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
           seticonname(iconName)
           setIcon(getIconComponent(iconName)); 
           setShowPopup(false); 
-          setshowvalue(currency)
+          
         };
 
         const handleFilterSelection = (filter) => {
@@ -94,18 +98,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
           setshowFilterMenu(false); // Close filter menu
           // Open sorting menu
       };
-      const getValue=(selectedFilter)=>{
-        switch(selectedFilter){
-          case "Change Icon":
-          return setShowPopup(!showPopup)
-          case "Edit Label":
-          return handleEdit()
-          default:
-          return handlePlusClick()
-        
-        }
-       
-      }
+      
 
         
         const getIconComponent = (iconName) => {
@@ -149,7 +142,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                     {
                         
                         setlablename(val.portfoliowidgit.labelname)
-                        setshowvalue(val.portfoliowidgit.showValue)
+                        
                         seticonname(val.portfoliowidgit.portfolioicon)
                         setIcon(getIconComponent(val.portfoliowidgit.portfolioicon))
                         setcurrencyvalue(val.portfoliowidgit.currencyValue)
@@ -161,42 +154,28 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
 
     },[])
 
-    const handlePlusClick=async()=>{
-        setLoading(true)
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:Logorganization},{
-        headers:{
-          "Authorization":`Bearer ${token}`
-        }
-      })
-        setsheetpopup(true)
-        setallsheets(response.data.data)
-        setLoading(false)
-        console.log("xy",response.data.data)
-        
-    }
-    const handlesheetclick=async(id,name)=>{
-        setsheetname(name)
-        setclickedSheetId(id)       
-        setsheetClicked(true)
-        setsheetpopup(false)
-    }
+    
+
+    
+    
     useEffect(()=>
-    {
-        const settingvalue=()=>{
-            let myid=id+1
-            const isFine=JSON.stringify({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname,currencyValue:currencyValue})===JSON.stringify({id:myid,labelname:'Enter Label',showValue:'0',portfolioicon:'',currencyValue:currencyValue})
-           if(!isFine)
-           {
-            
-            setportfoliocardwidgitcount({id:myid,labelname:labelname,showValue:showValue,portfolioicon:iconname,currencyValue:currencyValue})
-           }
-        }
-        if(!editLabel)
-        {
-            settingvalue()
-        }
-        
-    },[editLabel,showValue,iconname,currencyValue])
+      {
+          const settingvalue=()=>{
+              let myid=id+1
+              console.log("currentcy value cahfdf",currencyValue)
+              const isFine=JSON.stringify({id:myid,labelname:labelname,portfolioicon:iconname,currencyValue:currencyValue})===JSON.stringify({id:myid,labelname:'Enter Label',portfolioicon:'',currencyValue:'$'})
+             if(!isFine)
+             {
+              
+              setportfoliocardwidgitcount({id:myid,labelname:labelname,portfolioicon:iconname,currencyValue:currencyValue})
+             }
+          }
+          if(!editLabel)
+          {
+              settingvalue()
+          }
+          
+      },[editLabel,iconname,currencyValue])
 
     
 
@@ -231,29 +210,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
       }
       }
 
-      const handleselectsheetfield=()=>{
-        setsheetClicked(false)
-        setsheetpopup(false)
-        
-        let value=''
-        try{
-            value=parseInt(sheetJson[0][sheetfieldselected]) 
-            
-            if(isNaN(sheetJson[0][sheetfieldselected]))
-            {
-                value='0'
-            }
-        }
-        catch(e)
-        {
-            value='0'
-        }
-
-        
-        
-        setshowvalue(value);
-        
-    }
+     
     useEffect(()=>{
      
       },[currencyValue])
@@ -308,10 +265,20 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
 
 
     
-
+  const threedotref=useRef(null)
   useEffect(()=>{
-    console.log("zp",sheets.length)
-  },[])
+    const outsideclicked=(event)=>{
+      if(threedotref.current && !threedotref.current.contains(event.target))
+      {
+        setshowFilterMenu(false)
+      }
+
+    }
+    document.addEventListener('mousedown',outsideclicked)
+    return ()=>{
+      document.removeEventListener('mousedown',outsideclicked)
+    }
+  })
 
   return (
     <div ref={popupRef} className='flex h-[100%] flex-col  bg-white cursor-default space-y-2'>
@@ -319,7 +286,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     <div className='-mt-4 cursor-pointer'  ><HiOutlineDotsVertical onClick={()=>{setshowFilterMenu(true)}} size={20}/></div>
     {showFilterMenu && (
   <div className="">
-    <div className='absolute left-1 top-0 w-[150px] p-3 bg-white border-gray-300 border-[1px] rounded-md z-50'>
+    <div ref={threedotref} className='absolute left-1 top-0 w-[150px] p-3 bg-white border-gray-300 border-[1px] rounded-md z-50'>
       <RxCross2 onClick={() => { setshowFilterMenu(false) }} className='absolute right-2 top-1 cursor-pointer' />
       <div
         className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-semibold font-inter cursor-pointer'
@@ -333,7 +300,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
       </div>
       <div
         className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-inter h-[40px] font-semibold cursor-pointer'
-        onClick={() => { handlePlusClick(); setshowFilterMenu(false) }}>
+        onClick={() => { handlePlusClick(id); setshowFilterMenu(false) }}>
         <p className='p-1'>Add Sheet</p>
       </div>
     </div>
@@ -358,94 +325,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
     </div> */}
    
     {       
-                sheetpopup?
-                
-                <div ref={popupRef} className="flex flex-col space-y-2 overflow-y-auto scrollbar-hide bg-white">
-    {/* Close Button */}
-    <div className="flex items-center justify-end pr-2">
-        <IoMdClose 
-            size={20} 
-            className="text-gray-700 cursor-pointer hover:text-gray-500 transition duration-200 ease-in-out transform hover:scale-105" 
-            onClick={() => {
-                setsheetpopup(false);
-            }} 
-        />
-    </div>
 
-    {/* Main Content */}
-    <div className="h-[100px] flex items-center justify-center text-gray-500 font-medium italic">
-        {sheets.length === 0 ? (
-            <p className="text-gray-500">No sheets found</p>
-        ) : (
-            <div className="w-full mt-6 space-y-4 overflow-y-auto scrollbar-hide">
-                <div className="mt-6" /> {/* Added margin-top to provide space */}
-                {sheets
-                    .filter((doc) => doc.fileType === 'xlsx')
-                    .map((doc) => (
-                        <div 
-                            key={doc._id} 
-                            onClick={() => handlesheetclick(doc._id, doc.name)}
-                            className="w-full h-[60px] p-6 bg-gray-100 rounded-lg shadow-md cursor-pointer flex items-center space-x-4 transition-transform duration-200 transform hover:scale-105 hover:bg-white hover:gray-600"
-                        >
-                            <FaRegFileExcel className="text-green-600" size={22} />
-                            <p className="text-[15px] tracking-wider font-semibold truncate">
-                                {doc.name.replace(/^\d+_/, "")}
-                            </p>
-                        </div>
-                    ))
-                }
-            </div>
-        )}
-    </div>
-</div>
-
-
-               
-                :
-                sheetClicked?
-                
-                <div ref={popupRef} className='p-4 flex flex-col w-full h-full bg-white rounded-lg shadow-lg fixed top-0 left-0 z-[40] overflow-y-auto'>
-    
-    <div className='w-full flex space-x-2 items-center justify-start'>
-        <div className='flex items-center justify-center h-[40px] transition-transform transform hover:scale-110 cursor-pointer' onClick={(() => {setsheetClicked(false); setsheetpopup(true)})}>
-            <IoMdArrowBack className='text-gray-700' size={20} />
-        </div>
-        <div className='text-gray-800 font-semibold text-[16px] flex items-center justify-center'>
-            {sheetname.replace(/^\d+_/, "")}
-        </div>
-    </div>
-
-    <div className='w-full flex mt-6 flex-col items-center justify-center space-y-6'>
-        <select onChange={(e) => setsheetfieldselected(e.target.value)} className='w-[220px] h-[35px] text-[14px] text-gray-700 rounded-md border-gray-300 border-2 transition duration-200 ease-in-out outline-none '>
-            {Loading2 ? (
-                <option value="" disabled>
-                    <div className="flex items-center">
-                        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
-                        Loading...
-                    </div>
-                </option>
-            ) : (
-                (sheetKeys || []).map(k =>
-                    <option key={k._id} className="text-gray-700">{k}</option>
-                )
-            )}
-        </select>
-    </div>
-
-    <div className='w-full flex flex-row items-center justify-center'>
-        <div onClick={handleselectsheetfield} className='select-none mt-2 cursor-pointer flex flex-row w-[120px] rounded-md h-[40px] items-center justify-center bg-gradient-to-r from-green-500 to-green-800 space-x-2 transition duration-200 ease-in-out transform hover:scale-105 hover:shadow-lg'>
-            {Loading2 ? (
-                <AiOutlineLoading3Quarters className="animate-spin text-[14px] text-white" />
-            ) : (
-                <p className='text-[14px] text-white font-semibold'>Set sheet field</p>
-            )}
-        </div>
-    </div>
-    
-</div>
-
-                
-                :
                  
                 <div className='w-[100%] h-[100%]'>
                 {/* <div className='ml-12 -mb-2'><BsPencil /></div> */}
@@ -506,10 +386,11 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                                
                     </div>
                     <div className='w-[100%] h-[40%]  flex flex-row'>
-                        <div className='w-[70%] '>
+                        <div className='w-[20%] '>
                             <div className='flex h-[100%] items-center justify-start'>
                             
-                                <p  className='text-[22px] font-inter mt-9 font-bold text-gray-700 ml-2'><span onClick={togglePopup} className='mr-1 cursor-pointer' >{currencyValue}</span><span className='cursor-pointer' onDoubleClick={handlePlusClick}>{showValue }</span></p>
+                                <p  className='text-[22px] font-inter mt-9 font-bold text-gray-700 ml-2'><span onClick={togglePopup} className='mr-1 cursor-pointer' >{currencyValue || '$'}</span><span className='cursor-pointer' onDoubleClick={()=>handlePlusClick(id)}>{showValue || '0' }</span></p>
+                                
                             </div>
                             {isPopupOpen && (
                     <div ref={popupRef} className='absolute top-4 left-0 bg-white border h-[160px] scrollbar-hide border-gray-300 rounded overflow-y-auto shadow-md mt-2'>
@@ -526,15 +407,7 @@ const Portfoliocard = ({id,portfoliocardwidgitcount,boxes,setBoxes,setportfolioc
                     </div>
                 )}
                         </div>
-                        <div className='w-[100%] h-[100%] flex items-center justify-end mt-6'>
-                        {loading1 ? (
-            <AiOutlineLoading3Quarters className="animate-spin  text-[14px]" />
-          ) : (
-                        <div className='h-[20px] cursor-pointer'  onClick={handlePlusClick}>
-                            {/* <AiOutlineFileAdd  size={24} className='' /> */}
-                        </div>
-               )}
-</div>
+                        
                     </div>
                 </div>
             }

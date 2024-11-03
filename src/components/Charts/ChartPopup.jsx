@@ -23,6 +23,7 @@ import { useSheet } from "../SheetContext/SheetContext";
 
 
 const ChartPopup = ({
+  showValue,
   dashboardwidgitref,
   showlist,
   xAxis,
@@ -755,7 +756,7 @@ const ChartPopup = ({
         minW: 2.5,
         minH: 2
       };
-      setBoxes([...boxes, { ...newBox, type : "portfoliocard" , portfoliowidgitcount:{id:boxes.length +1,labelname:"Enter Label",showValue:"0",currencyValue:"$"}}]);
+      setBoxes([...boxes, { ...newBox, type : "portfoliocard" , portfoliowidgitcount:{id:boxes.length +1,labelname:"Enter Label",showValue:showValue,currencyValue:"$"}}]);
       setShowPopup(false);
   }
 
