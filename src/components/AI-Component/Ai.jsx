@@ -475,7 +475,7 @@ useEffect(() => {
           <span className='flex items-center text-[12px] text-gray-700 max-w-[200px] overflow-hidden whitespace-nowrap text-ellipsis'> 
             <FaRegFileExcel className='mr-2 text-green-500' size={20} />
             <span className='shrink overflow-hidden text-ellipsis max-w-[200px]'>
-              {doc.name}
+              {doc.name.replace(/.*?[-_]/, '')}
             </span>
           </span>
           <label className="ml-auto">

@@ -403,7 +403,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
             {
     (allDocs || []).map(doc => {
         // Use a regex to remove the numeric pattern followed by an underscore from doc.name
-        const cleanedName = doc.name.replace(/\d+_/g, '');
+        const cleanedName = doc.name.replace(/.*?[-_]/, '')
         
         return (
             <div key={doc._id} className='flex flex-row w-[100%] h-[100%] font-inter items-center pt-1 border-t border-gray-300 mb-6'>
