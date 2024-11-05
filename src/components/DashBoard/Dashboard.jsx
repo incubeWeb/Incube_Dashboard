@@ -36,7 +36,7 @@ import 'react-resizable/css/styles.css';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 
-const Dashboard = ({boxes, setBoxes,handlePlusClick,setshowvalue,showValue,setsheetpopup,mygoogleaccountisconnected,setdealpipelinefromdashboardcompany,navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
+const Dashboard = ({boxes,setcurrencyvalue,currencyValue, setBoxes,handlePlusClick,setshowvalue,showValue,setsheetpopup,mygoogleaccountisconnected,setdealpipelinefromdashboardcompany,navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
   
   const [openChatbar,setopenChatbar]=useState(false)
   const [showPopup, setShowPopup] = useState(false);
@@ -445,7 +445,7 @@ useEffect(() => {
       <div  className='w-[100%] h-[7%] flex flex-col items-end pr-4 justify-end'>
         <div
         ref={addwidgitref}
-          className=' z-[50] flex flex-row w-[130px] h-[33px] rounded-md bg-blue-600  text-[14px] items-center justify-center text-white cursor-pointer'
+          className=' z-[50] flex mt-2 flex-row w-[130px] h-[33px] rounded-md bg-blue-600  text-[14px] items-center justify-center text-white cursor-pointer'
           onClick={handleShowPopup}
         >
           <p> <span className='text-[20px] font-bold'>+</span>  Add widgets</p>
@@ -507,6 +507,8 @@ useEffect(() => {
                      setBoxes={setBoxes} 
                      boxes={boxes}
                      showValue={box.showValue}
+                     setcurrencyvalue={setcurrencyvalue}
+                     currencyValue={currencyValue}
                      setshowvalue={setshowvalue}
                      setsheetpopup={setsheetpopup}
                      handlePlusClick={handlePlusClick}

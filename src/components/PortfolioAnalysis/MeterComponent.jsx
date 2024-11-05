@@ -7,7 +7,7 @@ import { FaRegFileExcel } from 'react-icons/fa'
 import { IoMdArrowBack } from 'react-icons/io'
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useSheet } from '../SheetContext/SheetContext';
-const MeterComponent = ({selectedTab,hidenavbar,realtimeportfoliostate}) => {
+const MeterComponent = ({selectedTab,PortfolioMetervalue,hidenavbar,realtimeportfoliostate}) => {
   const max = 100;  
   const min = 0;    
  
@@ -29,14 +29,14 @@ const MeterComponent = ({selectedTab,hidenavbar,realtimeportfoliostate}) => {
   const [clickedSheetId,setclickedSheetId]=useState('')
   const [sheetJson,setsheetJson]=useState([])
   const [showValue,setshowvalue]=useState('$0')
-  const [percentage, setpercentage] = useState(0);
+  const [percentage, setpercentage] = useState(PortfolioMetervalue);
   const[checkvalue,setcheckvalue]=useState('')
   const [previousPercentage, setPreviousPercentage] = useState(0);
   const popupRef = useRef(null);
-  const totalArcLength=820;
   
-    const { setpercentage1 } = useSheet();
-    setpercentage1(showValue+"%")
+  
+  
+  
 
 
    
@@ -84,75 +84,31 @@ const MeterComponent = ({selectedTab,hidenavbar,realtimeportfoliostate}) => {
 
 useEffect(()=>{
   const insertValue=async()=>{
-            const organization2=`${Logorganization}_ShownGraph`
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization2},{
-                headers:{
-                  "Authorization":`Bearer ${token}`
-                }
-              })
-
-            if(response.data.status==200)
-            {
-              setpercentage(response.data.metervalue)
-            }
+    setpercentage(PortfolioMetervalue)      
   }
   insertValue()
 },[])
 
-useEffect(()=>{
-const setmeterValue=async()=>{
-            const organization2=`${Logorganization}_ShownGraph`
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
-                email:Logemail,
-                metervalue:percentage,
-                organization2:organization2
-            },{
-                headers:{
-                  "Authorization":`Bearer ${token}`
-                }
-              })
-            
-        }
-        if(selectedTab==Logemail && percentage !=0){
-         
-        setmeterValue()
-        }
-      
-
-
-},[percentage])
 
 useEffect(()=>{
   const insertValue=async()=>{
-            
-            const organization2=`${Logorganization}_ShownGraph`
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization2},{
-                headers:{
-                  "Authorization":`Bearer ${token}`
-                }
-              })
-              console.log(response.data)
-            if(response.data.status==200)
-            {
-              const metervalue = response.data.metervalue;
-              setpercentage(metervalue);
-           
-            }
+      setpercentage(PortfolioMetervalue)      
   }
   if (selectedTab) {
     insertValue();
   }
-},[selectedTab,realtimeportfoliostate])
+},[selectedTab,realtimeportfoliostate,PortfolioMetervalue])
 
 
 
-const handleselectsheetfield = () => {
+const handleselectsheetfield = async() => {
   setsheetClicked(false);
   setsheetpopup(false);
   
   // Check if sheetJson is not empty
   if (sheetJson.length > 0) {
     let value = sheetJson[0][sheetfieldselected];
+  
     
     // Extract numeric value if it starts with symbols
     const numericValue = parseFloat(value.replace(/[^0-9.-]+/g, ''));
@@ -186,9 +142,30 @@ const handleselectsheetfield = () => {
       value = 0; // or set it to some default string like '$0'
     }
     
-    setshowvalue(value);
-    const ans = Math.max(min, Math.min(value/2, max)); 
-    setpercentage(ans);
+    //setshowvalue(value);
+   // const ans = Math.max(min, Math.min(value/2, max)); 
+    
+   
+   
+    const organization2=Logorganization+"_ShownGraph"
+    const response2=  await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
+        email:Logemail,
+        metervalue:value,
+        MeterGraphorganization:organization2
+    },{
+        headers:{
+          "Authorization":`Bearer ${token}`
+        }
+      })
+    console.log(response2.data.status)
+    if(response2.data.status==200){
+      setpercentage(value);
+    }
+    else{
+      alert("Server error")
+    }
+        
+        
   
   } else {
     console.warn("sheetJson is empty");
@@ -231,47 +208,13 @@ useEffect(()=>{
       setsheetKeys(fileteredKey)
       
   }
-  try{
+  if(clickedSheetId.trim().length>0){
   setValues()
-  }catch(e)
-  {
-      setValues()
   }
+  
 },[clickedSheetId])
 
 
-useEffect(()=>{
-  const setValues=async()=>{
-      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:clickedSheetId,organization:Logorganization},{
-          headers:{
-            "Authorization":`Bearer ${token}`
-          }
-        })
-      const data=JSON.parse(response.data.data)
-      setsheetJson(data)
-      const key=Object.keys(data[0])
-      
-      const fileteredKey=[]
-      data.map(d=>{
-          key.map(k=>{
-              if(d[k]!=""&&!fileteredKey.includes(k)){
-              fileteredKey.push(k)
-              }
-          }
-          )
-      })
-      
-      setsheetfieldselected(fileteredKey[0])
-      setsheetKeys(fileteredKey)
-     
-  }
-  try{
-  setValues()
-  }catch(e)
-  {
-      setValues()
-  }
-},[clickedSheetId])
 
 
 
@@ -326,6 +269,8 @@ const handleGooglesheetclicked=async (id,name)=>{
      
   }
 }
+
+
 let label, bgColor;
   if (percentage*2 >= 80) {
     label = "Excellent";
@@ -355,6 +300,8 @@ let label, bgColor;
         document.removeEventListener('mousedown', handleClickOutside);
     };
 }, []);
+
+
   return (
     <div className='relative w-[100%]'>
        {selectedTab === Logemail && (
@@ -531,7 +478,7 @@ let label, bgColor;
         
       
         <text x="150" y="120" textAnchor="middle" fontSize="32" fill="#333" fontWeight="bold">
-          {`${percentage*2}%`}
+          {`${percentage}%`}
         </text>
       </svg>
 

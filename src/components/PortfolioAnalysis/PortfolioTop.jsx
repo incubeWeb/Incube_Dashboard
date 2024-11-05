@@ -12,8 +12,8 @@ import { HiChartBar } from 'react-icons/hi'
 import { CiShare2 } from 'react-icons/ci'
 import { jwtDecode } from 'jwt-decode'
 
-const PortfolioTop = ({selectedTab,setportfoliocardsdata,portfoliosecurity,realtimeportfoliostate,hidenavbar,sheetedited,selectedSheetId}) => {
-    const [valueid,setvalueid]=useState([{id:1,labelname:'Total fund',showValue:'0',currencyValue:'$'},{id:2,labelname:'Fund utilized',showValue:'0',currencyValue:'$'},{id:3,labelname:'Funds remaining',showValue:'0',currencyValue:'$'},{id:4,labelname:'ROI',showValue:'0',currencyValue:'$'}])
+const PortfolioTop = ({PortfolioGraphvalues, Portfoliocardvalues,PortfolioMetervalue,selectedTab,setportfoliocardsdata,portfoliosecurity,realtimeportfoliostate,hidenavbar,sheetedited,selectedSheetId}) => {
+    const [valueid,setvalueid]=useState([{id:1,labelname:'Total fund',showValue:'0',currencyValue:'$',prevShowVal:'0'},{id:2,labelname:'Fund utilized',showValue:'0',currencyValue:'$',prevShowVal:'0'},{id:3,labelname:'Funds remaining',showValue:'0',currencyValue:'$',prevShowVal:'0'},{id:4,labelname:'ROI',showValue:'0',currencyValue:'$',prevShowVal:'0'}])
     
     const [changevalue,setchangevalue]=useState(false)
     const token=localStorage.getItem('token')
@@ -28,63 +28,22 @@ const PortfolioTop = ({selectedTab,setportfoliocardsdata,portfoliosecurity,realt
    
     
     
+    
     useEffect(()=>{
         const getTopCardsValues=async()=>{
-            
-            const organization=`${Logorganization}_Topcards`
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization},{
-              headers:{
-                "Authorization":`Bearer ${token}`
-              }
-            })
-            console.log(response,"itsem card")
-            if(response.data.status==-200 || response.data.data == undefined)
-            {
-              setvalueid([{id:1,labelname:'Total fund',showValue:'0',currencyValue:'$'},{id:2,labelname:'Fund utilized',showValue:'0',currencyValue:'$'},{id:3,labelname:'Funds remaining',showValue:'0',currencyValue:'$'},{id:4,labelname:'ROI',showValue:'0',currencyValue:'$'}])
-              return
-            }
-            
-            const data=response.data.data
-    
-           // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
-           const stateValues=JSON.parse(data)||[]
-           setvalueid(stateValues)
-        }
-        try{
-        getTopCardsValues()
-        }catch(e)
-        {
-          getTopCardsValues()
-        }
-
-    },[sheetedited,realtimeportfoliostate,selectedTab])
-
-  useEffect(()=>{
-    const getTopCardsValues=async()=>{
-        const organization=`${Logorganization}_Topcards`
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization},{
-          headers:{
-            "Authorization":`Bearer ${token}`
-          }
-        })
-        if(response.data.status==-200)
+         
+          if(typeof(Portfoliocardvalues)=='string')
           {
-          //  setvalueid([{id:1,labelname:'Total fund',showValue:'$0'},{id:2,labelname:'Fund utilized',showValue:'$0'},{id:3,labelname:'Funds remaining',showValue:'$0'},{id:4,labelname:'ROI',showValue:'$0'}])
-            return
+            console.log("here")
+            const val1=JSON.parse(Portfoliocardvalues)
+            console.log(val1)
+            setvalueid(val1)
+          }else{
+            setvalueid([{id:1,labelname:'Total fund',showValue:'0',currencyValue:'$',prevShowVal:'0'},{id:2,labelname:'Fund utilized',showValue:'0',currencyValue:'$',prevShowVal:'0'},{id:3,labelname:'Funds remaining',showValue:'0',currencyValue:'$',prevShowVal:'0'},{id:4,labelname:'ROI',showValue:'0',currencyValue:'$',prevShowVal:'0'}])
           }
-        const data=response.data.data
-
-       // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
-       const stateValues=JSON.parse(data)||[]
-       setvalueid(stateValues)
-     
-    }
-    try{
-    getTopCardsValues()
-    }catch(e){
-      getTopCardsValues()
-    }
-  },[])
+        }     
+        getTopCardsValues()
+    },[Portfoliocardvalues])//sheetedited,
 
   
 
@@ -105,7 +64,7 @@ const PortfolioTop = ({selectedTab,setportfoliocardsdata,portfoliosecurity,realt
         </div>
         
         <div className='w-[100%] h-[420px] '>
-            <PortfolioTopGraph selectedTab={selectedTab} portfoliosecurity={portfoliosecurity} realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited}  hidenavbar={hidenavbar}/>
+            <PortfolioTopGraph PortfolioGraphvalues={PortfolioGraphvalues} PortfolioMetervalue={PortfolioMetervalue} selectedTab={selectedTab} portfoliosecurity={portfoliosecurity} realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited}  hidenavbar={hidenavbar}/>
         </div>
     </div>
   )

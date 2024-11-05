@@ -17,7 +17,7 @@ import { LuTriangle } from "react-icons/lu";
 import { HiOutlineDotsVertical } from 'react-icons/hi'
 import { jwtDecode } from 'jwt-decode'
 
-const Portfoliocard = ({id,setsheetpopup,handlePlusClick,portfoliocardwidgitcount,boxes,setBoxes,setportfoliocardwidgitcount,capturingPortfoliowidgitvalues,setcapturingPortfoliowidgitvalues,setshowvalue,showValue}) => {
+const Portfoliocard = ({id,setcurrencyvalue,currencyValue,setsheetpopup,handlePlusClick,portfoliocardwidgitcount,boxes,setBoxes,setportfoliocardwidgitcount,capturingPortfoliowidgitvalues,setcapturingPortfoliowidgitvalues,setshowvalue,showValue}) => {
     const [editLabel,seteditLabel]=useState(false)
     const inputRef=useRef(null)
     const [labelname,setlablename]=useState('Enter Label')
@@ -45,17 +45,10 @@ const Portfoliocard = ({id,setsheetpopup,handlePlusClick,portfoliocardwidgitcoun
     const [showPopup, setShowPopup] = useState(false);
     const [iconname,seticonname]=useState('')
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const[currencyValue,setcurrencyvalue]=useState('$');
+   
    
     
-    const handleCurrencySelect = (currency) => {
-      console.log(currency);
-      setcurrencyvalue(currency) // Handle currency selection here
-      setIsPopupOpen(false);
-      
     
-     
-  };
 
 
 
@@ -162,7 +155,7 @@ const Portfoliocard = ({id,setsheetpopup,handlePlusClick,portfoliocardwidgitcoun
       {
           const settingvalue=()=>{
               let myid=id+1
-              console.log("currentcy value cahfdf",currencyValue)
+              
               const isFine=JSON.stringify({id:myid,labelname:labelname,portfolioicon:iconname,currencyValue:currencyValue})===JSON.stringify({id:myid,labelname:'Enter Label',portfolioicon:'',currencyValue:'$'})
              if(!isFine)
              {
@@ -211,9 +204,7 @@ const Portfoliocard = ({id,setsheetpopup,handlePlusClick,portfoliocardwidgitcoun
       }
 
      
-    useEffect(()=>{
-     
-      },[currencyValue])
+ 
 
       const handleEdit=()=>{
         seteditLabel(true)
@@ -388,24 +379,16 @@ const Portfoliocard = ({id,setsheetpopup,handlePlusClick,portfoliocardwidgitcoun
                     <div className='w-[100%] h-[40%]  flex flex-row'>
                         <div className='w-[20%] '>
                             <div className='flex h-[100%] items-center justify-start'>
-                            
-                                <p  className='text-[22px] font-inter mt-9 font-bold text-gray-700 ml-2'><span onClick={togglePopup} className='mr-1 cursor-pointer' >{currencyValue || '$'}</span><span className='cursor-pointer' onDoubleClick={()=>handlePlusClick(id)}>{showValue || '0' }</span></p>
+                                  
+                                {
+                                  currencyValue=='%'?
+                                  <p onDoubleClick={()=>handlePlusClick(id)} className='text-[22px] cursor-pointer font-inter mt-9 font-bold text-gray-700 ml-2'><span className='' >{showValue || '0' }</span><span className='mr-1 ' >{currencyValue || '$'}</span></p>
+                                  :
+                                  <p onDoubleClick={()=>handlePlusClick(id)} className='text-[22px] cursor-pointer font-inter mt-9 font-bold text-gray-700 ml-2'><span className='mr-1 ' >{currencyValue || '$'}</span><span className='' >{showValue || '0' }</span></p>
+                                }
                                 
                             </div>
-                            {isPopupOpen && (
-                    <div ref={popupRef} className='absolute top-4 left-0 bg-white border h-[160px] scrollbar-hide border-gray-300 rounded overflow-y-auto shadow-md mt-2'>
-                        <ul>
-                        <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('$')}>$</li>
-                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('€')}>€</li>
-                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('₹')}>₹</li>
-                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('£')}>£</li>
-                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('%')}>%</li> {/* Percentage selection */}
-</ul>
                             
-                        
-                     
-                    </div>
-                )}
                         </div>
                         
                     </div>

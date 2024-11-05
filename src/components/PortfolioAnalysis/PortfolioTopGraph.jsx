@@ -21,7 +21,7 @@ import Pie_Chart from '../Icons/Pie_Chart.svg'
 import Line_Chart from '../Icons/Line_Chart.svg'
 
 
-const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited,realtimeportfoliostate}) => {
+const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab,portfoliosecurity,hidenavbar,sheetedited,realtimeportfoliostate}) => {
     const [chartselectpopup,setchartselectpopup]=useState(false)
     const [clickedBar,setclickedBar]=useState(false)
     const [clickedPie,setclickedPie]=useState(false)
@@ -82,59 +82,15 @@ const PortfolioTopGraph = ({selectedTab,portfoliosecurity,hidenavbar,sheetedited
   }, [changeChart]);
 
 
-    // useEffect(()=>
-    // {
-    //     const updateRealtimevalue=async()=>{
-    //         const organization=`${Logorganization}_ShownGraph`
-    //         const response=await axios.post('http://localhost:8999/getportfoliostate',{organization:organization})
-    //         const data=response.data.data
-    //         const stateValues=JSON.parse(data)||{}
-    //         const sheetid=stateValues.sheetclicked
-    //         const response1=await axios.post('http://localhost:8999/sheetfromdb',{id:sheetid,organization:Logorganization})
-    //         const sheetdata=JSON.parse(response1.data.data)
-    //         const stateJson={showBarchart:stateValues.showBarchart,showPiechart:stateValues.showPiechart,showLinechart:stateValues.showLinechart,chartDatatypeX:stateValues.chartDatatypeX,chartDatatypeY:stateValues.chartDatatypeY,sheetJson:sheetdata,sheetfieldselectedX:stateValues.sheetfieldselectedX,sheetfieldselectedY:stateValues.sheetfieldselectedY,sheetclicked:stateValues.sheetclicked}
-    //         if((stateValues.showBarchart || stateValues.showPiechart || stateValues.showLinechart)&&sheetdata!=[])
-    //         {
-    //             await axios.post('http://localhost:8999/setportfoliostate',{
-    //                 organization:organization,
-    //                 portfolioState:JSON.stringify(stateJson)
-    //             })
-    //         }
-    //         setshowBarchart(stateValues.showBarchart)
-    //         setshowPiechart(stateValues.showPiechart)
-    //         setshowLinechart(stateValues.showLinechart)
-    //         setchartDatatypeX(stateValues.chartDatatypeX)
-    //         setchartDatatypeY(stateValues.chartDatatypeY)
-    //         setsheetJson(sheetdata)
-    //         setsheetfieldselectedX(stateValues.sheetfieldselectedX)
-    //         setsheetfieldselectedY(stateValues.sheetfieldselectedY)
-    //         setsheetClicked(stateValues.sheetclicked)
-
-
-    //     }
-    //     updateRealtimevalue()
-    // },[sheetedited])
-useEffect(()=>{
-console.log("pot",selectedSheetName)
-},[selectedSheetName])
-
-
-
-
     useEffect(()=>{
         setloading(true)
     },[selectedTab])
 
     useEffect(()=>{
         const setGraphValues=async()=>{
-            const organization=`${Logorganization}_ShownGraph`
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization},{
-                headers:{
-                  "Authorization":`Bearer ${token}`
-                }
-              })
-            console.log("chjasdf",response.data.data)
-            if(response.data.status==-200 || response.data.data==undefined)
+           console.log("graphs",PortfolioGraphvalues)
+            
+            if(PortfolioGraphvalues.length==0)
             {
 
                 setshowBarchart(false)
@@ -150,16 +106,14 @@ console.log("pot",selectedSheetName)
                     setloading(false)
                 },1000)
                 
-            
+                return
             }
 
           
-            const data=response.data.data 
-            const status=response.data.status
-            const stateValues=JSON.parse(data)||{}
             
-            if(status==200)
-            {
+            
+            const stateValues=JSON.parse(PortfolioGraphvalues)
+            
             setshowBarchart(stateValues.showBarchart)
             setshowPiechart(stateValues.showPiechart)
             setshowLinechart(stateValues.showLinechart)
@@ -170,72 +124,14 @@ console.log("pot",selectedSheetName)
             setsheetfieldselectedY(stateValues.sheetfieldselectedY)
             setsheetClicked(stateValues.sheetclicked)
             setSelectedSheetName(stateValues.selectedSheetName)
-            setTimeout(()=>{
-                setloading(false)
-            },1000)
-            }
-            else{
-                setTimeout(()=>{
-                    setloading(false)
-                },1000)
-            }
-        }
-        try{
-        setGraphValues()
-        }catch(e)
-        {
-            setGraphValues()
-        }
-    },[realtimeportfoliostate,selectedTab])
-
-
-    useEffect(()=>{
-        const setGraphValues=async()=>{
-            const organization=`${Logorganization}_ShownGraph`
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization},{
-                headers:{
-                  "Authorization":`Bearer ${token}`
-                }
-              })
-            if(response.data.status==-200)
-                {
-                    setTimeout(()=>{
-                        setloading(false)
-                    },1000)
-                }
-            const data=response.data.data 
-            console.log("pp",data)
-            const status=response.data.status
-            const stateValues=JSON.parse(data)||{}
             
-            if(status==200)
-            {
-            setshowBarchart(stateValues.showBarchart)
-            setshowPiechart(stateValues.showPiechart)
-            setshowLinechart(stateValues.showLinechart)
-            setchartDatatypeX(stateValues.chartDatatypeX)
-            setchartDatatypeY(stateValues.chartDatatypeY)
-            setsheetJson(stateValues.sheetJson)
-            setsheetfieldselectedX(stateValues.sheetfieldselectedX)
-            setsheetfieldselectedY(stateValues.sheetfieldselectedY)
-            setsheetClicked(stateValues.sheetclicked)
-            setSelectedSheetName(stateValues.selectedSheetName)
-            setTimeout(()=>{
-                setloading(false)
-            },1000)
-            }
-            else{
-                setTimeout(()=>{
-                    setloading(false)
-                },1000)
-            }
+            setloading(false)
+            
         }
-        try{
         setGraphValues()
-        }catch(e){
-            setGraphValues()
-        }
-    },[])
+        
+    },[PortfolioGraphvalues])
+
 
 
     const handleChartSelectPopup=()=>{
@@ -412,7 +308,7 @@ console.log("pot",selectedSheetName)
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
                 email:Logemail,
                 security:portfoliosecurity,
-                organization:organization,
+                Graphorganization:organization,
                 portfolioState:JSON.stringify(stateJson)
             },{
                 headers:{
@@ -436,7 +332,7 @@ console.log("pot",selectedSheetName)
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
                 email:Logemail,
             security:portfoliosecurity,
-                organization:organization,
+            Graphorganization:organization,
                 portfolioState:JSON.stringify(stateJson)
             },{
                 headers:{
@@ -458,7 +354,7 @@ console.log("pot",selectedSheetName)
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
                 email:Logemail,
                 security:portfoliosecurity,
-                organization:organization,
+                Graphorganization:organization,
                 portfolioState:JSON.stringify(stateJson)
             },{
                 headers:{
@@ -476,23 +372,6 @@ console.log("pot",selectedSheetName)
     },[clickedBar,clickedPie,clickedLine])
 
 
-  
-
-    
-    
-
-    
-
-
-    useEffect(()=>{
-        const mergedData=[...sheetJson,
-        
-           
-        ]
-        sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-        console.log(mergedData)
-        
-            },[sheetJson])
 
 
 
@@ -940,7 +819,7 @@ console.log("pot",selectedSheetName)
                 :<></>
             }
             <div className='flex w-[30%] h-[420px] bg-white rounded-xl'>
-                <PortfolioMeter realtimeportfoliostate={realtimeportfoliostate} selectedTab={selectedTab} hidenavbar={hidenavbar}/>
+                <PortfolioMeter PortfolioMetervalue={PortfolioMetervalue} realtimeportfoliostate={realtimeportfoliostate} selectedTab={selectedTab} hidenavbar={hidenavbar}/>
             </div>
             <div className='w-[70%] h-[420px] bg-white rounded-xl flex flex-col items-center justify-center'>
                     <div className=' w-[100%] relative h-[20px] flex flex-row items-end justify-end pt-2 pr-2'>

@@ -2,58 +2,31 @@ import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import React, { useEffect, useState } from 'react'
 import { FaMinus } from 'react-icons/fa'
+import { IoArrowBack } from 'react-icons/io5'
 import { RxCross2 } from 'react-icons/rx'
 
-const PortfolioRemoveSharedUsers = ({realtimeportfoliostate,setclickedPortfolioShared,setsharedwithusers,hidenavbar}) => {
-    const [organziationUsers,setorganizationusers]=useState([])
+const PortfolioRemoveSharedUsers = ({setPortfolioSharedwithusers,setclickedportfolioremoveshared,PortfoliosharedWithUsers,mainportfoliosecurity,realtimeportfoliostate,setclickedPortfolioShared,setsharedwithusers,hidenavbar}) => {
+    const [organziationUsers,setorganizationusers]=useState(PortfoliosharedWithUsers)
     const token=localStorage.getItem('token')
     const userdata=jwtDecode(token)
     const Logemail=userdata.userdetails.email
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
 
+    
+
+    useEffect(()=>{
+      console.log("newuser list is d",organziationUsers)
+    },[organziationUsers])
    
     useEffect(()=>{
       const settingusers=async()=>{
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:Logemail,organization:Logorganization},{
-          headers:{
-            "Authorization":`Bearer ${token}`
-          }
-        })
-        if(response.data.status==200)
-        {
-          setorganizationusers(JSON.parse(response.data.sharewith))
-        }
-        
+          setorganizationusers(PortfoliosharedWithUsers)
       }
-      try{
       settingusers()
-      }catch(e)
-      {
-        settingusers()
-      }
-    },[])
+      
+    },[PortfoliosharedWithUsers])
   
-    useEffect(()=>{
-      const settingusers=async()=>{
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:Logemail,organization:Logorganization},{
-          headers:{
-            "Authorization":`Bearer ${token}`
-          }
-        })
-        if(response.data.status==200)
-        {
-          setorganizationusers(JSON.parse(response.data.sharewith))
-        }
-        
-      }
-      try{
-      settingusers()
-      }catch(e)
-      {
-        settingusers()
-      }
-    },[realtimeportfoliostate])
 
     const handlecancel=()=>{
         setclickedPortfolioShared(false)
@@ -62,21 +35,57 @@ const PortfolioRemoveSharedUsers = ({realtimeportfoliostate,setclickedPortfolioS
       const newsharedlist=organziationUsers.filter(item=>item.email!=email)
       setorganizationusers(organziationUsers.filter(item=>item.email!=email))
       setsharedwithusers(newsharedlist)
-      
+      setPortfolioSharedwithusers(newsharedlist)
     }
   
-    const handledone=()=>{
+    const handledone=async()=>{
+
+      if(organziationUsers!==PortfoliosharedWithUsers)
+      {
+          const sharingusers='yes'
+          const organization=`${Logorganization}_Topcards`
+          const organization1=Logorganization
+          const organization2=`${Logorganization}_ShownGraph`
+            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`, {
+                email: Logemail,
+                security: mainportfoliosecurity,
+                sharedwith: JSON.stringify(organziationUsers), // Use selectedUsers instead of sharedwithusers
+                sharingusers:sharingusers,
+                organization1:organization1,
+                organization2:organization2,
+                organization:organization
+                    
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            if(response.data.status!=200){
+            
+              alert('server error!')
+            }
+      }
+
       setclickedPortfolioShared(false)
     }
 
+  const handleback=(e)=>{
+    e.stopPropagation()
+    setclickedportfolioremoveshared(false)
+    setclickedPortfolioShared(true)
+  }
 
   return (
    <div className={`${hidenavbar?'ml-[2%] w-[90%]':'ml-[20%] w-[80%] '} font-inter h-screen pt-[5%] flex flex-col p-4 items-center justify-center space-y-4 font-sans `}>
-        <div className='space-y-2 flex flex-col w-[430px] h-[470px] rounded-md bg-white p-4 border-[1px] border-gray-100'>
-        <div className='w-[100%] h-[40px] flex items-center justify-end' >
+        <div className='space-y-2 flex flex-col w-[430px] h-[500px] rounded-md bg-white p-4 border-[1px] border-gray-100'>
+        <div className='w-[100%] h-[40px] flex items-center justify-end relative' >
+                <div className='w-[16px] h-[16px] cursor-pointer absolute left-0' onClick={handleback}>
+                  <IoArrowBack size={16}/>
+                </div>
                 <div className='w-[16px] h-[16px] cursor-pointer' onClick={handlecancel}>
                   <RxCross2 size={16} className='text-black'/>
                 </div>
+                
           </div>
           <div className='w-[100%] h-[80%] overflow-y-auto space-y-1 font-inter  mb-2'>
               
@@ -87,8 +96,8 @@ const PortfolioRemoveSharedUsers = ({realtimeportfoliostate,setclickedPortfolioS
                 <div key={val._id} className='w-[100%] p-2 h-[40px] border-[1px] border-gray-200 flex flex-row space-x-2'>
                     <div className='flex w-[50%] items-center justify-start'><p className='text-[14px] font-inter font-semibold mb-2'>{val.email}</p></div>
                     <div className='w-[50%] flex items-center justify-end'>
-                        <div className='w-[20px] h-[20px] cursor-pointer' onClick={()=>handleremoveUser(val.email)}>
-                            <FaMinus size={18} />
+                        <div className='w-[20px] h-[20px] cursor-pointer' onClick={(e)=>{handleremoveUser(val.email); e.stopPropagation()}}>
+                            <FaMinus size={13} />
                         </div>
                     </div>
                     

@@ -6,7 +6,7 @@ import { FaMinus } from 'react-icons/fa'
 import { MdGroupRemove } from 'react-icons/md'
 
 
-const PortfolioShared = ({realtimeportfoliostate,setsharedwithusers,setclickedPortfolioShared,hidenavbar ,handlesavestate,sharedwithusers}) => {
+const PortfolioShared = ({mainportfoliosecurity,setclickedportfolioremoveshared,PortfoliosharedWithUsers,realtimeportfoliostate,setsharedwithusers,setclickedPortfolioShared,hidenavbar ,handlesavestate,sharedwithusers}) => {
   const [organziationUsers,setorganizationusers]=useState([])
   const [checkedUsers,setcheckedUsers]=useState([])
   const [popupType, setPopupType] = useState('private');
@@ -20,7 +20,7 @@ const PortfolioShared = ({realtimeportfoliostate,setsharedwithusers,setclickedPo
   const [searchQuery, setSearchQuery] = useState('');
   const [organziationUsers1,setorganizationusers1]=useState([])
  
-  const [portfoliosecurity,setportfoliosecurity]=useState('private')
+  const [portfoliosecurity,setportfoliosecurity]=useState(mainportfoliosecurity)
 
   const [popupLoader,setpopupLoader]=useState(true)
 
@@ -44,26 +44,16 @@ const PortfolioShared = ({realtimeportfoliostate,setsharedwithusers,setclickedPo
 
   }
   useEffect(()=>{
-    try{
+   
     setUsers()
-    }catch(e)
-    {
-      setUsers()
-    }
+    
   },[])
 
   useEffect(()=>{
-    try{
-      setUsers()
-      }catch(e)
-      {
-        setUsers()
-      }
+      setUsers()  
   },[realtimeportfoliostate])
 
- useEffect(()=>{
-console.log("zx",organziationUsers)
- },[])
+ 
 
   const handleCheckboxchange=(id)=>{
     
@@ -115,55 +105,17 @@ console.log("zx",organziationUsers)
 };
 useEffect(()=>{
   const settingusers=async()=>{
-    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:Logemail,organization:Logorganization},{
-      headers:{
-        "Authorization":`Bearer ${token}`
-      }
-    })
-    if(response.data.status==200)
-    {
     
-      setorganizationusers1(JSON.parse(response.data.sharewith))
-      setportfoliosecurity(response.data.security); 
+    
+      setorganizationusers1(PortfoliosharedWithUsers)
+      setportfoliosecurity(portfoliosecurity); 
       setpopupLoader(false)
-    }
-    else if(response.data.status==-400){
-      setpopupLoader(false)
-    }
     
   }
-  try{
   settingusers()
-  }catch(e)
-  {
-    settingusers()
-  }
-},[])
+  
+},[PortfoliosharedWithUsers])
 
-useEffect(()=>{
-  const settingusers=async()=>{
-    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:Logemail,organization:Logorganization},{
-      headers:{
-        "Authorization":`Bearer ${token}`
-      }
-    })
-    if(response.data.status==200)
-    {
-      setorganizationusers1(JSON.parse(response.data.sharewith))
-      setportfoliosecurity(response.data.security);
-      setpopupLoader(false)
-    }else if(response.data.status==-400){
-      setpopupLoader(false)
-    }
-    
-  }
-  try{
-  settingusers()
-  }catch(e)
-  {
-    settingusers()
-  }
-},[realtimeportfoliostate])
 
 
 const handleremoveUser = async (email) => {
@@ -196,6 +148,7 @@ useEffect(() => {
 
 const handlesavestate1 = async (selectedUsers) => {
   try {
+    const sharingusers='yes'
     const organization=`${Logorganization}_Topcards`
     const organization1=Logorganization
     const organization2=`${Logorganization}_ShownGraph`
@@ -203,7 +156,7 @@ const handlesavestate1 = async (selectedUsers) => {
           email: Logemail,
           security: portfoliosecurity,
           sharedwith: JSON.stringify(selectedUsers), // Use selectedUsers instead of sharedwithusers
-       
+          sharingusers:sharingusers,
           organization1:organization1,
           organization2:organization2,
           organization:organization
@@ -227,7 +180,7 @@ const handlesavestate1 = async (selectedUsers) => {
 
 
     return (
-      <div  ref={componentRef}  className={`${hidenavbar ? 'ml-[2%] w-[90%]' : 'ml-[20%] w-[80%]'} font-inter h-screen pt-[5%] flex flex-col p-4 items-center justify-center space-y-4`}>
+      <div  ref={componentRef} className={`${hidenavbar ? 'ml-[2%] w-[90%]' : 'ml-[20%] w-[80%]'} font-inter h-screen pt-[5%] flex flex-col p-4 items-center justify-center space-y-4`}>
      {!popupLoader?
       <div ref={componentRef} className='relative flex flex-col  w-[430px] h-[500px] bg-white p-4 border border-gray-100 rounded-lg shadow-lg space-y-4'>
       <div className="absolute top-4 right-4 cursor-pointer" onClick={handlecancel}>
@@ -239,10 +192,13 @@ const handlesavestate1 = async (selectedUsers) => {
   <span className='font-semibold font-inter'>Share your portfolio</span>
   {portfoliosecurity === 'private' && (
     <MdGroupRemove 
-      onClick={() => {
-        setRemoveList(true);
-        setUsersList(false);
-        setportfoliosecurity('private');
+      onClick={(e) => {
+        // setRemoveList(true);
+        // setUsersList(false);
+        // setportfoliosecurity('private');
+        setclickedPortfolioShared(false)
+        setclickedportfolioremoveshared(true)
+        e.stopPropagation()
       }} 
       size={20} 
       className='cursor-pointer ml-6' // Adjust margin if needed

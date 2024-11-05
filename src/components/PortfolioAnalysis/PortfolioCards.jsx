@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import { FaRegFileExcel } from 'react-icons/fa'
-import { FaCirclePlus } from 'react-icons/fa6'
+import { FaArrowDownLong, FaArrowUpLong, FaCirclePlus } from 'react-icons/fa6'
 import { IoMdArrowBack } from 'react-icons/io'
 import { IoAddSharp } from 'react-icons/io5'
 import { LuPencil } from 'react-icons/lu'
@@ -19,6 +19,7 @@ import { PiMoney } from "react-icons/pi";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuTriangle } from "react-icons/lu";
 import { jwtDecode } from 'jwt-decode'
+import { TiMinus } from 'react-icons/ti'
 
 
 const PortfolioCards = ({selectedTab,id,portfoliosecurity,sheetedited,selectedSheetId,style,hidenavbar,valueid,setvalueid,changevalue,setchangevalue,component}) => {
@@ -46,7 +47,14 @@ const PortfolioCards = ({selectedTab,id,portfoliosecurity,sheetedited,selectedSh
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const[currencyValue,setcurrencyvalue]=useState('$');
     const FilterRef = useRef(null);
+    const [prevShowVal,setprevShowVal]=useState('0')
+
+    const [showsign,setshowsign]=useState('none')
+    const [changedpercentage,setchangedpercentage]=useState('')
+   
     
+    
+
 
 const togglePopup = () => {
     if(selectedTab === Logemail) 
@@ -58,7 +66,7 @@ const togglePopup = () => {
     // State for filter pop-up
     const [selectedFilter, setSelectedFilter] = useState('');
     const handleCurrencySelect = (currency) => {
-      console.log(currency);
+    
       setcurrencyvalue(currency) // Handle currency selection here
       setIsPopupOpen(false); // Close popup after selection
   }; // Selected filter
@@ -105,7 +113,48 @@ const togglePopup = () => {
       setIcon(getIconComponent(iName)); 
       setShowPopup(false); 
     };
-   
+    const handlesavestate=async()=>{
+        
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/changeportfoliocardvalue`,{
+            newstate:JSON.stringify(valueid),
+           
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
+
+        
+        if(response.data.status==200){
+            alert("State Saved")
+        }
+    
+        }
+
+        const isDifferent = (arr1, arr2) => {
+            return arr1.some(item1 => {
+              return !arr2.some(item2 =>
+                item1.id === item2.id &&
+                item1.labelname === item2.labelname &&
+                item1.showValue === item2.showValue &&
+                item1.currencyValue === item2.currencyValue &&
+                item1.prevShowVal === item2.prevShowVal
+              );
+            });
+          };
+
+          
+    useEffect(()=>{
+        if(isDifferent(valueid,[{"id":1,"labelname":"Total fund","showValue":"0","currencyValue":"$","prevShowVal":"0"},{"id":2,"labelname":"Fund utilized","showValue":"0","currencyValue":"$","prevShowVal":"0"},{"id":3,"labelname":"Funds remaining","showValue":"0","currencyValue":"$","prevShowVal":"0"},{"id":4,"labelname":"ROI","showValue":"0","currencyValue":"$","prevShowVal":"0"}])&& selectedTab==Logemail)
+        {
+            handlesavestate()
+        }
+        else{
+            return 
+        }
+        
+    },[valueid])
+
     
     useEffect(()=>
         {
@@ -116,13 +165,16 @@ const togglePopup = () => {
                         const exists = prev.some(val => val.id === id); // Check if the id exists
                         if (exists) {
                           return prev.map(val =>
-                            val.id === id
-                              ? { ...val, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue } // Update the existing object
-                              : val
+                            val.id === id && val.showValue!=showValue
+                              ? { ...val, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue,prevShowVal:val.showValue } // Update the existing object
+                              :  val.id === id?
+                              { ...val, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue }
+                              :
+                              val
                           );
                         } else {
                           // Insert new object if id is not found
-                          return [...prev, { id: id, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue }];
+                          return 
                         }
                       });
                 }
@@ -131,6 +183,37 @@ const togglePopup = () => {
             
             
         },[editLabel,showValue,iconname,currencyValue])
+
+ 
+
+    
+
+    const CheckChangedpercentage=(oldvalu,newvalu)=>{
+        let oldvalue=parseInt(oldvalu);
+        let newvalue=parseInt(newvalu)
+       
+        let denominator=oldvalue;
+        let formula=0
+        console.log(newvalue-oldvalue)
+        if(denominator==0)
+        {
+            
+            formula=(newvalue-oldvalue) * 100;
+        }
+        else{
+            formula=((newvalue-oldvalue)/oldvalue) * 100;
+        }
+        
+        if(formula>0){
+            setshowsign('profit')
+        }else if(formula<0){
+            setshowsign('loss')
+            formula = -1 *formula;
+        }else{
+            setshowsign('none')
+        }
+        setchangedpercentage(formula)
+    }
    
     const getIconComponent = (iconName) => {
         switch (iconName) {
@@ -181,6 +264,10 @@ const togglePopup = () => {
                     seticonname(val.portfolioicon)
                     setIcon(getIconComponent(val.portfolioicon))
                     setcurrencyvalue(val.currencyValue)
+                    
+                    setprevShowVal(val.prevShowVal)
+                    CheckChangedpercentage(val.prevShowVal,val.showValue)
+                    
                     setTimeout(()=>{
                         setloading(false)
                     },1000)
@@ -190,6 +277,11 @@ const togglePopup = () => {
         getTopCardsValues()
         
     },[valueid,selectedTab])
+
+
+  
+
+
 
 
     const handlePlusClick=async()=>{
@@ -234,24 +326,24 @@ const togglePopup = () => {
     const handleselectsheetfield=()=>{
         setsheetClicked(false)
         setsheetpopup(false)
-        let value=sheetJson[0][sheetfieldselected]
-        // let value=''
-        // try{
-        //     value=parseInt(sheetJson[0][sheetfieldselected]) 
+       // let value1=sheetJson[0][sheetfieldselected]
+         let value1=''
+         try{
+            value1=parseInt(sheetJson[0][sheetfieldselected]) 
             
-        //     if(isNaN(sheetJson[0][sheetfieldselected]))
-        //     {
-        //         value='$0'
-        //     }
-        // }
-        // catch(e)
-        // {
-        //     value='$0'
-        // }
+            if(isNaN(sheetJson[0][sheetfieldselected]))
+             {
+                 value1='0'
+             }
+         }
+         catch(e)
+         {
+             value1='0'
+         }
 
         
         
-        setshowvalue(value)
+        setshowvalue(value1)
         
     }
 
@@ -351,9 +443,7 @@ const togglePopup = () => {
         }
     }
 
-useEffect(()=>{
-console.log("zp",showValue)
-},[showValue])
+
 
 useEffect(() => {
   // Handle clicks outside the chat box
@@ -376,7 +466,7 @@ useEffect(() => {
   return (
    <div>
    
-    <div className='flex flex-col  bg-white p-3 w-[100%] h-[160px] rounded-xl relative'>
+    <div className='flex flex-col select-none  bg-white p-3 w-[100%] h-[160px] rounded-xl relative'>
    
         {showFilterMenu && (
     <div  ref={FilterRef} className='absolute top-0 right-0 w-[150px] bg-white p-3 border-gray-300 border-[1px] rounded-md z-50'>
@@ -443,23 +533,35 @@ useEffect(() => {
                                         </div>
                                         <div className=' w-[100%] h-[40%] flex flex-col items-center justify-center space-y-8 space-x-2'>
                                             
-                                            <select value={sheetfieldselected}  onChange={(e)=>setsheetfieldselected(e.target.value)} className='w-[220px] h-[30px] text-[14px] text-gray-700 rounded-md border-gray-300 border-[1px]'>
-                                            {loading2 ? (
-    <option value="">
-      <div className="flex items-center">
-        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
-        Loading...
-      </div>
-    </option>
-  ) : (
-                                                
-                                                            
-                                                sheetKeys.map(k=>
-                                                    <option key={k._id}>{k}</option>
-                                                    )
-                                              )  }
+                                            <div className='flex flex-row space-x-2'>
 
-                                            </select>
+                                            <select className='border-[1px] border-gray-300 rounded-md' onChange={(e)=>handleCurrencySelect(e.target.value)}>
+                                                            <option className='cursor-pointer p-2 hover:bg-gray-100' value='$'>$</option>
+                                                                <option className='cursor-pointer p-2 hover:bg-gray-100' value='€'>€</option>
+                                                                <option className='cursor-pointer p-2 hover:bg-gray-100' value='₹'>₹</option>
+                                                                <option className='cursor-pointer p-2 hover:bg-gray-100' value='£'>£</option>
+                                                                <option className='cursor-pointer p-2 hover:bg-gray-100' value='%'>%</option> 
+                                                            
+                                                            </select>
+
+                                                    <select value={sheetfieldselected}  onChange={(e)=>setsheetfieldselected(e.target.value)} className='w-[220px] h-[30px] text-[14px] text-gray-700 rounded-md border-gray-300 border-[1px]'>
+                                                    {loading2 ? (
+                                                    <option value="">
+                                                    <div className="flex items-center">
+                                                        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+                                                        Loading...
+                                                    </div>
+                                                    </option>
+                                                ) : (
+                                                        
+                                                                    
+                                                        sheetKeys.map(k=>
+                                                            <option key={k._id}>{k}</option>
+                                                            )
+                                                    )  }
+
+                                                    </select>
+                                            </div>
                                         </div>
                                         <div className='w-[100%] mt-[14px] flex flex-row items-center justify-center'>
                                             <div onClick={handleselectsheetfield} className='select-none cursor-pointer flex flex-row w-[120px] rounded-md h-[40px] items-center justify-center bg-gradient-to-r from-green-500 to-green-800 spae-x-2'>
@@ -586,30 +688,38 @@ useEffect(() => {
                 <div className='w-[100%] flex flex-row'>
                     <div className='w-[70%] '>
                         <div className='flex h-[100%] items-center justify-start'>
-                            <p className='text-[20px] font-inter font-semibold text-gray-700'><span className='mr-1 cursor-pointer' onClick={togglePopup} >{currencyValue}</span><span onDoubleClick={()=>{selectedTab === Logemail ?  handlePlusClick() : undefined}} className='cursor-pointer'>{showValue}</span></p>
+                            <div onDoubleClick={()=>{selectedTab === Logemail ?  handlePlusClick() : undefined}} className='w-[20%] cursor-pointer'>
+                                {
+                                    currencyValue=='%'?
+                                    <p className='text-[20px] font-inter font-semibold text-gray-700 flex'><span  className='cursor-pointer'>{showValue}</span> <span className='mr-1 ' >{currencyValue}</span></p>
+                                    :
+                                    <p className='text-[20px] font-inter font-semibold text-gray-700'><span className='mr-1 ' >{currencyValue}</span><span  className='cursor-pointer'>{showValue}</span></p>
+                                }
+                            </div>
                         </div>
-                        {isPopupOpen && (
-                    <div  ref={FilterRef} className='absolute top-0 left-0 bg-white border h-[160px] scrollbar-hide border-gray-300 rounded overflow-y-auto shadow-md '>
-                        <ul>
-                        <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('$')}>$</li>
-                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('€')}>€</li>
-                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('₹')}>₹</li>
-                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('£')}>£</li>
-                            <li className='cursor-pointer p-2 hover:bg-gray-100' onClick={() => handleCurrencySelect('%')}>%</li> 
                         
-                        </ul>
                     </div>
-                )}
-                    </div>
-                    <div className='w-[30%] flex items-center justify-end'>
-    
-                    {loading1 ? (
-            <AiOutlineLoading3Quarters className="animate-spin text-[14px]" />
-          ) : Logrole=='super admin' || Logrole=='admin'?(
-                        <div className='h-[20px] cursor-pointer'  onClick={handlePlusClick}>
-                            {/* <AiOutlineFileAdd  size={24} className='' /> */}
+                    <div className='w-[30%] space-x-2 flex items-end justify-end pr-1'>
+                        <div className='h-[100%]'>
+                            {
+                                changedpercentage==0 || isNaN(parseInt(changedpercentage))?
+                                '':
+                                changedpercentage+"%"
+                            }
                         </div>
-               ):<></>}
+                        <div className='h-[15px] w-[15px] mb-3'>
+                            {
+                                showsign=='none'?
+                                <></>
+                                :
+                                showsign=='profit'?
+                                <FaArrowUpLong className='text-green-600' size={15}/>
+                                :
+                                <FaArrowDownLong className='text-red-500' size={15}/>
+                            }
+                        </div>
+                        
+
                     </div>
                 </div>
                 </div>

@@ -6,7 +6,7 @@ import DatabaseSheets from './DatabaseSheets'
 import PortfolioHistory from './PortfolioHistory'
 import { RxCross2 } from 'react-icons/rx'
 import { FaCaretRight, FaDatabase, FaPlus } from 'react-icons/fa'
-import { IoMdArrowBack } from 'react-icons/io'
+import { IoMdArrowBack, IoMdEyeOff } from 'react-icons/io'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import PortfolioTop from './PortfolioTop'
 import { Bars } from 'react-loader-spinner'
@@ -14,7 +14,7 @@ import GoogleSheetDatabaseSheets from './GoogleSheetDatabaseSheets'
 import { CiShare2 } from 'react-icons/ci'
 import PortfolioShared from './PortfolioShared'
 import PortfolioRemoveSharedUsers from './PortfolioRemoveSharedUsers'
-import { MdGroupRemove } from 'react-icons/md'
+import { MdGroupRemove, MdOutlineRemoveRedEye } from 'react-icons/md'
 import { TbCircleDotFilled } from "react-icons/tb";
 import { jwtDecode } from 'jwt-decode'
 import {useSheet } from '../SheetContext/SheetContext.jsx'
@@ -61,6 +61,13 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
   const [clickedportfolioremoveshared,setclickedportfolioremoveshared]=useState(false)
     const [SharepopUp,setSharepopUp]=useState(false)
 
+    const [PortfoliosharedWithUsers,setPortfolioSharedwithusers]=useState([])
+
+    const [PortfolioMetervalue,setportfoliometervalue]=useState('0')
+
+    const [Portfoliocardvalues,setPortfoliocardvalues]=useState([])
+    const [PortfolioGraphvalues,setPortfolioGraphvalues]=useState([])
+
     
     // Function to toggle filter menu visibility
     const toggleFilterMenu = () => {
@@ -87,9 +94,15 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     const {percentage1}=useSheet();
     
     useEffect(()=>{
+       
         setloading(true)
         
     },[selectedTab])
+
+    useEffect(()=>{
+        console.log("from main portfolio Portfolio shared",PortfoliosharedWithUsers)
+    },[PortfoliosharedWithUsers])
+
 
     useEffect(()=>{
         const setStateValues=async()=>{
@@ -107,21 +120,80 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 setTimeout(()=>{
                     setloading(false)
                 },1000)
+                alert('Server error')
                 return
             }
-            const data=response.data.data
+            const data=response.data.historydata
+            const data2=response.data.cardsdata
+            const data3=response.data.Graphdata
            
+            
+
             if(response.data.security==undefined)
             {
                 setportfoliosecurity('private')
             }else{
             setportfoliosecurity(response.data.security)
             }
+            setportfoliometervalue(response.data.metervalue)
+            
+            
+                    
+                    try{
+                        if(typeof(response.data.sharewith)=='string'){
+                            const val=JSON.parse(response.data.sharewith)
+                            console.log("values",typeof(val))
+                            setPortfolioSharedwithusers(val)
+                        }
+                        else if(typeof(response.data.sharewith)=='object')
+                        {
+                            setPortfolioSharedwithusers(response.data.sharewith)
+                        }
+                        
+                    }catch(e){
+                        setPortfolioSharedwithusers([])
+                    }
+                
+                console.log(typeof(response.data.sharewith))
+                console.log("sharedusers",response.data.sharewith,typeof(response.data.sharewith))
+            
+                let stateValues=[]
+               
+                let val1= []
+                let val2=[] 
             
            // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
-           const stateValues=JSON.parse(data)||[]
+           try{
+            stateValues=JSON.parse(data)||[]
+           }catch(e)
+           {
+            stateValues=[]
+           }
+           try{
+            val1=data2 || []
+           }catch(e){
+            val1=JSON.parse(data2) || []
+           }
+
+           try{
+           val2=data3 || [] //JSON.parse(data)
+           }
+          catch(e){
+            
+            val2=JSON.parse(data3) || [] //JSON.parse(data)
+           }
+            
+           console.log(val1,"this is the val1 value")
+
+           setPortfoliocardvalues(val1)
+           
+           setPortfolioGraphvalues(val2)
+
+          
+         
             if(stateValues.length>0)
             {
+                
                 stateValues.map(val=>{
                 setsheetmethod(val.sheetmethod)
                 setallSheets(val.allSheets)
@@ -133,19 +205,15 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 setshowimagePopup(val.showimagepopup)
                 setsheetname(val.sheetname)
                 setselectfield(val.selectfield)
-             
+               
                 
                 })
             }
-            setTimeout(()=>{
-                setloading(false)
-            },1000)
+            setloading(false)
         }
-        try{
-         setStateValues()
-        }catch(e){
-            setStateValues()
-        }
+        
+        setStateValues()
+        
     },[])
 
 
@@ -157,39 +225,88 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                   "Authorization":`Bearer ${token}`
                 }
               })
-           
+             
               
-            if(response.data.status==-200 || response.data.data==undefined)
+             
+            if(response.data.status==-200)
             {
-                
-                setsheetmethod('')
-                setallSheets([])
-                setselectedSheetId('')
-                setsheetJson([])
-                setsheetKeys([])
-                setselectedImageField('')
-                setshowHistory(false)
-                setshowimagePopup(false)
-                setsheetname('')
-                setselectfield('')
                 setTimeout(()=>{
                     setloading(false)
                 },1000)
+                alert('Server error')
                 return
             }
+            const data=response.data.historydata
+            const data2=response.data.cardsdata
+            const data3=response.data.Graphdata
+           
             
-            const data=response.data.data
+
             if(response.data.security==undefined)
-                {
-                    setportfoliosecurity('private')
-                }else{
+            {
+                setportfoliosecurity('private')
+            }else{
             setportfoliosecurity(response.data.security)
-                }
+            }
+            setportfoliometervalue(response.data.metervalue)
+            
+            
+                    
+                    try{
+                        if(typeof(response.data.sharewith)=='string'){
+                            const val=JSON.parse(response.data.sharewith)
+                            console.log("values",typeof(val))
+                            setPortfolioSharedwithusers(val)
+                        }
+                        else if(typeof(response.data.sharewith)=='object')
+                        {
+                            setPortfolioSharedwithusers(response.data.sharewith)
+                        }
+                        
+                    }catch(e){
+                        setPortfolioSharedwithusers([])
+                    }
+                
+                console.log(typeof(response.data.sharewith))
+                console.log("sharedusers",response.data.sharewith,typeof(response.data.sharewith))
+            
+                let stateValues=[]
+               
+                let val1= []
+                let val2=[] 
+            
            // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
-           const stateValues=JSON.parse(data)||[]
+           try{
+            stateValues=JSON.parse(data)||[]
+           }catch(e)
+           {
+            stateValues=[]
+           }
+           try{
+            val1=data2 || []
+           }catch(e){
+            val1=JSON.parse(data2) || []
+           }
+
+           try{
+           val2=data3 || [] //JSON.parse(data)
+           }
+          catch(e){
+            
+            val2=JSON.parse(data3) || [] //JSON.parse(data)
+           }
+            
+           console.log(val1,"this is the val1 value")
+
+           setPortfoliocardvalues(val1)
+           
+           setPortfolioGraphvalues(val2)
+
           
+         
             if(stateValues.length>0)
             {
+                
                 stateValues.map(val=>{
                 setsheetmethod(val.sheetmethod)
                 setallSheets(val.allSheets)
@@ -201,20 +318,53 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 setshowimagePopup(val.showimagepopup)
                 setsheetname(val.sheetname)
                 setselectfield(val.selectfield)
+               
                 
                 })
             }
-            setTimeout(()=>{
-                setloading(false)
-            },1000)
+            setloading(false)
         }
-        try{
-            setStateValues()
-           }catch(e){
-               setStateValues()
-           }
+        
+        setStateValues()
+        
     },[realtimeportfoliostate,selectedTab])
 
+
+    const handlesavestate=async()=>{
+        const organization=`${Logorganization}_Topcards`
+        const organization1=Logorganization
+        const organization2=`${Logorganization}_ShownGraph`
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
+            email:Logemail,
+            organization:organization,
+            portfolioState:JSON.stringify(portfoliocardsdata),
+            sharedwith:JSON.stringify(sharedwithusers),
+            organization1:organization1,
+            organization2:organization2,
+            
+            
+        },{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
+
+
+
+
+            // useEffect(()=>{
+            //     handlesavestate()
+            // },[portfoliocardsdata])
+
+
+                    console.log(response)
+                    if(response.data.status==200){
+                        alert("State Saved")
+                    }
+                
+            }
+ 
+    
     
 
     const handleselect=async()=>{
@@ -223,7 +373,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
             email:Logemail,
             security:portfoliosecurity,
-            organization:Logorganization,
+            Historyorganization:Logorganization,
             portfolioState:JSON.stringify(constructPortfolioState)
         },{
             headers:{
@@ -430,7 +580,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
         const data=finalJson
         setsheetJson(data)
-          console.log("google",data)
+          
             const key=Object.keys(data[0])
             
             const fileteredKey=[]
@@ -561,47 +711,27 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         }
 
     useEffect(()=>{
-        try{
+        
         settingupTabs()
-        }catch(e)
-        {
-            settingupTabs()
-        }
+        
     },[])
+
+
     useEffect(()=>{
-        try{
+        
         settingupTabs()
-        }catch(e)
-        {
-            settingupTabs()
-        }
+        
     },[realtimeportfoliostate])
 
-    const handlesavestate=async()=>{
-            const organization=`${Logorganization}_Topcards`
-            const organization1=Logorganization
-            const organization2=`${Logorganization}_ShownGraph`
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
-                email:Logemail,
-                organization:organization,
-                portfolioState:JSON.stringify(portfoliocardsdata),
-                sharedwith:JSON.stringify(sharedwithusers),
-                organization1:organization1,
-                organization2:organization2,
-                
-                
-            },{
-                headers:{
-                  "Authorization":`Bearer ${token}`
-                }
-              })
+    
 
-            console.log(response)
-            if(response.data.status==200){
-                alert("State Saved")
-            }
-        
-    }
+    
+
+    // useEffect(()=>{
+    //     handlesavestate()
+    // },[portfoliocardsdata])
+   
+
     const PortfolioCard=[]
     portfoliocardsdata.map((val=>{
         PortfolioCard.push({"Label Name":val.labelname,"Values":val.showValue})
@@ -656,7 +786,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             
         };
     sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-    console.log(mergedData)
+   
     
         },[sheetJson,sheetKeys,portfoliocardsdata,sheetJson1])
   return (
@@ -711,10 +841,15 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                     <div className='flex flex-row space-x-4 items-center justify-center'>
                   
                             <div className='flex flex-row space-x-2 '>
-                                <div onClick={()=>setclickedPortfolioShared(true)} className='w-[20px] h-[20px] cursor-pointer'>
-                                <IoShareSocialOutline  size={24} />
+                                <div onClick={()=>setclickedPortfolioShared(true)} className='w-[24px] h-[24px] cursor-pointer'>
+                                {
+                                    portfoliosecurity=='private'?
+                                    <IoMdEyeOff size={24 }/>
+                                    :
+                                    <MdOutlineRemoveRedEye size={24 } />
+                                }
                               
-                            </div>
+                                </div>
                             {/* <div onClick={()=>setclickedportfolioremoveshared(true)} className='w-[20px] h-[20px]  '>
                             <MdGroupRemove size={20} className='mr-12 cursor-pointer'/>
                             </div> */}
@@ -724,9 +859,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                         <option value='public'>Public</option>
                         <option value='private'>Private</option>
                     </select> */}
-                    <div onClick={handlesavestate} className='cursor-pointer w-[120px] h-[30px] bg-gradient-to-r from-blue-500 to-blue-700 rounded-md text-white items-center justify-center'>
-                        <p className='w-[100%] h-[100%] text-[12px] font-inter font-bold flex items-center justify-center'>Save state</p>
-                    </div>
+                    
                 </div>
                 :
                 <></>
@@ -735,7 +868,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             </div>
         </div>
         <div className='w-[100%]  flex flex-col'>{/*Portfolio content */}
-            <PortfolioTop selectedTab={selectedTab} setportfoliocardsdata={setportfoliocardsdata} portfoliosecurity={portfoliosecurity} realtimeportfoliostate={realtimeportfoliostate} selectedSheetId={selectedSheetId} hidenavbar={hidenavbar} sheetedited={sheetedited}/>
+            <PortfolioTop PortfolioGraphvalues={PortfolioGraphvalues} Portfoliocardvalues={Portfoliocardvalues} PortfolioMetervalue={PortfolioMetervalue} selectedTab={selectedTab} setportfoliocardsdata={setportfoliocardsdata} portfoliosecurity={portfoliosecurity} realtimeportfoliostate={realtimeportfoliostate} selectedSheetId={selectedSheetId} hidenavbar={hidenavbar} sheetedited={sheetedited}/>
         </div>
 
         <div className='tracking-wider    select-none mt-[20px] w-[100%] bg-white rounded-xl p-4 flex flex-col space-y-2 font-noto'>
@@ -1015,9 +1148,9 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
         {
             clickedportfolioshared?
-            <div className='fixed overflow-hidden left-0 w-[100%] top-[-20px] h-[100%] bg-opacity-40 bg-black'>
+            <div className='fixed overflow-hidden left-0 w-[100%] top-[-2.2%] h-[100%] bg-opacity-40 bg-black'>
             <div ref={popupRef} className=''>
-                <PortfolioShared realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar} setclickedPortfolioShared={setclickedPortfolioShared} handlesavestate={handlesavestate} sharedwithusers={sharedwithusers} />
+                <PortfolioShared setclickedportfolioremoveshared={setclickedportfolioremoveshared} mainportfoliosecurity={portfoliosecurity} PortfoliosharedWithUsers={PortfoliosharedWithUsers}  realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar} setclickedPortfolioShared={setclickedPortfolioShared} handlesavestate={handlesavestate} sharedwithusers={sharedwithusers} />
             </div>
             </div>
             :
@@ -1025,8 +1158,8 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         }
         {
             clickedportfolioremoveshared?
-            <div className='fixed left-0 w-[100%] top-[-20px] h-[100%] bg-white bg-opacity-80'>
-                <PortfolioRemoveSharedUsers realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar} setclickedPortfolioShared={setclickedportfolioremoveshared} />
+            <div className='fixed overflow-hidden left-0 w-[100%] top-[-2.2%] z-[60] h-screen bg-opacity-40 bg-black'>
+                <PortfolioRemoveSharedUsers setPortfolioSharedwithusers={setPortfolioSharedwithusers} setclickedportfolioremoveshared={setclickedportfolioremoveshared} setclickedPortfolioShared={setclickedPortfolioShared} mainportfoliosecurity={portfoliosecurity} PortfoliosharedWithUsers={PortfoliosharedWithUsers} realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar}  />
             </div>
             :
             <></>

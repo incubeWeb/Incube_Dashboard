@@ -341,9 +341,9 @@ const popupref2=useRef(null)
 useEffect(() => {
   const handleClickOutside2 = (event) => {
       // Check if the click is outside the popup and filter menu
-      if (FilterRef.current && !FilterRef.current.contains(event.target) && popupref2.current && !popupref2.current.contains(event.target)){
-          alert("hi")
-          
+      console.log(event.target,"this is event target")
+      if (FilterRef.current && !FilterRef.current.contains(event.target)){
+          setsheetClicked(false)
       }
 
       
@@ -434,6 +434,15 @@ useEffect(()=>{
   console.log("sheet is clicke")
 },[sheetClicked])
 
+const[currencyValue,setcurrencyvalue]=useState('$');
+
+const handleCurrencySelect = (currency) => {
+  console.log(currency);
+  setcurrencyvalue(currency) // Handle currency selection here
+  setIsPopupOpen(false);
+  
+};
+
 
 
   return (
@@ -476,9 +485,10 @@ useEffect(()=>{
                       doc.fileType === 'xlsx' ? (
                           <div key={doc._id} className='w-[100%] flex flex-col space-y-2'>
                               <div 
+                                onClick={(e) => e.stopPropagation()}
                                   onMouseEnter={() => sethover(true)} 
                                   onMouseLeave={() => sethover(false)} 
-                                  onMouseDown={() => handlesheetclick(doc._id, doc.name)} 
+                                  onMouseDown={(e) => {handlesheetclick(doc._id, doc.name);e.stopPropagation()}} 
                                   className='w-[100%] h-[45px] hover:bg-gray-100 hover:text-gray-800 p-2 rounded-md select-none cursor-pointer flex flex-row items-center justify-start'
                               >
                                   <FaRegFileExcel className='text-green-500' size={19} />
@@ -517,7 +527,7 @@ useEffect(()=>{
 
                 {
                     sheetClicked?
-                    <div onClick={()=>setsheetClicked(false)} className={`${hidenavbar ? 'w-full' : 'left-20 w-[80%]'} fixed top-0 left-0 w-full h-full  bg-black bg-opacity-40 flex items-center justify-center z-[65]`}>
+                    <div  className={`${hidenavbar ? 'w-full' : 'left-20 w-[80%]'} fixed top-0 left-0 w-full h-full  bg-black bg-opacity-40 flex items-center justify-center z-[65]`}>
                                     <div ref={FilterRef} className='p-2 flex flex-col  w-[400px] h-[400px] space-y-2 bg-white rounded-md'>
                                         
                                         <div  className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
@@ -530,24 +540,33 @@ useEffect(()=>{
                                             
                                         </div>
                                         <div  className=' w-[100%] h-[40%] flex flex-col items-center justify-center space-y-8 space-x-2'>
-                                            
-                                            <select value={sheetfieldselected}  onChange={(e)=>setsheetfieldselected(e.target.value)} className='w-[220px] h-[30px] text-[14px] text-gray-700 rounded-md border-gray-300 border-[1px]'>
-                                            {loading2 ? (
-    <option value="">
-      <div className="flex items-center">
-        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
-        Loading...
-      </div>
-    </option>
-  ) : (
-                                                
-                                                            
+                                        <div className='flex flex-row space-x-2'>
+
+                                              <select onClick={(e) => e.stopPropagation()}  onMouseDown={(e) => e.stopPropagation()}  className='border-[1px] border-gray-300 rounded-md' onChange={(e)=>handleCurrencySelect(e.target.value)}>
+                                                              <option className='cursor-pointer p-2 hover:bg-gray-100' value='$'>$</option>
+                                                                  <option className='cursor-pointer p-2 hover:bg-gray-100' value='€'>€</option>
+                                                                  <option className='cursor-pointer p-2 hover:bg-gray-100' value='₹'>₹</option>
+                                                                  <option className='cursor-pointer p-2 hover:bg-gray-100' value='£'>£</option>
+                                                                  <option className='cursor-pointer p-2 hover:bg-gray-100' value='%'>%</option> 
+                                                              
+                                                              </select>
+                                            <select onClick={(e) => e.stopPropagation()}  onMouseDown={(e) => e.stopPropagation()} value={sheetfieldselected}  onChange={(e)=>setsheetfieldselected(e.target.value)} className='w-[220px] h-[30px] text-[14px] text-gray-700 rounded-md border-gray-300 border-[1px]'>
+                                                  {loading2 ? (
+                                                        <option value="">
+                                                          <div className="flex items-center">
+                                                            <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+                                                            Loading...
+                                                          </div>
+                                                        </option>
+                                                      ) : (
+                                                                                                               
                                                 sheetKeys.map(k=>
                                                     <option key={k._id}>{k}</option>
                                                     )
                                               )  }
 
                                             </select>
+                                            </div>
                                         </div>
                                         <div className='w-[100%] mt-[14px] flex flex-row items-center justify-center'>
                                             <div onMouseDown={handleselectsheetfield} className='select-none cursor-pointer flex flex-row w-[120px] rounded-md h-[40px] items-center justify-center bg-gradient-to-r from-green-500 to-green-800 spae-x-2'>
@@ -570,7 +589,7 @@ useEffect(()=>{
           <Routes>
             <Route path="/" element={!login?<Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn}/>:<></>} />
             <Route path="/dashboard" element={
-              <ProtectedRoute login={login}><Dashboard boxes={boxes} setBoxes={setBoxes} setshowvalue={setshowvalue} showvalue={showValue} handlePlusClick={handlePlusClick} setsheetpopup={setsheetpopup} mygoogleaccountisconnected={mygoogleaccountisconnected} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} navbarref={navbarref} showsmallnav={showsmallnav} sethidenavbar={sethidenavbar} realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
+              <ProtectedRoute login={login}><Dashboard setcurrencyvalue={setcurrencyvalue} currencyValue={currencyValue} boxes={boxes} setBoxes={setBoxes} setshowvalue={setshowvalue} showvalue={showValue} handlePlusClick={handlePlusClick} setsheetpopup={setsheetpopup} mygoogleaccountisconnected={mygoogleaccountisconnected} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} navbarref={navbarref} showsmallnav={showsmallnav} sethidenavbar={sethidenavbar} realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
             <Route path="/dealpipeline" element={
               <ProtectedRoute login={login}>
               <FirstCol setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} dealpipelinefromdashboardcompany={dealpipelinefromdashboardcompany} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>

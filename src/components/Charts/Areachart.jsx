@@ -317,13 +317,13 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
   return (
     <div style={{ width: '100%', height: '90%' }} className='mt-8  pr-10'>
    <p className='font-inter font-semibold text-[16px] ml-6 -mt-4'>  {thissheetname.replace(/^\d+_/, "")}
-   </p>    <div className='w-[100%] h-[100%] mt-3 pr-14'>
+   </p>    <div className='w-[100%] h-[100%] mt-3 pr-0'>
     <ResponsiveContainer width="100%" height="100%">
                     {mydatatypex === 'string' && mydatatypey === 'integer' ? (
                         // Standard layout: String on X-axis, Integer on Y-axis
                         <AreaChart
                             data={mydata}
-                            margin={{ top: 5, right: 30, left: -20, bottom: 5 }}
+                            margin={{ top: 5, right: 0, left: -20, bottom: 5 }}
                         >
                             <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
                             <XAxis dataKey="pv" tickCount={4}/>
@@ -339,7 +339,7 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                         <AreaChart
                             layout="vertical"
                             data={mydata}
-                            margin={{ top: 5, right: 30, left: -20, bottom: 5 }}
+                            margin={{ top: 5, right: 0, left: -20, bottom: 5 }}
                         >
                              <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
                             <XAxis type="number" dataKey="pv" />
@@ -352,7 +352,7 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                     :
                     (<AreaChart
                       data={mydata}
-                      margin={{ top: 5, right: 30, left: -20, bottom: 5 }}
+                      margin={{ top: 5, right: 0, left: -20, bottom: 5 }}
                   >
                       <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
                       <XAxis dataKey="pv" tickCount={4}/>
