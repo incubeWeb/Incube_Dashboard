@@ -29,11 +29,7 @@ const ChatCard = ({id,hidenavbar,chatdata,currentTab,CompanyName,itsfrom,realtim
     useEffect(()=>{
         const fun=async()=>{
            console.log(chatdata,"this is chat data")
-          
-          
-            setChat(chatdata)
-            
-            
+            setChat(chatdata)    
         }
         fun()
       

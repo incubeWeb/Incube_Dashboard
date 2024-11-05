@@ -713,10 +713,10 @@ const ChartPopup = ({
         id: lastBox ? lastBox.id + 1 : 1,
         x: (boxes.length * 2) % 12, // Adds in the next available position
         y: Math.floor(boxes.length / 6),
-        w: 4,
-        h: 4, // Add some space below the last box
-        minW: 3,
-        minH: 2
+        w: 5,
+        h: 5, // Add some space below the last box
+        minW: 4,
+        minH: 4
       };
     setBoxes([...boxes, { ...newBox, type : "timeline" }]);
     setShowPopup(false); 

@@ -7,14 +7,16 @@ import { FiDollarSign } from "react-icons/fi";
 import { FaChevronDown } from "react-icons/fa";
 import { MdOutlineFilterList } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
-import CompanyTemplate from './CompanyTemplate';
+import ConfimDealAddition from './ConfimDealAddition';
 import { RxCross2 } from "react-icons/rx";
 import axios from 'axios';
 
-import CompanyTemplate2 from './CompanyTemplate2';
 import { FaPlus } from "react-icons/fa";
 import { Bars } from 'react-loader-spinner';
 import { jwtDecode } from 'jwt-decode';
+import { IoAdd, IoLogoCodepen } from 'react-icons/io5';
+import { IoIosBuild } from 'react-icons/io';
+import Succesalert from '../Alerts/Succesalert';
 
 
 
@@ -37,12 +39,22 @@ const Dealsourcing = ({hidenavbar}) => {
 
   const [loadsearch,setloadsearch]=useState(false)
   const [companies,setCompanies]=useState([])
+  const [showsuccessalert,setshowsuccessalert]=useState(false)
+  const [showerroralert,setshowerroralert]=useState(false)
 
   const handleSearchInputChange=(e)=>{
       setSearchVal(e.target.value)   
       
   }
 
+  const [imageurl,setimageurl]=useState(['https://i.pinimg.com/originals/ec/d9/c2/ecd9c2e8ed0dbbc96ac472a965e4afda.jpg'])
+  const [searchedlinks,setsearchedlinks]=useState([])
+  const [companytitle,setcompanytitle]=useState('')
+
+  const [showAddConfirmation,setshowAddConfirmation]=useState(false)
+
+  const [showcardInfo,setshowcardInfo]=useState(false)
+  const [loading,setloading]=useState(false)
  
 
  
@@ -69,29 +81,54 @@ const Dealsourcing = ({hidenavbar}) => {
   
   // }
 
+  
+
 
   const handleSearch = async () => {
     setloadsearch(true)
- 
-    setLoading(true);   // Set loading to true when search is initiated
+    setshowcardInfo(false)
+    setLoading(true); 
+    setloading(true)  // Set loading to true when search is initiated
     
     
     try {
-     
       const res = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/site/get-sitename`,{"companysearch": `${searchValue}`},{
         headers:{
           "Authorization":`Bearer ${token}`
         }
       });
+      if(res.data.status!=200){
+        alert('unable to fetch details!')
+        return
+      }else{
       const data = res.data.data;
-   
-      setCompanies(data); // Store fetched companies
+      const filtereddata=data.replace(/[^\w\s:]/g, '');
+      const short=filtereddata.substring(0,100).split(" ")
+      console.log(short)
+      const companyname=short[0]
+      setcompanytitle(companyname)
+     
+      setCompanies(filtereddata); // Store fetched companies
+      
+      if(typeof(res.data.urls)=='string'){
+        setsearchedlinks(JSON.parse(res.data.urls))
+      }else{
+        setsearchedlinks(res.data.urls)
+      }
+      if(typeof(res.data.imagelinks)=='string'){
+        setimageurl(JSON.parse(res.data.imagelinks))
+      }else{
+      setimageurl(res.data.imagelinks)
+      }
+      setshowcardInfo(true)
+      }
     } catch (err) {
       console.log("Failed to fetch data. Please try again.");
     } finally {
       setLoading(false);
       setloadsearch(false)
       ClearInput()
+      setloading(false)
        // Stop loading after fetching is complete
     }
   };
@@ -148,11 +185,11 @@ const Dealsourcing = ({hidenavbar}) => {
   
 
   useEffect(()=>{
-const mergedData=[...companies]
- sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+      const mergedData=[...companies]
+      sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
    },[companies])
 
- 
+   
 
   return (
     <div className={`${hidenavbar?'ml-[2%] w-[100%]':'ml-[20%] w-[80%]'}select-none text-gray-800 flex flex-col p-[63px] pt-[30px] h-screen`}>
@@ -211,7 +248,7 @@ const mergedData=[...companies]
           </div>
           {
                       fundingRounds?
-                      <div className='cursor-default w-[20%] top-[25%] h-[30%] left-[37%] overflow-y-auto bg-white absolute z-40 rounded-md flex flex-col shadow-md border-[1px] border-gray-300'>
+                      <div className='cursor-default w-[20%] top-[25%] h-[30%] left-[37%] overflow-y-auto bg-white absolute z-40 rounded-md flex flex-col border-[1px] border-gray-300'>
                           <div className='flex flex-col w-[100%] h-[100%] p-4 space-y-4 font-inter'>
                               <div className='cursor-pointer w-[100%] h-[20%] flex justify-start items-center p-2 rounded-md hover:bg-blue-400 hover:shadow-md hover:border-gray-300 hover:border-b-[1px]'>
                                   <p className='text-[14px] text-gray-500'>Pre seed</p>
@@ -342,13 +379,72 @@ const mergedData=[...companies]
 
 
               {
-                <div className='w-[100%]'>
-                  <p className='text-[15px] text-gray-800 font-inter'>{companies}</p>
+                showcardInfo?
+                <div className='w-[100%] p-4 bg-white  h-[100%] flex flex-col rounded-md' style={{boxShadow:'0px 0px 9px #9CA3AF'}}>
+                  {/* <p className='text-[15px] text-gray-800 font-inter'>{companies}</p> */}
+                  <div className='flex flex-row w-[100%] h-[80%] space-x-2'>
+                      
+                      <div className='w-[80%] flex flex-row space-x-2 h-[100%] scrollbar-hide'>
+                          {
+                            imageurl[0].trim().length!=0?
+                            <img className=' rounded-lg object-cover w-[30%] h-[100%]' src={imageurl[0]}/>
+                            :
+                            <img className=' rounded-lg object-cover w-[30%] h-[100%]' src='https://i.pinimg.com/originals/ec/d9/c2/ecd9c2e8ed0dbbc96ac472a965e4afda.jpg'/>
+                          }
+                          <div className='w-[85%] h-[100%] overflow-y-auto text-gray-500 text-[15px] font-inter scrollbar-hide'><p className=''>{companies}</p></div>
+                      </div>
+                      <div className='w-[20%] space-x-2 flex items-center justify-center flex-row'>
+                          <div onClick={()=>{setshowAddConfirmation(true)}} className='w-[100%] cursor-pointer font-inter text-white bg-gradient-to-tr from-sky-600 to-blue-600 rounded-md  space-x-2 items-center justify-center  h-[40px] flex flex-row'>
+                              <div className='w-[14px] h-[14px]'><IoAdd size={17}/></div>
+                              <div><p className='text-[14px]'>Add to Dealpipeline</p></div>
+                          </div>
+                      </div>
+                  </div>
+                  <div className="w-[100%] p-3 items-center h-[40%] flex flex-row space-x-3">
+                      <p className="w-[18%]">Results Captured from</p>
+                      <div className="w-[78%] overflow-y-hidden  space-x-3 flex  items-center h-[30px] overflow-x-auto scrollbar-hide">
+                        {
+                          searchedlinks.map((val,index)=>
+                            <div onClick={()=>window.open(val,'_blank')} key={index} className='w-[30%] flex-row p-2  scrollbar-hide h-[40px] cursor-pointer flex items-center justify-center rounded-md bg-gray-400 font-inter text-[14px] text-white'>
+                              <p>{val.substring(0,23)}</p>
+                            </div>
+                          )
+                        }
+                      </div>
+                  </div>
+                </div>
+                :
+                loading?
+                <div className='w-[100%]' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                  <Bars color="#8884d8" height={80} width={80} />
+                </div>
+                :
+                <div className="w-[100%] space-x-2 font-inter h-[100%] flex items-center justify-center">
+                  <IoIosBuild size={340} className="text-gray-500"/>
+                  <div>
+                    <p className='text-[14px] text-gray-600 flex items-center space-x-2'><IoLogoCodepen size={29}/> Dealsourcing Demo version</p>
+                  </div>
                 </div>
               }
 
-           
+           {showAddConfirmation?
+           <ConfimDealAddition setshowerroralert={setshowerroralert} showsuccessalert={showsuccessalert} setshowsuccessalert={setshowsuccessalert} Getimageurl={imageurl[0]} Getcompanytitle={companytitle} Getdescription={companies} setshowAddConfirmation={setshowAddConfirmation}/>
+            :
+            <></>
+          }
+          {
+           showsuccessalert?
+          <Succesalert alerttype="success" headmessage="Success" message="Company added to dealpipeline" offswitch={setshowsuccessalert}/>
+            :
+            <></>
+          }
 
+          {
+           showerroralert?
+          <Succesalert alerttype="danger" headmessage="Error" message="Unable to add company" offswitch={setshowerroralert}/>
+            :
+            <></>
+          }
     
 
 

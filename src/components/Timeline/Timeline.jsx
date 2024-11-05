@@ -252,38 +252,7 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
         return toSend || `notshow`
     }
 
-    useEffect(()=>{
-      const fun=()=>{
-        if (timelineEndRef.current) {
-          timelineEndRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else{
-          setTimeout(()=>{
-            fun()
-          },500)
-          
-        }
-      }
-      
-        fun()
-      
-    },[])
-
-    useEffect(()=>{
-      const fun=()=>{
-        if (timelineEndRef.current) {
-          timelineEndRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-        else{
-          setTimeout(()=>{
-            fun()
-          },500)
-        }
-      }
-      
-        fun()
-      
-    },[realtimetimeline])
+    
 
 
     useEffect(()=>{
@@ -328,31 +297,11 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
       settimelinedatas()
     },[realtimetimeline])
 
-    const timelineEndRef=useRef(null);
 
-    useEffect(() => {
-      const scrollToBottom = () => {
-        if (timelineEndRef.current) {
-          timelineEndRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-      };
+
     
-      scrollToBottom();
-    }, [realtimetimeline]); 
 
 
-    useEffect(() => {
-      const scrollToBottom = () => {
-        if (timelineEndRef.current) {
-          timelineEndRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-      };
-
-      setTimeout(()=>{
-        scrollToBottom();
-      },300)
-      
-    }, []); 
     
 
     useEffect(()=>{
@@ -364,27 +313,27 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
   
 {   try{
     return (
-   <div  className="flex z-0 flex-col scrollbar-hide w-full max-h-screen h-[100%] overflow-y-auto">
+   <div  className="flex z-0 font-inter flex-col pt-[9%] scrollbar-hide w-full h-[100%] overflow-y-auto">
     
   {timelinedata.map((item) =>
     provideData(item) !== "notshow" ? (
       <div
         key={item.key || item._id}
-        className="flex w-[100%] h-auto flex-row space-x-2 items-center"
+        className="flex w-[100%] h-[17%] flex-row space-x-2 items-center"
       >
        
-        <div className="w-[100px] flex-col h-auto flex items-center bg-white">
+        <div className="w-[100px] flex-col h-[100%] flex items-center bg-white">
           <div className="w-[100%] h-[100%] flex flex-row space-x-2">
    
-            <div className="w-[100%] h-auto flex items-start justify-center">
-              <p className="w-[100%] h-auto text-[12px] font-sans flex items-center mt-3 justify-start">
+            <div className="w-[100%] h-[100%] flex items-start justify-center">
+              <p className="w-[100%] h-[100%] text-[12px] font-inter flex items-center justify-start">
                 {DateData(item)}
               </p>
             </div>
-
+            
             <div className="w-[20%] h-auto flex flex-col pr-12 items-center">
               <div className="w-[2px] h-[100%] bg-gray-500"></div>
-              <MdDonutLarge size={50} className="text-blue-600" />
+              <MdDonutLarge size={80} className="text-blue-600" />
               <div className="w-[2px] h-[100%] bg-gray-500"></div>
             </div>
           </div>
@@ -392,19 +341,21 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
 
        
         <div className="flex-grow h-auto mt-4 mb-4 flex flex-row items-start space-x-2 mr-4">
-          <div className="w-[60%] h-auto">
+          <div className="w-[80%] h-[100%]">
          
-            <p className="text-[12px] font-sans leading-4 break-words mr-2 mt-1">
+            <p className="text-[12px] font-inter leading-4 break-words mr-2 mt-4">
               {provideData(item)}
             </p>
           </div>
 
        
-          <div className="w-[40%] h-auto flex items-center justify-end pr-4">
-            <p className="text-[12px]">{timeData(item)}</p>
+          <div className="w-[20%] h-[100%] flex items-start justify-center pt-4">
+              <p className="w-[100%] h-[100%] text-[11px] font-inter flex items-center justify-end">
+              {timeData(item)}
+              </p>
           </div>
         </div>
-        <div ref={timelineEndRef}></div>
+        
       </div>
     ) : null
   )}

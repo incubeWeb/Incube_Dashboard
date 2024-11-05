@@ -30,6 +30,7 @@ const PortfolioRemoveSharedUsers = ({setPortfolioSharedwithusers,setclickedportf
 
     const handlecancel=()=>{
         setclickedPortfolioShared(false)
+        setclickedportfolioremoveshared(false)
     }
     const handleremoveUser=async(email)=>{
       const newsharedlist=organziationUsers.filter(item=>item.email!=email)
@@ -39,9 +40,7 @@ const PortfolioRemoveSharedUsers = ({setPortfolioSharedwithusers,setclickedportf
     }
   
     const handledone=async()=>{
-
-      if(organziationUsers!==PortfoliosharedWithUsers)
-      {
+   
           const sharingusers='yes'
           const organization=`${Logorganization}_Topcards`
           const organization1=Logorganization
@@ -64,9 +63,9 @@ const PortfolioRemoveSharedUsers = ({setPortfolioSharedwithusers,setclickedportf
             
               alert('server error!')
             }
-      }
+      
 
-      setclickedPortfolioShared(false)
+      setclickedportfolioremoveshared(false)
     }
 
   const handleback=(e)=>{

@@ -341,7 +341,7 @@ const popupref2=useRef(null)
 useEffect(() => {
   const handleClickOutside2 = (event) => {
       // Check if the click is outside the popup and filter menu
-      console.log(event.target,"this is event target")
+      
       if (FilterRef.current && !FilterRef.current.contains(event.target)){
           setsheetClicked(false)
       }
