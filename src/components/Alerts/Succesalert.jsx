@@ -2,6 +2,9 @@ import React, { useEffect, useRef } from 'react'
 
 const Succesalert = ({alerttype,headmessage,message,offswitch}) => {
     const alertref=useRef(null)
+
+    
+
     useEffect(()=>{
         const handleclickoutside=(event)=>{
             if(alertref.current && !alertref.current.contains(event.target))
@@ -15,7 +18,7 @@ const Succesalert = ({alerttype,headmessage,message,offswitch}) => {
         }
     },[])
   return (
-    <div ref={alertref} className='fixed z-[1001] top-0 left-1/2 -translate-x-1/2'>
+    <div ref={alertref} className='fixed z-[1001] top-5 left-1/2 -translate-x-1/2'>
         {
             alerttype=='danger'?
                 <div className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">

@@ -22,6 +22,7 @@ import { FaRegFileExcel } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { IoMdArrowBack } from "react-icons/io";
+import Succesalert from "./components/Alerts/Succesalert";
 
 
 
@@ -60,6 +61,26 @@ function App() {
 
   const [mygoogleaccountisconnected,setmygoogleaccountisconnected]=useState(false)
   
+  const [internetdisconnected,setinternetdisconnected]=useState(false)
+  const [internetisback,setinternetisback]=useState(false)
+  const [slowinternetconenction,setslowinternetconnection]=useState(false)
+
+  useEffect(()=>{
+    console.log(navigator.onLine,"integer")
+    const checkInternet=()=>{
+      if(!navigator.onLine){
+        setinternetdisconnected(true)
+        setinternetisback(false)
+      }else{
+        setinternetdisconnected(false)
+        setinternetisback(true)
+      }
+    }
+    window.addEventListener('offline',checkInternet)
+    window.addEventListener('online',checkInternet)
+
+    
+  },[navigator.onLine])
 
   useEffect(()=>{
     
@@ -73,8 +94,17 @@ function App() {
       socket2.on('Googleconnected',(change)=>{
         setgoogleaccountconnected(change)
       })
+
+      socket2.on('disconnect',(reason)=>{
+        setslowinternetconnection(true)
+      })
+      socket2.on('connect_error', (err) => {
+        setslowinternetconnection(true)
+      });
+      
+      
     }
-    
+    if(navigator.onLine)
     fun()
     
 
@@ -121,7 +151,13 @@ function App() {
         }
 
         
-
+        socket.on('disconnect',(reason)=>{
+          setslowinternetconnection(true)
+        })
+        
+        socket.on('connect_error', (err) => {
+          setslowinternetconnection(true)
+      });
         
         socket.on('databaseChange',(change)=>{
             const key=changes.length-1
@@ -185,7 +221,7 @@ function App() {
       
       }
       
-      
+      if(navigator.onLine)
       fun()
       
       
@@ -278,9 +314,10 @@ useEffect(()=>{
       setsheetKeys(fileteredKey)
       setLoading2(false)
   }
- 
+  if(clickedSheetId.length>0)
+  {
   setValues()
-  
+  }
 },[clickedSheetId])
 
   const handleGooglesheetclicked=async (id,name)=>{
@@ -584,7 +621,28 @@ const handleCurrencySelect = (currency) => {
                                 <></>
                 }
 
-  
+          {
+            login && internetdisconnected?
+            <Succesalert alerttype='danger' headmessage="Not connected to internet" message="" offswitch={setinternetdisconnected}/>
+            :
+            <></>
+
+          }
+
+          {
+            login && slowinternetconenction && !internetdisconnected?
+            <Succesalert alerttype='danger' headmessage="Slow internet speed" message="" offswitch={setslowinternetconnection}/>
+            :
+            <></>
+          }
+
+{
+            login && internetisback?
+            <Succesalert alerttype='success' headmessage="You are back online" message="" offswitch={setinternetisback}/>
+            :
+            <></>
+
+          }
 
           <Routes>
             <Route path="/" element={!login?<Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn}/>:<></>} />

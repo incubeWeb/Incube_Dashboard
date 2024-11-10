@@ -62,10 +62,12 @@ const Privatekeypopup = ({ Type, uniqueid, apikeyvalue, hidenavbar, setpopup, re
   };
 
   useEffect(() => {
+    if(navigator.onLine)
     setUsers();
   }, []);
 
   useEffect(() => {
+    if(navigator.onLine)
     setUsers();
   }, [realtimecheckAPikeys]);
 

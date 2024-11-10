@@ -126,10 +126,10 @@ const Login = ({ setLoginIn,login }) => {
   };
 
   return (
-    <div className='font-roboto w-[100%] h-screen bg-gray-200 flex items-center justify-center'>
+    <div className='font-roboto w-[100%] h-screen flex items-center justify-center'>
                 
-      <div className='flex relative flex-row w-[70%] h-[90%] bg-white rounded-xl border-gray-300 borddr-[1px] shadow-md'>
-        <div className='space-y-3 z-40 flex-col absolute w-[50%] h-[100%] bg-blue-500 rounded-r-xl shadow-lg shadow-gray-400 border-r-[1px] border-gray-300 flex items-center justify-center text-white'>
+      <div className='flex relative flex-row w-[70%] h-[90%] bg-white rounded-xl border-gray-300 ' style={{boxShadow:'0px 0px 22px #D1D5DB'}}>
+        <div className='space-y-3 z-40 flex-col absolute w-[50%] h-[100%] bg-blue-500 rounded-r-xl border-gray-300 flex items-center justify-center text-white'>
           <p className='text-[25px] tracking-wider font-inter font-bold  fade-in'>Incube Web Login</p>
           <div className='flex flex-row h-[5%] w-[100%] items-center justify-center'>
             <div className='text-[14px] w-[60px] h-[100%] flex items-center justify-center pt-[2px]'>
@@ -143,15 +143,15 @@ const Login = ({ setLoginIn,login }) => {
               <p className='text-[16px] font-inter font-bold'>Login User</p>
               <div className='flex flex-col w-[70%] h-[15%] space-y-3'>
                 <p className='text-[14px] pl-1 font-inter font-semibold'>Email</p>
-                <input id='email' type='text' className='text-[14px] border-gray-300 outline-none pl-2 border-[1px] rounded-md h-[50%]' placeholder='Email' />
+                <input id='email' type='text' className='text-[14px] outline-blue-400 outline-[1px] border-gray-300 pl-2 border-[1px] rounded-md h-[50%]' placeholder='Email' />
               </div>
               <div className='flex flex-col w-[70%] h-[15%] space-y-3'>
                 <p className='text-[14px] pl-1 font-semibold font-inter'>Password</p>
-                <input id='password' type='password' className='text-[14px] border-gray-300 outline-none pl-2 border-[1px] rounded-md h-[50%]' placeholder='Password' />
+                <input id='password' type='password' className='text-[14px] border-gray-300 outline-blue-400 outline-[1px] pl-2 border-[1px] rounded-md h-[50%]' placeholder='Password' />
               </div>
               <div className='flex flex-col w-[70%] h-[15%] space-y-3'>
                 <p className='text-[14px] pl-1 font-semibold font-inter'>Organization</p>
-                <input id='organization' type='text' className='text-[14px] border-gray-300 outline-none pl-2 border-[1px] rounded-md h-[50%]' placeholder='Organization name' />
+                <input id='organization' type='text' className='text-[14px] border-gray-300 outline-blue-400 outline-[1px] pl-2 border-[1px] rounded-md h-[50%]' placeholder='Organization name' />
               </div>
               <div className='flex flex-col w-[100%] items-center justify-center'>
                 {showError? <p className='text-[14px] text-red-400'>Wrong Credentials</p>:<></>}
@@ -172,28 +172,28 @@ const Login = ({ setLoginIn,login }) => {
             <div className='space-y-2 flex flex-col ml-[50%] h-[550px] overflow-y-auto w-[50%] items-center justify-center'>
             <div className='flex flex-col w-[70%] h-[15%] space-y-1'>
               <p className='text-[14px] pl-1 font-inter font-semibold'>Name</p>
-              <input onChange={(e)=>setorg_name(e.target.value)} type='text' className='text-[14px] border-gray-300 outline-none pl-2 border-[1px] rounded-md h-[50%]' placeholder='Name' />
+              <input onChange={(e)=>setorg_name(e.target.value)} type='text' className='text-[14px] border-gray-300 outline-blue-400 outline-[1px] pl-2 border-[1px] rounded-md h-[50%]' placeholder='Name' />
             </div>
             <div className='flex flex-col w-[70%] h-[15%] space-y-1'>
               <p className='text-[14px] pl-1 font-inter font-semibold'>Email</p>
-              <input onChange={(e)=>setorg_email(e.target.value)} type='text' className='text-[14px] border-gray-300 outline-none pl-2 border-[1px] rounded-md h-[50%]' placeholder='abc@incube.com' />
+              <input onChange={(e)=>setorg_email(e.target.value)} type='text' className='text-[14px] border-gray-300 outline-blue-400 outline-[1px] pl-2 border-[1px] rounded-md h-[50%]' placeholder='abc@incube.com' />
             </div>
             <div className='flex flex-col w-[70%] h-[15%] space-y-1'>
               <p className='text-[14px] pl-1 font-inter font-semibold'>Password</p>
-              <input onChange={(e)=>setorg_pass(e.target.value)} type='password' className='text-[14px] border-gray-300 outline-none pl-2 border-[1px] rounded-md h-[50%]' placeholder='********' />
+              <input onChange={(e)=>setorg_pass(e.target.value)} type='password' className='text-[14px] border-gray-300 outline-blue-400 outline-[1px] pl-2 border-[1px] rounded-md h-[50%]' placeholder='********' />
             </div>
            
             <div className='flex flex-col w-[70%] h-[15%] space-y-1'>
               <p className='text-[14px] pl-1 font-inter font-semibold'>Location</p>
-              <input onChange={(e)=>setorg_loc(e.target.value)} type='text' className='text-[14px] border-gray-300 outline-none pl-2 border-[1px] rounded-md h-[50%]' placeholder='eg.India' />
+              <input onChange={(e)=>setorg_loc(e.target.value)} type='text' className='text-[14px] border-gray-300 outline-blue-400 outline-[1px] pl-2 border-[1px] rounded-md h-[50%]' placeholder='eg.India' />
             </div>
             <div className='flex flex-col w-[70%] h-[15%] space-y-1'>
               <p className='text-[14px] pl-1 font-inter font-semibold'>Entity Type</p>
-              <input onChange={(e)=>setorg_entity(e.target.value)} type='text' className='text-[14px] border-gray-300 outline-none pl-2 border-[1px] rounded-md h-[50%]' placeholder='pvt.' />
+              <input onChange={(e)=>setorg_entity(e.target.value)} type='text' className='text-[14px] border-gray-300 outline-blue-400 outline-[1px] pl-2 border-[1px] rounded-md h-[50%]' placeholder='pvt.' />
             </div>
             <div className='flex flex-col w-[70%] h-[15%] space-y-1'>
               <p className='text-[14px] pl-1 font-inter font-semibold'>Website</p>
-              <input onChange={(e)=>setorg_web(e.target.value)} type='text' className='text-[14px] border-gray-300 outline-none pl-2 border-[1px] rounded-md h-[50%]' placeholder='incube.com' />
+              <input onChange={(e)=>setorg_web(e.target.value)} type='text' className='text-[14px] border-gray-300 outline-blue-400 outline-[1px] pl-2 border-[1px] rounded-md h-[50%]' placeholder='incube.com' />
             </div>
             <div className='flex flex-row space-x-2 w-[70%] h-[15%] items-center justify-center'>
                 <div className='bg-gradient-to-r from-sky-500 to-blue-600 h-[40px] rounded-md hover:bg-blue-800 select-none cursor-pointer flex items-center justify-center w-[80px]' onClick={setloginfun}>

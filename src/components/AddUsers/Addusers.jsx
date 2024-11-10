@@ -73,11 +73,12 @@ const Addusers = ({setActiveField,hidenavbar,realtimeuser}) => {
                 
                 
             }
-            setTimeout(()=>{  
-                setloading(false)
-              },1000)
+            
         }
         setUsers()
+        setTimeout(()=>{  
+            setloading(false)
+          },1000)
         
     },[searchUser])
     
@@ -134,12 +135,9 @@ const Addusers = ({setActiveField,hidenavbar,realtimeuser}) => {
             
             
         }
-        try{
+        
         getUser()
-        }catch(e)
-        {
-            getUser()
-        }
+        
     },[])
 
     useEffect(()=>{
@@ -154,12 +152,9 @@ const Addusers = ({setActiveField,hidenavbar,realtimeuser}) => {
             
             
         }
-        try{
+       
         getUser()
-        }catch(e)
-        {
-            getUser()
-        }
+        
     },[realtimeuser])
 
   return (

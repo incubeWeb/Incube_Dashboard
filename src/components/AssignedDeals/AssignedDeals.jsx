@@ -55,7 +55,7 @@ const AssignedDeals = ({id,setdealpipelinefromdashboardcompany,setActiveField,se
       setassignedDeals(response.data.data)
       
      }
-
+     
     getAllDeals()
     
   },[])
