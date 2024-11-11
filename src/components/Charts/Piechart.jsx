@@ -344,8 +344,8 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
 
 
   return (
-    <div style={{ width: '100%', height: '100%',paddingBottom:'15px' }}>
-     <p className='mt-4 ml-7 font-inter font-semibold'>{thissheetname.replace(/^\d+_/, "")}</p>
+    <div style={{ width: '100%', height: '85%',paddingBottom:'15px' }}>
+     <p className='mt-4 ml-[5px] font-inter font-semibold'>{thissheetname.replace(/^\d+_/, "")}</p>
       {loading ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
           <Bars color="#8884d8" height={80} width={80} />

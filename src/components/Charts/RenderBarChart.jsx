@@ -320,11 +320,11 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
       <div style={{ width: '100%', height: '90%' }} className='mt-2 pr-5 ml-[-20px]'>
     {mydatatypex === 'string' && mydatatypey === 'integer' ?
         <div className='' style={{ paddingBottom: '20px' }}>
-            <p className='text-[16px] font-semibold font-inter -mt-4 ml-11'>{thissheetname.replace(/^\d+_/, "")}</p>
+            <p className='text-[16px] font-semibold font-inter -mt-4 ml-6'>{thissheetname.replace(/^\d+_/, "")}</p>
         </div>
         :
         <div className=' -pt-4' style={{ paddingBottom: '20px' }}>
-            <p className='text-[16px] font-semibold font-inter -mt-4 ml-11'>{thissheetname.replace(/^\d+_/, "")}</p>
+            <p className='text-[16px] font-semibold font-inter -mt-4 ml-6'>{thissheetname.replace(/^\d+_/, "")}</p>
         </div>
     }
 

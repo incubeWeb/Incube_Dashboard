@@ -333,7 +333,7 @@ useEffect(() => {
 
 
   return (
-    <div className=' bg-white space-y-2 font-inter shadow-gray-400 w-full relative  h-[100%] flex flex-col'>
+    <div className=' bg-white space-y-2 font-inter shadow-gray-400 w-full relative  h-[95%] flex flex-col'>
         {
                       clickedUser&&openChat!=''?
                       <div className='flex flex-col space-y-4 font-noto p-[20px] fixed  w-[100%] h-[100%] top-0 left-0 rounded-md  bg-white scrollbar-hide  shadow-lg  mb-4 ' onClick={(e)=>e.stopPropagation()}>
@@ -437,10 +437,10 @@ useEffect(() => {
                       :
                       <></>
         }
-        <div className='w-[100%] h-[45px] '>
-          <input className='w-[100%] outline-none h-[45px] border-[1px] border-gray-500    rounded-md text-[14px] pl-2' placeholder='Search' onChange={handleSearchUser}/> 
+        <div className='w-[100%] h-[45px] absolute'>
+          <input className='w-[100%] outline-none h-[45px] border-[1px] border-gray-500 rounded-md text-[14px] pl-2' placeholder='Search' onChange={handleSearchUser}/> 
         </div>
-          <div className=' flex w-[100%] h-[70%] flex-row  '>
+          <div className='flex w-[100%] h-[100%] flex-row  '>
             {
               users.length==0?
               <div className='flex flex-row w-[100%] h-[100%] items-center justify-center text-gray-700 space-x-4'>
@@ -449,7 +449,7 @@ useEffect(() => {
               </div>
               :
               users.length>0?
-              <div className=' flex flex-col w-[100%] items-center justify-start text-gray-700 space-y-1 overflow-y-auto scrollbar-hide'>
+              <div className=' flex flex-col w-[100%] mt-[40px] items-center justify-start text-gray-700 space-y-1 overflow-y-auto scrollbar-hide'>
                
               {
                 (users||[]).map(user=>

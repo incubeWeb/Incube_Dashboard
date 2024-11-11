@@ -315,8 +315,8 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
 },[mydata])
 
   return (
-    <div style={{ width: '100%', height: '90%' }} className='mt-8  pr-10'>
-   <p className='font-inter font-semibold text-[16px] ml-6 -mt-4'>  {thissheetname.replace(/^\d+_/, "")}
+    <div style={{ width: '100%', height: '90%' }} className='mt-4  pr-10'>
+   <p className='font-inter font-semibold text-[16px] ml-1 -mt-4'>  {thissheetname.replace(/^\d+_/, "")}
    </p>    <div className='w-[100%] h-[100%] mt-3 pr-0'>
     <ResponsiveContainer width="100%" height="100%">
                     {mydatatypex === 'string' && mydatatypey === 'integer' ? (
@@ -370,7 +370,7 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-green-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Database</p>
-                  <p className='text-[14px] text-gray-600 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
+                  
                 </div>:
                 <></>
             }
@@ -380,7 +380,7 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                 <div className='flex flex-row space-x-2 fixed left-5 top-3 items-center'>
                   <div className='w-[10px] h-[10px] bg-orange-600 rounded-[50%] mt-[2px]'></div> 
                   <p className='text-[13px] text-gray-07 font-noto text-gray-700'>Google Drive</p>
-                  <p className='text-[14px] text-gray-600 font-noto'> {thissheetname.replace(/^\d+_/, "")}</p>
+                  
                 </div>:
                 <></>
             }

@@ -32,12 +32,30 @@ import { jwtDecode } from 'jwt-decode';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+import { TfiHandDrag } from 'react-icons/tfi';
+import { TbDragDrop } from 'react-icons/tb';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 
 const Dashboard = ({boxes,setcurrencyvalue,currencyValue, setBoxes,handlePlusClick,setshowvalue,showValue,setsheetpopup,mygoogleaccountisconnected,setdealpipelinefromdashboardcompany,navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
   
+  const [isDraggable, setIsDraggable] = useState(false);
+
+
+  useEffect(()=>{
+    console.log(isDraggable,"drag value")
+  },[isDraggable])
+
+  const handleMouseDown = () => {
+    setIsDraggable(true)
+  };
+
+ 
+
+
+
+
   const [openChatbar,setopenChatbar]=useState(false)
   const [showPopup, setShowPopup] = useState(false);
   const [Useremail,setUseremail]=useState('')
@@ -427,8 +445,8 @@ useEffect(() => {
   };
   //{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 } cols
   //{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 } brekpoints
-  const breakpoints={ lg: 992, md: 768, sm: 576, xs: 0 }
-  const cols={ lg: 12, md: 10, sm: 6, xs: 4, }
+  const breakpoints={ lg: 992, md: 768, sm: 576, xs: 480, xxs:0 }
+  const cols={ lg: 12, md: 10, sm: 6, xs: 4, xxs:2 }
   return (
     
     <div className={`w-[100%] h-screen bg-white space-x-4 flex flex-row   font-roboto`}>
@@ -442,7 +460,7 @@ useEffect(() => {
       ):
       
     <div className='w-[100%] h-[100%] flex flex-col  '>
-      <div  className='w-[100%] h-[7%] flex flex-col items-end pr-4 justify-end'>
+      <div  className='w-[100%] h-[7%] flex flex-row space-x-2 items-end pr-4 justify-end'>
         <div
         ref={addwidgitref}
           className=' z-[50] flex mt-2 flex-row w-[130px] h-[33px] rounded-md bg-blue-600  text-[14px] items-center justify-center text-white cursor-pointer'
@@ -450,12 +468,15 @@ useEffect(() => {
         >
           <p> <span className='text-[20px] font-bold'>+</span>  Add widgets</p>
         </div>
+
+        
       </div>
+      
 
     <div className=' flex flex-col w-[100%] h-[0%] items-end '>
     
 </div>
-      <div ref={dashboardwidgitref} className='  flex h-[100%]'>
+      <div ref={dashboardwidgitref} className='flex h-[100%]'>
         
       <ResponsiveReactGridLayout
       className="layout w-[100%] "
@@ -465,8 +486,7 @@ useEffect(() => {
       cols={cols}
       rowHeight={100}
       isResizable={true}
-
-      isDraggable={true}
+      isDraggable={isDraggable}
       onResizeStop={onResizeStop}
         onDragStop={onDragStop}
     >
@@ -479,8 +499,8 @@ useEffect(() => {
          key={box.id}
         data-grid={box}
         onClick={(e)=>e.stopPropagation()}
-        className="dev-box z-20 border-gray-300 bg-white border-[0.5px] rounded-lg p-4 pt-7"
-  
+        className="dev-box z-20 border-gray-300 bg-white border-[0.5px] rounded-lg  pt-0"
+        
          >
           
             {(() => {
@@ -488,20 +508,55 @@ useEffect(() => {
               switch (box.type) {
                 case 'news':
                   return (
+                    <div className='flex flex-col h-[100%] overflow-y-auto'>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] bg-white fixed h-[40px] mb-4 rounded-md'>
+                          <div className='w-[100%] border-white h-[40px] relative  flex items-center justify-between px-4'
+                            
+                            style={{
+                                    background: 'linear-gradient(90deg, #1e3a8a, #2563eb)', // Blue gradient
+                                }}>
+                            
+                                <p className='text-white text-[19px] tracking-wider font-sans font-bold'>News</p>
+                                {/* Diagonal effect */}
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        bottom: 0,
+                                        right: 0,
+                                        width: '30px',
+                                        height: '30px',
+                                        backgroundColor: '#fff',
+                                        clipPath: 'polygon(100% 0, 100% 100%, 0 100%)',
+                                    }}
+                                ></div>
+                            </div>
+                      </div>
+                    <div className='px-4 pt-[60px] overflow-y-auto '>
                     <NewsWidgit id={index} boxes={boxes} setBoxes={setBoxes}/>
+                    </div>
+                    </div>
                   )
                 case 'timeline':
                   return (
+                    <div className='flex flex-col h-[92%] scrollbar-hide overflow-y-auto'>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] bg-white h-[40px] mb-4 fixed rounded-md'>
+                      <p className='text-[15px] pl-2 pt-2 font-bold'>Timeline</p>
+                      </div>
+                    <div className='px-4 scrollbar-hide mt-[45px]'>
                     <Timeline
                     id={index}
                     setBoxes={setBoxes}
                     boxes={boxes}
                     realtimetimeline={realtimetimeline}
                     />
+                    </div>
+                    </div>
                   )
                 case 'portfoliocard':
                   return (
-                    
+                    <div className='flex flex-col'>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed  h-[40px] mb-4 rounded-md'></div>
+                    <div className='px-4 mt-[35px]'>
                     <Portfoliocard 
                     id={index}
                      setBoxes={setBoxes} 
@@ -518,10 +573,14 @@ useEffect(() => {
                      setcapturingPortfoliowidgitvalues={setcapturingPortfoliowidgitvalues}
                      
                      />
-              
+                    </div>
+                    </div>
                   )
                 case 'chat':
                   return (
+                    <div className='flex flex-col h-[100%] scrollbar-hide '>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[40px] bg-white mb-4 rounded-md'></div>
+                    <div className='px-4 mt-[50px] h-[84%]'>
                     <ChatWidgit 
                     id={index} 
                     setBoxes={setBoxes}
@@ -530,19 +589,29 @@ useEffect(() => {
                     Useremail={Useremail} 
                     handleSeeUsers={handleSeeUsers} 
                     setclickeduseremail={setclickeduseremail}/>
+                    </div>
+                    </div>
                   )
                 case 'calendarwidgit':
                   return(
+                    <div className='flex flex-col h-[100%]'>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[40px] flex items-center left-2 text-[16px] font-bold mb-4 rounded-md'><p>Calendar</p></div>
+                    <div className='px-4 h-[100%] mt-[40px]'>
                     <CalendarWidgit
                       id={index}
                       setBoxes={setBoxes}
                       boxes={boxes}
                       mygoogleaccountisconnected={mygoogleaccountisconnected}
                     />
+                    </div>
+                    </div>
                   )
                 
                 case 'AssignedDeals':
                   return(
+                    <div className='flex flex-col h-[100%] overflow-y-auto scrollbar-hide'>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[50px] mb-4 rounded-md'></div>
+                    <div className='px-4 pt-[20px] h-[100%]'>
                     <AssignedDeals
                       id={index}
                       
@@ -565,11 +634,16 @@ useEffect(() => {
                       setCompanyName={setCompanyName}
                       setActiveField={setActiveField}
                     />
+                    </div>
+                    </div>
                   )
 
                 case 'Areachart':
                   if (areachartCount.length > 0) {
                     return (
+                      <div className='flex flex-col w-[100%] h-[100%]'>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[40px] mb-4 rounded-md'></div>
+                    <div className='pl-4 pt-[40px] h-[90%] w-[100%]'>
                       <Areachart
                         key={index}
                         id={index}
@@ -587,6 +661,8 @@ useEffect(() => {
                         setBoxes={setBoxes}
                         boxes={boxes}
                       />
+                      </div>
+                      </div>
                     );
                   } else {
                     return <div>No Areachart data available</div>;
@@ -594,6 +670,9 @@ useEffect(() => {
                 case 'Piechart':
                   if (piechartCount.length > 0) {
                     return (
+                      <div className='flex flex-col h-[100%]'>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] h-[40px] fixed mb-4 rounded-md'></div>
+                    <div className='px-4 pt-[20px] h-[90%]'>
                       <Piechart
                         key={index}
                         id={index}
@@ -612,6 +691,8 @@ useEffect(() => {
                         boxes={boxes}
                         
                       />
+                      </div>
+                      </div>
                     );
                   } else {
                     return <div>No Piechart data available</div>;
@@ -619,6 +700,9 @@ useEffect(() => {
                 case 'BarChart':
                   if (barchartCount.length > 0) {
                     return (
+                      <div className='flex flex-col h-[100%]'>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[40px] mb-4 rounded-md'></div>
+                    <div className='px-4 pt-[20px] h-[100%]'>
                       <RenderBarChart
                         key={index}
                         id={index}
@@ -636,6 +720,8 @@ useEffect(() => {
                         setBoxes={setBoxes}
                         boxes={boxes}
                       />
+                      </div>
+                      </div>
                     );
                   } else {
                     return <div>No Piechart data available</div>;

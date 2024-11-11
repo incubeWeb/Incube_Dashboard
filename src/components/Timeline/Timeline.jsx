@@ -313,7 +313,7 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
   
 {   try{
     return (
-   <div  className="flex z-0 font-inter flex-col pt-[9%] scrollbar-hide w-full h-[100%] overflow-y-auto">
+   <div  className="flex z-0 font-inter flex-col scrollbar-hide w-full h-[100%] overflow-y-auto">
     
   {timelinedata.map((item) =>
     provideData(item) !== "notshow" ? (
@@ -367,9 +367,7 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
   >
     <RxCross2 size={14} className="text-black" />
   </div>
-  <div className='fixed font-inter flex items-center pl-3 shadow-md left-0 top-0 z-[10] w-[100%] h-[13%] rounded-t-md bg-white'>
-      <p className='text-[14px]'>Timeline</p>
-    </div>
+  
 </div>
 
   )}catch(e){

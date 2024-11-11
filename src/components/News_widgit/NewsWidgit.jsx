@@ -67,26 +67,7 @@ const NewsWidgit = ({ id, boxes, setBoxes }) => {
     return (
         <div className='w-[100%] h-[100%] flex flex-col font-sans'>
             {/* Header with Red Background and Diagonal Effect */}
-            <div className='w-[100%] h-[40px] relative  flex items-center justify-between px-4'
             
-            style={{
-                     background: 'linear-gradient(90deg, #1e3a8a, #2563eb)', // Blue gradient
-                 }}>
-            
-                <p className='text-white text-[19px] tracking-wider font-sans font-bold'>News</p>
-                {/* Diagonal effect */}
-                <div
-                    style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        right: 0,
-                        width: '30px',
-                        height: '30px',
-                        backgroundColor: '#fff',
-                        clipPath: 'polygon(100% 0, 100% 100%, 0 100%)',
-                    }}
-                ></div>
-            </div>
 
             {/* Loading State */}
             {loading ? (
@@ -94,7 +75,7 @@ const NewsWidgit = ({ id, boxes, setBoxes }) => {
                     <Bars color="#8884d8" height={80} width={80} />
                 </div>
             ) : (
-                <div className='flex flex-col space-y-2 h-[85%] overflow-y-auto'
+                <div className='flex flex-col space-y-2 h-[95%] overflow-y-auto'
                     style={{
                         overflowY: 'auto',
                         scrollbarWidth: 'none', // For Firefox

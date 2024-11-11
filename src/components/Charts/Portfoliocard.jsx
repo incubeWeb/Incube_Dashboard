@@ -274,10 +274,10 @@ const Portfoliocard = ({id,setcurrencyvalue,currencyValue,setsheetpopup,handlePl
   return (
     <div ref={popupRef} className='flex h-[100%] flex-col  bg-white cursor-default space-y-2'>
       
-    <div className='-mt-4 cursor-pointer'  ><HiOutlineDotsVertical onClick={()=>{setshowFilterMenu(true)}} size={20}/></div>
-    {showFilterMenu && (
+    <div className='-mt-4 cursor-pointer z-[60] w-[20px] h-[20px]'  ><HiOutlineDotsVertical onClick={()=>{setshowFilterMenu(true)}} size={20}/></div>
+    {showFilterMenu ?
   <div className="">
-    <div ref={threedotref} className='absolute left-1 top-0 w-[150px] p-3 bg-white border-gray-300 border-[1px] rounded-md z-50'>
+    <div ref={threedotref} className='absolute left-8 top-7 w-[150px] p-3 bg-white border-gray-300 border-[1px] rounded-md z-50'>
       <RxCross2 onClick={() => { setshowFilterMenu(false) }} className='absolute right-2 top-1 cursor-pointer' />
       <div
         className='p-1 hover:bg-blue-400 flex items-center rounded-md text-[12px] font-semibold font-inter cursor-pointer'
@@ -296,7 +296,8 @@ const Portfoliocard = ({id,setcurrencyvalue,currencyValue,setsheetpopup,handlePl
       </div>
     </div>
   </div>
-)}
+:
+<div></div>}
 
     <div className='z-[10] cursor-pointer flex items-center justify-center w-[20px]  rounded-full bg-gray-100 h-[20px] fixed right-0 mt-4 mr-3 top-[1px]' onClick={deleteWidgit}>
     <IoMdClose size={20} className='text-black' />
@@ -360,14 +361,14 @@ const Portfoliocard = ({id,setcurrencyvalue,currencyValue,setsheetpopup,handlePl
 
 
                     <div className='w-[100%] h-[30%] flex flex-row items-center justify-start space-x-2 mt-2'>
-                    <div className="bg-blue-500 w-[20%] glow h-[50px]  shadow-[0_0_15px_rgba(59,130,246,1)] rounded-full flex items-center justify-center cursor-pointer mr-4 "onDoubleClick={() => setShowPopup(!showPopup)}>
+                    <div className="bg-blue-500 w-[20%] glow h-[50px]  shadow-[0_0_15px_rgba(59,130,246,1)] rounded-full flex items-center justify-center cursor-pointer mr-4 "onDoubleClick={(e) => {setShowPopup(!showPopup); e.stopPropagation()}}>
                   {icon }
                 </div>
                                 {
                                     !editLabel?
                                     <p className='text-[18px] font-inter font-bold text-gray-700 w-[50%] flex items-center h-[30px]  tracking-wider cursor-pointer' onDoubleClick={handleEdit}>{labelname}</p>
                                     :
-                                    <input ref={inputRef}  onChange={(e)=>{setlablename(e.target.value) }} onKeyPress={(e)=>e.key=='Enter'?seteditLabel(false):seteditLabel(true)} className='w-[90px] h-[30px] text-[13px] pl-1 outline-none border-[1px] border-gray-300 rounded-md'/>
+                                    <input ref={inputRef} value={labelname}  onChange={(e)=>{setlablename(e.target.value) }} onKeyPress={(e)=>e.key=='Enter'?seteditLabel(false):seteditLabel(true)} className='w-[90px] h-[30px] text-[13px] pl-1 outline-none border-[1px] border-gray-300 rounded-md'/>
                                 }
                                 
                                 {/* <div onClick={()=>handleEdit()}>

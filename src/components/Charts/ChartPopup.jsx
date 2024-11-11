@@ -385,8 +385,8 @@ const ChartPopup = ({
         y: Math.floor(boxes.length / 6),
         w: 4,
         h: 4, // Add some space below the last box // Add some space below the last box
-        minW: 2.5,
-        minH: 2
+        minW: 3,
+        minH: 3
       };
       try{
         setBoxes([...boxes, { ...newBox, type : "Areachart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle,sheetdbdata:sheetdbdata, areachartCount:[...data01,...xAxisValues.map((val,index)=>({pv:parseInt(val),uv:parseInt(yAxisValues[index])}))] }]);
@@ -459,8 +459,8 @@ const ChartPopup = ({
         y: Math.floor(boxes.length / 6),
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
-        minW: 2.5,
-        minH: 2
+        minW: 3,
+        minH: 3
       };
       setBoxes([...boxes, { ...newBox, type : "Piechart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle, piechartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName,sheetdbdata:sheetdbdata }]);
       setShowPopup(false);
@@ -488,8 +488,8 @@ const ChartPopup = ({
         y: Math.floor(boxes.length / 6),
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
-        minW: 2.5,
-        minH: 2
+        minW: 3,
+        minH: 3
       };
       setBoxes([...boxes, { ...newBox, type : "Piechart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle,sheetdbdata:sheetdbdata, piechartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetchart:false,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis, }]);
       setShowPopup(false);
@@ -576,8 +576,8 @@ const ChartPopup = ({
         y: Math.floor(boxes.length / 6),
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
-        minW: 2.5,
-        minH: 2
+        minW: 4,
+        minH: 3
     };
     setBoxes([...boxes, { ...newBox, type : "BarChart",selectedsheetfromdbname:selectedsheetfromdbname ,fromdrive:clickedGoogle,sheetdbdata:sheetdbdata, barchartCount:data01,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,isSheetChart:true,selectedXAxis:selectedSheetXaxis,selectedYAxis:selectedSheetYaxis,clickedsheetname:clickedSheetName,dbCompanyName:dbCompanyName }]);
     setShowPopup(false);
@@ -658,10 +658,10 @@ const ChartPopup = ({
         id: lastBox ? lastBox.id + 1 : 1,
         x: (boxes.length * 2) % 12, // Adds in the next available position
         y: Math.floor(boxes.length / 6),
-        w: 4,
+        w: 5,
         h: 3, // Add some space below the last box
-        minW: 3,
-        minH: 2
+        minW: 4,
+        minH: 3
       };
     setBoxes([...boxes, { ...newBox, type : "AssignedDeals" }]);
     setShowPopup(false); 
@@ -678,8 +678,8 @@ const ChartPopup = ({
         y: Math.floor(boxes.length / 6),
         w: 3,
         h: 4, // Add some space below the last box // Add some space below the last box
-        minW: 2.5,
-        minH: 2
+        minW: 3,
+        minH: 3
       };
     setBoxes([...boxes, { ...newBox, type : "chat" }]);
     setShowPopup(false); 
@@ -694,10 +694,10 @@ const ChartPopup = ({
         id: lastBox ? lastBox.id + 1 : 1,
         x: (boxes.length * 2) % 12, // Adds in the next available position
         y: Math.floor(boxes.length / 6),
-        w: 3,
+        w: 5,
         h: 3, // Add some space below the last box// Add some space below the last box
-        minW: 2.5,
-        minH: 2
+        minW: 4,
+        minH: 3
       };
     setBoxes([...boxes, { ...newBox, type : "calendarwidgit" }]);
     setShowPopup(false); 
@@ -897,7 +897,7 @@ const ChartPopup = ({
       className=" font-sans  font-semibold  "
       onClick={showlist}
     >
-      <div className="relative flex  bg-white rounded-lg   w-[30%] flex-col h-[70%] p-4" onClick={(e) => e.stopPropagation()}>
+      <div className="relative flex  bg-white rounded-lg border-[1px] border-gray-300  w-[25%] flex-col h-[70%] p-4" onClick={(e) => e.stopPropagation()}>
         {clickedPie && (
           <div className="p-4 pl-8 pr-8 flex flex-col w-[100%] h-[100%] rounded-lg absolute bg-white shadow-lg top-0 left-0">
             <div className="w-[100%] flex justify-end">
