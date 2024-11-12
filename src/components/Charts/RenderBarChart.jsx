@@ -69,7 +69,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
             const conversionType = fieldConversions[field];
 
             switch (conversionType) {
-                case 'integer':
+                case 'number':
                     newObj[field] = extractValue(obj[field]);
                     break;
                 case 'string':
@@ -124,7 +124,7 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
           setthissheetname(clickedsheetname)
           chartdatatypex=m?.chartDatatypeX || "string";
           setmydatatypex(chartdatatypex)
-          chartdatatypey=m?.chartDatatypeY || "integer";
+          chartdatatypey=m?.chartDatatypeY || "number";
           setmydatatypey(chartdatatypey)
           dbCompanyName=m?.dbCompanyName || "";
           fromdrive=m?.fromdrive || ""
@@ -318,7 +318,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
     <div style={{ width: '100%', height: '95%' ,paddingBottom:'15px'}} className='mt-8  pr-0'>
       
       <div style={{ width: '100%', height: '90%' }} className='mt-2 pr-5 ml-[-20px]'>
-    {mydatatypex === 'string' && mydatatypey === 'integer' ?
+    {mydatatypex === 'string' && mydatatypey === 'number' ?
         <div className='' style={{ paddingBottom: '20px' }}>
             <p className='text-[16px] font-semibold font-inter -mt-4 ml-6'>{thissheetname.replace(/^\d+_/, "")}</p>
         </div>
@@ -329,7 +329,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
     }
 
     <div style={{ width: '100%', height: '90%' }}>
-        {mydatatypex === 'string' && mydatatypey === 'integer' ?
+        {mydatatypex === 'string' && mydatatypey === 'number' ?
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={mydata}>
                     <XAxis dataKey="name" stroke="#8884d8"
@@ -359,7 +359,7 @@ sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
                 </BarChart>
             </ResponsiveContainer>
             :
-            mydatatypex === 'integer' && mydatatypey === 'string' ?
+            mydatatypex === 'number' && mydatatypey === 'string' ?
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart layout="vertical" data={mydata} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
                         <XAxis type="number" tick={true} stroke="#8884d8" />

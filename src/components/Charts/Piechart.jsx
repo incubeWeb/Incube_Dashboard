@@ -66,7 +66,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
         const conversionType = fieldConversions[field];
 
         switch (conversionType) {
-          case 'integer':
+          case 'number':
             if (field === 'value') {
               newObj[field] = extractValue(obj[field]);
             } else {
@@ -125,7 +125,7 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
           clickedsheetname = m?.clickedsheetname || "";
           setthissheetname(clickedsheetname)
           chartdatatypex = m?.chartDatatypeX || "string";
-          chartdatatypey = m?.chartDatatypeY || "integer";
+          chartdatatypey = m?.chartDatatypeY || "number";
           dbCompanyName = m?.dbCompanyName || "";
           fromdrive=m?.fromdrive || ""
           setisitfromdrive(fromdrive)

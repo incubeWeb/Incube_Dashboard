@@ -653,7 +653,7 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
                                       </select>
                                       <select value={chartDatatypeX} onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
-                                        <option >integer</option>
+                                        <option >number</option>
                                       </select>
                                     </div>
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
@@ -674,7 +674,7 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
                                       </select>
                                       <select value={chartDatatypeY} onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
-                                        <option >integer</option>
+                                        <option >number</option>
                                       </select>
                                     </div>
                                     <div onClick={()=>handleSheetCreateBarchart()} className="cursor-pointer select-none w-[100%] h-[40px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
@@ -718,7 +718,7 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
                                       </select>
                                       <select value={chartDatatypeX} onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
-                                        <option >integer</option>
+                                        <option >number</option>
                                       </select>
                                     </div>
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
@@ -739,7 +739,7 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
                                       </select>
                                       <select value={chartDatatypeY} onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
-                                        <option >integer</option>
+                                        <option >number</option>
                                       </select>
                                     </div>
                                     <div onClick={()=>handleSheetCreatePiechart()} className="cursor-pointer select-none w-[100%] h-[40px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
@@ -783,7 +783,7 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
                                       </select>
                                       <select value={chartDatatypeX} onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
-                                        <option >integer</option>
+                                        <option >number</option>
                                       </select>
                                     </div>
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
@@ -804,7 +804,7 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
                                       </select>
                                       <select value={chartDatatypeY} onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
-                                        <option >integer</option>
+                                        <option >number</option>
                                       </select>
                                     </div>
                                     <div onClick={()=>handleSheetCreateLinechart()} className="cursor-pointer select-none w-[100%] h-[40px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">

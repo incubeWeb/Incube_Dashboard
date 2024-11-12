@@ -20,7 +20,7 @@ const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfi
                 const conversionType = fieldConversions[field];
 
                 switch (conversionType) {
-                    case 'integer':
+                    case 'number':
                         newObj[field] = extractValue(obj[field]);
                         break;
                     case 'string':
@@ -65,7 +65,7 @@ const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfi
     };
     return (
         <div style={{ width: '95%', height: '90%' }} className='mt-8 pr-10'>
-        { chartDatatypeX === 'string' && chartDatatypeY === 'integer' ?   
+        { chartDatatypeX === 'string' && chartDatatypeY === 'number' ?   
             <div className='pl-8' style={{ paddingBottom: '30px' }}>
                 <p className='text-[18px] font-bold font-inter -mt-8'>{selectedSheetName}</p>
             </div> 
@@ -77,7 +77,7 @@ const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfi
 
         <div style={{ width: '100%', height: '90%' }}>
             <ResponsiveContainer width="100%" height="100%">
-                {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ? (
+                {chartDatatypeX === 'string' && chartDatatypeY === 'number' ? (
                     <AreaChart
                         data={data}
                         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}

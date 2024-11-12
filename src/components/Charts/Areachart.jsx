@@ -68,7 +68,7 @@ const Areachart = ({investmentchange,id,data01,clickedArea,setClickedArea,fromAp
             const conversionType = fieldConversions[field];
 
             switch (conversionType) {
-                case 'integer':
+                case 'number':
                     newObj[field] = extractValue(obj[field]);
                     break;
                 case 'string':
@@ -126,9 +126,9 @@ const fieldConversionsApi={
             isSheetchart=m?.isSheetChart || ""
             clickedsheetname=m?.clickedsheetname || ""
             setthissheetname(clickedsheetname)
-            chartdatatypex=m?.chartDatatypeX || "integer"
+            chartdatatypex=m?.chartDatatypeX || "number"
             setmydatatypex(chartdatatypex)
-            chartdatatypey=m?.chartDatatypeY || "integer"
+            chartdatatypey=m?.chartDatatypeY || "number"
             setmydatatypey(chartdatatypey)
             dbCompanyName=m?.dbCompanyName || ""
             fromdrive=m?.fromdrive || ""
@@ -319,8 +319,8 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
    <p className='font-inter font-semibold text-[16px] ml-1 -mt-4'>  {thissheetname.replace(/^\d+_/, "")}
    </p>    <div className='w-[100%] h-[100%] mt-3 pr-0'>
     <ResponsiveContainer width="100%" height="100%">
-                    {mydatatypex === 'string' && mydatatypey === 'integer' ? (
-                        // Standard layout: String on X-axis, Integer on Y-axis
+                    {mydatatypex === 'string' && mydatatypey === 'number' ? (
+                        // Standard layout: String on X-axis, number on Y-axis
                         <AreaChart
                             data={mydata}
                             margin={{ top: 5, right: 0, left: -20, bottom: 5 }}
@@ -333,9 +333,9 @@ sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
                             <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
                         </AreaChart>
                     ) :  
-                      mydatatypex === 'integer' && mydatatypey === 'string'?
+                      mydatatypex === 'number' && mydatatypey === 'string'?
                       (
-                        // Horizontal layout: Integer on X-axis, String on Y-axis
+                        // Horizontal layout: number on X-axis, String on Y-axis
                         <AreaChart
                             layout="vertical"
                             data={mydata}

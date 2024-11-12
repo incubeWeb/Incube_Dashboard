@@ -19,7 +19,7 @@ const PortfolioPieChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfie
             Object.keys(fieldConversions).forEach(field => {
                 const conversionType = fieldConversions[field];
                 switch (conversionType) {
-                    case 'integer':
+                    case 'number':
                         newObj[field] = extractValue(obj[field]);
                         break;
                     case 'string':

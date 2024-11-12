@@ -63,7 +63,7 @@ const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldse
             const conversionType = fieldConversions[field];
 
             switch (conversionType) {
-                case 'integer':
+                case 'number':
                     newObj[field] = extractValue(obj[field]);
                     break;
                 case 'string':
@@ -136,7 +136,7 @@ const fieldConversions = {
     const COLORS = ['#0d47a1', '#42a5f5',];
   return (
     <div style={{ width: '95%', height: '90%' }} className='mt-2 pr-10 ml-8 '>
-    {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ?
+    {chartDatatypeX === 'string' && chartDatatypeY === 'number' ?
         <div className='pl-4' style={{ paddingBottom: '20px' }}>
             <p className='text-[18px] font-bold font-inter -mt-4'>{selectedSheetName}</p>
         </div>
@@ -147,7 +147,7 @@ const fieldConversions = {
     }
 
     <div style={{ width: '100%', height: '90%' }}>
-        {chartDatatypeX === 'string' && chartDatatypeY === 'integer' ?
+        {chartDatatypeX === 'string' && chartDatatypeY === 'number' ?
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data}>
                     <XAxis dataKey="name" 
@@ -178,7 +178,7 @@ const fieldConversions = {
                 </BarChart>
             </ResponsiveContainer>
             :
-            chartDatatypeX === 'integer' && chartDatatypeY === 'string' ?
+            chartDatatypeX === 'number' && chartDatatypeY === 'string' ?
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart layout="vertical" data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                         <XAxis type="number" tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black'}}  />

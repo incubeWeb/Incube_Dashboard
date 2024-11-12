@@ -1241,7 +1241,7 @@ const ChartPopup = ({
 
                 <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                   <option>string</option>
-                  <option >integer</option>
+                  <option >number</option>
                 </select>
               </div>
               <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
@@ -1262,7 +1262,7 @@ const ChartPopup = ({
                 </select>
                 <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                   <option>string</option>
-                  <option >integer</option>
+                  <option >number</option>
                 </select>
               </div>
               <div onClick={(e)=>handleSheetCreatePiechartDB(e)} className="cursor-pointer select-none w-[100%] h-[30px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">{Loading2 ? (
@@ -1358,7 +1358,7 @@ const ChartPopup = ({
                                       </select>
                                       <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
-                                        <option >integer</option>
+                                        <option >number</option>
                                       </select>
                                     </div>
                                     <div className=" w-[100%] h-[7%] items-center justify-center flex flex-row space-x-2">
@@ -1372,7 +1372,7 @@ const ChartPopup = ({
                                       </select>
                                       <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
-                                        <option >integer</option>
+                                        <option >number</option>
                                       </select>
                                     </div>
                                     <div onClick={(e)=>handleSheetCreatePiechart(e)} className="cursor-pointer select-none w-[100%] h-[30px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
@@ -1473,7 +1473,7 @@ const ChartPopup = ({
                </select>
                <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                  <option>string</option>
-                 <option >integer</option>
+                 <option >number</option>
                </select>
              </div>
              <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
@@ -1494,7 +1494,7 @@ const ChartPopup = ({
                </select>
                <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                  <option>string</option>
-                 <option >integer</option>
+                 <option >number</option>
                </select>
              </div>
              <div onClick={(e)=>handleSheetCreateAreachartDB(e)} className="cursor-pointer select-none w-[100%] h-[30px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">{Loading2 ? (
@@ -1589,7 +1589,7 @@ const ChartPopup = ({
                                       </select>
                                       <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
-                                        <option >integer</option>
+                                        <option >number</option>
                                       </select>
                                     </div>
                                     <div className=" w-[100%] h-[10%] items-center justify-center flex flex-row space-x-2">
@@ -1603,7 +1603,7 @@ const ChartPopup = ({
                                       </select>
                                       <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
-                                        <option >integer</option>
+                                        <option >number</option>
                                       </select>
                                     </div>
                                     <div onClick={(e)=>handleSheetCreateAreachart(e)} className="cursor-pointer select-none w-[100%] h-[30px] flex items-center justify-center rounded-md bg-gradient-to-r from-blue-500 to-blue-700">
@@ -1806,7 +1806,7 @@ const ChartPopup = ({
               </select>
               <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                 <option>string</option>
-                <option >integer</option>
+                <option >number</option>
               </select>
              
             </div>
@@ -1828,7 +1828,7 @@ const ChartPopup = ({
               </select>
               <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                 <option>string</option>
-                <option >integer</option>
+                <option >number</option>
               </select>
               
             </div>
@@ -1926,7 +1926,7 @@ const ChartPopup = ({
                                       </select>
                                       <select onChange={(e)=>setchartDatatypeX(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
-                                        <option >integer</option>
+                                        <option >number</option>
                                       </select>
                                       {chartDatatypeX}
                                     </div>
@@ -1941,7 +1941,7 @@ const ChartPopup = ({
                                       </select>
                                       <select onChange={(e)=>setchartDatatypeY(e.target.value)} className="border-gray-600 rounded-md text-[14px] border-[1px] h-[100%] p-2">
                                         <option>string</option>
-                                        <option >integer</option>
+                                        <option >number</option>
                                       </select>
                                       {chartDatatypeY}
                                     </div>
