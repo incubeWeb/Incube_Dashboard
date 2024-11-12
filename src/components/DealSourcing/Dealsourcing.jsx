@@ -386,7 +386,7 @@ const Dealsourcing = ({hidenavbar}) => {
                       
                       <div className='w-[80%] flex flex-row space-x-2 h-[100%] scrollbar-hide'>
                           {
-                            imageurl[0].trim().length!=0?
+                            imageurl[0]?.trim().length!=0?
                             <img className=' rounded-lg object-cover w-[30%] h-[100%]' src={imageurl[0]}/>
                             :
                             <img className=' rounded-lg object-cover w-[30%] h-[100%]' src='https://i.pinimg.com/originals/ec/d9/c2/ecd9c2e8ed0dbbc96ac472a965e4afda.jpg'/>
