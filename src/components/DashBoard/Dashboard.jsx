@@ -476,7 +476,7 @@ useEffect(() => {
     <div className=' flex flex-col w-[100%] h-[0%] items-end '>
     
 </div>
-      <div ref={dashboardwidgitref} className='flex h-[100%]'>
+      <div  className={`${hidenavbar?'pl-[4%]':'pl-[21%]'} flex  h-[100%]`}>
         
       <ResponsiveReactGridLayout
       className="layout w-[100%] "

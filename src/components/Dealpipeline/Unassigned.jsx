@@ -80,7 +80,7 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
     <div>
       {
         currentData?.length>0?
-        <div className='overflow-y-auto grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
+        <div className=' grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
         {
           Logrole=='team lead' || Logrole=='user'?
           currentData.map(company => ( 
@@ -112,7 +112,7 @@ function Unassigned({realtimedealpipelinecompany,hidenavbar,filter,setSelectedTa
       </div>
       }
       {
-      <div className='cursor-pointer flex flex-row w-[100%] h-[40px] mt-[35px] items-center justify-center space-x-2'>
+      <div className={`${hidenavbar?'left-0':'left-[10%]'} cursor-pointer fixed bottom-5  flex flex-row w-[100%] h-[40px] mt-[35px] items-center justify-center space-x-2`}>
         <div className='md:w-[30px] md:h-[35px] flex justify-center rounded-md items-center hover:bg-white md:hover:shadow-md' onClick={() => { setCurrentPage(1) }}>
           <IoPlaySkipBackOutline size={17} className='md:w-[30px]' />
         </div>
