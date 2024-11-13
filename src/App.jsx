@@ -215,7 +215,7 @@ function App() {
         })
 
         socket.on('sheetedited',(data)=>{
-      
+          console.log("ok so sheet changed",data)
           setsheetedited(data)
         })
       
@@ -279,6 +279,8 @@ function App() {
   const [loading1,setLoading1]=useState(false)
 
   const [showValue,setshowvalue]=useState('0')
+  
+
 
   const handlesheetclick=async(id,name)=>{
     
@@ -288,6 +290,10 @@ function App() {
     setsheetpopup(false)
     
 }
+
+useEffect(()=>{
+  console.log("sheet field selected",sheetfieldselected)
+},[sheetfieldselected])
 
 useEffect(()=>{
   const setValues=async()=>{
@@ -444,6 +450,8 @@ const handleselectsheetfield=()=>{
   setsheetClicked(false)
   setsheetpopup(false)
   
+  
+
   let value=''
   try{
       value=parseInt(sheetJson[0][sheetfieldselected]) 
@@ -462,14 +470,74 @@ const handleselectsheetfield=()=>{
   
   setshowvalue(value);
   setBoxes(boxes.map(box =>
-    box.id === widgitid ? { ...box, showValue:value } : box
+    box.id === widgitid ? { ...box, showValue:value,Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected } : box
   ));
   
 }
 
+useEffect(() => {
+  const setBoxValues=async ()=>{
+      const email=Logemail
+      const organization=Logorganization
+      
+      let position=JSON.stringify(boxes)
+
+
+      if(boxes.length>0)
+      {
+        await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addDashboardData`,{email:email,positions:position,organization:organization},{
+          headers:{
+           "Authorization":`Bearer ${token}`
+          }
+        })
+      }
+     
+      
+  }
+ 
+  setBoxValues()
+  
+ 
+  
+}, [boxes]);
+
 useEffect(()=>{
-  console.log("sheet is clicke")
-},[sheetClicked])
+  const fun=async()=>{
+    const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetedited.fullDocument.editedSheet,organization:Logorganization},{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
+    })
+  const data=JSON.parse(response.data.data)
+  
+  let key='';
+  let sheetid=sheetedited.fullDocument.editedSheet
+ 
+  boxes.map(box=>{
+    console.log(box.Sheetid)
+    if(box.Sheetid === sheetid) {
+      
+    key=box.sheetfieldselected
+    }
+  })
+  console.log("sheet key",key)
+  let value=data[0][key]
+  console.log(value)
+  setBoxes(boxes.map(box =>  
+    box.Sheetid === sheetid ? { ...box, showValue:value} : box
+  
+  ));
+
+  console.log(boxes)
+
+    
+    
+    
+  }
+
+  console.log(boxes)
+  fun()
+},[sheetedited])
 
 const[currencyValue,setcurrencyvalue]=useState('$');
 
@@ -647,7 +715,7 @@ const handleCurrencySelect = (currency) => {
           <Routes>
             <Route path="/" element={!login?<Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn}/>:<></>} />
             <Route path="/dashboard" element={
-              <ProtectedRoute login={login}><Dashboard setcurrencyvalue={setcurrencyvalue} currencyValue={currencyValue} boxes={boxes} setBoxes={setBoxes} setshowvalue={setshowvalue} showvalue={showValue} handlePlusClick={handlePlusClick} setsheetpopup={setsheetpopup} mygoogleaccountisconnected={mygoogleaccountisconnected} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} navbarref={navbarref} showsmallnav={showsmallnav} sethidenavbar={sethidenavbar} realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
+              <ProtectedRoute login={login}><Dashboard setcurrencyvalue={setcurrencyvalue} sheetfieldselected={sheetfieldselected} clickedSheetId={clickedSheetId}  currencyValue={currencyValue} boxes={boxes} setBoxes={setBoxes} setshowvalue={setshowvalue} showvalue={showValue} handlePlusClick={handlePlusClick} setsheetpopup={setsheetpopup} mygoogleaccountisconnected={mygoogleaccountisconnected} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} navbarref={navbarref} showsmallnav={showsmallnav} sethidenavbar={sethidenavbar} realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
             <Route path="/dealpipeline" element={
               <ProtectedRoute login={login}>
               <FirstCol setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} dealpipelinefromdashboardcompany={dealpipelinefromdashboardcompany} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>

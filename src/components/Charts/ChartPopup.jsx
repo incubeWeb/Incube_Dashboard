@@ -24,6 +24,8 @@ import { useSheet } from "../SheetContext/SheetContext";
 
 const ChartPopup = ({
   showValue,
+  clickedSheetId,
+  sheetfieldselected,
   dashboardwidgitref,
   showlist,
   xAxis,
@@ -254,13 +256,33 @@ const ChartPopup = ({
 
   const handleselectDatabase=async(e)=>{
     e.stopPropagation();
-    
+
     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:Logorganization},{
       headers:{
         "Authorization":`Bearer ${token}`
       }
+      
     })
-    const filteredData=response.data.data.filter(val=>val.fileType=='xlsx')
+   
+  const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/get-document-visibility`,{
+      email:Logemail,
+      organization:Logorganization
+  },{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      }
+    })
+  const set2DocsIds=response2.data.allfiles.map(doc=>doc.Document_id)
+  
+  const filteredSet1=response.data.data.filter(doc=>!set2DocsIds.includes(doc._id))
+  const tosetdata=[...response2.data.data,...filteredSet1]
+    
+    // const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/alluploadedFiles`,{organization:Logorganization},{
+    //   headers:{
+    //     "Authorization":`Bearer ${token}`
+    //   }
+    // })
+    const filteredData=tosetdata.filter(val=>val.fileType=='xlsx')
    // console.log("my fileted data",response.data.data)
     setpresentSheets(filteredData)
     setLoading1(false);
@@ -756,7 +778,7 @@ const ChartPopup = ({
         minW: 2.5,
         minH: 2
       };
-      setBoxes([...boxes, { ...newBox, type : "portfoliocard" , portfoliowidgitcount:{id:boxes.length +1,labelname:"Enter Label",showValue:showValue,currencyValue:"$"}}]);
+      setBoxes([...boxes, { ...newBox, type : "portfoliocard" , portfoliowidgitcount:{id:boxes.length +1,labelname:"Enter Label",showValue:showValue,Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:"$"}}]);
       setShowPopup(false);
   }
 

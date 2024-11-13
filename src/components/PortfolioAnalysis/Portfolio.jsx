@@ -119,7 +119,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             {
                 setTimeout(()=>{
                     setloading(false)
-                },1000)
+                },50)
                 alert('Server error')
                 return
             }
@@ -194,11 +194,18 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             if(stateValues.length>0)
             {
                 
-                stateValues.map(val=>{
+
+                stateValues.map(async(val)=>{
                 setsheetmethod(val.sheetmethod)
                 setallSheets(val.allSheets)
+                const responseData=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:val.selectedSheetId,organization:Logorganization},{
+                    headers:{
+                      "Authorization":`Bearer ${token}`
+                    }
+                  })
+                const data=JSON.parse(responseData.data.data)
                 setselectedSheetId(val.selectedSheetId)
-                setsheetJson(val.sheetJson)
+                setsheetJson(data)
                 setsheetKeys(val.sheetKeys)
                 setselectedImageField(val.selectedImageFiled)
                 setshowHistory(val.showHistory)
@@ -232,7 +239,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             {
                 setTimeout(()=>{
                     setloading(false)
-                },1000)
+                },50)
                 alert('Server error')
                 return
             }
@@ -307,11 +314,17 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             if(stateValues.length>0)
             {
                 
-                stateValues.map(val=>{
+                stateValues.map(async(val)=>{
+                    const responseData=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:val.selectedSheetId,organization:Logorganization},{
+                        headers:{
+                          "Authorization":`Bearer ${token}`
+                        }
+                      })
+                    const data=JSON.parse(responseData.data.data)
                 setsheetmethod(val.sheetmethod)
                 setallSheets(val.allSheets)
                 setselectedSheetId(val.selectedSheetId)
-                setsheetJson(val.sheetJson)
+                setsheetJson(data)
                 setsheetKeys(val.sheetKeys)
                 setselectedImageField(val.selectedImageFiled)
                 setshowHistory(val.showHistory)
@@ -334,6 +347,8 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         const organization=`${Logorganization}_Topcards`
         const organization1=Logorganization
         const organization2=`${Logorganization}_ShownGraph`
+
+    
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
             email:Logemail,
             organization:organization,
@@ -599,25 +614,16 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         }
         
         }
-        try{
-            if(sheetmethod=='Database')
-                {
-                    setJSon()
-                }
-                if(sheetmethod=='Google Sheet')
-                {
-                    googleSheetJson()
-                }
-        }catch(e){
-            if(sheetmethod=='Database')
-                {
-                    setJSon()
-                }
-                if(sheetmethod=='Google Sheet')
-                {
-                    googleSheetJson()
-                }
+        
+        if(sheetmethod=='Database')
+        {
+            setJSon()
         }
+        if(sheetmethod=='Google Sheet')
+        {
+            googleSheetJson()
+        }
+        
         
         
     },[selectedSheetId,sheetedited])
@@ -844,9 +850,9 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                                 <div onClick={()=>setclickedPortfolioShared(true)} className='w-[24px] h-[24px] cursor-pointer'>
                                 {
                                     portfoliosecurity=='private'?
-                                    <IoMdEyeOff size={24 }/>
+                                    <CiShare2 size={24 }/>
                                     :
-                                    <MdOutlineRemoveRedEye size={24 } />
+                                    <CiShare2 size={24 } />
                                 }
                               
                                 </div>

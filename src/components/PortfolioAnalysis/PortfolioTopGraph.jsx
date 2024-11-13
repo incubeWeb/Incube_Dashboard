@@ -59,6 +59,44 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
     
     setSheetJson(sheetJson);
 
+    useEffect(()=>{
+        const fun=async()=>{
+            let sheetid=sheetedited.fullDocument.editedSheet;
+            if(sheetclicked==sheetid)
+            {
+                const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetid,organization:Logorganization},{
+                    headers:{
+                      "Authorization":`Bearer ${token}`
+                    }
+                  })
+                    const data=JSON.parse(response.data.data)
+                    setsheetJson(data)
+
+           
+                    
+            const organization=`${Logorganization}_ShownGraph`
+            const stateJson={showBarchart:showBarchart,showPiechart:showPiechart,showLinechart:showLinechart,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:data,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked,selectedSheetName:selectedSheetName}
+            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
+                email:Logemail,
+                security:portfoliosecurity,
+                Graphorganization:organization,
+                portfolioState:JSON.stringify(stateJson)
+            },{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
+
+            }
+
+        }
+        if(Object.keys(sheetedited).length>0)
+        {
+        fun()
+        }
+    },[sheetedited])
+    
+
 
     const RefreshSheets=()=>{
         setavailableDatabaseSheets()
@@ -119,6 +157,13 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
             setshowLinechart(stateValues.showLinechart)
             setchartDatatypeX(stateValues.chartDatatypeX)
             setchartDatatypeY(stateValues.chartDatatypeY)
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:stateValues.sheetclicked,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
+                const data=JSON.parse(response.data.data)
+            setsheetJson(data)
             setsheetJson(stateValues.sheetJson)
             setsheetfieldselectedX(stateValues.sheetfieldselectedX)
             setsheetfieldselectedY(stateValues.sheetfieldselectedY)
@@ -880,13 +925,13 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
                     </div>
                     :  
                     showBarchart &&!loading?
-                        <PortfolioBarChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY} selectedSheetName={selectedSheetName}/>   
+                        <PortfolioBarChart sheetclicked={sheetclicked} chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY} selectedSheetName={selectedSheetName}/>   
                     :
                     showPiechart &&!loading?
-                    <PortfolioPieChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY} selectedSheetName={selectedSheetName}/>
+                    <PortfolioPieChart sheetclicked={sheetclicked} chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY} selectedSheetName={selectedSheetName}/>
                     :
                     showLinechart &&!loading?
-                    <PortfolioLineChart chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY} selectedSheetName={selectedSheetName}/>
+                    <PortfolioLineChart sheetclicked={sheetclicked} chartDatatypeX={chartDatatypeX} chartDatatypeY={chartDatatypeY} sheetJson={sheetJson} sheetfieldselectedX={sheetfieldselectedX} sheetfieldselectedY={sheetfieldselectedY} selectedSheetName={selectedSheetName}/>
                     :
                     selectedTab==Logemail?
                     <div onClick={handleChartSelectPopup} className='w-[150px] h-[40px] bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl text-white'>

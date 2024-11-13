@@ -1,9 +1,18 @@
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
-const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfieldselectedX, sheetfieldselectedY ,selectedSheetName}) => {
+const PortfolioLineChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheetJson, sheetfieldselectedX, sheetfieldselectedY ,selectedSheetName}) => {
     const [data, setData] = useState([]);
     const [hoveredIndex, setHoveredIndex] = useState(null); // State to 
+
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
+
     function extractValue(input) {
         const continuousDigitsPattern = /^\D*(\d+)\D*$/;
         const str = String(input);
@@ -48,6 +57,28 @@ const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfi
         setValuesForData();
     }, [sheetJson, sheetfieldselectedX, sheetfieldselectedY]);
 
+    useEffect(()=>{
+        
+            const setValuesForData = async () => {
+                const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetclicked,organization:Logorganization},{
+                    headers:{
+                      "Authorization":`Bearer ${token}`
+                    }
+                  })
+                    const data=JSON.parse(response.data.data)
+
+                const myData = data.map(val => ({
+                    pv: val[sheetfieldselectedX],
+                    uv: val[sheetfieldselectedY]
+                }));
+    
+                const convertedData = convertDataTypes(myData, fieldConversions);
+                setData(convertedData);
+            };
+            setValuesForData();
+        
+    },[])
+
     const fieldConversions = {
         pv: chartDatatypeX,   // X-axis field
         uv: chartDatatypeY   // Y-axis field
@@ -79,39 +110,38 @@ const PortfolioLineChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfi
             <ResponsiveContainer width="100%" height="100%">
                 {chartDatatypeX === 'string' && chartDatatypeY === 'number' ? (
                     <AreaChart
-                        data={data}
-                        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                    data={data}
+                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                >
+                    <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
+                    <XAxis  type="category" dataKey="pv" tickCount={4} tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black' }}
+                    />
+                    <YAxis  type="number" tickCount={4} dataKey="uv"
+                        tick={{ fontSize: 14, fontFamily: 'Inter', fill: 'black' }} 
+                    />
+                    <Tooltip
+                        contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
+                        itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+                        labelStyle={{ color: '#ccc' }}
+                    />
+                    <Area
+                        type="monotone"
+                        dataKey="uv"
+                        stroke="#82ca9d"
+                        fill="#82ca9d"
+                        fillOpacity={0.3}
+                        activeDot={{ r: 8 }}
                     >
-                        <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                        <XAxis dataKey="pv" tickCount={4}
-                            tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black' }}
-                        />
-                        <YAxis tickCount={4}
-                            tick={{ fontSize: 14, fontFamily: 'Inter', fill: 'black' }} 
-                        />
-                        <Tooltip
-                            contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
-                            itemStyle={{ color: '#fff', fontWeight: 'bold' }}
-                            labelStyle={{ color: '#ccc' }}
-                        />
-                        <Area
-                            type="monotone"
-                            dataKey="uv"
-                            stroke="#82ca9d"
-                            fill="#82ca9d"
-                            fillOpacity={0.3}
-                            activeDot={{ r: 8 }}
-                        >
-                            {data.map((entry, index) => (
-                                <Cell
-                                    key={`cell-${index}`}
-                                    fill={areaColor(index)}
-                                    onMouseEnter={() => handleMouseEnter(index)}  // Set hovered data point on mouse enter
-                                    onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
-                                />
-                            ))}
-                        </Area>
-                    </AreaChart>
+                        {data.map((entry, index) => (
+                            <Cell
+                                key={`cell-${index}`}
+                                fill={areaColor(index)}
+                                onMouseEnter={() => handleMouseEnter(index)}  // Set hovered data point on mouse enter
+                                onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
+                            />
+                        ))}
+                    </Area>
+                </AreaChart>
                 ) : (
                     <AreaChart
                         layout="vertical"

@@ -1,8 +1,9 @@
+import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from 'react'
 import { Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
-const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldselectedX,sheetfieldselectedY,selectedSheetName}) => {
+const PortfolioBarChart = ({sheetclicked,chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldselectedX,sheetfieldselectedY,selectedSheetName}) => {
     const [data,setdata]=useState([])
     const [hoveredIndex, setHoveredIndex] = useState(null);  // State to 
     const token=localStorage.getItem('token')
@@ -10,11 +11,20 @@ const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldse
     const Logemail=userdata.userdetails.email
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
+
+    
+
   
     useEffect(()=>{
       const settingValuesofData=async()=>{
             const mydata=[]
-            sheetJson.map(val=>{
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetclicked,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
+                const data=JSON.parse(response.data.data)
+            data.map(val=>{
                 mydata.push({name:val[sheetfieldselectedX],uv:val[sheetfieldselectedY]})
             })
            
@@ -22,30 +32,11 @@ const PortfolioBarChart = ({chartDatatypeX,chartDatatypeY,sheetJson,sheetfieldse
            
             setdata(converteddata)
     }
-    try{
+
         settingValuesofData()
-    }catch(e){
-        settingValuesofData()
-    }
+    
     },[sheetJson,sheetfieldselectedX,sheetfieldselectedY,chartDatatypeX,chartDatatypeY])
 
-    useEffect(()=>{
-        const settingValuesofData=async()=>{
-                const mydata=[]
-                sheetJson.map(val=>{
-                    mydata.push({name:val[sheetfieldselectedX],uv:val[sheetfieldselectedY]})
-                })
-             
-                const converteddata=convertDataTypes(mydata, fieldConversions);
-            
-                setdata(converteddata)
-        }
-        try{
-            settingValuesofData()
-        }catch(e){
-            settingValuesofData()
-        }
-    },[])
 
     function extractValue(input) {
         // Regex to match a string with continuous digits

@@ -36,7 +36,7 @@ const PortfolioTop = ({PortfolioGraphvalues, Portfoliocardvalues,PortfolioMeterv
           {
             console.log("here")
             const val1=JSON.parse(Portfoliocardvalues)
-            console.log(val1)
+            
             setvalueid(val1)
           }else{
             setvalueid([{id:1,labelname:'Total fund',showValue:'0',currencyValue:'$',prevShowVal:'0'},{id:2,labelname:'Fund utilized',showValue:'0',currencyValue:'$',prevShowVal:'0'},{id:3,labelname:'Funds remaining',showValue:'0',currencyValue:'$',prevShowVal:'0'},{id:4,labelname:'ROI',showValue:'0',currencyValue:'$',prevShowVal:'0'}])

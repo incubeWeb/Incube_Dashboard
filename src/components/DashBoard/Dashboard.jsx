@@ -38,14 +38,12 @@ import { TbDragDrop } from 'react-icons/tb';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 
-const Dashboard = ({boxes,setcurrencyvalue,currencyValue, setBoxes,handlePlusClick,setshowvalue,showValue,setsheetpopup,mygoogleaccountisconnected,setdealpipelinefromdashboardcompany,navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
+const Dashboard = ({boxes,sheetfieldselected,setcurrencyvalue,currencyValue,clickedSheetId, setBoxes,handlePlusClick,setshowvalue,showValue,setsheetpopup,mygoogleaccountisconnected,setdealpipelinefromdashboardcompany,navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
   
   const [isDraggable, setIsDraggable] = useState(false);
 
 
-  useEffect(()=>{
-    console.log(isDraggable,"drag value")
-  },[isDraggable])
+ 
 
   const handleMouseDown = () => {
     setIsDraggable(true)
@@ -329,31 +327,7 @@ useEffect(() => {
 
 
 
-  useEffect(() => {
-    const setBoxValues=async ()=>{
-        const email=Logemail
-        const organization=Logorganization
-        
-        let position=JSON.stringify(boxes)
 
-
-        if(boxes.length>0)
-        {
-          await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addDashboardData`,{email:email,positions:position,organization:organization},{
-            headers:{
-             "Authorization":`Bearer ${token}`
-            }
-          })
-        }
-       
-        
-    }
-   
-    setBoxValues()
-    
-   
-    
-  }, [boxes]);
 
   useEffect(()=>{
   
@@ -361,7 +335,7 @@ useEffect(() => {
       setBoxes(prev=>
       prev.map(b=>
         b.id===portfoliocardwidgitcount.id
-        ? { ...b, portfoliowidgitcount: {id:portfoliocardwidgitcount.id,labelname:portfoliocardwidgitcount.labelname,showValue:portfoliocardwidgitcount.showValue,portfolioicon:portfoliocardwidgitcount.portfolioicon,currencyValue:portfoliocardwidgitcount.currencyValue} } 
+        ? { ...b, portfoliowidgitcount: {id:portfoliocardwidgitcount.id,labelname:portfoliocardwidgitcount.labelname,showValue:portfoliocardwidgitcount.showValue,Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected,portfolioicon:portfoliocardwidgitcount.portfolioicon,currencyValue:portfoliocardwidgitcount.currencyValue} } 
         : b
       )
       )
@@ -565,6 +539,7 @@ useEffect(() => {
                      setcurrencyvalue={setcurrencyvalue}
                      currencyValue={currencyValue}
                      setshowvalue={setshowvalue}
+                     clickedSheetIdApp={clickedSheetId}
                      setsheetpopup={setsheetpopup}
                      handlePlusClick={handlePlusClick}
                      setportfoliocardwidgitcount={setportfoliocardwidgitcount}
@@ -745,6 +720,8 @@ useEffect(() => {
       {showPopup && (
         <ChartPopup
         showValue={showValue}
+        clickedSheetId={clickedSheetId}
+        sheetfieldselected={sheetfieldselected}
         dashboardwidgitref={dashboardwidgitref}
           showlist={handleShowPopup}
           addComponent={addBox}

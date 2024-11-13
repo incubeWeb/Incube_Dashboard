@@ -165,9 +165,9 @@ const togglePopup = () => {
                         const exists = prev.some(val => val.id === id); // Check if the id exists
                         if (exists) {
                           return prev.map(val =>
-                            val.id === id && val.showValue!=showValue
+                            val.id === id && val.showValue!=showValue 
                               ? { ...val, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue,prevShowVal:val.showValue } // Update the existing object
-                              :  val.id === id?
+                              :  val.id === id && clickedSheetId.length>0?
                               { ...val, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue }
                               :
                               val
@@ -183,6 +183,43 @@ const togglePopup = () => {
             
             
         },[editLabel,showValue,iconname,currencyValue])
+
+        useEffect(()=>
+            {
+               const fun=async()=>{
+                
+                if(valueid.some(item=>item.sheetId === sheetedited.fullDocument.editedSheet))
+                    {
+                        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetedited.fullDocument.editedSheet,organization:Logorganization},{
+                            headers:{
+                              "Authorization":`Bearer ${token}`
+                            }
+                          })
+                            const data=JSON.parse(response.data.data)
+                        setvalueid(prev => {
+                            const exists = prev.some(val => val.sheetId === sheetedited.fullDocument.editedSheet); // Check if the id exists
+                            if (exists) {
+                              return prev.map(val =>
+                                val.sheetId === sheetedited.fullDocument.editedSheet
+                                  ? { ...val, showValue: data[0][val.sheetfieldselected]} // Update the existing object
+                                  :
+                                  val
+                              );
+                            } else {
+                              // Insert new object if id is not found
+                              return 
+                            }
+                          });
+                    }
+               }
+            if(Object.keys(sheetedited).length>0)
+            {
+            
+               fun()
+            }
+            console.log(sheetedited,"edited sheet")
+                
+            },[sheetedited])
 
  
 
@@ -255,11 +292,27 @@ const togglePopup = () => {
     useEffect(()=>{
         const getTopCardsValues=async()=>{
          
-            valueid.map(val=>{
+            valueid.map(async(val)=>{
                 
                 if(val.id==id)
                 {
                     setlablename(val.labelname)
+                    
+                   
+              
+                    if('sheetfieldselected' in val && val['sheetfieldselected'].length>0){
+                        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:val.sheetId,organization:Logorganization},{
+                            headers:{
+                              "Authorization":`Bearer ${token}`
+                            }
+                          })
+                            const data=JSON.parse(response.data.data)
+                            const newValue=data[0][val.sheetfieldselected]
+                            val["showValue"]=newValue
+                    }
+                     
+                    
+
                     setshowvalue(val.showValue)
                     seticonname(val.portfolioicon)
                     setIcon(getIconComponent(val.portfolioicon))
@@ -363,6 +416,11 @@ const togglePopup = () => {
                   "Authorization":`Bearer ${token}`
                 }
               })
+              console.log("here",response.data.data==undefined)
+              if(response.data.data==undefined)
+              {
+                return;
+              }
             const data=JSON.parse(response.data.data)
             setsheetJson(data)
             const key=Object.keys(data[0])
@@ -381,12 +439,9 @@ const togglePopup = () => {
             setsheetKeys(fileteredKey)
             setLoading2(false)
         }
-        try{
+      
         setValues()
-        }catch(e)
-        {
-            setValues()
-        }
+        
     },[clickedSheetId])
 
    

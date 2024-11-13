@@ -1,9 +1,16 @@
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useRef, useState } from 'react';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'; // Use different arrow icons
 import { Pie, PieChart, ResponsiveContainer, Tooltip, Legend, Cell } from 'recharts';
 
-const PortfolioPieChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfieldselectedX, sheetfieldselectedY ,selectedSheetName}) => {
+const PortfolioPieChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheetJson, sheetfieldselectedX, sheetfieldselectedY ,selectedSheetName}) => {
     const [data, setData] = useState([]);
+    const token=localStorage.getItem('token')
+    const userdata=jwtDecode(token)
+    const Logemail=userdata.userdetails.email
+    const Logorganization=userdata.userdetails.organization
+    const Logrole=userdata.userdetails.role
 
     const extractValue = (input) => {
         const continuousDigitsPattern = /^\D*(\d+)\D*$/;
@@ -33,9 +40,19 @@ const PortfolioPieChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfie
         });
     };
 
+    
+
     useEffect(() => {
         const settingValuesofData = async () => {
-            const myData = sheetJson.map(val => ({
+
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetclicked,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
+                const data=JSON.parse(response.data.data)
+
+            const myData = data.map(val => ({
                 name: val[sheetfieldselectedX],
                 value: val[sheetfieldselectedY]
             }));
@@ -44,6 +61,8 @@ const PortfolioPieChart = ({ chartDatatypeX, chartDatatypeY, sheetJson, sheetfie
         };
         settingValuesofData();
     }, [sheetJson, sheetfieldselectedX, sheetfieldselectedY]);
+
+  
 
     const legendFormatter = (value, entry) => {
         const { name, value: val } = entry.payload;
