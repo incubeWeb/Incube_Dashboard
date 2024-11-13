@@ -198,6 +198,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 stateValues.map(async(val)=>{
                 setsheetmethod(val.sheetmethod)
                 setallSheets(val.allSheets)
+                
                 const responseData=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:val.selectedSheetId,organization:Logorganization},{
                     headers:{
                       "Authorization":`Bearer ${token}`
@@ -216,6 +217,18 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 
                 })
             }
+            else{
+                setsheetmethod('')
+                setallSheets([])
+                setselectedSheetId('')
+                setsheetJson([])
+                setsheetKeys([])
+                setselectedImageField('')
+                setshowHistory(false)
+                setshowimagePopup(false)
+                setsheetname('')
+                setselectfield('')
+            }
             setloading(false)
         }
         
@@ -223,6 +236,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         
     },[])
 
+    
 
     useEffect(()=>{
         const setStateValues=async()=>{
@@ -334,6 +348,18 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                
                 
                 })
+            }
+            else{
+                setsheetmethod('')
+                setallSheets([])
+                setselectedSheetId('')
+                setsheetJson([])
+                setsheetKeys([])
+                setselectedImageField('')
+                setshowHistory(false)
+                setshowimagePopup(false)
+                setsheetname('')
+                setselectfield('')
             }
             setloading(false)
         }
@@ -1139,6 +1165,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                     selectedFilter={selectedFilter}
                                     selectedSort={selectedSort}
                                     sheetJson={sheetJson}
+                                    selectedTab={selectedTab}
                 />
             </div>
             :

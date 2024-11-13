@@ -6,7 +6,7 @@ import { BsBuildings } from "react-icons/bs";
 import { RiFilter3Line } from 'react-icons/ri'
 import { RxCross2 } from 'react-icons/rx'
 
-const PortfolioHistory = ({setportfolioHistory,sheetKeys,sheetJson,selectedImageFiled}) => {
+const PortfolioHistory = ({selectedTab,setportfolioHistory,sheetKeys,sheetJson,selectedImageFiled}) => {
     
     const [imageUrls, setImageUrls] = useState({});
     const[showFilterMenu,setshowFilterMenu]=useState(false)
@@ -39,6 +39,8 @@ const PortfolioHistory = ({setportfolioHistory,sheetKeys,sheetJson,selectedImage
           document.removeEventListener('mousedown', handleClickOutside);
       };
   }, []);
+
+
 
     useEffect(() => {
         const initialImageUrls = {};
