@@ -15,9 +15,7 @@ const PortfolioRemoveSharedUsers = ({setPortfolioSharedwithusers,setclickedportf
 
     
 
-    useEffect(()=>{
-      console.log("newuser list is d",organziationUsers)
-    },[organziationUsers])
+
    
     useEffect(()=>{
       const settingusers=async()=>{

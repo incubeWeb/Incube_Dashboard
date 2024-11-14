@@ -34,7 +34,7 @@ const PortfolioTop = ({PortfolioGraphvalues, Portfoliocardvalues,PortfolioMeterv
          
           if(typeof(Portfoliocardvalues)=='string')
           {
-            console.log("here")
+         
             const val1=JSON.parse(Portfoliocardvalues)
             
             setvalueid(val1)

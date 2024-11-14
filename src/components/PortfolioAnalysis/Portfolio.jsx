@@ -84,6 +84,8 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
     // Function to handle filter selection and open sorting pop-up
    
+    
+
 
     // Function to handle sorting selection
     const handleSortSelection = (sort) => {
@@ -99,9 +101,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         
     },[selectedTab])
 
-    useEffect(()=>{
-        console.log("from main portfolio Portfolio shared",PortfoliosharedWithUsers)
-    },[PortfoliosharedWithUsers])
+    
 
 
     useEffect(()=>{
@@ -135,14 +135,14 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             }else{
             setportfoliosecurity(response.data.security)
             }
-            setportfoliometervalue(response.data.metervalue)
+            // setportfoliometervalue(response.data.metervalue)
             
             
                     
                     try{
                         if(typeof(response.data.sharewith)=='string'){
                             const val=JSON.parse(response.data.sharewith)
-                            console.log("values",typeof(val))
+                    
                             setPortfolioSharedwithusers(val)
                         }
                         else if(typeof(response.data.sharewith)=='object')
@@ -154,9 +154,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                         setPortfolioSharedwithusers([])
                     }
                 
-                console.log(typeof(response.data.sharewith))
-                console.log("sharedusers",response.data.sharewith,typeof(response.data.sharewith))
-            
+           
                 let stateValues=[]
                
                 let val1= []
@@ -183,7 +181,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             val2=JSON.parse(data3) || [] //JSON.parse(data)
            }
             
-           console.log(val1,"this is the val1 value")
+       
 
            setPortfoliocardvalues(val1)
            
@@ -269,14 +267,14 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             }else{
             setportfoliosecurity(response.data.security)
             }
-            setportfoliometervalue(response.data.metervalue)
+            // setportfoliometervalue(response.data.metervalue)
             
             
                     
                     try{
                         if(typeof(response.data.sharewith)=='string'){
                             const val=JSON.parse(response.data.sharewith)
-                            console.log("values",typeof(val))
+                        
                             setPortfolioSharedwithusers(val)
                         }
                         else if(typeof(response.data.sharewith)=='object')
@@ -288,9 +286,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                         setPortfolioSharedwithusers([])
                     }
                 
-                console.log(typeof(response.data.sharewith))
-                console.log("sharedusers",response.data.sharewith,typeof(response.data.sharewith))
-            
+              
                 let stateValues=[]
                
                 let val1= []
@@ -317,7 +313,6 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             val2=JSON.parse(data3) || [] //JSON.parse(data)
            }
             
-           console.log(val1,"this is the val1 value")
 
            setPortfoliocardvalues(val1)
            
@@ -397,8 +392,6 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             //     handlesavestate()
             // },[portfoliocardsdata])
 
-
-                    console.log(response)
                     if(response.data.status==200){
                         alert("State Saved")
                     }

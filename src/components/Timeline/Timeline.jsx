@@ -261,7 +261,7 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
         timelinedata:timelineMini}
       
         sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-        console.log("timeline",mergedData)
+        
         },[timelinedata])
     
     useEffect(()=>{

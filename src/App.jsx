@@ -66,7 +66,6 @@ function App() {
   const [slowinternetconenction,setslowinternetconnection]=useState(false)
 
   useEffect(()=>{
-    console.log(navigator.onLine,"integer")
     const checkInternet=()=>{
       if(!navigator.onLine){
         setinternetdisconnected(true)
@@ -126,7 +125,7 @@ function App() {
         const Logemail=userdata.userdetails.email || ''
         const Logorganization=userdata.userdetails.organization || ''
         const Logrole=userdata.userdetails.role || ''
-        console.log(Logemail,"itn is")
+     
         if(Logemail=='')
         {
           return
@@ -173,7 +172,6 @@ function App() {
           }
           if(change.ns.coll=='DealPipelineCompany')
           {
-            console.log('[Company added]')
             setrealtimedealpipelinecompany(change)
           }
           if(change.ns.coll=='AddNewDetailDealPipeline')
@@ -215,7 +213,7 @@ function App() {
         })
 
         socket.on('sheetedited',(data)=>{
-          console.log("ok so sheet changed",data)
+
           setsheetedited(data)
         })
       
@@ -291,9 +289,7 @@ function App() {
     
 }
 
-useEffect(()=>{
-  console.log("sheet field selected",sheetfieldselected)
-},[sheetfieldselected])
+
 
 useEffect(()=>{
   const setValues=async()=>{
@@ -465,7 +461,7 @@ const handleselectsheetfield=()=>{
   {
       value='0'
   }
-  console.log("the value is",value)
+
   
   
   setshowvalue(value);
@@ -514,35 +510,34 @@ useEffect(()=>{
   let sheetid=sheetedited.fullDocument.editedSheet
  
   boxes.map(box=>{
-    console.log(box.Sheetid)
+
     if(box.Sheetid === sheetid) {
       
     key=box.sheetfieldselected
     }
   })
-  console.log("sheet key",key)
+ 
   let value=data[0][key]
-  console.log(value)
+
   setBoxes(boxes.map(box =>  
     box.Sheetid === sheetid ? { ...box, showValue:value} : box
   
   ));
 
-  console.log(boxes)
+
 
     
     
     
   }
 
-  console.log(boxes)
   fun()
 },[sheetedited])
 
 const[currencyValue,setcurrencyvalue]=useState('$');
 
 const handleCurrencySelect = (currency) => {
-  console.log(currency);
+
   setcurrencyvalue(currency) // Handle currency selection here
   setIsPopupOpen(false);
   

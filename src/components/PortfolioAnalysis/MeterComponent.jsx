@@ -7,7 +7,7 @@ import { FaRegFileExcel } from 'react-icons/fa'
 import { IoMdArrowBack } from 'react-icons/io'
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useSheet } from '../SheetContext/SheetContext';
-const MeterComponent = ({selectedTab,PortfolioMetervalue,hidenavbar,realtimeportfoliostate}) => {
+const MeterComponent = ({selectedTab,PortfolioMetervalue,hidenavbar,realtimeportfoliostate,sheetedited}) => {
   const max = 100;  
   const min = 0;    
  
@@ -29,13 +29,103 @@ const MeterComponent = ({selectedTab,PortfolioMetervalue,hidenavbar,realtimeport
   const [clickedSheetId,setclickedSheetId]=useState('')
   const [sheetJson,setsheetJson]=useState([])
   const [showValue,setshowvalue]=useState('$0')
-  const [percentage, setpercentage] = useState(PortfolioMetervalue);
+  const [percentage, setpercentage] = useState('0');
   const[checkvalue,setcheckvalue]=useState('')
   const [previousPercentage, setPreviousPercentage] = useState(0);
   const popupRef = useRef(null);
   
+  useEffect(()=>{
+    const settingMeterValue=async()=>{
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate-meter-value`,{email:selectedTab},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
+
+       
+        
+        if(response.data.status==-200 || response.data.data==null){
+          setpercentage('0')
+          return
+        }
+        
+          const databasedata=response.data.data
+        
+        const sheetdetails=JSON.parse(databasedata.portfolioState)
+        const responseData=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetdetails.sheetid,organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
+        
+        const data=JSON.parse(responseData.data.data)
+        let value=data[0][sheetdetails.sheetcolumn]
+        setpercentage(value)
+    }
+    settingMeterValue()
+},[selectedTab,realtimeportfoliostate])
   
-  
+  useEffect(()=>{
+    const settingMeterValue=async()=>{
+        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate-meter-value`,{email:selectedTab},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
+         
+          if(response.data.status==-200 || response.data.data==null){
+            setpercentage('0')
+            return
+          }
+        const databasedata=response.data.data
+        
+        const sheetdetails=JSON.parse(databasedata.portfolioState)
+        const responseData=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetdetails.sheetid,organization:Logorganization},{
+            headers:{
+              "Authorization":`Bearer ${token}`
+            }
+          })
+       
+        const data=JSON.parse(responseData.data.data)
+        let value=data[0][sheetdetails.sheetcolumn]
+        setpercentage(value)
+    }
+    settingMeterValue()
+},[])
+
+useEffect(()=>{
+  const settingMeterValue=async()=>{
+    let sheetid=sheetedited.fullDocument.editedSheet
+    
+      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate-meter-value`,{email:selectedTab},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        })
+       
+        if(response.data.status==-200 || response.data.data==null){
+          setpercentage('0')
+          return
+        }
+      const databasedata=response.data.data
+      
+      const sheetdetails=JSON.parse(databasedata.portfolioState)
+
+      if(sheetid!=sheetdetails.sheetid){
+        return
+      }
+      const responseData=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetid,organization:Logorganization},{
+          headers:{
+            "Authorization":`Bearer ${token}`
+          }
+        })
+     
+      const data=JSON.parse(responseData.data.data)
+      let value=data[0][sheetdetails.sheetcolumn]
+      setpercentage(value)
+  }
+  settingMeterValue()
+},[sheetedited])
   
 
 
@@ -82,22 +172,10 @@ const MeterComponent = ({selectedTab,PortfolioMetervalue,hidenavbar,realtimeport
  
 } 
 
-useEffect(()=>{
-  const insertValue=async()=>{
-    setpercentage(PortfolioMetervalue)      
-  }
-  insertValue()
-},[])
 
 
-useEffect(()=>{
-  const insertValue=async()=>{
-      setpercentage(PortfolioMetervalue)      
-  }
-  if (selectedTab) {
-    insertValue();
-  }
-},[selectedTab,realtimeportfoliostate,PortfolioMetervalue])
+
+
 
 
 
@@ -147,21 +225,24 @@ const handleselectsheetfield = async() => {
     
    
    
-    const organization2=Logorganization+"_ShownGraph"
-    const response2=  await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
+    
+    const response2=  await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate-meter-value`,{
         email:Logemail,
         metervalue:value,
-        MeterGraphorganization:organization2
+        sheetid:clickedSheetId,
+        sheetcolumn: sheetfieldselected
+        
     },{
         headers:{
           "Authorization":`Bearer ${token}`
         }
       })
-    console.log(response2.data.status)
+    
     if(response2.data.status==200){
       setpercentage(value);
     }
     else{
+      console.log("error",response2)
       alert("Server error")
     }
         

@@ -217,7 +217,7 @@ const togglePopup = () => {
             
                fun()
             }
-            console.log(sheetedited,"edited sheet")
+
                 
             },[sheetedited])
 
@@ -231,7 +231,7 @@ const togglePopup = () => {
        
         let denominator=oldvalue;
         let formula=0
-        console.log(newvalue-oldvalue)
+     
         if(denominator==0)
         {
             
@@ -416,7 +416,7 @@ const togglePopup = () => {
                   "Authorization":`Bearer ${token}`
                 }
               })
-              console.log("here",response.data.data==undefined)
+             
               if(response.data.data==undefined)
               {
                 return;

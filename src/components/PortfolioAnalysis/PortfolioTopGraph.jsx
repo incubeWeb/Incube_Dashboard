@@ -126,7 +126,7 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
 
     useEffect(()=>{
         const setGraphValues=async()=>{
-           console.log("graphs",PortfolioGraphvalues)
+          
             
             if(PortfolioGraphvalues.length==0)
             {
@@ -216,11 +216,11 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
             const files=response3.data.data
             setgooglesheetfiles(files)
         }
-        console.log("tx",response3.data.data)
+      
         setsheetname(response3.data.data)
         setallSheets(tosetdata)
         setloading2(false)
-        console.log("pk",tosetdata)
+       
 
         
     }
@@ -272,7 +272,7 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
                 }
               })
                 const data=JSON.parse(response.data.data)
-             console.log("zt",data)
+
                 setsheetJson(data)
                 const key=Object.keys(data[0])
               
@@ -338,7 +338,7 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
             setsheetfieldselectedY(fileteredKey[0])
             setsheetKeys(fileteredKey)
             setLoading1(false) 
-            console.log("Line",data)
+           
     }
     const handleSheetCreateBarchart=async()=>{
         //create bar chart Logic
@@ -864,7 +864,7 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
                 :<></>
             }
             <div className='flex w-[30%] h-[420px] bg-white rounded-xl'>
-                <PortfolioMeter PortfolioMetervalue={PortfolioMetervalue} realtimeportfoliostate={realtimeportfoliostate} selectedTab={selectedTab} hidenavbar={hidenavbar}/>
+                <PortfolioMeter sheetedited={sheetedited} PortfolioMetervalue={PortfolioMetervalue} realtimeportfoliostate={realtimeportfoliostate} selectedTab={selectedTab} hidenavbar={hidenavbar}/>
             </div>
             <div className='w-[70%] h-[420px] bg-white rounded-xl flex flex-col items-center justify-center'>
                     <div className=' w-[100%] relative h-[20px] flex flex-row items-end justify-end pt-2 pr-2'>
