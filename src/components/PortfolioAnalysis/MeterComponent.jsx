@@ -59,7 +59,7 @@ const MeterComponent = ({selectedTab,PortfolioMetervalue,hidenavbar,realtimeport
           })
         
         const data=JSON.parse(responseData.data.data)
-        let value=data[0][sheetdetails.sheetcolumn]
+        let value=data[0][sheetdetails.sheetcolumn].match(/\d+/)?data[0][sheetdetails.sheetcolumn].match(/\d+/)[0]:'0'
         setpercentage(value)
     }
     settingMeterValue()
@@ -87,7 +87,7 @@ const MeterComponent = ({selectedTab,PortfolioMetervalue,hidenavbar,realtimeport
           })
        
         const data=JSON.parse(responseData.data.data)
-        let value=data[0][sheetdetails.sheetcolumn]
+        let value=data[0][sheetdetails.sheetcolumn].match(/\d+/)?data[0][sheetdetails.sheetcolumn].match(/\d+/)[0]:'0'
         setpercentage(value)
     }
     settingMeterValue()
@@ -121,10 +121,13 @@ useEffect(()=>{
         })
      
       const data=JSON.parse(responseData.data.data)
-      let value=data[0][sheetdetails.sheetcolumn]
+      let value=data[0][sheetdetails.sheetcolumn].match(/\d+/)?data[0][sheetdetails.sheetcolumn].match(/\d+/)[0]:'0'
+      
       setpercentage(value)
   }
+  if(Object.keys(sheetedited).length>0){
   settingMeterValue()
+  }
 },[sheetedited])
   
 
@@ -185,7 +188,8 @@ const handleselectsheetfield = async() => {
   
   // Check if sheetJson is not empty
   if (sheetJson.length > 0) {
-    let value = sheetJson[0][sheetfieldselected];
+    let value = sheetJson[0][sheetfieldselected].match(/\d+/)?sheetJson[0][sheetfieldselected].match(/\d+/)[0]:'0';
+    
   
     
     // Extract numeric value if it starts with symbols

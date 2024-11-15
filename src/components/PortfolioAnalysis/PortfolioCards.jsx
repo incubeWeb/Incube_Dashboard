@@ -51,9 +51,16 @@ const PortfolioCards = ({selectedTab,id,portfoliosecurity,sheetedited,selectedSh
 
     const [showsign,setshowsign]=useState('none')
     const [changedpercentage,setchangedpercentage]=useState('')
+    const previouslyHitValueIds = useRef(new Set());
+    
+    const [sheets,setallsheets]=useState([])
+    const [sheetpopup,setsheetpopup]=useState(false)
+    const [sheetJson,setsheetJson]=useState([])
+    const [sheetClicked,setsheetClicked]=useState(false)
+    const [sheetname,setsheetname]=useState('')
+    const [sheetfieldselected,setsheetfieldselected]=useState('')
+    const[showFilterMenu,setshowFilterMenu]=useState(false)
    
-    
-    
 
 
 const togglePopup = () => {
@@ -145,9 +152,10 @@ const togglePopup = () => {
 
           
     useEffect(()=>{
-        if(isDifferent(valueid,[{"id":1,"labelname":"Total fund","showValue":"0","currencyValue":"$","prevShowVal":"0"},{"id":2,"labelname":"Fund utilized","showValue":"0","currencyValue":"$","prevShowVal":"0"},{"id":3,"labelname":"Funds remaining","showValue":"0","currencyValue":"$","prevShowVal":"0"},{"id":4,"labelname":"ROI","showValue":"0","currencyValue":"$","prevShowVal":"0"}])&& selectedTab==Logemail)
+        if(isDifferent(valueid,[{"id":1,"labelname":"Total fund","showValue":"0","currencyValue":"$","prevShowVal":"0"},{"id":2,"labelname":"Fund utilized","showValue":"0","currencyValue":"$","prevShowVal":"0"},{"id":3,"labelname":"Funds remaining","showValue":"0","currencyValue":"$","prevShowVal":"0"},{"id":4,"labelname":"ROI","showValue":"0","currencyValue":"$","prevShowVal":"0"}])&& selectedTab==Logemail && !previouslyHitValueIds.current.has(JSON.stringify(valueid)))
         {
             handlesavestate()
+            previouslyHitValueIds.current.add(JSON.stringify(valueid));
         }
         else{
             return 
@@ -155,10 +163,20 @@ const togglePopup = () => {
         
     },[valueid])
 
+
+    useEffect(()=>{
+        console.log("show value is",showValue)
+    },[showValue])
+   
     
     useEffect(()=>
         {
            const fun=()=>{
+
+            if((prevShowVal==showValue)){
+                
+                return
+            }
             if(!editLabel && labelname!='' )
                 {
                     setvalueid(prev => {
@@ -166,14 +184,23 @@ const togglePopup = () => {
                         if (exists) {
                           return prev.map(val =>
                             val.id === id && val.showValue!=showValue 
-                              ? { ...val, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue,prevShowVal:val.showValue } // Update the existing object
-                              :  val.id === id && clickedSheetId.length>0?
+                            ?
+                            { ...val, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue,prevShowVal:prevShowVal } // Update the existing object
+                            
+                            :  val.id === id?
+                                clickedSheetId.length>0?
                               { ...val, showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue }
                               :
+
+                              { ...val, showValue: showValue, labelname: labelname,portfolioicon:iconname,currencyValue:currencyValue }
+                              :
+                               
                               val
+                              
                           );
                         } else {
                           // Insert new object if id is not found
+                          
                           return 
                         }
                       });
@@ -226,8 +253,10 @@ const togglePopup = () => {
     
 
     const CheckChangedpercentage=(oldvalu,newvalu)=>{
-        let oldvalue=parseInt(oldvalu);
-        let newvalue=parseInt(newvalu)
+        const v1=oldvalu.match(/\d+/)
+        const v2=newvalu.match(/\d+/)
+        let oldvalue=v1 ? parseInt(oldvalu):0
+        let newvalue=v2 ? parseInt(newvalu) : 0
        
         let denominator=oldvalue;
         let formula=0
@@ -235,7 +264,7 @@ const togglePopup = () => {
         if(denominator==0)
         {
             
-            formula=(newvalue-oldvalue) * 100;
+            formula=(newvalue-oldvalue) ;
         }
         else{
             formula=((newvalue-oldvalue)/oldvalue) * 100;
@@ -249,7 +278,7 @@ const togglePopup = () => {
         }else{
             setshowsign('none')
         }
-        setchangedpercentage(formula)
+        setchangedpercentage(Math.round(formula))
     }
    
     const getIconComponent = (iconName) => {
@@ -272,13 +301,6 @@ const togglePopup = () => {
 
 
 
-    const [sheets,setallsheets]=useState([])
-    const [sheetpopup,setsheetpopup]=useState(false)
-    const [sheetJson,setsheetJson]=useState([])
-    const [sheetClicked,setsheetClicked]=useState(false)
-    const [sheetname,setsheetname]=useState('')
-    const [sheetfieldselected,setsheetfieldselected]=useState('')
-    const[showFilterMenu,setshowFilterMenu]=useState(false)
    
     
     
@@ -297,9 +319,6 @@ const togglePopup = () => {
                 if(val.id==id)
                 {
                     setlablename(val.labelname)
-                    
-                   
-              
                     if('sheetfieldselected' in val && val['sheetfieldselected'].length>0){
                         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:val.sheetId,organization:Logorganization},{
                             headers:{
@@ -312,8 +331,9 @@ const togglePopup = () => {
                     }
                      
                     
-
+                    
                     setshowvalue(val.showValue)
+                    
                     seticonname(val.portfolioicon)
                     setIcon(getIconComponent(val.portfolioicon))
                     setcurrencyvalue(val.currencyValue)
@@ -321,9 +341,9 @@ const togglePopup = () => {
                     setprevShowVal(val.prevShowVal)
                     CheckChangedpercentage(val.prevShowVal,val.showValue)
                     
-                    setTimeout(()=>{
-                        setloading(false)
-                    },1000)
+                    
+                    setloading(false)
+                    
                 }
             })
         }
@@ -332,6 +352,10 @@ const togglePopup = () => {
     },[valueid,selectedTab])
 
 
+    useEffect(()=>{
+        if(showValue!=prevShowVal)
+        console.log("values are",prevShowVal,showValue)
+    },[showValue,prevShowVal])
   
 
 
@@ -383,20 +407,29 @@ const togglePopup = () => {
          let value1=''
          try{
             value1=parseInt(sheetJson[0][sheetfieldselected]) 
+            console.log(value1)
             
             if(isNaN(sheetJson[0][sheetfieldselected]))
              {
-                 value1='0'
+                // value1='0'
+                value1=sheetJson[0][sheetfieldselected].match(/\d+/)?sheetJson[0][sheetfieldselected].match(/\d+/)[0]:'0'
+                 
+                    setprevShowVal(showValue) 
+                    console.log("prev value chnage",showValue)
+                    console.log("here the value cahange",value1)
+                    setshowvalue(value1)
              }
+
+
          }
          catch(e)
          {
              value1='0'
+             setshowvalue('0')
          }
 
         
-        
-        setshowvalue(value1)
+       
         
     }
 
@@ -408,6 +441,7 @@ const togglePopup = () => {
        
     }
 
+    
 
     useEffect(()=>{
         const setValues=async()=>{
@@ -746,9 +780,9 @@ useEffect(() => {
                             <div onDoubleClick={()=>{selectedTab === Logemail ?  handlePlusClick() : undefined}} className='w-[20%] cursor-pointer'>
                                 {
                                     currencyValue=='%'?
-                                    <p className='text-[20px] font-inter font-semibold text-gray-700 flex'><span  className='cursor-pointer'>{showValue}</span> <span className='mr-1 ' >{currencyValue}</span></p>
+                                    <p className='text-[20px] font-inter font-semibold text-gray-700 flex'><span  className='cursor-pointer'>{showValue.match(/\d+/)?showValue.match(/\d+/)[0]:'0'}</span> <span className='mr-1 ' >{currencyValue}</span></p>
                                     :
-                                    <p className='text-[20px] font-inter font-semibold text-gray-700'><span className='mr-1 ' >{currencyValue}</span><span  className='cursor-pointer'>{showValue}</span></p>
+                                    <p className='text-[20px] font-inter font-semibold text-gray-700'><span className='mr-1 ' >{currencyValue}</span><span  className='cursor-pointer'>{showValue.match(/\d+/)?showValue.match(/\d+/)[0]:'0'}</span></p>
                                 }
                             </div>
                         </div>
@@ -757,6 +791,7 @@ useEffect(() => {
                     <div className='w-[30%] space-x-2 flex items-end justify-end pr-1'>
                         <div className='h-[100%]'>
                             {
+                                
                                 changedpercentage==0 || isNaN(parseInt(changedpercentage))?
                                 '':
                                 changedpercentage+"%"

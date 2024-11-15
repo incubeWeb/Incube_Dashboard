@@ -24,6 +24,8 @@ const PortfolioShared = ({mainportfoliosecurity,setclickedportfolioremoveshared,
 
   const [popupLoader,setpopupLoader]=useState(true)
 
+  
+
   const handlecancel=()=>{
     setclickedPortfolioShared(false)
 }

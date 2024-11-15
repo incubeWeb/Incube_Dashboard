@@ -31,6 +31,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
     const popupRef = useRef(null);
+    const [loaderforsetsheets,setloaderforsetsheets]=useState(false)
 
     const [sheetmethod,setsheetmethod]=useState('')
     const [allSheets,setallSheets]=useState([])
@@ -68,30 +69,51 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     const [Portfoliocardvalues,setPortfoliocardvalues]=useState([])
     const [PortfolioGraphvalues,setPortfolioGraphvalues]=useState([])
 
+    const sheetfromdatabaseref=useRef(null)
+    const sheetfromdatabaseselectimageref=useRef(null)
     
-    // Function to toggle filter menu visibility
-    const toggleFilterMenu = () => {
-        setShowFilterMenu(!showFilterMenu);
-    };
-
-
-    const handleFilterSelection = (filter) => {
-        setSelectedFilter(filter);
-     
-        setShowFilterMenu(false); // Close filter menu
-        setShowSortMenu(true); // Open sorting menu
-    };
-
-    // Function to handle filter selection and open sorting pop-up
+    const Googlesheetfromdatabaseref=useRef(null)
+    const Googlesheetfromdatabaseselectimageref=useRef(null)
    
+
+
+    
+
+    useEffect(()=>{
+        const handleoutsideclick=(event)=>{
+            if(!sheetfromdatabaseselectimageref.current && sheetfromdatabaseref.current && !sheetfromdatabaseref.current.contains(event.target)){
+                setsheetmethod('')
+            }
+            else if(sheetfromdatabaseref.current && !sheetfromdatabaseref.current.contains(event.target) && !sheetfromdatabaseselectimageref.current.contains(event.target)){
+                setsheetmethod('')
+            }
+        }
+
+        document.addEventListener('mousedown',handleoutsideclick)
+        return ()=>{
+            document.removeEventListener('mousedown',handleoutsideclick)
+        }
+    },[])
+
+    useEffect(()=>{
+        const handleoutsideclick=(event)=>{
+            if(!Googlesheetfromdatabaseselectimageref.current && Googlesheetfromdatabaseref.current && !Googlesheetfromdatabaseref.current.contains(event.target)){
+                setsheetmethod('')
+            }
+            else if(Googlesheetfromdatabaseref.current && !Googlesheetfromdatabaseref.current.contains(event.target) && !Googlesheetfromdatabaseselectimageref.current.contains(event.target)){
+                setsheetmethod('')
+            }
+        }
+
+        document.addEventListener('mousedown',handleoutsideclick)
+        return ()=>{
+            document.removeEventListener('mousedown',handleoutsideclick)
+        }
+    },[])
     
 
 
-    // Function to handle sorting selection
-    const handleSortSelection = (sort) => {
-        setSelectedSort(sort);
-        setShowSortMenu(false); // Close sorting menu after selection
-    };
+    
     const { sheetJson1 } = useSheet();
     const {percentage1}=useSheet();
     
@@ -195,7 +217,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
                 stateValues.map(async(val)=>{
                 setsheetmethod(val.sheetmethod)
-                setallSheets(val.allSheets)
+                
                 
                 const responseData=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:val.selectedSheetId,organization:Logorganization},{
                     headers:{
@@ -208,7 +230,9 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 setsheetKeys(val.sheetKeys)
                 setselectedImageField(val.selectedImageFiled)
                 setshowHistory(val.showHistory)
-                setshowimagePopup(val.showimagepopup)
+                setallSheets([])
+                setshowimagePopup(false)
+                
                 setsheetname(val.sheetname)
                 setselectfield(val.selectfield)
                
@@ -217,12 +241,13 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             }
             else{
                 setsheetmethod('')
-                setallSheets([])
+               
                 setselectedSheetId('')
                 setsheetJson([])
                 setsheetKeys([])
                 setselectedImageField('')
                 setshowHistory(false)
+                setallSheets([])
                 setshowimagePopup(false)
                 setsheetname('')
                 setselectfield('')
@@ -233,6 +258,143 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         setStateValues()
         
     },[])
+
+    useEffect(()=>{
+        const setStateValues=async()=>{
+           const organization=Logorganization
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/getportfoliostate`,{email:selectedTab,organization:organization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
+             
+              
+             
+            if(response.data.status==-200)
+            {
+                setTimeout(()=>{
+                    setloading(false)
+                },50)
+                alert('Server error')
+                return
+            }
+            const data=response.data.historydata
+            const data2=response.data.cardsdata
+            const data3=response.data.Graphdata
+           
+            
+
+            if(response.data.security==undefined)
+            {
+                setportfoliosecurity('private')
+            }else{
+            setportfoliosecurity(response.data.security)
+            }
+            // setportfoliometervalue(response.data.metervalue)
+            
+            
+                    
+                    try{
+                        if(typeof(response.data.sharewith)=='string'){
+                            const val=JSON.parse(response.data.sharewith)
+                    
+                            setPortfolioSharedwithusers(val)
+                        }
+                        else if(typeof(response.data.sharewith)=='object')
+                        {
+                            setPortfolioSharedwithusers(response.data.sharewith)
+                        }
+                        
+                    }catch(e){
+                        setPortfolioSharedwithusers([])
+                    }
+                
+           
+                let stateValues=[]
+               
+                let val1= []
+                let val2=[] 
+            
+           // const stateValues=JSON.parse(localStorage.getItem('portfolioState'))||[]
+           try{
+            stateValues=JSON.parse(data)||[]
+           }catch(e)
+           {
+            stateValues=[]
+           }
+           try{
+            val1=data2 || []
+           }catch(e){
+            val1=JSON.parse(data2) || []
+           }
+
+           try{
+           val2=data3 || [] //JSON.parse(data)
+           }
+          catch(e){
+            
+            val2=JSON.parse(data3) || [] //JSON.parse(data)
+           }
+            
+       
+
+           setPortfoliocardvalues(val1)
+           
+           setPortfolioGraphvalues(val2)
+
+          
+         
+            if(stateValues.length>0)
+            {
+                
+
+                stateValues.map(async(val)=>{
+               
+                if(val.selectedSheetId!=sheetedited.fullDocument.editedSheet){
+                    return
+                }
+                setsheetmethod(val.sheetmethod)
+                const responseData=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:val.selectedSheetId,organization:Logorganization},{
+                    headers:{
+                      "Authorization":`Bearer ${token}`
+                    }
+                  })
+                const data=JSON.parse(responseData.data.data)
+                setselectedSheetId(val.selectedSheetId)
+                setsheetJson(data)
+                setsheetKeys(val.sheetKeys)
+                setselectedImageField(val.selectedImageFiled)
+                setshowHistory(val.showHistory)
+                setallSheets([])
+                setshowimagePopup(false)
+                
+                setsheetname(val.sheetname)
+                setselectfield(val.selectfield)
+               
+                
+                })
+            }
+            else{
+                setsheetmethod('')
+               
+                setselectedSheetId('')
+                setsheetJson([])
+                setsheetKeys([])
+                setselectedImageField('')
+                setshowHistory(false)
+                setallSheets([])
+                setshowimagePopup(false)
+                setsheetname('')
+                setselectfield('')
+            }
+            setloading(false)
+        }
+        if(Object.keys(sheetedited).length>0){
+            setStateValues()
+        }
+        
+        
+    },[sheetedited])
 
     
 
@@ -331,13 +493,14 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                       })
                     const data=JSON.parse(responseData.data.data)
                 setsheetmethod(val.sheetmethod)
-                setallSheets(val.allSheets)
+                
                 setselectedSheetId(val.selectedSheetId)
                 setsheetJson(data)
                 setsheetKeys(val.sheetKeys)
                 setselectedImageField(val.selectedImageFiled)
                 setshowHistory(val.showHistory)
-                setshowimagePopup(val.showimagepopup)
+                setshowimagePopup(false)
+                setallSheets([])
                 setsheetname(val.sheetname)
                 setselectfield(val.selectfield)
                
@@ -346,12 +509,13 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             }
             else{
                 setsheetmethod('')
-                setallSheets([])
+          
                 setselectedSheetId('')
                 setsheetJson([])
                 setsheetKeys([])
                 setselectedImageField('')
                 setshowHistory(false)
+                setallSheets([])
                 setshowimagePopup(false)
                 setsheetname('')
                 setselectfield('')
@@ -402,8 +566,10 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     
 
     const handleselect=async()=>{
+        console.log("hitted")
+        setloaderforsetsheets(true)
         
-        const constructPortfolioState=[{sheetmethod:'',allSheets:allSheets,selectedSheetId:selectedSheetId,sheetJson:sheetJson,sheetKeys:sheetKeys,selectedImageFiled:selectedImageFiled,showHistory:true,showimagepopup:!showimagepopup,sheetname:sheetname,selectfield:selectfield}]
+        const constructPortfolioState=[{sheetmethod:'',selectedSheetId:selectedSheetId,sheetJson:sheetJson,sheetKeys:sheetKeys,selectedImageFiled:selectedImageFiled,showHistory:true,sheetname:sheetname,selectfield:selectfield}]
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
             email:Logemail,
             security:portfoliosecurity,
@@ -414,11 +580,21 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
               "Authorization":`Bearer ${token}`
             }
           })
+
+        console.log("here response",response)
         if(response.data.status==200)
         {
+            setloaderforsetsheets(false)
             setshowHistory(true)
             setsheetmethod('')
-            setshowimagePopup(!showimagepopup)
+            setshowimagePopup(false)
+        }
+        else{
+            alert('server error')
+            setloaderforsetsheets(false)
+            setshowHistory(true)
+            setsheetmethod('')
+            setshowimagePopup(false)
         }
         
         
@@ -475,7 +651,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
         }
         
-        try{
+      
             if(sheetmethod=='Database')
                 {
                     setavailableDatabaseSheets()
@@ -484,17 +660,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 {
                     setavailableGoogleDatabaseSheets()
                 }
-        }catch(e)
-        {
-            if(sheetmethod=='Database')
-                {
-                    setavailableDatabaseSheets()
-                }
-                else if(sheetmethod=='Google Sheet')
-                {
-                    setavailableGoogleDatabaseSheets()
-                }
-        }
+        
     },[])
 
     useEffect(()=>{
@@ -543,7 +709,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         }
     
 
-        try{
+        
             if(sheetmethod=='Database')
                 {
                     setavailableDatabaseSheets()
@@ -552,16 +718,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 {
                     setavailableGoogleDatabaseSheets()
                 }
-        }catch(e){
-            if(sheetmethod=='Database')
-                {
-                    setavailableDatabaseSheets()
-                }
-                else if(sheetmethod=='Google Sheet')
-                {
-                    setavailableGoogleDatabaseSheets()
-                }
-        }
+       
     },[sheetmethod])
 
     useEffect(()=>{
@@ -896,7 +1053,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             <PortfolioTop PortfolioGraphvalues={PortfolioGraphvalues} Portfoliocardvalues={Portfoliocardvalues} PortfolioMetervalue={PortfolioMetervalue} selectedTab={selectedTab} setportfoliocardsdata={setportfoliocardsdata} portfoliosecurity={portfoliosecurity} realtimeportfoliostate={realtimeportfoliostate} selectedSheetId={selectedSheetId} hidenavbar={hidenavbar} sheetedited={sheetedited}/>
         </div>
 
-        <div className='tracking-wider    select-none mt-[20px] w-[100%] bg-white rounded-xl p-4 flex flex-col space-y-2 font-noto'>
+        <div className='tracking-wider select-none mt-[20px] w-[100%] bg-white rounded-xl p-4 flex flex-col space-y-2 font-noto'>
             <div className='flex flex-col  space-y-3'>
                 <div className='h-[50px] w-[100%] flex flex-row'>
                     <p className='flex w-[50%] text-[16px] font-inter font-semibold tracking-wider'>Investment History</p>
@@ -989,10 +1146,10 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                     }
                     {
                         selectfield?
-                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
+                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-[100%] bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
                             <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' >
-                                <div onClick={()=>{setselectfield(false);setsheetmethod('')}} className='cursor-pointer h-[50px]'>
-                                    <RxCross2/>
+                                <div onClick={()=>{setselectfield(false);setsheetmethod('')}} className='cursor-pointer w-[20px] h-[20px]'>
+                                    <RxCross2 size={20}/>
                                 </div>
                                 <div onClick={()=>{setsheetmethod('Database'); setselectfield(false)}} className={`${sheetmethod=='Database'?'bg-white':''} p-1 hover:bg-gray-100 flex items-center rounded-md text-[14px] font-roboto`}>
                                     <FaDatabase className='text-gray-700'/>
@@ -1010,16 +1167,16 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                     }
                     {
                         !selectfield && sheetmethod!="Google Sheet" && sheetmethod!="" ?
-                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
-                            <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' >
+                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'} h-[100%]  bg-black bg-opacity-40 top-0 fixed flex items-center justify-center z-[80]`}>
+                            <div ref={sheetfromdatabaseref} className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' >
                                 {
                                     clickedDots?
                                     <div onClick={()=>{setselectfield(!selectfield);setsheetmethod('Database')}} className='cursor-pointer h-[50px]'>
                                         <IoMdArrowBack />
                                     </div>
                                     :
-                                    <div onClick={()=>{setselectfield(false);setsheetmethod("")}} className='cursor-pointer h-[50px]'>
-                                        <RxCross2/>
+                                    <div onClick={()=>{setselectfield(false);setsheetmethod("")}} className='cursor-pointer w-[20px] h-[20px]'>
+                                        <RxCross2 size={20}/>
                                     </div>
                                 }
                                 <div className='flex items-center justify-center'><p className='font-inter font-semibold flex justify-center items-center text-white bg-blue-500 p-2 w-[280px] rounded-md mt-4 mb-4'>Select sheet from database</p></div>
@@ -1041,16 +1198,16 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
                     {
                         !selectfield && sheetmethod!="Database" && sheetmethod!="" ?
-                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
-                            <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md'>
+                        <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-[100%] bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
+                            <div ref={Googlesheetfromdatabaseref} className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md'>
                                 {
                                     clickedDots?
                                     <div onClick={()=>{setselectfield(!selectfield);setsheetmethod('Google Sheet')}} className='cursor-pointer h-[50px]'>
                                         <IoMdArrowBack />
                                     </div>
                                     :
-                                    <div onClick={()=>{setselectfield(false);setsheetmethod("")}} className='cursor-pointer h-[50px]'>
-                                       <RxCross2/>
+                                    <div onClick={()=>{setselectfield(false);setsheetmethod("")}} className='cursor-pointer w-[20px] h-[20px]'>
+                                       <RxCross2 size={20}/>
                                     </div>
                                 }
                                 <div className='flex items-center justify-center'><p className='font-inter font-semibold flex justify-center items-center text-white bg-blue-500 p-2 w-[280px] rounded-md mt-4 mb-4'>Select from google sheet</p></div>
@@ -1070,8 +1227,8 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
                             {
                                 showimagepopup && sheetmethod!="Google Sheet" && sheetmethod!=""   ?
-                                <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
-                                    <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' >
+                                <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-[100%] top-0  fixed flex items-center justify-center z-[80]`}>
+                                    <div ref={sheetfromdatabaseselectimageref} className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' >
                                         
                                         <div className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
                                             <div className='flex items-center justify-center h-[40px]' onClick={(()=>{setshowimagePopup(false); setsheetmethod('Database')})}>
@@ -1093,12 +1250,22 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
                                             </select>
                                         </div>
-                                        <div className='w-[100%] mt-[14px] flex flex-row items-center justify-center'>
+                                        {
+                                            loaderforsetsheets?
+                                            <div className='w-[100%] mt-[14px] flex flex-row items-center justify-center'>
+                                                <div  className='select-none cursor-pointer flex flex-row w-[120px] rounded-md h-[40px] items-center justify-center bg-gradient-to-r from-gray-500 to-gray-800 spae-x-2'>
+                                                    <p className='text-[14px] text-white'>Setting values</p>
+                                                    
+                                                </div>
+                                            </div>
+                                            :
+                                            <div className='w-[100%] mt-[14px] flex flex-row items-center justify-center'>
                                             <div onClick={handleselect} className='select-none cursor-pointer flex flex-row w-[120px] rounded-md h-[40px] items-center justify-center bg-gradient-to-r from-green-500 to-green-800 spae-x-2'>
                                                 <p className='text-[14px] text-white'>Set image key</p>
                                                 
                                             </div>
                                         </div>
+                                        }
                                         
                                     </div>
                                 </div>
@@ -1108,8 +1275,8 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
 {
                                 showimagepopup && sheetmethod!="Database" && sheetmethod!=""   ?
-                                <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-screen bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
-                                    <div className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' >
+                                <div className={`${hidenavbar?'w-[100%]':'left-[20%] w-[80%]'}  h-[100%] bg-black bg-opacity-40  top-0  fixed flex items-center justify-center z-[80]`}>
+                                    <div ref={Googlesheetfromdatabaseselectimageref} className='p-2 flex flex-col  w-[360px] h-[430px] space-y-2 bg-white  z-[40]  rounded-md' >
                                         
                                         <div className='w-[100%] h-[20%] flex space-x-2 items-start justify-start'>
                                             <div className='flex items-center justify-center h-[40px]' onClick={(()=>{setshowimagePopup(false); setsheetmethod('Google Sheet')})}>
@@ -1131,12 +1298,22 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
                                             </select>
                                         </div>
-                                        <div className='w-[100%] mt-[14px] flex flex-row items-center justify-center'>
+                                        {
+                                            loaderforsetsheets?
+                                            <div className='w-[100%] mt-[14px] flex flex-row items-center justify-center'>
+                                                <div className='select-none cursor-pointer flex flex-row w-[120px] rounded-md h-[40px] items-center justify-center bg-gradient-to-r from-gray-500 to-gray-800 spae-x-2'>
+                                                    <p className='text-[14px] text-white'>Setting values</p>
+                                                    
+                                                </div>
+                                            </div>
+                                            :
+                                            <div className='w-[100%] mt-[14px] flex flex-row items-center justify-center'>
                                             <div onClick={handleselect} className='select-none cursor-pointer flex flex-row w-[120px] rounded-md h-[40px] items-center justify-center bg-gradient-to-r from-green-500 to-green-800 spae-x-2'>
                                                 <p className='text-[14px] text-white'>Set image key</p>
                                                 
                                             </div>
                                         </div>
+                                        }
                                         
                                     </div>
                                 </div>
@@ -1184,7 +1361,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         }
         {
             clickedportfolioremoveshared?
-            <div className='fixed overflow-hidden left-0 w-[100%] top-[-2.2%] z-[60] h-screen bg-opacity-40 bg-black'>
+            <div className='fixed overflow-hidden left-0 w-[100%] top-[-2.2%] z-[60] h-[100%] bg-opacity-40 bg-black'>
                 <PortfolioRemoveSharedUsers setPortfolioSharedwithusers={setPortfolioSharedwithusers} setclickedportfolioremoveshared={setclickedportfolioremoveshared} setclickedPortfolioShared={setclickedPortfolioShared} mainportfoliosecurity={portfoliosecurity} PortfoliosharedWithUsers={PortfoliosharedWithUsers} realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar}  />
             </div>
             :

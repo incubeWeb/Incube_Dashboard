@@ -82,8 +82,8 @@ const Viewsheet = ({ viewdDoc, jsonData, id, setclickedview, clickedview, hidena
   useEffect(() => {
     // Initialize Handsontable
     const parentWidth = hotRef.current ? hotRef.current.clientWidth - 50 : 400; // Default to 400px if not available
-    const numberOfColumns = Object.keys(jsonData[0] || {}).length;
-    const columnWidth = parentWidth / numberOfColumns;
+    const numberOfColumns = Object.keys(Object.keys(jsonData[0] || {}).length, 5).length;
+    const columnWidth = Math.min(parentWidth / numberOfColumns, 100);
 
     const hot = new Handsontable(hotRef.current, {
       data: initialData,
@@ -96,8 +96,9 @@ const Viewsheet = ({ viewdDoc, jsonData, id, setclickedview, clickedview, hidena
       licenseKey: 'non-commercial-and-evaluation', // This license key is required for non-commercial use
       manualColumnResize: true,
       colWidths: columnWidth,
+      stretchH: 'all', // Stretch all columns horizontally
       rowHeights: 25,
-      height: 'auto',
+      height: 600, // Fixed height with scroll,
       className: 'font-roboto text-[14px]',
       afterChange: handleAfterChange,
       minSpareRows: 1, // Ensures there's always an empty row available for input
@@ -162,7 +163,7 @@ const Viewsheet = ({ viewdDoc, jsonData, id, setclickedview, clickedview, hidena
           </div>
         </div>
       </div>
-      <div ref={hotRef} className='overflow-y-auto overflow-x-hidden w-[100%] h-[400px]' />
+      <div ref={hotRef} className='overflow-y-auto overflow-x-auto w-[100%] h-auto' />
     </div>
   );
 };
