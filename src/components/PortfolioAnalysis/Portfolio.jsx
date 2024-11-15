@@ -76,7 +76,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     const Googlesheetfromdatabaseselectimageref=useRef(null)
    
 
-
+    
     
 
     useEffect(()=>{
@@ -1353,7 +1353,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             clickedportfolioshared?
             <div className='fixed overflow-hidden left-0 w-[100%] top-[-2.2%] h-[100%] bg-opacity-40 bg-black'>
             <div ref={popupRef} className=''>
-                <PortfolioShared setclickedportfolioremoveshared={setclickedportfolioremoveshared} mainportfoliosecurity={portfoliosecurity} PortfoliosharedWithUsers={PortfoliosharedWithUsers}  realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar} setclickedPortfolioShared={setclickedPortfolioShared} handlesavestate={handlesavestate} sharedwithusers={sharedwithusers} />
+                <PortfolioShared setclickedportfolioremoveshared={setclickedportfolioremoveshared} mainportfoliosecurity={portfoliosecurity.length==0?'private':portfoliosecurity} PortfoliosharedWithUsers={PortfoliosharedWithUsers}  realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar} setclickedPortfolioShared={setclickedPortfolioShared} handlesavestate={handlesavestate} sharedwithusers={sharedwithusers} />
             </div>
             </div>
             :
@@ -1362,7 +1362,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         {
             clickedportfolioremoveshared?
             <div className='fixed overflow-hidden left-0 w-[100%] top-[-2.2%] z-[60] h-[100%] bg-opacity-40 bg-black'>
-                <PortfolioRemoveSharedUsers setPortfolioSharedwithusers={setPortfolioSharedwithusers} setclickedportfolioremoveshared={setclickedportfolioremoveshared} setclickedPortfolioShared={setclickedPortfolioShared} mainportfoliosecurity={portfoliosecurity} PortfoliosharedWithUsers={PortfoliosharedWithUsers} realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar}  />
+                <PortfolioRemoveSharedUsers setPortfolioSharedwithusers={setPortfolioSharedwithusers} setclickedportfolioremoveshared={setclickedportfolioremoveshared} setclickedPortfolioShared={setclickedPortfolioShared} mainportfoliosecurity={portfoliosecurity.length==0?'private':portfoliosecurity} PortfoliosharedWithUsers={PortfoliosharedWithUsers} realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar}  />
             </div>
             :
             <></>

@@ -26,6 +26,11 @@ const PortfolioShared = ({mainportfoliosecurity,setclickedportfolioremoveshared,
 
   
 
+  useEffect(()=>{
+    console.log(mainportfoliosecurity,"geeted portfolio")
+    setportfoliosecurity('private')
+  },[])
+
   const handlecancel=()=>{
     setclickedPortfolioShared(false)
 }
