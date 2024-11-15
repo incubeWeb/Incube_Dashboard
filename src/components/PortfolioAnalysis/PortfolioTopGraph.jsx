@@ -513,10 +513,10 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
                                     <p className='border-b pb-2'>Database Sheets:</p>
                                 </div>
                                 {(allsheet || []).map(val => 
-                                    val.fileType === 'xlsx' ? (
+                                    val.fileType === 'xlsx' || val.fileType === 'csv' ? (
                                         <div 
                                             key={val._id} 
-                                            onClick={() => { setsheetrowsselect(true); setclickedBar(false); handlesheetclicked(val._id);  setSelectedSheetName(val.name.replace(/^\d+_/, ""));}} 
+                                            onClick={() => { setsheetrowsselect(true); setclickedBar(false); handlesheetclicked(val._id);  setSelectedSheetName(val.fileName.replace(/^\d+_/, ""));}} 
                                             className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'
                                         >
                                             <p className='text-[14px]'>{val.name.replace(/^\d+_/, "")}</p>
@@ -534,7 +534,7 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
                     </div>
                 )}
                 {(googlesheetfiles || []).map(val => 
-                    <div key={val._id} onClick={() => { setsheetrowsselect(true); setclickedBar(false); handleGooglesheetclicked(val.id, val.name);  setSelectedSheetName(val.name);}} className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'>
+                    <div key={val._id} onClick={() => { setsheetrowsselect(true); setclickedBar(false); handleGooglesheetclicked(val.id, val.name);  setSelectedSheetName(val.fileName);}} className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'>
                         <p className='text-[14px]'>{val.name}</p>
                         <FaRegFileExcel className='text-green-700' />
                     </div>
@@ -576,10 +576,10 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
                       <p className='border-b pb-2'>Database Sheets:</p>
                   </div>
                   {(allsheet || []).map(val => 
-                      val.fileType === 'xlsx' ? (
+                      val.fileType === 'xlsx' || val.fileType === 'csv' ? (
                           <div 
                               key={val._id} 
-                              onClick={() => { setsheetrowsselectLine(true); setclickedLine(false); handlesheetclickedLine(val._id);setSelectedSheetName(val.name.replace(/^\d+_/, "")); }} 
+                              onClick={() => { setsheetrowsselectLine(true); setclickedLine(false); handlesheetclickedLine(val._id);setSelectedSheetName(val.fileName.replace(/^\d+_/, "")); }} 
                               className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'
                           >
                               <p className='text-[14px]'>{val.name.replace(/^\d+_/, "")}</p>
@@ -597,7 +597,7 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
       </div>
   )}
   {(googlesheetfiles || []).map(val => 
-      <div key={val._id} onClick={() => { setsheetrowsselectLine(true); setclickedLine(false); handleGooglesheetclicked(val.id, val.name); setSelectedSheetName(val.name);}} className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'>
+      <div key={val._id} onClick={() => { setsheetrowsselectLine(true); setclickedLine(false); handleGooglesheetclicked(val.id, val.name); setSelectedSheetName(val.fileName);}} className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'>
           <p className='text-[14px]'>{val.name}</p>
           <FaRegFileExcel className='text-green-700' />
       </div>
@@ -638,10 +638,10 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
                                   <p className='border-b pb-2'>Database Sheets:</p>
                               </div>
                               {(allsheet || []).map(val => 
-                                  val.fileType === 'xlsx' ? (
+                                  val.fileType === 'xlsx' || val.fileType === 'csv' ? (
                                       <div 
                                           key={val._id} 
-                                          onClick={() => { setsheetrowsselectPie(true); setclickedPie(false); handlesheetclickedPie(val._id);setSelectedSheetName(val.name.replace(/^\d+_/, "")); }} 
+                                          onClick={() => { setsheetrowsselectPie(true); setclickedPie(false); handlesheetclickedPie(val._id);setSelectedSheetName(val.fileName.replace(/^\d+_/, "")); }} 
                                           className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'
                                       >
                                           <p className='text-[14px]'>{val.name.replace(/^\d+_/, "")}</p>
@@ -659,7 +659,7 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
                   </div>
               )}
               {(googlesheetfiles || []).map(val => 
-                  <div key={val._id} onClick={() => { setsheetrowsselectPie(true); setclickedPie(false); handleGooglesheetclicked(val.id, val.name);setSelectedSheetName(val.name); }} className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'>
+                  <div key={val._id} onClick={() => { setsheetrowsselectPie(true); setclickedPie(false); handleGooglesheetclicked(val.id, val.name);setSelectedSheetName(val.fileName); }} className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'>
                       <p className='text-[14px]'>{val.name}</p>
                       <FaRegFileExcel className='text-green-700' />
                   </div>

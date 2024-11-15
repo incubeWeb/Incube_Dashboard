@@ -282,7 +282,7 @@ const ChartPopup = ({
     //     "Authorization":`Bearer ${token}`
     //   }
     // })
-    const filteredData=tosetdata.filter(val=>val.fileType=='xlsx')
+    const filteredData=tosetdata.filter(val=>val.fileType=='xlsx' || val.fileType === 'csv')
    // console.log("my fileted data",response.data.data)
     setpresentSheets(filteredData)
     setLoading1(false);

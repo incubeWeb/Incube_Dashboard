@@ -582,7 +582,7 @@ const handleCurrencySelect = (currency) => {
               </div>
               <div ref={popupref2} className={`p-1 flex h-[100%] items-center rounded-md text-[14px] flex-col font-roboto overflow-y-auto scrollbar-hide bg-white z-[60]`}>
                   {(sheets || []).map(doc => (
-                      doc.fileType === 'xlsx' ? (
+                      doc.fileType === 'xlsx' || doc.fileType === 'csv'  ? (
                           <div key={doc._id} className='w-[100%] flex flex-col space-y-2'>
                               <div 
                                 onClick={(e) => e.stopPropagation()}

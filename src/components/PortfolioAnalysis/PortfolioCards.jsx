@@ -692,7 +692,7 @@ useEffect(() => {
         </div>
         <div className={`p-1 flex h-[100%] items-center rounded-md text-[14px] flex-col font-roboto overflow-y-auto scrollbar-hide`}>
             {(sheets || []).map(doc => (
-                doc.fileType === 'xlsx' ? (
+                doc.fileType === 'xlsx' || doc.fileType === 'csv' ? (
                     <div key={doc._id} className='w-[100%] flex flex-col space-y-2'>
                         <div 
                             onMouseEnter={() => sethover(true)} 

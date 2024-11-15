@@ -1182,7 +1182,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                                 <div className='flex items-center justify-center'><p className='font-inter font-semibold flex justify-center items-center text-white bg-blue-500 p-2 w-[280px] rounded-md mt-4 mb-4'>Select sheet from database</p></div>
                                 <div  className={`${sheetmethod=='Database'?'bg-white':''} p-1 flex items-center rounded-md text-[14px] flex-col font-roboto overflow-y-auto  scrollbar-hide`}style={{ maxHeight: '320px' }}>
                                 {(allSheets||[]).map(doc=>
-                                        doc.fileType=='xlsx'?
+                                        doc.fileType=='xlsx' || doc.fileType === 'csv'?
                                         <DatabaseSheets setsheetname={setsheetname} showimagepopup={showimagepopup} setshowimagePopup={setshowimagePopup} setsheetmethod={setsheetmethod} key={doc._id} sheetKeys={sheetKeys} selectedImageFiled={selectedImageFiled} setselectedImageField={setselectedImageField} id={doc._id} setportfolioHistory={setshowHistory} setshowHistory={setshowHistory} sheetname={doc.name} setselectedSheetId={setselectedSheetId}/>
                                         :
                                         <></>

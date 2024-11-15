@@ -114,7 +114,10 @@ const Viewsheet = ({ viewdDoc, jsonData, id, setclickedview, clickedview, hidena
     };
   }, [jsonData, hidenavbar]);
 
+  const [clickedtick,setclickedtick]=useState(false)
+
   const handleGetUpdatedJson = async () => {
+    setclickedtick(true)
     if (hotInstance) {
       const updatedData = hotInstance.getData(); // Retrieve the data from the spreadsheet
       const headers = updatedData[0]; // Get the column headers
@@ -144,7 +147,7 @@ const Viewsheet = ({ viewdDoc, jsonData, id, setclickedview, clickedview, hidena
         }
       });
 
-
+      setclickedtick(false)
       setclickedview(!clickedview);
     }
   };
@@ -157,7 +160,12 @@ const Viewsheet = ({ viewdDoc, jsonData, id, setclickedview, clickedview, hidena
           <p className='text-white text-[16px]'>{viewdDoc}</p>
         </div>
         <div className='w-[50%] text-white h-[100%] space-x-2 items-center justify-end flex pr-4'>
+          {
+            clickedtick?
+          <div><p>Saving...</p></div>
+          :
           <TiTick size={20} onClick={handleGetUpdatedJson} className='cursor-pointer hover:h-[24px] w-[24px]' />
+          } 
           <div className='w-[40px] h-[100%] flex items-center pt-[2px]'>
             <ImCross size={11} onClick={() => setclickedview(!clickedview)} className='cursor-pointer hover:h-[14px] w-[14px]' />
           </div>
