@@ -11,7 +11,7 @@ import { jwtDecode } from 'jwt-decode'
 import { Link } from 'react-router-dom'
 
 
-const AssignedDeals = ({id,setdealpipelinefromdashboardcompany,setActiveField,setTeamLead_status,setstatus,setcompleted,setOpenViewallGrid,setCompanyName,setcompanyDiscription,openViewallGrid,status,TeamLead_status,completed,setassigneddealclicked,setBoxes,boxes,hidenavbar,realtimetabchats,realtimedealpipelinecompanyInfo}) => {
+const AssignedDeals = ({id,setdashboardbotdata,setdealpipelinefromdashboardcompany,setActiveField,setTeamLead_status,setstatus,setcompleted,setOpenViewallGrid,setCompanyName,setcompanyDiscription,openViewallGrid,status,TeamLead_status,completed,setassigneddealclicked,setBoxes,boxes,hidenavbar,realtimetabchats,realtimedealpipelinecompanyInfo}) => {
   const [asignedDeals,setassignedDeals]=useState([])
   const Navigate=useNavigate()
   const [clickedCompany,setclickedCompany]=useState(false)
@@ -118,13 +118,26 @@ const AssignedDeals = ({id,setdealpipelinefromdashboardcompany,setActiveField,se
   }
 
   useEffect(()=>{
-    
-    
-    const mergedData={
-      AssignedDealsData:asignedDeals,
-     
-    }
-     sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
+
+    let updatedDeals=[]
+    asignedDeals.map(val=>{
+      updatedDeals.push({Dealassignedto:val.member,DealAssignedDate:convertDate(val.time),DealAssignedTime:convertTime(val.time)})
+    })
+
+    setdashboardbotdata(prevData => {
+      const keyExists = prevData.some(item => Object.keys(item).includes(`Assigned_Deals`));
+      if (keyExists) {
+          // Update the value for the existing key
+          return prevData.map(item =>
+              Object.keys(item).includes(`Assigned_Deals`)
+                  ? { ...item, [`Assigned_Deals`]: updatedDeals }
+                  : item
+          );
+      } else {
+          // Insert a new object with the key-value pair
+          return [...prevData, { [`Assigned_Deals`]: updatedDeals }];
+      }
+  });
     
     },[asignedDeals])
 

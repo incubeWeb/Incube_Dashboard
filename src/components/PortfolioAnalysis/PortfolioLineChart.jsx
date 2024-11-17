@@ -47,8 +47,8 @@ const PortfolioLineChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheet
     useEffect(() => {
         const setValuesForData = async () => {
             const myData = sheetJson.map(val => ({
-                pv: val[sheetfieldselectedX],
-                uv: val[sheetfieldselectedY]
+                [sheetfieldselectedX]: val[sheetfieldselectedX],
+                [sheetfieldselectedY]: val[sheetfieldselectedY]
             }));
 
             const convertedData = convertDataTypes(myData, fieldConversions);
@@ -68,8 +68,8 @@ const PortfolioLineChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheet
                     const data=JSON.parse(response.data.data)
 
                 const myData = data.map(val => ({
-                    pv: val[sheetfieldselectedX],
-                    uv: val[sheetfieldselectedY]
+                    [sheetfieldselectedX]: val[sheetfieldselectedX],
+                    [sheetfieldselectedY]: val[sheetfieldselectedY]
                 }));
     
                 const convertedData = convertDataTypes(myData, fieldConversions);
@@ -80,8 +80,8 @@ const PortfolioLineChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheet
     },[])
 
     const fieldConversions = {
-        pv: chartDatatypeX,   // X-axis field
-        uv: chartDatatypeY   // Y-axis field
+        [sheetfieldselectedX]: chartDatatypeX,   // X-axis field
+        [sheetfieldselectedY]: chartDatatypeY   // Y-axis field
     };
     const handleMouseEnter = (index) => {
         setHoveredIndex(index);  // Set the hovered point
@@ -114,9 +114,9 @@ const PortfolioLineChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheet
                     margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                 >
                     <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                    <XAxis  type="category" dataKey="pv" tickCount={4} tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black' }}
+                    <XAxis  type="category" dataKey={`${sheetfieldselectedX}`} tickCount={4} tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black' }}
                     />
-                    <YAxis  type="number" tickCount={4} dataKey="uv"
+                    <YAxis  type="number" tickCount={4} dataKey={`${sheetfieldselectedY}`}
                         tick={{ fontSize: 14, fontFamily: 'Inter', fill: 'black' }} 
                     />
                     <Tooltip
@@ -126,7 +126,7 @@ const PortfolioLineChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheet
                     />
                     <Area
                         type="monotone"
-                        dataKey="uv"
+                        dataKey={`${sheetfieldselectedY}`}
                         stroke="#82ca9d"
                         fill="#82ca9d"
                         fillOpacity={0.3}
@@ -149,8 +149,8 @@ const PortfolioLineChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheet
                         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                     >
                         <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                        <XAxis type="number" dataKey="pv" />
-                        <YAxis type="category" dataKey="uv" tickCount={4} />
+                        <XAxis type="number" dataKey={`${sheetfieldselectedX}`} />
+                        <YAxis type="category" dataKey={`${sheetfieldselectedY}`} tickCount={4} />
                         <Tooltip
                             contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
                             itemStyle={{ color: '#fff', fontWeight: 'bold' }}
@@ -158,7 +158,7 @@ const PortfolioLineChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheet
                         />
                         <Area
                             type="monotone"
-                            dataKey="pv"
+                            dataKey={`${sheetfieldselectedX}`}
                          
                             fill="#82ca9d"
                             fillOpacity={0.3}

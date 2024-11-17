@@ -14,7 +14,7 @@ import user2 from '../Icons/user2.png'
 import { jwtDecode } from 'jwt-decode'
 
 
-const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeChat,setBoxes,boxes}) => {
+const ChatWidgit = ({id,Useremail,setdashboardbotdata,handleSeeUsers,setclickeduseremail,realtimeChat,setBoxes,boxes}) => {
   
   const [openChat,setopenChat]=useState(false)
   const clickedUser=useSelector((state)=>state.chatclickedUser)
@@ -65,6 +65,20 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
       const users=response.data.data
     
       setUsers(users)
+      setdashboardbotdata(prevData => {
+        const keyExists = prevData.some(item => Object.keys(item).includes(`availablechatusers`));
+        if (keyExists) {
+            // Update the value for the existing key
+            return prevData.map(item =>
+                Object.keys(item).includes(`availablechatusers`)
+                    ? { ...item, [`availablechatusers`]: {allusers:users} }
+                    : item
+            );
+        } else {
+            // Insert a new object with the key-value pair
+            return [...prevData, { [`availablechatusers`]: {allusers:users} }];
+        }
+    });
       const UserChatpositionRes=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/chatwidgituserpositionvalues`,{
         email:Logemail+`${id}`,
         organization:Logorganization
@@ -135,6 +149,21 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
       const users=response.data.data
     
       setUsers(users)
+
+      setdashboardbotdata(prevData => {
+        const keyExists = prevData.some(item => Object.keys(item).includes(`availablechatusers`));
+        if (keyExists) {
+            // Update the value for the existing key
+            return prevData.map(item =>
+                Object.keys(item).includes(`availablechatusers`)
+                    ? { ...item, [`availablechatusers`]: {allusers:users} }
+                    : item
+            );
+        } else {
+            // Insert a new object with the key-value pair
+            return [...prevData, { [`availablechatusers`]: {allusers:users} }];
+        }
+    });
       const UserChatpositionRes=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/chatwidgituserpositionvalues`,{
         email:Logemail+`${id}`,
         organization:Logorganization
@@ -302,13 +331,21 @@ const ChatWidgit = ({id,Useremail,handleSeeUsers,setclickeduseremail,realtimeCha
     
    
     useEffect(()=>{
-        const mergedData={
-          sendmessage:{sendedMsg},
-          receivedMessage:{receivedMsg}
-          
-            }
-          sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-        },[sendedMsg,receivedMsg])
+      setdashboardbotdata(prevData => {
+        const keyExists = prevData.some(item => Object.keys(item).includes(`Chat_messages_${id}`));
+        if (keyExists) {
+            // Update the value for the existing key
+            return prevData.map(item =>
+                Object.keys(item).includes(`Chat_messages_${id}`)
+                    ? { ...item, [`Chat_messages_${id}`]: {id:id,chatting_with:openuser,sendedMessage:sendedMsg,receivedMessage:receivedMsg} }
+                    : item
+            );
+        } else {
+            // Insert a new object with the key-value pair
+            return [...prevData, { [`Chat_messages_${id}`]: {id:id,chatting_with:openuser,sendedMessage:sendedMsg,receivedMessage:receivedMsg}}];
+        }
+    });
+      },[sendedMsg,receivedMsg])
     
 useEffect(() => {
   const scrollToBottom = () => {

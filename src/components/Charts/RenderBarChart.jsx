@@ -6,7 +6,7 @@ import { RxCross2 } from 'react-icons/rx';
 import { jwtDecode } from 'jwt-decode';
 
 
-const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
+const RenderBarChart = ({investmentchange,setdashboardbotdata,id,data01,clickedBar,setClickedBar,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [thissheetname,setthissheetname]=useState('')
   const [mydata,setmydata]=useState([]);
   const [itsfromDatabase,setitsfromdatabase]=useState(false);
@@ -37,7 +37,9 @@ const RenderBarChart = ({investmentchange,id,data01,clickedBar,setClickedBar,fro
     const email=Logemail;
     const organization=Logorganization;
     const position=JSON.stringify(boxes.filter((box,index)=>index!=id));
-   
+    setdashboardbotdata(prevData => {
+      return prevData.filter(item => !Object.keys(item).includes(`Barchart_${id}`));
+    });
     if(boxes.length===0)
     {
       await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization},{
@@ -307,11 +309,23 @@ const barColor = (index) => {
     return index === hoveredIndex ? '#FF8042' : COLORS[index % COLORS.length];  // Change color on hover
 };
 
-useEffect(()=>{
-const mergedData=[...mydata]
-sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-},[mydata])
 
+useEffect(()=>{
+  setdashboardbotdata(prevData => {
+    const keyExists = prevData.some(item => Object.keys(item).includes(`Barchart_${id}`));
+    if (keyExists) {
+        // Update the value for the existing key
+        return prevData.map(item =>
+            Object.keys(item).includes(`Barchart_${id}`)
+                ? { ...item, [`Barchart_${id}`]: {data:mydata} }
+                : item
+        );
+    } else {
+        // Insert a new object with the key-value pair
+        return [...prevData, { [`Barchart_${id}`]: {data:mydata} }];
+    }
+});
+  },[mydata])
 
 
   return (

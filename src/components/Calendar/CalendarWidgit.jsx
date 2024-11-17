@@ -17,7 +17,7 @@ const localizer = momentLocalizer(moment);
 
 
 
-const CalendarWidgit = ({id,setBoxes,boxes,mygoogleaccountisconnected}) => {
+const CalendarWidgit = ({id,setBoxes,boxes,mygoogleaccountisconnected,setdashboardbotdata}) => {
 
   const token=localStorage.getItem('token')
   const userdata=jwtDecode(token)
@@ -534,6 +534,24 @@ const CalendarWidgit = ({id,setBoxes,boxes,mygoogleaccountisconnected}) => {
     }
     setIsEditing(false);
   };
+
+
+  useEffect(()=>{
+    setdashboardbotdata(prevData => {
+      const keyExists = prevData.some(item => Object.keys(item).includes(`CalendarEvents`));
+      if (keyExists) {
+          // Update the value for the existing key
+          return prevData.map(item =>
+              Object.keys(item).includes(`CalendarEvents`)
+                  ? { ...item, [`CalendarEvents`]: events }
+                  : item
+          );
+      } else {
+          // Insert a new object with the key-value pair
+          return [...prevData, { [`CalendarEvents`]: events }];
+      }
+  });
+  },[events])
 
   return (
     <div style={{ height: "100%",}} className="font-inter">

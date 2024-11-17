@@ -52,6 +52,8 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     const [portfoliocardsdata,setportfoliocardsdata]=useState([])
     const [sharedwithusers,setsharedwithusers]=useState([])
 
+
+    const [gettingmetervalue,setgettingmetervalue]=useState('0')
 //Tabs variables
     const [selectedTab,setselectedTab]=useState(Logemail)
     
@@ -964,7 +966,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 PortfolioCard,
                ChartData:{ sheetJson1
                },
-               MeterPercentage:{percentage1}
+               MeterPercentage:{gettingmetervalue}
             
         };
     sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
@@ -1050,7 +1052,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             </div>
         </div>
         <div className='w-[100%]  flex flex-col'>{/*Portfolio content */}
-            <PortfolioTop PortfolioGraphvalues={PortfolioGraphvalues} Portfoliocardvalues={Portfoliocardvalues} PortfolioMetervalue={PortfolioMetervalue} selectedTab={selectedTab} setportfoliocardsdata={setportfoliocardsdata} portfoliosecurity={portfoliosecurity} realtimeportfoliostate={realtimeportfoliostate} selectedSheetId={selectedSheetId} hidenavbar={hidenavbar} sheetedited={sheetedited}/>
+            <PortfolioTop setgettingmetervalue={setgettingmetervalue} PortfolioGraphvalues={PortfolioGraphvalues} Portfoliocardvalues={Portfoliocardvalues} PortfolioMetervalue={PortfolioMetervalue} selectedTab={selectedTab} setportfoliocardsdata={setportfoliocardsdata} portfoliosecurity={portfoliosecurity} realtimeportfoliostate={realtimeportfoliostate} selectedSheetId={selectedSheetId} hidenavbar={hidenavbar} sheetedited={sheetedited}/>
         </div>
 
         <div className='tracking-wider select-none mt-[20px] w-[100%] bg-white rounded-xl p-4 flex flex-col space-y-2 font-noto'>

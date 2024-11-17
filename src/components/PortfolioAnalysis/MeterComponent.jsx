@@ -7,7 +7,7 @@ import { FaRegFileExcel } from 'react-icons/fa'
 import { IoMdArrowBack } from 'react-icons/io'
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useSheet } from '../SheetContext/SheetContext';
-const MeterComponent = ({selectedTab,PortfolioMetervalue,hidenavbar,realtimeportfoliostate,sheetedited}) => {
+const MeterComponent = ({setgettingmetervalue,selectedTab,PortfolioMetervalue,hidenavbar,realtimeportfoliostate,sheetedited}) => {
   const max = 100;  
   const min = 0;    
  
@@ -64,6 +64,9 @@ const MeterComponent = ({selectedTab,PortfolioMetervalue,hidenavbar,realtimeport
     }
     settingMeterValue()
 },[selectedTab,realtimeportfoliostate])
+
+
+
   
   useEffect(()=>{
     const settingMeterValue=async()=>{
@@ -131,7 +134,9 @@ useEffect(()=>{
 },[sheetedited])
   
 
-
+useEffect(()=>{
+  setgettingmetervalue(percentage)
+},[percentage])
    
 
 

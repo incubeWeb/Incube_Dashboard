@@ -12,6 +12,9 @@ const PortfolioPieChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheetJ
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
 
+
+
+
     const extractValue = (input) => {
         const continuousDigitsPattern = /^\D*(\d+)\D*$/;
         const str = String(input);
@@ -53,8 +56,8 @@ const PortfolioPieChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheetJ
                 const data=JSON.parse(response.data.data)
 
             const myData = data.map(val => ({
-                name: val[sheetfieldselectedX],
-                value: val[sheetfieldselectedY]
+                [sheetfieldselectedX]: val[sheetfieldselectedX],
+                [sheetfieldselectedY]: val[sheetfieldselectedY]
             }));
             const convertedData = convertDataTypes(myData, fieldConversions);
             setData(convertedData);
@@ -70,9 +73,10 @@ const PortfolioPieChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheetJ
     };
 
     const fieldConversions = {
-        name: chartDatatypeX,
-        value: chartDatatypeY
+        [sheetfieldselectedX]: chartDatatypeX,
+        [sheetfieldselectedY]: chartDatatypeY
     };
+   
 
     const [activeIndex, setActiveIndex] = useState(null);
     const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -101,13 +105,14 @@ const PortfolioPieChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheetJ
 
     return (
         <div style={{ width: '90%', height: '90%' }} className='-mt-10 pr-10'>
+             <p className='pt-4 font-inter text-[18px] font-bold'>{selectedSheetName}</p>
             <div style={{ width: '100%', height: '100%', display: 'flex' }}>
-                <p className='pt-4 font-inter text-[18px] font-bold'>{selectedSheetName}</p>
-                <div style={{ flex: 1 }}>
+               
+                <div style={{ flex: 1 }} className='flex flex-row h-[90%]'>
                     <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
                             <Pie
-                                dataKey="value"
+                                dataKey={`${sheetfieldselectedY}`}
                                 data={data}
                                 cx="50%"
                                 cy="50%"
@@ -137,22 +142,18 @@ const PortfolioPieChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheetJ
                                 })}
                             </Pie>
                             <Tooltip
-                                formatter={(value) => `${value}`}
+                                formatter={(value,key) => {return [`${data[key][sheetfieldselectedX]} :${sheetfieldselectedY}:${value}`]}}
                                 contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
                                 itemStyle={{ color: '#fff', fontWeight: 'bold' }}
                                 labelStyle={{ color: '#ccc' }}
                             />
-                           <Legend
-    layout="vertical"
-    align="right"
-    verticalAlign="middle"
-    formatter={legendFormatter}
-    content={props => {
-        const { payload } = props;
-        return (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+                        </PieChart>
+                  
+                    </ResponsiveContainer>
+                    <div className='w-[100%] h-[100%] basis-3/12 text-[13px] flex items-center justify-center' style={{ display: 'flex', flexDirection: 'column', alignItems: 'center',  }}>
                 {isScrollable() && (
-                    <button
+                    <button 
+                    className='mt-4'
                         style={{
                             background: 'none',
                             border: 'none',
@@ -163,10 +164,10 @@ const PortfolioPieChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheetJ
                         }}
                         onClick={() => scrollLegend('up')}
                     >
-                        <MdKeyboardArrowUp size={24}  className='mb-2 mr-3'/>
+                        <MdKeyboardArrowUp size={24}  className=' mr-3'/>
                     </button>
                 )}
-                <ul
+                <ul 
                     ref={legendRef}
                     style={{
                         listStyleType: 'none',
@@ -183,14 +184,15 @@ const PortfolioPieChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheetJ
                     }}
                     className="hide-scrollbar"
                 >
-                    {payload.map((entry, index) => (
-                        <li key={`item-${index}`} style={{ color: '#8884d8', fontSize: '14px' }}>
-                            {`${entry.value}: ${entry.payload.value}`}
+                    {data.map((entry, index) => (
+                        <li key={`item-${index}`} className='mt-4' style={{ color: '#8884d8', fontSize: '14px' }}>
+                            {`${entry[sheetfieldselectedX]}: ${entry[sheetfieldselectedY]}`}
                         </li>
                     ))}
                 </ul>
                 {isScrollable() && (
-                    <button
+                    <button 
+                        className='mb-4'
                         style={{
                             background: 'none',
                             border: 'none',
@@ -201,17 +203,10 @@ const PortfolioPieChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheetJ
                         }}
                         onClick={() => scrollLegend('down')}
                     >
-                        <MdKeyboardArrowDown size={24} className='mt-2 mr-3' />
+                        <MdKeyboardArrowDown size={24} className=' mr-3' />
                     </button>
                 )}
             </div>
-        );
-    }}
-    wrapperStyle={{ paddingLeft: '20px', lineHeight: '60px' }}
-/>
-
-                        </PieChart>
-                    </ResponsiveContainer>
                 </div>
             </div>
         </div>

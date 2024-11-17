@@ -5,7 +5,7 @@ import { IoMdClose } from "react-icons/io";
 import { IoNewspaperOutline } from "react-icons/io5";
 import { jwtDecode } from 'jwt-decode';
 
-const NewsWidgit = ({ id, boxes, setBoxes }) => {
+const NewsWidgit = ({ id, boxes, setBoxes,setdashboardbotdata }) => {
     const [fetchedNews, setFetchedNews] = useState([]);
     const [loading, setLoading] = useState(true);
     const token=localStorage.getItem('token')
@@ -60,9 +60,21 @@ const NewsWidgit = ({ id, boxes, setBoxes }) => {
     };
 
     useEffect(()=>{
-        const mergedData=[...fetchedNews]
-        sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-            },[fetchedNews])
+        setdashboardbotdata(prevData => {
+            const keyExists = prevData.some(item => Object.keys(item).includes(`NewsInfo`));
+            if (keyExists) {
+                // Update the value for the existing key
+                return prevData.map(item =>
+                    Object.keys(item).includes(`NewsInfo`)
+                        ? { ...item, [`NewsInfo`]: fetchedNews }
+                        : item
+                );
+            } else {
+                // Insert a new object with the key-value pair
+                return [...prevData, { [`NewsInfo`]: fetchedNews }];
+            }
+        });
+        },[fetchedNews])
 
     return (
         <div className='w-[100%] h-[100%] flex flex-col font-sans'>

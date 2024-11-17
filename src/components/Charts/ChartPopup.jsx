@@ -23,6 +23,8 @@ import { useSheet } from "../SheetContext/SheetContext";
 
 
 const ChartPopup = ({
+  dashboardbotdata,
+  setdashboardbotdata,
   showValue,
   clickedSheetId,
   sheetfieldselected,
@@ -436,6 +438,14 @@ const ChartPopup = ({
     
   }
 
+
+  useEffect(()=>{
+    const mergedData=[...dbSheetIntRows,
+      ...sheetdbdata,
+      ...presentSheets
+    ]
+    sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
+      },[dbSheetIntRows,sheetdbdata,presentSheets])
   
  
   useEffect(()=>{
@@ -905,13 +915,7 @@ const ChartPopup = ({
     
   }
 
-  useEffect(()=>{
-    const mergedData=[...dbSheetIntRows,
-      ...sheetdbdata,
-      ...presentSheets
-    ]
-    sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
-      },[dbSheetIntRows,sheetdbdata,presentSheets])
+ 
 
   return (
     <div 

@@ -321,6 +321,11 @@ const Apikeys = ({hidenavbar,realtimecheckAPikeys}) => {
         }
     }
 
+    useEffect(()=>{
+        const updatedJson={CreatedKeys:createdKeys,AvailableKeys:availablekeys}
+        sessionStorage.setItem('Bot_Data',JSON.stringify(updatedJson))
+    },[availablekeys,createdKeys])
+
   return (
     <div className={`${hidenavbar?'ml-[4%] w-[96%]':'ml-[21%] w-[78%]'} select-none h-screen p-4 font-noto  flex flex-col space-y-4 font-inter bg-white`}>
         <div className='w-[100%] flex flex-col h-[100%] justify-center'>

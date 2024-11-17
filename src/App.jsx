@@ -59,6 +59,8 @@ function App() {
   const [error,seterror]=useState(false)
   const navbarref=useRef(null)
 
+  const [prevValue,setprevValue]=useState('0')
+
   const [mygoogleaccountisconnected,setmygoogleaccountisconnected]=useState(false)
   
   const [internetdisconnected,setinternetdisconnected]=useState(false)
@@ -446,16 +448,18 @@ const handleselectsheetfield=()=>{
   setsheetClicked(false)
   setsheetpopup(false)
   
-  
 
   let value=''
   try{
-      value=parseInt(sheetJson[0][sheetfieldselected]) 
-      
-      if(isNaN(sheetJson[0][sheetfieldselected]))
-      {
-          value='0'
-      }
+    value=parseInt(sheetJson[0][sheetfieldselected]) 
+    
+    
+    if(isNaN(sheetJson[0][sheetfieldselected]))
+     {
+        // value1='0'
+        value=sheetJson[0][sheetfieldselected].match(/\d+/)?sheetJson[0][sheetfieldselected].match(/\d+/)[0]:'0'
+         
+     }
   }
   catch(e)
   {
@@ -463,10 +467,10 @@ const handleselectsheetfield=()=>{
   }
 
   
-  
+  setprevValue(showValue)
   setshowvalue(value);
   setBoxes(boxes.map(box =>
-    box.id === widgitid ? { ...box, showValue:value,Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected } : box
+    box.id === widgitid ? { ...box, showValue:value,prevValue:box.showValue??'0',Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected } : box
   ));
   
 }
@@ -710,7 +714,7 @@ const handleCurrencySelect = (currency) => {
           <Routes>
             <Route path="/" element={!login?<Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn}/>:<></>} />
             <Route path="/dashboard" element={
-              <ProtectedRoute login={login}><Dashboard setcurrencyvalue={setcurrencyvalue} sheetfieldselected={sheetfieldselected} clickedSheetId={clickedSheetId}  currencyValue={currencyValue} boxes={boxes} setBoxes={setBoxes} setshowvalue={setshowvalue} showvalue={showValue} handlePlusClick={handlePlusClick} setsheetpopup={setsheetpopup} mygoogleaccountisconnected={mygoogleaccountisconnected} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} navbarref={navbarref} showsmallnav={showsmallnav} sethidenavbar={sethidenavbar} realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
+              <ProtectedRoute login={login}><Dashboard setcurrencyvalue={setcurrencyvalue} sheetfieldselected={sheetfieldselected} clickedSheetId={clickedSheetId}  currencyValue={currencyValue} boxes={boxes} setBoxes={setBoxes} setshowvalue={setshowvalue} setprevValue={setprevValue} prevValue={prevValue} showvalue={showValue} handlePlusClick={handlePlusClick} setsheetpopup={setsheetpopup} mygoogleaccountisconnected={mygoogleaccountisconnected} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} navbarref={navbarref} showsmallnav={showsmallnav} sethidenavbar={sethidenavbar} realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
             <Route path="/dealpipeline" element={
               <ProtectedRoute login={login}>
               <FirstCol setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} dealpipelinefromdashboardcompany={dealpipelinefromdashboardcompany} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>

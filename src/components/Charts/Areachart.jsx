@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 
 
 
-const Areachart = ({investmentchange,id,data01,clickedArea,setClickedArea,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
+const Areachart = ({investmentchange,setdashboardbotdata,id,data01,clickedArea,setClickedArea,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [mydata,setmydata]=useState([])
   const [thissheetname,setthissheetname]=useState('')
   const [itsfromDatabase,setitsfromdatabase]=useState(false)
@@ -38,7 +38,11 @@ const Areachart = ({investmentchange,id,data01,clickedArea,setClickedArea,fromAp
     const email=Logemail
     const organization=Logorganization
     const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
-    
+   
+    setdashboardbotdata(prevData => {
+      return prevData.filter(item => !Object.keys(item).includes(`Linechart_${id}`));
+    });
+
     if(boxes.length===0)
     {
       await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization},{
@@ -310,9 +314,21 @@ const fieldConversionsApi={
 }, []);
 
 useEffect(()=>{
-const mergedData=[...mydata]
-sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
-},[mydata])
+  setdashboardbotdata(prevData => {
+    const keyExists = prevData.some(item => Object.keys(item).includes(`Linechart_${id}`));
+    if (keyExists) {
+        // Update the value for the existing key
+        return prevData.map(item =>
+            Object.keys(item).includes(`Linechart_${id}`)
+                ? { ...item, [`Linechart_${id}`]: {data:mydata} }
+                : item
+        );
+    } else {
+        // Insert a new object with the key-value pair
+        return [...prevData, { [`Linechart_${id}`]: {data:mydata} }];
+    }
+});
+  },[mydata])
 
   return (
     <div style={{ width: '100%', height: '90%' }} className='mt-4  pr-10'>

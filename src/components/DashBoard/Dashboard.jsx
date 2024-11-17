@@ -38,12 +38,12 @@ import { TbDragDrop } from 'react-icons/tb';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 
-const Dashboard = ({boxes,sheetfieldselected,setcurrencyvalue,currencyValue,clickedSheetId, setBoxes,handlePlusClick,setshowvalue,showValue,setsheetpopup,mygoogleaccountisconnected,setdealpipelinefromdashboardcompany,navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
+const Dashboard = ({boxes,prevValue,setprevValue,sheetfieldselected,setcurrencyvalue,currencyValue,clickedSheetId, setBoxes,handlePlusClick,setshowvalue,showValue,setsheetpopup,mygoogleaccountisconnected,setdealpipelinefromdashboardcompany,navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
   
   const [isDraggable, setIsDraggable] = useState(false);
 
+  const [dashboardbotdata,setdashboardbotdata]=useState([])
 
- 
 
   const handleMouseDown = () => {
     setIsDraggable(true)
@@ -143,6 +143,9 @@ const Dashboard = ({boxes,sheetfieldselected,setcurrencyvalue,currencyValue,clic
 const dashboardwidgitref=useRef(null)
 const addwidgitref=useRef(null)
 
+
+
+
 useEffect(() => {
   
   
@@ -190,14 +193,12 @@ useEffect(() => {
   },[openChatbar])
 
   useEffect(()=>{
-    const mergedData=[
-     
-      ...data01,
-   
-   
-    ]
-    sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-  },[data01])
+      sessionStorage.setItem("Bot_Data",(JSON.stringify({allwidgits:dashboardbotdata})))
+      },[dashboardbotdata])
+
+  
+
+  
   
   
 
@@ -335,7 +336,7 @@ useEffect(() => {
       setBoxes(prev=>
       prev.map(b=>
         b.id===portfoliocardwidgitcount.id
-        ? { ...b, portfoliowidgitcount: {id:portfoliocardwidgitcount.id,labelname:portfoliocardwidgitcount.labelname,showValue:portfoliocardwidgitcount.showValue,Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected,portfolioicon:portfoliocardwidgitcount.portfolioicon,currencyValue:portfoliocardwidgitcount.currencyValue} } 
+        ? { ...b, portfoliowidgitcount: {id:portfoliocardwidgitcount.id,labelname:portfoliocardwidgitcount.labelname,showValue:portfoliocardwidgitcount.showValue,prevValue:portfoliocardwidgitcount.prevValue,Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected,portfolioicon:portfoliocardwidgitcount.portfolioicon,currencyValue:portfoliocardwidgitcount.currencyValue} } 
         : b
       )
       )
@@ -506,7 +507,7 @@ useEffect(() => {
                             </div>
                       </div>
                     <div className='px-4 pt-[60px] overflow-y-auto '>
-                    <NewsWidgit id={index} boxes={boxes} setBoxes={setBoxes}/>
+                    <NewsWidgit setdashboardbotdata={setdashboardbotdata} id={index} boxes={boxes} setBoxes={setBoxes}/>
                     </div>
                     </div>
                   )
@@ -522,6 +523,7 @@ useEffect(() => {
                     setBoxes={setBoxes}
                     boxes={boxes}
                     realtimetimeline={realtimetimeline}
+                    setdashboardbotdata={setdashboardbotdata}
                     />
                     </div>
                     </div>
@@ -536,6 +538,8 @@ useEffect(() => {
                      setBoxes={setBoxes} 
                      boxes={boxes}
                      showValue={box.showValue}
+                     setprevValue={setprevValue} 
+                     prevValue={box.prevValue}
                      setcurrencyvalue={setcurrencyvalue}
                      currencyValue={currencyValue}
                      setshowvalue={setshowvalue}
@@ -546,7 +550,8 @@ useEffect(() => {
                      portfoliocardwidgitcount={portfoliocardwidgitcount}
                      capturingPortfoliowidgitvalues={capturingPortfoliowidgitvalues}
                      setcapturingPortfoliowidgitvalues={setcapturingPortfoliowidgitvalues}
-                     
+                     setdashboardbotdata={setdashboardbotdata}
+                     dashboardbotdata={dashboardbotdata}
                      />
                     </div>
                     </div>
@@ -563,7 +568,9 @@ useEffect(() => {
                     realtimeChat={realtimeChat} 
                     Useremail={Useremail} 
                     handleSeeUsers={handleSeeUsers} 
+                    setdashboardbotdata={setdashboardbotdata}
                     setclickeduseremail={setclickeduseremail}/>
+                    
                     </div>
                     </div>
                   )
@@ -576,6 +583,7 @@ useEffect(() => {
                       id={index}
                       setBoxes={setBoxes}
                       boxes={boxes}
+                      setdashboardbotdata={setdashboardbotdata}
                       mygoogleaccountisconnected={mygoogleaccountisconnected}
                     />
                     </div>
@@ -589,7 +597,7 @@ useEffect(() => {
                     <div className='px-4 pt-[20px] h-[100%]'>
                     <AssignedDeals
                       id={index}
-                      
+                      setdashboardbotdata={setdashboardbotdata}
                       setBoxes={setBoxes}
                       setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany}
                       boxes={boxes}
@@ -622,6 +630,7 @@ useEffect(() => {
                       <Areachart
                         key={index}
                         id={index}
+                        setdashboardbotdata={setdashboardbotdata}
                         data01={areachartCount[[box.id]-1]['values']}
                         clickedArea={clickedArea}
                         setClickedArea={setClickedArea}
@@ -651,6 +660,7 @@ useEffect(() => {
                       <Piechart
                         key={index}
                         id={index}
+                        setdashboardbotdata={setdashboardbotdata}
                         data01={piechartCount[[box.id]-1]['values']}
                         clickedPie={clickedPie}
                         setClickedPie={setClickedPie}
@@ -681,6 +691,7 @@ useEffect(() => {
                       <RenderBarChart
                         key={index}
                         id={index}
+                        setdashboardbotdata={setdashboardbotdata}
                         data01={barchartCount[[box.id]-1]['values']}
                         clickedBar={clickedBar}
                         setClickedBar={setClickedBar}
@@ -719,7 +730,12 @@ useEffect(() => {
       </div>
       {showPopup && (
         <ChartPopup
+        dashboardbotdata
+        setdashboardbotdata
+        dashboard
         showValue={showValue}
+        setprevValue={setprevValue} 
+        prevValue={prevValue}
         clickedSheetId={clickedSheetId}
         sheetfieldselected={sheetfieldselected}
         dashboardwidgitref={dashboardwidgitref}

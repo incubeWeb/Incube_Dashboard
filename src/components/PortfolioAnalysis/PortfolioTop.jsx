@@ -12,7 +12,7 @@ import { HiChartBar } from 'react-icons/hi'
 import { CiShare2 } from 'react-icons/ci'
 import { jwtDecode } from 'jwt-decode'
 
-const PortfolioTop = ({PortfolioGraphvalues, Portfoliocardvalues,PortfolioMetervalue,selectedTab,setportfoliocardsdata,portfoliosecurity,realtimeportfoliostate,hidenavbar,sheetedited,selectedSheetId}) => {
+const PortfolioTop = ({PortfolioGraphvalues,setgettingmetervalue, Portfoliocardvalues,PortfolioMetervalue,selectedTab,setportfoliocardsdata,portfoliosecurity,realtimeportfoliostate,hidenavbar,sheetedited,selectedSheetId}) => {
     const [valueid,setvalueid]=useState([{id:1,labelname:'Total fund',showValue:'0',currencyValue:'$',prevShowVal:'0'},{id:2,labelname:'Fund utilized',showValue:'0',currencyValue:'$',prevShowVal:'0'},{id:3,labelname:'Funds remaining',showValue:'0',currencyValue:'$',prevShowVal:'0'},{id:4,labelname:'ROI',showValue:'0',currencyValue:'$',prevShowVal:'0'}])
     
     const [changevalue,setchangevalue]=useState(false)
@@ -64,7 +64,7 @@ const PortfolioTop = ({PortfolioGraphvalues, Portfoliocardvalues,PortfolioMeterv
         </div>
         
         <div className='w-[100%] h-[420px] '>
-            <PortfolioTopGraph PortfolioGraphvalues={PortfolioGraphvalues} PortfolioMetervalue={PortfolioMetervalue} selectedTab={selectedTab} portfoliosecurity={portfoliosecurity} realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited}  hidenavbar={hidenavbar}/>
+            <PortfolioTopGraph setgettingmetervalue={setgettingmetervalue} PortfolioGraphvalues={PortfolioGraphvalues} PortfolioMetervalue={PortfolioMetervalue} selectedTab={selectedTab} portfoliosecurity={portfoliosecurity} realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited}  hidenavbar={hidenavbar}/>
         </div>
     </div>
   )

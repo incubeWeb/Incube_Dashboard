@@ -6,7 +6,7 @@ import { RxCross2 } from 'react-icons/rx';
 import { VscArrowDown, VscArrowUp } from 'react-icons/vsc';
 import { jwtDecode } from 'jwt-decode';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
-const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setClickedPie, fromApi, setFromApi, chartDatatypeX, chartDatatypeY, chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
+const Piechart = ({investmentchange,setdashboardbotdata, id, outerRadius, data01, clickedPie, setClickedPie, fromApi, setFromApi, chartDatatypeX, chartDatatypeY, chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [loading, setLoading] = useState(true);
   const [mydata, setmydata] = useState([]);
   const [thissheetname,setthissheetname]=useState('')
@@ -37,6 +37,11 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
     const email=Logemail;
     const organization=Logorganization;
     const position=JSON.stringify(boxes.filter((box,index)=>index!=id));
+
+    setdashboardbotdata(prevData => {
+      return prevData.filter(item => !Object.keys(item).includes(`Piechart_${id}`));
+    });
+
     if(boxes.length===0) {
       await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization},{
         headers:{
@@ -337,10 +342,22 @@ const Piechart = ({investmentchange, id, outerRadius, data01, clickedPie, setCli
     const COLORS = ['#0d47a1', '#1976d2', '#42a5f5', '#90caf9', '#e3f2fd'];
 
 
-useEffect(()=>{
-const mergedData=[...mydata]
-sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-},[mydata])
+    useEffect(()=>{
+      setdashboardbotdata(prevData => {
+        const keyExists = prevData.some(item => Object.keys(item).includes(`Piechart_${id}`));
+        if (keyExists) {
+            // Update the value for the existing key
+            return prevData.map(item =>
+                Object.keys(item).includes(`Piechart_${id}`)
+                    ? { ...item, [`Piechart_${id}`]: {data:mydata} }
+                    : item
+            );
+        } else {
+            // Insert a new object with the key-value pair
+            return [...prevData, { [`Piechart_${id}`]: {data:mydata} }];
+        }
+    });
+      },[mydata])
 
 
   return (

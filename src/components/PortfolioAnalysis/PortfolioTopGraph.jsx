@@ -21,7 +21,7 @@ import Pie_Chart from '../Icons/Pie_Chart.svg'
 import Line_Chart from '../Icons/Line_Chart.svg'
 
 
-const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab,portfoliosecurity,hidenavbar,sheetedited,realtimeportfoliostate}) => {
+const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioMetervalue,selectedTab,portfoliosecurity,hidenavbar,sheetedited,realtimeportfoliostate}) => {
     const [chartselectpopup,setchartselectpopup]=useState(false)
     const [clickedBar,setclickedBar]=useState(false)
     const [clickedPie,setclickedPie]=useState(false)
@@ -864,7 +864,7 @@ const PortfolioTopGraph = ({PortfolioGraphvalues,PortfolioMetervalue,selectedTab
                 :<></>
             }
             <div className='flex w-[30%] h-[420px] bg-white rounded-xl'>
-                <PortfolioMeter sheetedited={sheetedited} PortfolioMetervalue={PortfolioMetervalue} realtimeportfoliostate={realtimeportfoliostate} selectedTab={selectedTab} hidenavbar={hidenavbar}/>
+                <PortfolioMeter setgettingmetervalue={setgettingmetervalue} sheetedited={sheetedited} PortfolioMetervalue={PortfolioMetervalue} realtimeportfoliostate={realtimeportfoliostate} selectedTab={selectedTab} hidenavbar={hidenavbar}/>
             </div>
             <div className='w-[70%] h-[420px] bg-white rounded-xl flex flex-col items-center justify-center'>
                     <div className=' w-[100%] relative h-[20px] flex flex-row items-end justify-end pt-2 pr-2'>

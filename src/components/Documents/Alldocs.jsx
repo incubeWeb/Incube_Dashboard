@@ -349,6 +349,10 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
       };
     }, []);
   
+    useEffect(()=>{
+     
+        sessionStorage.setItem('Bot_Data',JSON.stringify(allDocs))
+    },[allDocs])
   
 
   return (

@@ -170,10 +170,11 @@ const PortfolioHistory = ({selectedTab,setportfolioHistory,sheetKeys,sheetJson,s
                                                     {i==0?
                                                             <td className='w-[35px] rounded-md h-[35px] flex items-center justify-center'> 
                                                             <img
+                                                          
                                                             onError={(e) => handleError(e, index)} // Pass the id to handleError
                                                             className='w-[25px] rounded-md h-[25px] object-fit'
                                                             src={imageUrls[index]} // Use the image URL from state
-                                                            alt='Portfolio'
+                                                            alt='https://i.pinimg.com/originals/ec/d9/c2/ecd9c2e8ed0dbbc96ac472a965e4afda.jpg'
                                                         /></td>
                                                             :
                                                             <></>

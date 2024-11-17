@@ -37,16 +37,125 @@ const ChatBot = () => {
   
       // Send the new prompt to the API and handle the response
       try {
-        const Response_Data = sessionStorage.getItem("Bot_Data");
-  
-        const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/genai/create-response`, {
-          "Jsondata": Response_Data,
+        const Response_Data =JSON.parse(sessionStorage.getItem("Bot_Data"));
+        const lowerCaseCurrentprompt=currentPrompt.toLowerCase();
+        let updatedJson=[]
+
+        if(lowerCaseCurrentprompt.includes('timeline')){
+          Response_Data.allwidgits.map(val=>{
+            for(const key in val){
+                if(key.includes('timeline')){
+                    updatedJson.push({[key]:val[key]})
+                }
+            }
+        })
+        }
+
+        if(lowerCaseCurrentprompt.includes('portfolio') || lowerCaseCurrentprompt.includes('card')){
+          Response_Data.allwidgits.map(val=>{
+            for(const key in val){
+                if(key.includes('portfoliocard')){
+                    updatedJson.push({[key]:val[key]})
+                }
+            }
+        })
+        }
+
+        if(lowerCaseCurrentprompt.includes('chat') || lowerCaseCurrentprompt.includes('user') || lowerCaseCurrentprompt.includes('message')){
+          Response_Data.allwidgits.map(val=>{
+            for(const key in val){
+                if(key.includes('Chat_messages') || key.includes('availablechatusers')){
+                    updatedJson.push({[key]:val[key]})
+                }
+            }
+        })
+        }
+
+        if(lowerCaseCurrentprompt.includes('calendar') || lowerCaseCurrentprompt.includes('events')){
+          Response_Data.allwidgits.map(val=>{
+            for(const key in val){
+                if(key.includes('CalendarEvents')){
+                    updatedJson.push({[key]:val[key]})
+                }
+            }
+        })
+        }
+
+        if(lowerCaseCurrentprompt.includes('news')){
+          Response_Data.allwidgits.map(val=>{
+            for(const key in val){
+                if(key.includes('NewsInfo')){
+                    updatedJson.push({[key]:val[key]})
+                }
+            }
+        })
+        }
+
+        if(lowerCaseCurrentprompt.includes('deals')){
+          Response_Data.allwidgits.map(val=>{
+            for(const key in val){
+                if(key.includes('Assigned_Deals')){
+                    updatedJson.push({[key]:val[key]})
+                }
+            }
+        })
+        }
+
+        if(lowerCaseCurrentprompt.includes('pie')){
+          Response_Data.allwidgits.map(val=>{
+            for(const key in val){
+                if(key.includes('Piechart')){
+                    updatedJson.push({[key]:val[key]})
+                }
+            }
+        })
+        }
+
+        if(lowerCaseCurrentprompt.includes('line') || lowerCaseCurrentprompt.includes('area') ){
+          Response_Data.allwidgits.map(val=>{
+            for(const key in val){
+                if(key.includes('Linechart')){
+                    updatedJson.push({[key]:val[key]})
+                }
+            }
+        })
+        }
+
+        if(lowerCaseCurrentprompt.includes('bar')){
+          Response_Data.allwidgits.map(val=>{
+            for(const key in val){
+                if(key.includes('Barchart')){
+                    updatedJson.push({[key]:val[key]})
+                }
+            }
+        })
+        }
+
+        if(updatedJson.length<=0){
+          updatedJson=Response_Data
+        }
+
+        let response={}
+        try{
+        if(updatedJson?.allwidgits.length<=0){
+          response={data:{response:'No widgit found'}}
+        }
+      }
+        catch(e){
+          if(Response_Data.length==0){
+            response={data:{response:'Nothing to analyze'}}
+          }
+          else{
+         response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/genai/create-response`, {
+          "Jsondata": JSON.stringify(updatedJson),
           "prompt": currentPrompt // Send only the latest user message
         }, {
           headers: {
             "Authorization":`Bearer ${token}`
           }
         });
+      }
+      }
   
         // Get the response from the API
         const botResponse = response.data.response;
@@ -62,7 +171,7 @@ const ChatBot = () => {
   
       } catch (error) {
         console.error('Error downloading data:', error);
-        alert('Failed to get response from bot.');
+        alert('Server error!.');
       }
       finally {
         // Set loading state back to false

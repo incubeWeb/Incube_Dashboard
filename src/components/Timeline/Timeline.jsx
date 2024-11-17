@@ -6,7 +6,7 @@ import { RxCross2 } from 'react-icons/rx'
 import { useSelector } from 'react-redux'
 
 
-const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
+const Timeline = ({id,boxes,setBoxes,realtimetimeline,setdashboardbotdata}) => {
     
     const [timelinedata,settimelinedata]=useState([])
     const[timelineMini,settimelineMini]=useState([]);
@@ -16,6 +16,8 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
     const timelineref=useRef(null);
+
+    const timelinetexts=[]
 
     const deleteWidgit=async()=>{ 
         
@@ -248,21 +250,15 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
                 toSend=`notshow`
             }
         }
-
+       
+        timelinetexts.push({'info':toSend})
+        
         return toSend || `notshow`
     }
 
     
 
 
-    useEffect(()=>{
-      const mergedData={
-        
-        timelinedata:timelineMini}
-      
-        sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-        
-        },[timelinedata])
     
     useEffect(()=>{
       const settimelinedatas=async()=>{
@@ -275,7 +271,7 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
           settimelineMini(limitedTimelineData)
           
           settimelinedata(response.data.data)
-          timelineref.current.scrollTop=timelineref.current.scrollHeight
+         // timelineref.current.scrollTop=timelineref.current.scrollHeight
 
           
         }
@@ -291,7 +287,7 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
         })
         
         settimelinedata(response.data.data)
-        timelineref.current.scrollTop=timelineref.current.scrollHeight
+       // timelineref.current.scrollTop=timelineref.current.scrollHeight
         
       }
       settimelinedatas()
@@ -299,16 +295,62 @@ const Timeline = ({id,boxes,setBoxes,realtimetimeline}) => {
 
 
 
-    
+    useEffect(()=>{
 
+      const fun=()=>{
+        setdashboardbotdata(prevData => {
+                const keyExists = prevData.some(item => Object.keys(item).includes('timeline'));
+                if (keyExists) {
+                    // Update the value for the existing key
+                    return prevData.map(item =>
+                        Object.keys(item).includes('timeline')
+                            ? { ...item, ['timeline']: timelinetexts }
+                            : item
+                    );
+                } else {
+                    // Insert a new object with the key-value pair
+                    return [...prevData, { ['timeline']: timelinetexts }];
+                }
+            });
+      }
+      try{
+      fun()
+      }catch(e){
+        return
+      }
+    },[timelinedata])
 
     
 
     useEffect(()=>{
-      const mergedData=[...timelinedata]
-      
-      sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
-          },[timelinedata])
+
+      const fun=()=>{
+        setdashboardbotdata(prevData => {
+                const keyExists = prevData.some(item => Object.keys(item).includes('timeline'));
+                if (keyExists) {
+                    // Update the value for the existing key
+                    return prevData.map(item =>
+                        Object.keys(item).includes('timeline')
+                            ? { ...item, ['timeline']: timelinetexts }
+                            : item
+                    );
+                } else {
+                    // Insert a new object with the key-value pair
+                    return [...prevData, { ['timeline']: timelinetexts }];
+                }
+            });
+      }
+      try{
+      fun()
+      }catch(e){
+        return
+      }
+    },[])
+
+
+    
+
+   
     
   
 {   try{

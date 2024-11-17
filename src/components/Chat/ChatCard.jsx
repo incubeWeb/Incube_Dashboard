@@ -48,25 +48,27 @@ const ChatCard = ({id,hidenavbar,chatdata,currentTab,CompanyName,itsfrom,realtim
       scrollToBottom();
     }, [chat]);
 
-
+    useEffect(()=>{
+      console.log("current tab is ",currentTab)
+    },[currentTab])
     
 
     
 
 
     const handleChat = async() => {
+      
       if (mychat.trim().length === 0) {
         return; 
     }
       let sender = Logemail;
       setCountChat(countChat + 1);
       const latestvalue=[...chat,{ id: countChat, chat: mychat, sender: sender, time: Date.now() }]
-      setChat((prevChat) => [...prevChat, { id: countChat, chat: mychat, sender: sender, time: Date.now() }]);
-
-      if(chat.length!=0)
+      setChat(prevChat => [...prevChat, { id: countChat, chat: mychat, sender: sender, time: Date.now() }]);
+      if(mychat.length!=0)
         {
             let organization=Logorganization
-            await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setTabChats`,{
+           const response= await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setTabChats`,{
                 id:id,
                 CompanyName:CompanyName,
                 tab:`Tab${currentTab}`,
@@ -77,6 +79,8 @@ const ChatCard = ({id,hidenavbar,chatdata,currentTab,CompanyName,itsfrom,realtim
           "Authorization":`Bearer ${token}`
         }
       })
+      console.log(response)
+
         }
       setmychat('');
     };

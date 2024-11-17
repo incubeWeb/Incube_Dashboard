@@ -25,7 +25,7 @@ const PortfolioBarChart = ({sheetclicked,chartDatatypeX,chartDatatypeY,sheetJson
               })
                 const data=JSON.parse(response.data.data)
             data.map(val=>{
-                mydata.push({name:val[sheetfieldselectedX],uv:val[sheetfieldselectedY]})
+                mydata.push({[sheetfieldselectedX]:val[sheetfieldselectedX],[sheetfieldselectedY]:val[sheetfieldselectedY]})
             })
            
             const converteddata=convertDataTypes(mydata, fieldConversions);
@@ -70,8 +70,8 @@ const PortfolioBarChart = ({sheetclicked,chartDatatypeX,chartDatatypeY,sheetJson
 }
 
 const fieldConversions = {
-    name: chartDatatypeX,  // Convert 'name' field to number
-    uv: chartDatatypeY  // Convert 'value' field to string
+    [sheetfieldselectedX]: chartDatatypeX,  // Convert 'name' field to number
+    [sheetfieldselectedY]: chartDatatypeY  // Convert 'value' field to string
   };
 
     const sampledata = [
@@ -114,6 +114,7 @@ const fieldConversions = {
       const yAxisTickFormatter = (value) => value; 
 
       const handleMouseEnter = (index) => {
+        
         setHoveredIndex(index);  // Set the hovered bar
     };
 
@@ -141,10 +142,10 @@ const fieldConversions = {
         {chartDatatypeX === 'string' && chartDatatypeY === 'number' ?
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={data}>
-                    <XAxis dataKey="name" 
+                    <XAxis dataKey={`${sheetfieldselectedX}`} 
                         tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black' }}
                     />
-                    <YAxis dataKey='uv' tickCount={4} tickMargin={-1}
+                    <YAxis dataKey={`${sheetfieldselectedY}`} tickCount={4} tickMargin={-1}
                         tick={{ fontSize: 14, fontFamily: 'Inter', fill: 'black' }}
                     />
                     <Tooltip
@@ -153,7 +154,7 @@ const fieldConversions = {
                         labelStyle={{ color: '#ccc' }}
                     />
                     <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                    <Bar dataKey="uv" barSize={30}>
+                    <Bar dataKey={`${sheetfieldselectedY}`} barSize={30}>
                         {data.map((entry, index) => (
                             <Cell
                                 key={`cell-${index}`}
@@ -173,10 +174,10 @@ const fieldConversions = {
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart layout="vertical" data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                         <XAxis type="number" tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black'}}  />
-                        <YAxis dataKey="uv" type="category" tick={{ fontSize: 14, fontFamily: 'Inter', fill: 'black'}} />
+                        <YAxis dataKey={`${sheetfieldselectedY}`} type="category" tick={{ fontSize: 14, fontFamily: 'Inter', fill: 'black'}} />
                         <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
                         <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                        <Bar dataKey="name" barSize={30}>
+                        <Bar dataKey={`${sheetfieldselectedX}`}  barSize={30}>
                             {data.map((entry, index) => (
                                 <Cell
                                     key={`cell-${index}`}
@@ -193,15 +194,15 @@ const fieldConversions = {
                 :
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={data}>
-                        <XAxis dataKey="name"  tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black'}}  />
-                        <YAxis dataKey='uv'   tick={{ fontSize: 14, fontFamily: 'Inter', fill: 'black'}} tickCount={4} tickMargin={-1} />
+                        <XAxis dataKey={`${sheetfieldselectedX}`}   tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black'}}  />
+                        <YAxis dataKey={`${sheetfieldselectedY}`}   tick={{ fontSize: 14, fontFamily: 'Inter', fill: 'black'}} tickCount={4} tickMargin={-1} />
                         <Tooltip
                             contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
                             itemStyle={{ color: '#fff', fontWeight: 'bold' }}
                             labelStyle={{ color: '#ccc' }}
                         />
                         <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                        <Bar dataKey="uv" barSize={30}>
+                        <Bar dataKey={`${sheetfieldselectedY}`} barSize={30}>
                             {data.map((entry, index) => (
                                 <Cell
                                     key={`cell-${index}`}

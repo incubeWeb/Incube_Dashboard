@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import { FaRegFileExcel } from 'react-icons/fa'
-import { FaCirclePlus } from 'react-icons/fa6'
+import { FaArrowDownLong, FaArrowUpLong, FaCirclePlus } from 'react-icons/fa6'
 import { IoMdArrowBack } from 'react-icons/io'
 import { LuPencil } from 'react-icons/lu'
 import { RiFundsLine } from 'react-icons/ri'
@@ -17,10 +17,11 @@ import { LuTriangle } from "react-icons/lu";
 import { HiOutlineDotsVertical } from 'react-icons/hi'
 import { jwtDecode } from 'jwt-decode'
 
-const Portfoliocard = ({id,setcurrencyvalue,currencyValue,setsheetpopup,handlePlusClick,portfoliocardwidgitcount,boxes,setBoxes,setportfoliocardwidgitcount,capturingPortfoliowidgitvalues,setcapturingPortfoliowidgitvalues,setshowvalue,showValue,clickedSheetIdApp}) => {
+const Portfoliocard = ({id,dashboardbotdata,setdashboardbotdata,prevValue,setprevValue,setcurrencyvalue,currencyValue,setsheetpopup,handlePlusClick,portfoliocardwidgitcount,boxes,setBoxes,setportfoliocardwidgitcount,capturingPortfoliowidgitvalues,setcapturingPortfoliowidgitvalues,setshowvalue,showValue,clickedSheetIdApp}) => {
     const [editLabel,seteditLabel]=useState(false)
     const inputRef=useRef(null)
     const [labelname,setlablename]=useState('Enter Label')
+    
 
     
     
@@ -58,6 +59,82 @@ const Portfoliocard = ({id,setcurrencyvalue,currencyValue,setsheetpopup,handlePl
     const togglePopup = () => {
       setIsPopupOpen(prev => !prev);
   };
+
+  const [showsign,setshowsign]=useState('none')
+  const [changedpercentage,setchangedpercentage]=useState('')
+
+  useEffect(()=>{
+    const CheckChangedpercentage=(oldvalu,newvalu)=>{
+      const v1=oldvalu.match(/\d+/)
+      const v2=newvalu.match(/\d+/)
+      let oldvalue=v1 ? parseInt(oldvalu):0
+      let newvalue=v2 ? parseInt(newvalu) : 0
+     
+      let denominator=oldvalue;
+      let formula=0
+   
+      if(denominator==0)
+      {
+          
+          formula=(newvalue-oldvalue) ;
+      }
+      else{
+          formula=((newvalue-oldvalue)/oldvalue) * 100;
+      }
+      
+      if(formula>0){
+          setshowsign('profit')
+      }else if(formula<0){
+          setshowsign('loss')
+          formula = -1 *formula;
+      }else{
+          setshowsign('none')
+      }
+      setchangedpercentage(Math.round(formula))
+  }
+  try{
+    CheckChangedpercentage(prevValue,showValue)
+    }catch(e){
+      console.log('e')
+    }
+  },[])
+
+  useEffect(()=>{
+    const CheckChangedpercentage=(oldvalu,newvalu)=>{
+      const v1=oldvalu.match(/\d+/)
+      const v2=newvalu.match(/\d+/)
+      let oldvalue=v1 ? parseInt(oldvalu):0
+      let newvalue=v2 ? parseInt(newvalu) : 0
+     
+      let denominator=oldvalue;
+      let formula=0
+   
+      if(denominator==0)
+      {
+          
+          formula=(newvalue-oldvalue) ;
+      }
+      else{
+          formula=((newvalue-oldvalue)/oldvalue) * 100;
+      }
+      
+      if(formula>0){
+          setshowsign('profit')
+      }else if(formula<0){
+          setshowsign('loss')
+          formula = -1 *formula;
+      }else{
+          setshowsign('none')
+      }
+      setchangedpercentage(Math.round(formula))
+  }
+  try{
+  CheckChangedpercentage(prevValue,showValue)
+  }catch(e){
+    console.log('e')
+  }
+  },[showValue])
+  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -135,7 +212,6 @@ const Portfoliocard = ({id,setcurrencyvalue,currencyValue,setsheetpopup,handlePl
                     {
                         
                         setlablename(val.portfoliowidgit.labelname)
-                        
                         seticonname(val.portfoliowidgit.portfolioicon)
                         setIcon(getIconComponent(val.portfoliowidgit.portfolioicon))
                         setcurrencyvalue(val.portfoliowidgit.currencyValue)
@@ -176,7 +252,9 @@ const Portfoliocard = ({id,setcurrencyvalue,currencyValue,setsheetpopup,handlePl
         const email=Logemail
         const organization=Logorganization
         const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
-        
+        setdashboardbotdata(prevData => {
+          return prevData.filter(item => !Object.keys(item).includes(`portfoliocard_${id}`));
+        });
         if(boxes.length===0)
         {
           await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization},{
@@ -246,14 +324,6 @@ const Portfoliocard = ({id,setcurrencyvalue,currencyValue,setsheetpopup,handlePl
 
     const[showFilterMenu,setshowFilterMenu]=useState(false)
 
-    useEffect(()=>{
-      const mergedData={
-        
-        portfoliocard:boxes}
-      sessionStorage.setItem("Bot_Data",(JSON.stringify(mergedData)))
-      console.log("MergedData",boxes)
-          },[boxes])
-
 
     
   const threedotref=useRef(null)
@@ -270,6 +340,43 @@ const Portfoliocard = ({id,setcurrencyvalue,currencyValue,setsheetpopup,handlePl
       document.removeEventListener('mousedown',outsideclicked)
     }
   })
+
+
+ useEffect(()=>{
+  setdashboardbotdata(prevData => {
+    const keyExists = prevData.some(item => Object.keys(item).includes(`portfoliocard_${id}`));
+    if (keyExists) {
+        // Update the value for the existing key
+        return prevData.map(item =>
+            Object.keys(item).includes(`portfoliocard_${id}`)
+                ? { ...item, [`portfoliocard_${id}`]: {showValue:showValue,currencyValue:currencyValue,labelname:labelname} }
+                : item
+        );
+    } else {
+        // Insert a new object with the key-value pair
+        return [...prevData, { [`portfoliocard_${id}`]: {showValue:showValue,currencyValue:currencyValue,labelname:labelname} }];
+    }
+});
+ },[])
+
+ useEffect(()=>{
+  setdashboardbotdata(prevData => {
+    const keyExists = prevData.some(item => Object.keys(item).includes(`portfoliocard_${id}`));
+    if (keyExists) {
+        // Update the value for the existing key
+        return prevData.map(item =>
+            Object.keys(item).includes(`portfoliocard_${id}`)
+                ? { ...item, [`portfoliocard_${id}`]: {showValue:showValue,currencyValue:currencyValue,labelname:labelname} }
+                : item
+        );
+    } else {
+        // Insert a new object with the key-value pair
+        return [...prevData, { [`portfoliocard_${id}`]: {showValue:showValue,currencyValue:currencyValue,labelname:labelname} }];
+    }
+});
+ },[currencyValue,showValue,labelname])
+
+
 
   return (
     <div ref={popupRef} className='flex h-[100%] flex-col  bg-white cursor-default space-y-2'>
@@ -390,6 +497,27 @@ const Portfoliocard = ({id,setcurrencyvalue,currencyValue,setsheetpopup,handlePl
                                 
                             </div>
                             
+                        </div>
+                        <div className='w-[80%] flex items-end justify-end space-x-1'>
+                          <div className='h-[100%] flex items-end justify-center'>
+                            {
+                                
+                                changedpercentage==0 || isNaN(parseInt(changedpercentage))?
+                                '':
+                                changedpercentage+"%"
+                            }
+                        </div>
+                        <div className='h-[15px] w-[15px] mb-[7px] flex items-end'>
+                            {
+                                showsign=='none'?
+                                <></>
+                                :
+                                showsign=='profit'?
+                                <FaArrowUpLong className='text-green-600' size={15}/>
+                                :
+                                <FaArrowDownLong className='text-red-500' size={15}/>
+                            }
+                        </div>
                         </div>
                         
                     </div>
