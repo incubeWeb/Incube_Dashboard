@@ -87,7 +87,7 @@ const AssignedDeals = ({id,setdashboardbotdata,setdealpipelinefromdashboardcompa
   const deleteWidgit=async()=>{
     const email=Logemail
     const organization=Logorganization
-    const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
+    const position=JSON.stringify(boxes.filter((box,index)=>box.id!=id))
     
  
     if(boxes.length===0)
@@ -106,7 +106,7 @@ const AssignedDeals = ({id,setdashboardbotdata,setdealpipelinefromdashboardcompa
       })
     if(response.data.status==200)
     {
-      setBoxes(boxes.filter((box,index)=>index!=id))
+      setBoxes(boxes.filter((box,index)=>box.id!=id))
     }
   }
   }

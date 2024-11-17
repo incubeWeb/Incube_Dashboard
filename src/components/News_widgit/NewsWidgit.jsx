@@ -38,7 +38,7 @@ const NewsWidgit = ({ id, boxes, setBoxes,setdashboardbotdata }) => {
     const deleteWidgit = async () => {
         const email = Logemail;
         const organization = Logorganization;
-        const position = JSON.stringify(boxes.filter((box, index) => index !== id));
+        const position = JSON.stringify(boxes.filter((box, index) => box.id !== id));
 
         if (boxes.length === 0) {
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`, { email, organization },{
@@ -54,7 +54,7 @@ const NewsWidgit = ({ id, boxes, setBoxes,setdashboardbotdata }) => {
                 }
               });
             if (response.data.status === 200) {
-                setBoxes(boxes.filter((box, index) => index !== id));
+                setBoxes(boxes.filter((box, index) => box.id !== id));
             }
         }
     };

@@ -250,21 +250,22 @@ const Portfoliocard = ({id,dashboardbotdata,setdashboardbotdata,prevValue,setpre
       useEffect(()=>{
         
         console.log(portfoliocardwidgitcount.id,"this")
-    
+        if (portfoliocardwidgitcount.id === id) {
         setBoxes(prev=>
         prev.map(b=>
           b.id===id
-          ? { ...b, portfoliowidgitcount: {id:id,labelname:portfoliocardwidgitcount.labelname,showValue:portfoliocardwidgitcount.showValue,prevValue:portfoliocardwidgitcount.prevValue,Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected,portfolioicon:portfoliocardwidgitcount.portfolioicon,currencyValue:portfoliocardwidgitcount.currencyValue} } 
+          ? { ...b, portfoliowidgitcount: {id:b.id,labelname:portfoliocardwidgitcount.labelname,showValue:portfoliocardwidgitcount.showValue,prevValue:portfoliocardwidgitcount.prevValue,Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected,portfolioicon:portfoliocardwidgitcount.portfolioicon,currencyValue:portfoliocardwidgitcount.currencyValue} } 
           : b
         )
         )
+      }
       
     },[portfoliocardwidgitcount])
 
     const deleteWidgit=async()=>{
         const email=Logemail
         const organization=Logorganization
-        const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
+        const position=JSON.stringify(boxes.filter((box,index)=>box.id!=id))
         
         if(boxes.length==0)
         {
@@ -284,7 +285,7 @@ const Portfoliocard = ({id,dashboardbotdata,setdashboardbotdata,prevValue,setpre
         if(response.data.status==200)
         {
           
-          setBoxes(boxes.filter((box,index)=>index!=id))
+          setBoxes(boxes.filter((box,index)=>box.id!=id))
           setcapturingPortfoliowidgitvalues(prev=>
             prev.filter(val=>val.id!=id)
           )

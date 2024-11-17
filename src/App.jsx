@@ -403,7 +403,8 @@ const [widgitid,setwidgitid]=useState(1)
 
 const handlePlusClick=async(widgitid)=>{
   
-  let myid=widgitid+1
+  let myid=widgitid
+  
   setwidgitid(myid)
 
   setLoading1(true)
@@ -468,6 +469,7 @@ const handleselectsheetfield=()=>{
 
   setprevValue(showValue)
   setshowvalue(value);
+  console.log(widgitid,"widgit id")
   setBoxes(boxes.map(box =>
     box.id === widgitid ? { ...box, showValue:value,prevValue:box.showValue??'0',Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected } : box
   

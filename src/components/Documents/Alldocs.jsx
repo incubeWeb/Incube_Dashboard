@@ -64,7 +64,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
               "Authorization":`Bearer ${token}`
             }
           })
-        if(response.data.status==-200 && response.data.message!="no refresh token found")
+        if(response.data.status!=-200 && response.data.message!="no refresh token found")
         {
             const files=response.data.data
             
@@ -100,7 +100,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
         GetDriveSheets()
         }catch(e)
         {
-            GetDriveSheets()
+            console.log("not google connected")
         }
     },[])
 

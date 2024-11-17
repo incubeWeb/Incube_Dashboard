@@ -788,7 +788,26 @@ const ChartPopup = ({
         minW: 2.5,
         minH: 2
       };
-      setBoxes([...boxes, { ...newBox, type : "portfoliocard" , portfoliowidgitcount:{id:boxes.length +1,labelname:"Enter Label",showValue:showValue,Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:"$"}}]);
+
+      setBoxes(prevBoxes => {
+        const lastId = prevBoxes.length > 0 ? prevBoxes[prevBoxes.length - 1].id : 0; // Get the id of the last box or default to 0
+        return [
+            ...prevBoxes,
+            {
+                ...newBox,
+                type: "portfoliocard",
+                portfoliowidgitcount: {
+                    id: lastId + 1, // Increment the last id by 1
+                    labelname: "Enter Label",
+                    showValue: showValue,
+                    Sheetid: clickedSheetId,
+                    sheetfieldselected: sheetfieldselected,
+                    currencyValue: "$",
+                },
+            },
+        ];
+    });
+    
       setShowPopup(false);
   }
 

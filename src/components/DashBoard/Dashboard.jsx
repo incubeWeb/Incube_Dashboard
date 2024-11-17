@@ -496,7 +496,7 @@ useEffect(() => {
                             </div>
                       </div>
                     <div className='px-4 pt-[60px] overflow-y-auto '>
-                    <NewsWidgit setdashboardbotdata={setdashboardbotdata} id={index} boxes={boxes} setBoxes={setBoxes}/>
+                    <NewsWidgit setdashboardbotdata={setdashboardbotdata} id={box.id} boxes={boxes} setBoxes={setBoxes}/>
                     </div>
                     </div>
                   )
@@ -508,7 +508,7 @@ useEffect(() => {
                       </div>
                     <div className='px-4 scrollbar-hide mt-[45px]'>
                     <Timeline
-                    id={index}
+                    id={box.id}
                     setBoxes={setBoxes}
                     boxes={boxes}
                     realtimetimeline={realtimetimeline}
@@ -523,7 +523,7 @@ useEffect(() => {
                       <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed  h-[40px] mb-4 rounded-md'></div>
                     <div className='px-4 mt-[35px]'>
                     <Portfoliocard 
-                    id={index}
+                    id={box.id}
                      setBoxes={setBoxes} 
                      boxes={boxes}
                      showValue={box.showValue}
@@ -550,7 +550,7 @@ useEffect(() => {
                       <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[40px] bg-white mb-4 rounded-md'></div>
                     <div className='px-4 mt-[50px] h-[84%]'>
                     <ChatWidgit 
-                    id={index} 
+                    id={box.id} 
                     setBoxes={setBoxes}
                     boxes={boxes} 
                     realtimeChat={realtimeChat} 
@@ -568,7 +568,7 @@ useEffect(() => {
                       <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[40px] flex items-center left-2 text-[16px] font-bold mb-4 rounded-md'><p>Calendar</p></div>
                     <div className='px-4 h-[100%] mt-[40px]'>
                     <CalendarWidgit
-                      id={index}
+                      id={box.id}
                       setBoxes={setBoxes}
                       boxes={boxes}
                       setdashboardbotdata={setdashboardbotdata}
@@ -584,7 +584,7 @@ useEffect(() => {
                       <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[50px] mb-4 rounded-md'></div>
                     <div className='px-4 pt-[20px] h-[100%]'>
                     <AssignedDeals
-                      id={index}
+                      id={box.id}
                       setdashboardbotdata={setdashboardbotdata}
                       setBoxes={setBoxes}
                       setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany}
