@@ -97,7 +97,7 @@ const Dashboard = ({boxes,prevValue,setprevValue,sheetfieldselected,setcurrencyv
   const [timelinewidgitcount,settimelinewidgitcount]=useState([])
   
   const [portfoliocardwidgit,setportfoliocardwidgit]=useState(false)
-  const [portfoliocardwidgitcount,setportfoliocardwidgitcount]=useState([])
+
   
   const [xAxis,setXaxis]=useState(0)
   const [yAxis,setYaxis]=useState(0)
@@ -330,18 +330,7 @@ useEffect(() => {
 
 
 
-  useEffect(()=>{
   
-    
-      setBoxes(prev=>
-      prev.map(b=>
-        b.id===portfoliocardwidgitcount.id
-        ? { ...b, portfoliowidgitcount: {id:portfoliocardwidgitcount.id,labelname:portfoliocardwidgitcount.labelname,showValue:portfoliocardwidgitcount.showValue,prevValue:portfoliocardwidgitcount.prevValue,Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected,portfolioicon:portfoliocardwidgitcount.portfolioicon,currencyValue:portfoliocardwidgitcount.currencyValue} } 
-        : b
-      )
-      )
-    
-  },[portfoliocardwidgitcount])
   
 
   const addBox = (chartType) => {
@@ -471,7 +460,7 @@ useEffect(() => {
     
         {(boxes||[]).map((box,index) => (
          <div
-         key={box.id}
+        key={box.id}
         data-grid={box}
         onClick={(e)=>e.stopPropagation()}
         className="dev-box z-20 border-gray-300 bg-white border-[0.5px] rounded-lg  pt-0"
@@ -546,8 +535,7 @@ useEffect(() => {
                      clickedSheetIdApp={clickedSheetId}
                      setsheetpopup={setsheetpopup}
                      handlePlusClick={handlePlusClick}
-                     setportfoliocardwidgitcount={setportfoliocardwidgitcount}
-                     portfoliocardwidgitcount={portfoliocardwidgitcount}
+                     
                      capturingPortfoliowidgitvalues={capturingPortfoliowidgitvalues}
                      setcapturingPortfoliowidgitvalues={setcapturingPortfoliowidgitvalues}
                      setdashboardbotdata={setdashboardbotdata}
@@ -783,8 +771,7 @@ useEffect(() => {
           setisSheetChart={setisSheetChart}
           portfoliocardwidgit={portfoliocardwidgit}
           setportfoliocardwidgit={setportfoliocardwidgit}
-          portfoliocardwidgitcount={portfoliocardwidgitcount}
-          setportfoliocardwidgitcount={setportfoliocardwidgitcount}
+          
         />
       )}
       </div>

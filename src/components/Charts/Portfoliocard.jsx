@@ -17,11 +17,11 @@ import { LuTriangle } from "react-icons/lu";
 import { HiOutlineDotsVertical } from 'react-icons/hi'
 import { jwtDecode } from 'jwt-decode'
 
-const Portfoliocard = ({id,dashboardbotdata,setdashboardbotdata,prevValue,setprevValue,setcurrencyvalue,currencyValue,setsheetpopup,handlePlusClick,portfoliocardwidgitcount,boxes,setBoxes,setportfoliocardwidgitcount,capturingPortfoliowidgitvalues,setcapturingPortfoliowidgitvalues,setshowvalue,showValue,clickedSheetIdApp}) => {
+const Portfoliocard = ({id,dashboardbotdata,setdashboardbotdata,prevValue,setprevValue,setcurrencyvalue,currencyValue,setsheetpopup,handlePlusClick,boxes,setBoxes,capturingPortfoliowidgitvalues,setcapturingPortfoliowidgitvalues,setshowvalue,showValue,clickedSheetIdApp}) => {
     const [editLabel,seteditLabel]=useState(false)
     const inputRef=useRef(null)
     const [labelname,setlablename]=useState('Enter Label')
-    
+    const [portfoliocardwidgitcount,setportfoliocardwidgitcount]=useState([])
 
     
     
@@ -208,7 +208,7 @@ const Portfoliocard = ({id,dashboardbotdata,setdashboardbotdata,prevValue,setpre
         if(capturingPortfoliowidgitvalues!=[])
         {
             (capturingPortfoliowidgitvalues||[]).map(val=>{
-                    if(val.portfoliowidgit.id==id+1)
+                    if(val.portfoliowidgit.id==id)
                     {
                         
                         setlablename(val.portfoliowidgit.labelname)
@@ -230,13 +230,13 @@ const Portfoliocard = ({id,dashboardbotdata,setdashboardbotdata,prevValue,setpre
     useEffect(()=>
       {
           const settingvalue=()=>{
-              let myid=id+1
               
-              const isFine=JSON.stringify({id:myid,labelname:labelname,portfolioicon:iconname,currencyValue:currencyValue})===JSON.stringify({id:myid,labelname:'Enter Label',portfolioicon:'',currencyValue:'$'})
+              
+            const isFine=JSON.stringify({id:id,labelname:labelname,portfolioicon:iconname,currencyValue:currencyValue})===JSON.stringify({id:id,labelname:'Enter Label',portfolioicon:'',currencyValue:'$'})
              if(!isFine)
              {
               
-              setportfoliocardwidgitcount({id:myid,labelname:labelname,portfolioicon:iconname,currencyValue:currencyValue})
+              setportfoliocardwidgitcount({id:id,labelname:labelname,portfolioicon:iconname,currencyValue:currencyValue})
              }
           }
           if(!editLabel)
@@ -247,15 +247,26 @@ const Portfoliocard = ({id,dashboardbotdata,setdashboardbotdata,prevValue,setpre
       },[editLabel,iconname,currencyValue])
 
     
+      useEffect(()=>{
+        
+        console.log(portfoliocardwidgitcount.id,"this")
+    
+        setBoxes(prev=>
+        prev.map(b=>
+          b.id===id
+          ? { ...b, portfoliowidgitcount: {id:id,labelname:portfoliocardwidgitcount.labelname,showValue:portfoliocardwidgitcount.showValue,prevValue:portfoliocardwidgitcount.prevValue,Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected,portfolioicon:portfoliocardwidgitcount.portfolioicon,currencyValue:portfoliocardwidgitcount.currencyValue} } 
+          : b
+        )
+        )
+      
+    },[portfoliocardwidgitcount])
 
     const deleteWidgit=async()=>{
         const email=Logemail
         const organization=Logorganization
         const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
-        setdashboardbotdata(prevData => {
-          return prevData.filter(item => !Object.keys(item).includes(`portfoliocard_${id}`));
-        });
-        if(boxes.length===0)
+        
+        if(boxes.length==0)
         {
           await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard`,{email:email,organization:organization},{
         headers:{
@@ -264,16 +275,18 @@ const Portfoliocard = ({id,dashboardbotdata,setdashboardbotdata,prevValue,setpre
       })
           setBoxes([])
         }
-        else{const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization},{
+        else{
+          const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization},{
         headers:{
           "Authorization":`Bearer ${token}`
         }
       })
         if(response.data.status==200)
         {
+          
           setBoxes(boxes.filter((box,index)=>index!=id))
           setcapturingPortfoliowidgitvalues(prev=>
-            prev.filter(val=>val.portfoliowidgit.id!=id+1)
+            prev.filter(val=>val.id!=id)
           )
          
         }
@@ -319,7 +332,9 @@ const Portfoliocard = ({id,dashboardbotdata,setdashboardbotdata,prevValue,setpre
             setsheetKeys(fileteredKey)
             setLoading2(false)
         }
+        if(clickedSheetId.length>0){
         setValues()
+        }
     },[clickedSheetId])
 
     const[showFilterMenu,setshowFilterMenu]=useState(false)
@@ -473,7 +488,7 @@ const Portfoliocard = ({id,dashboardbotdata,setdashboardbotdata,prevValue,setpre
                 </div>
                                 {
                                     !editLabel?
-                                    <p className='text-[18px] font-inter font-bold text-gray-700 w-[50%] flex items-center h-[30px]  tracking-wider cursor-pointer' onDoubleClick={handleEdit}>{labelname}</p>
+                                    <p className='text-[18px] font-inter font-bold text-gray-700 w-[50%] flex items-center h-[30px]  tracking-wider cursor-pointer' onDoubleClick={handleEdit}>{labelname?.length>0? labelname : 'Enter Label'}</p>
                                     :
                                     <input ref={inputRef} value={labelname}  onChange={(e)=>{setlablename(e.target.value) }} onKeyPress={(e)=>e.key=='Enter'?seteditLabel(false):seteditLabel(true)} className='w-[90px] h-[30px] text-[13px] pl-1 outline-none border-[1px] border-gray-300 rounded-md'/>
                                 }

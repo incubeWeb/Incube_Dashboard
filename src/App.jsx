@@ -452,7 +452,7 @@ const handleselectsheetfield=()=>{
   let value=''
   try{
     value=parseInt(sheetJson[0][sheetfieldselected]) 
-    
+    console.log(value)
     
     if(isNaN(sheetJson[0][sheetfieldselected]))
      {
@@ -466,12 +466,13 @@ const handleselectsheetfield=()=>{
       value='0'
   }
 
-  
   setprevValue(showValue)
   setshowvalue(value);
   setBoxes(boxes.map(box =>
     box.id === widgitid ? { ...box, showValue:value,prevValue:box.showValue??'0',Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected } : box
+  
   ));
+ 
   
 }
 

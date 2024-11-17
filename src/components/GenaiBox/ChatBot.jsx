@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { MdSend } from "react-icons/md";
 import { RxCross2 } from 'react-icons/rx';
 import axios from 'axios';
-import { json } from 'react-router-dom';
+import { json, useLocation } from 'react-router-dom';
 import Addusers from '../AddUsers/Addusers';
 
 const ChatBot = () => {
@@ -13,6 +13,7 @@ const ChatBot = () => {
   const [prompt, setPrompt] = useState(''); // To store the conversation for the API call
   const chatRef=useRef(null);
 
+  const location=useLocation()
   const [loading, setLoading] = useState(false); 
   const [loadingDots, setLoadingDots] = useState('');
   const toggleChat = () => setShowChat((prev) => !prev);
@@ -41,6 +42,8 @@ const ChatBot = () => {
         const lowerCaseCurrentprompt=currentPrompt.toLowerCase();
         let updatedJson=[]
 
+        if(location.pathname=='/dashboard'){
+          
         if(lowerCaseCurrentprompt.includes('timeline')){
           Response_Data.allwidgits.map(val=>{
             for(const key in val){
@@ -130,6 +133,8 @@ const ChatBot = () => {
             }
         })
         }
+        }
+
 
         if(updatedJson.length<=0){
           updatedJson=Response_Data

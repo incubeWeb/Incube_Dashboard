@@ -474,7 +474,7 @@ useEffect(() => {
                       :
                       <></>
         }
-        <div className='w-[100%] h-[45px] absolute'>
+        <div className='w-[100%] h-[45px]'>
           <input className='w-[100%] outline-none h-[45px] border-[1px] border-gray-500 rounded-md text-[14px] pl-2' placeholder='Search' onChange={handleSearchUser}/> 
         </div>
           <div className='flex w-[100%] h-[100%] flex-row  '>
@@ -486,7 +486,7 @@ useEffect(() => {
               </div>
               :
               users.length>0?
-              <div className=' flex flex-col w-[100%] mt-[40px] items-center justify-start text-gray-700 space-y-1 overflow-y-auto scrollbar-hide'>
+              <div className=' flex flex-col w-[100%] h-[80%] items-center justify-start text-gray-700 space-y-1 overflow-y-auto scrollbar-hide'>
                
               {
                 (users||[]).map(user=>
