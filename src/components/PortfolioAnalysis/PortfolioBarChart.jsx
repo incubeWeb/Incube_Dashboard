@@ -35,15 +35,26 @@ const PortfolioBarChart = ({sheetclicked,chartDatatypeX,chartDatatypeY,sheetJson
 
         settingValuesofData()
     
-    },[sheetJson,sheetfieldselectedX,sheetfieldselectedY,chartDatatypeX,chartDatatypeY])
+    },[sheetJson,sheetfieldselectedX,sheetfieldselectedY])
 
+    
+
+
+    
 
     function extractValue(input) {
         // Regex to match a string with continuous digits
         const continuousDigitsPattern = /^\D*(\d+)\D*$/;
         const str=String(input)
-        const match = str.match(continuousDigitsPattern);
-        return str.replace(/\D/g, '').length==0?0:parseInt(str.replace(/\D/g, ''))
+        const match = str.match(/\d+(\.\d+)?/)?str.match(/\d+(\.\d+)?/)[0]:'0'
+  
+        if (match!='0') {
+        
+            return match
+            
+        } else {
+            return 0;
+        }
       }
       
   function convertDataTypes(array, fieldConversions) {

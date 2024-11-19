@@ -454,19 +454,33 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
                 <div className='w-[15%] flex scrollbar-hide overflow-x-auto pl-2 items-end justify-start h-[100%]'>
                     {
                         !privatefiles.includes(doc._id) ?
+                            doc.uploadedBy==Logemail?
                             <div onClick={() => { setfileprivate(true); setdocId(doc._id) }} className='select-none cursor-pointer h-[35px] mr-[32px] flex items-center justify-center rounded-md text-black'>
                                 <CiUnlock size={18} /> <p className='text-[14px] font-inter w-[200px] pl-2 font-[300]'> Public</p>
                             </div>
                             :
+                            <div><p className='text-[14px]'>Public File</p></div>
+                            :
+                            doc.uploadedBy==Logemail?
                             <div onClick={() => { setshowConfirmPublicPopup(true); setshowconfirmpublicpopupid(doc._id) }} className='select-none cursor-pointer bg-white h-[35px] mr-[32px] flex items-center justify-center rounded-md text-black'>
                                 <CiLock size={18} /> <p className='text-[14px] font-inter w-[100px] font-[300] pl-2'> Private</p>
+                            </div>
+                            :
+                            <div>
+                                <p className='text-[14px]'>Shared file</p>
                             </div>
                     }
                 </div>
                 <div className='w-[15%] flex flex-col items-center justify-start h-[100%]'>
                     <div className='basis-1/2 flex justify-end space-x-3'>
                         <p className='text-[14px] text-sky-600 cursor-pointer font-inter font-semibold' onClick={() => handleView(doc._id, cleanedName,doc.fileName)}>View</p>
-                        <p className='text-[14px] text-red-600 cursor-pointer font-inter font-semibold' onClick={() => handleDelete(doc._id)}>Remove</p>
+                        {
+                            Logemail==doc.uploadedBy?
+                            <p className='text-[14px] text-red-600 cursor-pointer font-inter font-semibold' onClick={() => handleDelete(doc._id)}>Remove</p>
+                            :
+                            <></>
+                        }
+                        
                     </div>
                 </div>
             </div>

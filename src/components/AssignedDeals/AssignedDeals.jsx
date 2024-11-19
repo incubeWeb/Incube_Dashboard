@@ -99,7 +99,9 @@ const AssignedDeals = ({id,setdashboardbotdata,setdealpipelinefromdashboardcompa
       })
       setBoxes([])
     }
-    else{const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization},{
+    else{
+      
+      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard-single`,{email:email,boxid:id,organization:organization},{
         headers:{
           "Authorization":`Bearer ${token}`
         }

@@ -452,15 +452,17 @@ const handleselectsheetfield=()=>{
 
   let value=''
   try{
-    value=parseInt(sheetJson[0][sheetfieldselected]) 
-    console.log(value)
-    
-    if(isNaN(sheetJson[0][sheetfieldselected]))
-     {
-        // value1='0'
-        value=sheetJson[0][sheetfieldselected].match(/\d+/)?sheetJson[0][sheetfieldselected].match(/\d+/)[0]:'0'
-         
-     }
+    value=String(sheetJson[0][sheetfieldselected]) 
+    const match = value.match(/\d+(\.\d+)?/)?value.match(/\d+(\.\d+)?/)[0]:'0'
+  
+    if (match!='0') {
+      
+          value= match
+        
+    } else {
+        // If input does not match the pattern or contains interspersed letters, return 0
+        value= 0;
+    }
   }
   catch(e)
   {
@@ -471,29 +473,30 @@ const handleselectsheetfield=()=>{
   setshowvalue(value);
   console.log(widgitid,"widgit id")
   setBoxes(boxes.map(box =>
-    box.id === widgitid ? { ...box, showValue:value,prevValue:box.showValue??'0',Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected } : box
+    box.id === widgitid ? { ...box,currencyValue:currencyValue, showValue:value,prevValue:box.showValue??'0',Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected } : box
   
   ));
  
-  
 }
+
+
 
 useEffect(() => {
   const setBoxValues=async ()=>{
       const email=Logemail
       const organization=Logorganization
       
-      let position=JSON.stringify(boxes)
-
-
-      if(boxes.length>0)
-      {
-        await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addDashboardData`,{email:email,positions:position,organization:organization},{
-          headers:{
-           "Authorization":`Bearer ${token}`
-          }
+        boxes.map(async(val)=>{
+          let position=JSON.stringify(val)
+          let boxid=val.id
+          await axios.post(`${import.meta.env.VITE_HOST_URL}8999/addDashboardData`,{email:email,boxid:boxid,positions:position,organization:organization},{
+            headers:{
+             "Authorization":`Bearer ${token}`
+            }
+          })
         })
-      }
+        
+      
      
       
   }
@@ -524,17 +527,22 @@ useEffect(()=>{
     }
   })
  
-  let value=data[0][key]
+  let value=String(data[0][key])
+    const match = value.match(/\d+(\.\d+)?/)?value.match(/\d+(\.\d+)?/)[0]:'0'
+  
+    if (match!='0') {
+      
+          value= match
+        
+    } else {
+        // If input does not match the pattern or contains interspersed letters, return 0
+        value= 0;
+    }
 
   setBoxes(boxes.map(box =>  
     box.Sheetid === sheetid ? { ...box, showValue:value} : box
   
   ));
-
-
-
-    
-    
     
   }
 

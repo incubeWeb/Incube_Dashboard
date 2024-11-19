@@ -160,7 +160,8 @@ const Ai = ({hidenavbar}) => {
   
         // Get the response from the API
         const botResponse = response.data.response;
-  
+        console.log(botResponse,"response")
+        console.log('-----')
         // Create a new bot message object
         const botMessage = { text: botResponse, sender: 'Bot' };
   
@@ -181,7 +182,8 @@ const Ai = ({hidenavbar}) => {
     }
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
-  };
+  }
+
   const handleAddGoogleSheet = async (name, id) => {
     const isSheetAlreadyAdded = MergedData.some(sheet => Object.keys(sheet)[0] === name);
     
@@ -307,7 +309,7 @@ const Ai = ({hidenavbar}) => {
 
 
 const fileNamefilter=(fileName)=>{
-  console.log(fileName.split("-")[1],"this")
+  
   return String(fileName.split("-")[1])=='undefined'?'Untitled.xlsx':fileName.split("-")[1]
 }
 
@@ -367,22 +369,32 @@ useEffect(() => {
   const formatMessage = (text) => {
     // Replace "**text**" with "<strong>text</strong>" for bold formatting
     // Replace "\n" with "<br />" for line breaks
+    if(text==undefined){
+      return 'Server error 500 try again!'
+    }
     return text
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/\n/g, '<br />');
   };
   const isTableResponse = (text) => {
-    return text.startsWith('|') && text.includes('|');
+    try{
+      console.log("table response",text)
+    return text.includes('|') && text.includes('---');
+    }catch(e){
+      console.log(e)
+      return false
+    }
   };
   
   const renderTable = (dataText) => {
-    const lines = dataText.trim().split('\n');
+    const lines = dataText.substring(dataText.indexOf('|'),dataText.lastIndexOf('|')+1).trim().split('\n');
   
     // Ensure there are enough lines to create a header and table data
     if (lines.length < 3) {
       console.error("Not enough lines for header and data.");
       return null;
     }
+    
   
     // Extract the header from the first line
     const header = lines[0].slice(1, -1).split('|').map(item => item.trim());
@@ -435,12 +447,15 @@ useEffect(() => {
   };
   
   const downloadCSV = () => {
-    const lines = messages
+    try{
+        let lines = messages
       .filter(msg => msg.sender === 'Bot' && isTableResponse(msg.text)) 
-      .map(msg => msg.text.trim().split('\n'))[0];
+      .map(msg => msg.text.substring(msg.text.indexOf('|'),msg.text.lastIndexOf('|')+1).split('\n'))[0];
 
+     
     if (!lines) return;
-
+    
+    
     const csvContent = lines.map(line => {
       return line.split('|').map(item => item.trim()).join(',');
     }).join('\n');
@@ -454,6 +469,10 @@ useEffect(() => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }catch(e){
+    console.log(e)
+    return
+  }
   };
   const [textareaHeight, setTextareaHeight] = useState(0);
 

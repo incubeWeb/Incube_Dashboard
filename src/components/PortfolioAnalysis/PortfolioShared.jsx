@@ -6,7 +6,7 @@ import { FaMinus } from 'react-icons/fa'
 import { MdGroupRemove } from 'react-icons/md'
 
 
-const PortfolioShared = ({mainportfoliosecurity,setclickedportfolioremoveshared,PortfoliosharedWithUsers,realtimeportfoliostate,setsharedwithusers,setclickedPortfolioShared,hidenavbar ,handlesavestate,sharedwithusers}) => {
+const PortfolioShared = ({setmainportfoliosecurity,mainportfoliosecurity,setclickedportfolioremoveshared,PortfoliosharedWithUsers,realtimeportfoliostate,setsharedwithusers,setclickedPortfolioShared,hidenavbar ,handlesavestate,sharedwithusers}) => {
   const [organziationUsers,setorganizationusers]=useState([])
   const [checkedUsers,setcheckedUsers]=useState([])
   const [popupType, setPopupType] = useState('private');
@@ -218,6 +218,7 @@ const handlesavestate1 = async (selectedUsers) => {
     if (portfoliosecurity=='public'){
       setRemoveList(false)
     }
+    setmainportfoliosecurity(e.target.value)
     }}
     
   >

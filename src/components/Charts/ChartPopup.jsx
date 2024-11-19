@@ -366,8 +366,8 @@ const ChartPopup = ({
       
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: (boxes.length * 2) % 12, // Adds in the next available position
-        y: Math.floor(boxes.length / 6),
+        x: 10, // Adds in the next available position
+        y: 10,
         w: 4,
         h: 4, // Add some space below the last box
         minW: 2.5,
@@ -405,8 +405,8 @@ const ChartPopup = ({
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: (boxes.length * 2) % 12, // Adds in the next available position
-        y: Math.floor(boxes.length / 6),
+        x: 10, // Adds in the next available position
+        y: 10,
         w: 4,
         h: 4, // Add some space below the last box // Add some space below the last box
         minW: 3,
@@ -487,8 +487,8 @@ const ChartPopup = ({
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: (boxes.length * 2) % 12, // Adds in the next available position
-        y: Math.floor(boxes.length / 6),
+        x: 10, // Adds in the next available position
+        y: 10,
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
         minW: 3,
@@ -516,8 +516,8 @@ const ChartPopup = ({
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: (boxes.length * 2) % 12, // Adds in the next available position
-        y: Math.floor(boxes.length / 6),
+        x: 10, // Adds in the next available position
+        y: 10,
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
         minW: 3,
@@ -544,8 +544,8 @@ const ChartPopup = ({
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: (boxes.length * 2) % 12, // Adds in the next available position
-        y: Math.floor(boxes.length / 6),
+        x: 10, // Adds in the next available position
+        y: 10,
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
         minW: 2.5,
@@ -575,8 +575,8 @@ const ChartPopup = ({
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: (boxes.length * 2) % 12, // Adds in the next available position
-        y: Math.floor(boxes.length / 6),
+        x: 10, // Adds in the next available position
+        y: 10,
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
         minW: 2.5,
@@ -604,8 +604,8 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
     const newBox = {
       id: lastBox ? lastBox.id + 1 : 1,
-      x: (boxes.length * 2) % 12, // Adds in the next available position
-        y: Math.floor(boxes.length / 6),
+      x: 10, // Adds in the next available position
+        y: 10,
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
         minW: 4,
@@ -633,8 +633,8 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
     const newBox = {
       id: lastBox ? lastBox.id + 1 : 1,
-      x: (boxes.length * 2) % 12, // Adds in the next available position
-        y: Math.floor(boxes.length / 6),
+      x: 10, // Adds in the next available position
+        y: 10,
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
         minW: 2.5,
@@ -663,8 +663,8 @@ const ChartPopup = ({
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: (boxes.length * 2) % 12, // Adds in the next available position
-        y: Math.floor(boxes.length / 6),
+        x: 10, // Adds in the next available position
+        y: 10,
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
         minW: 2.5,
@@ -688,8 +688,8 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: (boxes.length * 2) % 12, // Adds in the next available position
-        y: Math.floor(boxes.length / 6),
+        x: 10, // Adds in the next available position
+        y: 10,
         w: 5,
         h: 3, // Add some space below the last box
         minW: 4,
@@ -706,8 +706,8 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: (boxes.length * 2) % 12, // Adds in the next available position
-        y: Math.floor(boxes.length / 6),
+        x: 10, // Adds in the next available position
+        y: 10,
         w: 3,
         h: 4, // Add some space below the last box // Add some space below the last box
         minW: 3,
@@ -724,8 +724,8 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: (boxes.length * 2) % 12, // Adds in the next available position
-        y: Math.floor(boxes.length / 6),
+        x: 10, // Adds in the next available position
+        y: 10,
         w: 5,
         h: 3, // Add some space below the last box// Add some space below the last box
         minW: 4,
@@ -743,8 +743,8 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: (boxes.length * 2) % 12, // Adds in the next available position
-        y: Math.floor(boxes.length / 6),
+        x: 10, // Adds in the next available position
+        y: 10,
         w: 5,
         h: 5, // Add some space below the last box
         minW: 4,
@@ -761,8 +761,8 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: (boxes.length * 2) % 12, // Adds in the next available position
-        y: Math.floor(boxes.length / 6),
+        x: 10, // Adds in the next available position
+        y: 10,
         w: 3,
         h: 3, // Add some space below the last box // Add some space below the last box
         minW: 2.5,
@@ -781,8 +781,8 @@ const ChartPopup = ({
     const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: (boxes.length * 2) % 12, // Adds in the next available position
-        y: Math.floor(boxes.length / 6),
+        x: 10, // Adds in the next available position
+        y: 10,
         w: 3,
         h: 2, // Add some space below the last box // Add some space below the last box
         minW: 2.5,
@@ -796,14 +796,7 @@ const ChartPopup = ({
             {
                 ...newBox,
                 type: "portfoliocard",
-                portfoliowidgitcount: {
-                    id: lastId + 1, // Increment the last id by 1
-                    labelname: "Enter Label",
-                    showValue: showValue,
-                    Sheetid: clickedSheetId,
-                    sheetfieldselected: sheetfieldselected,
-                    currencyValue: "$",
-                },
+                
             },
         ];
     });

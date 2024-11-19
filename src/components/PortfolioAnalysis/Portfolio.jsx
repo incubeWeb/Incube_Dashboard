@@ -20,7 +20,7 @@ import { jwtDecode } from 'jwt-decode'
 import {useSheet } from '../SheetContext/SheetContext.jsx'
 import { IoShareSocialOutline } from "react-icons/io5";
 
-
+import {Card} from "@material-tailwind/react"
 
 
 const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
@@ -119,11 +119,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     const { sheetJson1 } = useSheet();
     const {percentage1}=useSheet();
     
-    useEffect(()=>{
-       
-        setloading(true)
-        
-    },[selectedTab])
+    
 
     
 
@@ -204,13 +200,10 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             
             val2=JSON.parse(data3) || [] //JSON.parse(data)
            }
-            
-       
-
-           setPortfoliocardvalues(val1)
            
+           if(val2.length>0){
            setPortfolioGraphvalues(val2)
-
+           }
           
          
             if(stateValues.length>0)
@@ -257,7 +250,9 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             setloading(false)
         }
         
+       
         setStateValues()
+        
         
     },[])
 
@@ -342,8 +337,9 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
            setPortfoliocardvalues(val1)
            
+           if(val2.length>0){
            setPortfolioGraphvalues(val2)
-
+           }
           
          
             if(stateValues.length>0)
@@ -391,7 +387,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             }
             setloading(false)
         }
-        if(Object.keys(sheetedited).length>0){
+        if(Object.keys(sheetedited).length>0 ){
             setStateValues()
         }
         
@@ -480,8 +476,11 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
            setPortfoliocardvalues(val1)
            
+           if(val2.length>0){
            setPortfolioGraphvalues(val2)
-
+           }else{
+            setPortfolioGraphvalues([])
+           }
           
          
             if(stateValues.length>0)
@@ -511,7 +510,6 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             }
             else{
                 setsheetmethod('')
-          
                 setselectedSheetId('')
                 setsheetJson([])
                 setsheetKeys([])
@@ -568,7 +566,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
     
 
     const handleselect=async()=>{
-        console.log("hitted")
+       
         setloaderforsetsheets(true)
         
         const constructPortfolioState=[{sheetmethod:'',selectedSheetId:selectedSheetId,sheetJson:sheetJson,sheetKeys:sheetKeys,selectedImageFiled:selectedImageFiled,showHistory:true,sheetname:sheetname,selectfield:selectfield}]
@@ -954,6 +952,8 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         };
     }, []);
 
+    const [getportfoliocarddata,setgetportfoliocarddata]=useState([])
+
 
     useEffect(()=>{
         const mergedData = {
@@ -963,7 +963,9 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                 
                
             },
-                PortfolioCard,
+                PortfolioCard:{
+                    getportfoliocarddata
+                },
                ChartData:{ sheetJson1
                },
                MeterPercentage:{gettingmetervalue}
@@ -971,18 +973,17 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         };
     sessionStorage.setItem("Bot_Data",JSON.stringify(mergedData))
    
-    
         },[sheetJson,sheetKeys,portfoliocardsdata,sheetJson1])
   return (
-    <div className={`${hidenavbar?'pl-[6%] w-[100%]':'ml-[21%] w-[79%]'} p-4 font-noto  flex flex-col space-y-4 bg-gray-100`}> 
-        <div className=' w-[100%] scrollbar-hide  items-end pb-1 pl-2 mt-1 overflow-x-auto h-[40px] bg-white rounded-lg flex flex-row '>
+    <div className={`${hidenavbar?'pl-[6%] w-[100%]':'ml-[21%] w-[79%]'} p-4 font-noto  bg-blue-100 bg-opacity-50 flex flex-col space-y-4 `}> 
+        <Card className=' w-[100%] scrollbar-hide items-end  mt-0 overflow-x-auto h-[50px] bg-white rounded-lg flex flex-row '>
                     
                     {
                         allportfoliotabs?.length>0 && !clickedportfolioshared?
                         allportfoliotabs.map((val, index)=>
                             
-                            <div onClick={()=>handleselectedportfoliotab(val.email)} key={val.id} className={`cursor-pointer p-2 h-[30px] w-[200px] flex items-center justify-center 
-          ${selectedTab === val.email ? 'bg-gray-100  rounded-lg' : 'bg-white boder-l border-r border-gray-300'}
+                            <div onClick={()=>handleselectedportfoliotab(val.email)} key={val.id} className={`cursor-pointer p-2  h-[100%] w-[200px] flex items-center justify-center 
+          ${selectedTab === val.email ? 'bg-blue-100  rounded-lg' : 'bg-white boder-l border-r border-gray-300'}
           ${selectedTab === val.email && index > 0 ? '' : ''}
           ${selectedTab === val.email && index <  allportfoliotabs.length - 1 ? '' : ''}
           ${selectedTab !== val.email && selectedTab ===  allportfoliotabs[index - 1] ? 'border-l-0' : ''}
@@ -993,7 +994,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
 
 
         >
-                                <p className='text-[10px] font-inter font-semibold'>{val.email}</p>
+                                <p className='text-[12px] font-inter font-semibold'>{val.email}</p>
                                 {selectedTab === val.email && (
           <p className=' text-green-600 ml-1 mt-0.5'>
           <TbCircleDotFilled size={12}/>
@@ -1007,7 +1008,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
                         <></>
                     }
                     
-                </div>
+                </Card>
         <div className=' h-[60px] p-2 w-[100%] flex  flex-row rounded-md'>
         
             <div className='w-[90%] space-x-2 flex items-center justify-start'>
@@ -1052,7 +1053,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             </div>
         </div>
         <div className='w-[100%]  flex flex-col'>{/*Portfolio content */}
-            <PortfolioTop setgettingmetervalue={setgettingmetervalue} PortfolioGraphvalues={PortfolioGraphvalues} Portfoliocardvalues={Portfoliocardvalues} PortfolioMetervalue={PortfolioMetervalue} selectedTab={selectedTab} setportfoliocardsdata={setportfoliocardsdata} portfoliosecurity={portfoliosecurity} realtimeportfoliostate={realtimeportfoliostate} selectedSheetId={selectedSheetId} hidenavbar={hidenavbar} sheetedited={sheetedited}/>
+            <PortfolioTop setgetportfoliocarddata={setgetportfoliocarddata} setgettingmetervalue={setgettingmetervalue} PortfolioGraphvalues={PortfolioGraphvalues} Portfoliocardvalues={Portfoliocardvalues} PortfolioMetervalue={PortfolioMetervalue} selectedTab={selectedTab} setportfoliocardsdata={setportfoliocardsdata} portfoliosecurity={portfoliosecurity} realtimeportfoliostate={realtimeportfoliostate} selectedSheetId={selectedSheetId} hidenavbar={hidenavbar} sheetedited={sheetedited}/>
         </div>
 
         <div className='tracking-wider select-none mt-[20px] w-[100%] bg-white rounded-xl p-4 flex flex-col space-y-2 font-noto'>
@@ -1355,7 +1356,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             clickedportfolioshared?
             <div className='fixed overflow-hidden left-0 w-[100%] top-[-2.2%] h-[100%] bg-opacity-40 bg-black'>
             <div ref={popupRef} className=''>
-                <PortfolioShared setclickedportfolioremoveshared={setclickedportfolioremoveshared} mainportfoliosecurity={portfoliosecurity.length==0?'private':portfoliosecurity} PortfoliosharedWithUsers={PortfoliosharedWithUsers}  realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar} setclickedPortfolioShared={setclickedPortfolioShared} handlesavestate={handlesavestate} sharedwithusers={sharedwithusers} />
+                <PortfolioShared setclickedportfolioremoveshared={setclickedportfolioremoveshared} setmainportfoliosecurity={setportfoliosecurity} mainportfoliosecurity={portfoliosecurity.length==0?'private':portfoliosecurity} PortfoliosharedWithUsers={PortfoliosharedWithUsers}  realtimeportfoliostate={realtimeportfoliostate} setsharedwithusers={setsharedwithusers} hidenavbar={hidenavbar} setclickedPortfolioShared={setclickedPortfolioShared} handlesavestate={handlesavestate} sharedwithusers={sharedwithusers} />
             </div>
             </div>
             :

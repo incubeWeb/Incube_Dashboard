@@ -59,8 +59,18 @@ const MeterComponent = ({setgettingmetervalue,selectedTab,PortfolioMetervalue,hi
           })
         
         const data=JSON.parse(responseData.data.data)
-        let value=data[0][sheetdetails.sheetcolumn].match(/\d+/)?data[0][sheetdetails.sheetcolumn].match(/\d+/)[0]:'0'
-        setpercentage(value)
+          
+
+        let value5 = String(data[0][sheetdetails.sheetcolumn])
+        let value = value5.match(/\d+(\.\d+)?/)?value5.match(/\d+(\.\d+)?/)[0]:'0'
+      
+        if (value5!='0') {
+          
+          setpercentage(value)
+            
+        } else {
+          setpercentage(0)
+        }
     }
     settingMeterValue()
 },[selectedTab,realtimeportfoliostate])
@@ -90,8 +100,17 @@ const MeterComponent = ({setgettingmetervalue,selectedTab,PortfolioMetervalue,hi
           })
        
         const data=JSON.parse(responseData.data.data)
-        let value=data[0][sheetdetails.sheetcolumn].match(/\d+/)?data[0][sheetdetails.sheetcolumn].match(/\d+/)[0]:'0'
-        setpercentage(value)
+        let value1=String(data[0][sheetdetails.sheetcolumn])
+        const value = value1.match(/\d+(\.\d+)?/)?value1.match(/\d+(\.\d+)?/)[0]:'0'
+      
+        if (value1!='0') {
+          
+          setpercentage(value)
+            
+        } else {
+          setpercentage(0)
+        }
+        
     }
     settingMeterValue()
 },[])
@@ -124,9 +143,16 @@ useEffect(()=>{
         })
      
       const data=JSON.parse(responseData.data.data)
-      let value=data[0][sheetdetails.sheetcolumn].match(/\d+/)?data[0][sheetdetails.sheetcolumn].match(/\d+/)[0]:'0'
+      let value1=String(data[0][sheetdetails.sheetcolumn])
+      const value = value1.match(/\d+(\.\d+)?/)?value1.match(/\d+(\.\d+)?/)[0]:'0'
       
-      setpercentage(value)
+        if (value1!='0') {
+          
+          setpercentage(value)
+            
+        } else {
+          setpercentage(0)
+        }
   }
   if(Object.keys(sheetedited).length>0){
   settingMeterValue()
@@ -193,7 +219,10 @@ const handleselectsheetfield = async() => {
   
   // Check if sheetJson is not empty
   if (sheetJson.length > 0) {
-    let value = sheetJson[0][sheetfieldselected].match(/\d+/)?sheetJson[0][sheetfieldselected].match(/\d+/)[0]:'0';
+    let value5 = String(sheetJson[0][sheetfieldselected])
+    let value = value5.match(/\d+(\.\d+)?/)?value5.match(/\d+(\.\d+)?/)[0]:'0'
+      
+        
     
   
     
@@ -543,7 +572,7 @@ let label, bgColor;
           d="M 20 150 A 130 130 0 0 1 280 150"
           fill="none"
           stroke="#e6e6e6"
-          strokeWidth="15"
+          strokeWidth="22"
         />
       
       
@@ -551,7 +580,7 @@ let label, bgColor;
           d="M 20 150 A 130 130 0 0 1 280 150"
           fill="none"
           stroke={`url(#gradient-${percentage})`}  
-          strokeWidth="15"
+          strokeWidth="22"
           strokeDasharray="820"
           strokeDashoffset={820 - (percentage / 100) * 820}
           style={{ transition: 'stroke-dashoffset 1s ease' }}

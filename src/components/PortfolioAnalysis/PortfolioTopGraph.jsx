@@ -19,6 +19,7 @@ import { useSheet } from '../SheetContext/SheetContext.jsx';
 import Bar_Chart from '../Icons/Bar_Chart.svg'
 import Pie_Chart from '../Icons/Pie_Chart.svg'
 import Line_Chart from '../Icons/Line_Chart.svg'
+import {Card} from '@material-tailwind/react'
 
 
 const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioMetervalue,selectedTab,portfoliosecurity,hidenavbar,sheetedited,realtimeportfoliostate}) => {
@@ -120,17 +121,16 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
   }, [changeChart]);
 
 
-    useEffect(()=>{
-        setloading(true)
-    },[selectedTab])
+    
+    
 
     useEffect(()=>{
         const setGraphValues=async()=>{
           
+            console.log("graph portfolio",PortfolioGraphvalues)
             
             if(PortfolioGraphvalues.length==0)
             {
-
                 setshowBarchart(false)
                 setshowPiechart(false)
                 setshowLinechart(false)
@@ -139,7 +139,7 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
                 setsheetJson([])
                 setsheetfieldselectedX('')
                 setsheetfieldselectedY('')
-                setsheetClicked(false)
+                setsheetClicked('')
                 setTimeout(()=>{
                     setloading(false)
                 },1000)
@@ -349,7 +349,7 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
         setshowPiechart(false)
 
         const organization=`${Logorganization}_ShownGraph`
-            const stateJson={showBarchart:true,showPiechart:false,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked,selectedSheetName:selectedSheetName}
+            const stateJson={showBarchart:true,showPiechart:false,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX:sheetfieldselectedX,sheetfieldselectedY:sheetfieldselectedY,sheetclicked:sheetclicked,selectedSheetName:selectedSheetName}
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
                 email:Logemail,
                 security:portfoliosecurity,
@@ -362,6 +362,7 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
               })
            
             setLoading1(false) 
+            setloading(false)
         
     }
     const handleSheetCreatePiechart=async()=>{
@@ -373,7 +374,7 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
         setshowBarchart(false)
 
         const organization=`${Logorganization}_ShownGraph`
-            const stateJson={showBarchart:false,showPiechart:true,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked,selectedSheetName:selectedSheetName}
+            const stateJson={showBarchart:false,showPiechart:true,showLinechart:false,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX:sheetfieldselectedX,sheetfieldselectedY:sheetfieldselectedY,sheetclicked:sheetclicked,selectedSheetName:selectedSheetName}
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
                 email:Logemail,
             security:portfoliosecurity,
@@ -395,7 +396,7 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
         setshowBarchart(false)
 
         const organization=`${Logorganization}_ShownGraph`
-            const stateJson={showBarchart:false,showPiechart:false,showLinechart:true,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX,sheetfieldselectedY,sheetclicked:sheetclicked,selectedSheetName:selectedSheetName}
+            const stateJson={showBarchart:false,showPiechart:false,showLinechart:true,chartDatatypeX:chartDatatypeX,chartDatatypeY:chartDatatypeY,sheetJson:sheetJson,sheetfieldselectedX:sheetfieldselectedX,sheetfieldselectedY:sheetfieldselectedY,sheetclicked:sheetclicked,selectedSheetName:selectedSheetName}
             await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate`,{
                 email:Logemail,
                 security:portfoliosecurity,
@@ -579,7 +580,7 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
                       val.fileType === 'xlsx' || val.fileType === 'csv' ? (
                           <div 
                               key={val._id} 
-                              onClick={() => { setsheetrowsselectLine(true); setclickedLine(false); handlesheetclickedLine(val._id);setSelectedSheetName(val.fileName.replace(/^\d+_/, "")); }} 
+                              onClick={() => { setsheetrowsselectLine(true); setclickedLine(false); handlesheetclicked(val._id);setSelectedSheetName(val.fileName.replace(/^\d+_/, "")); }} 
                               className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'
                           >
                               <p className='text-[14px]'>{val.name.replace(/^\d+_/, "")}</p>
@@ -641,7 +642,7 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
                                   val.fileType === 'xlsx' || val.fileType === 'csv' ? (
                                       <div 
                                           key={val._id} 
-                                          onClick={() => { setsheetrowsselectPie(true); setclickedPie(false); handlesheetclickedPie(val._id);setSelectedSheetName(val.fileName.replace(/^\d+_/, "")); }} 
+                                          onClick={() => { setsheetrowsselectPie(true); setclickedPie(false); handlesheetclicked(val._id);setSelectedSheetName(val.fileName.replace(/^\d+_/, "")); }} 
                                           className='hover:bg-gray-100 tracking-wider cursor-pointer rounded-md hover:text-gray-700 w-full h-[40px] flex items-center justify-between p-2'
                                       >
                                           <p className='text-[14px]'>{val.name.replace(/^\d+_/, "")}</p>
@@ -681,18 +682,18 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
                                     
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">X-axis</p></div>
-                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedX(e.target.value)}>
+                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" value={sheetfieldselectedX || ''} onChange={(e)=>setsheetfieldselectedX(e.target.value)}>
                                       {Loading1 && sheetKeys.length==0 ? (
-                     <option value="">
-                 <div className="flex items-center">
-                  <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
-                 Loading...
-                </div>
-                </option>
-                 ) : (
+                                            <option value="">
+                                        <div className="flex items-center">
+                                        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+                                        Loading...
+                                        </div>
+                                        </option>
+                                        ) : (
                                           
                                           (sheetKeys||[]).map(val=>
-                                            <option key={val.id}>{val}</option>
+                                            <option value={val} key={val.id}>{val}</option>
                                           )
                                        ) }
                                       </select>
@@ -703,17 +704,17 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
                                     </div>
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Y-axis</p></div>
-                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedY(e.target.value)}>
+                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none"  value={sheetfieldselectedY || ''}  onChange={(e)=>setsheetfieldselectedY(e.target.value)}>
                                       {Loading1 && sheetKeys.length==0 ? (
-    <option value="">
-      <div className="flex items-center">
-        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
-        Loading...
-      </div>
-    </option>
-  ) : (
+                                        <option value="">
+                                        <div className="flex items-center">
+                                            <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+                                            Loading...
+                                        </div>
+                                        </option>
+                                    ) : (
                                           (sheetKeys||[]).map(val=>
-                                            <option key={val.id}>{val}</option>
+                                            <option value={val} key={val.id}>{val}</option>
                                           )
                                        ) }
                                       </select>
@@ -746,18 +747,18 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
                                     
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Label</p></div>
-                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedX(e.target.value)}>
+                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" value={sheetfieldselectedX || ''} onChange={(e)=>setsheetfieldselectedX(e.target.value)}>
                                       {Loading1 && sheetKeys.length==0 ? (
-                     <option value="">
-                 <div className="flex items-center">
-                  <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
-                 Loading...
-                </div>
-                </option>
-                 ) : (
+                                        <option >
+                                    <div className="flex items-center">
+                                    <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+                                    Loading...
+                                    </div>
+                                    </option>
+                                    ) : (
                                           
                                           (sheetKeys||[]).map(val=>
-                                            <option key={val.id}>{val}</option>
+                                            <option value={val} key={val.id}>{val}</option>
                                           )
                                        ) }
                                       </select>
@@ -768,17 +769,17 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
                                     </div>
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Value</p></div>
-                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedY(e.target.value)}>
+                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none"  value={sheetfieldselectedY || ''} onChange={(e)=>setsheetfieldselectedY(e.target.value)}>
                                       {Loading1 && sheetKeys.length==0 ? (
-                     <option value="">
-                 <div className="flex items-center">
-                  <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
-                 Loading...
-                </div>
-                </option>
-                 ) : (
+                                            <option value="">
+                                        <div className="flex items-center">
+                                        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+                                        Loading...
+                                        </div>
+                                        </option>
+                                        ) : (
                                           (sheetKeys||[]).map(val=>
-                                            <option key={val.id}>{val}</option>
+                                            <option value={val} key={val.id}>{val}</option>
                                           )
                                        )}
                                       </select>
@@ -811,7 +812,7 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
                                     
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">X-axis</p></div>
-                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedX(e.target.value)}>
+                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none"  value={sheetfieldselectedX || ''} onChange={(e)=>setsheetfieldselectedX(e.target.value)}>
                                       {Loading1 && sheetKeys.length==0 ? (
                      <option value="">
                  <div className="flex items-center">
@@ -822,7 +823,7 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
   ) : (
                                           
                                           (sheetKeys||[]).map(val=>
-                                            <option key={val.id}>{val}</option>
+                                            <option value={val} key={val.id}>{val}</option>
                                           )
                                         )}
                                       </select>
@@ -833,17 +834,17 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
                                     </div>
                                     <div className=" w-[100%] h-[40px] items-center justify-center flex flex-row space-x-2">
                                       <div><p className="text-[14px]">Y-axis</p></div>
-                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" onChange={(e)=>setsheetfieldselectedY(e.target.value)}>
+                                      <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none"  value={sheetfieldselectedY || ''} onChange={(e)=>setsheetfieldselectedY(e.target.value)}>
                                       {Loading1 && sheetKeys.length==0 ? (
-    <option value="">
-      <div className="flex items-center">
-        <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
-        Loading...
-      </div>
-    </option>
-  ) : (
+                                        <option value="">
+                                        <div className="flex items-center">
+                                            <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
+                                            Loading...
+                                        </div>
+                                        </option>
+                                    ) : (
                                           (sheetKeys||[]).map(val=>
-                                            <option key={val.id}>{val}</option>
+                                            <option key={val.id} value={val}>{val}</option>
                                           )
                                        ) }
                                       </select>
@@ -863,10 +864,10 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
                 </div>
                 :<></>
             }
-            <div className='flex w-[30%] h-[420px] bg-white rounded-xl'>
+            <div className='flex shadow-lg w-[30%] h-[420px] bg-white rounded-xl'>
                 <PortfolioMeter setgettingmetervalue={setgettingmetervalue} sheetedited={sheetedited} PortfolioMetervalue={PortfolioMetervalue} realtimeportfoliostate={realtimeportfoliostate} selectedTab={selectedTab} hidenavbar={hidenavbar}/>
             </div>
-            <div className='w-[70%] h-[420px] bg-white rounded-xl flex flex-col items-center justify-center'>
+            <Card className='w-[70%] h-[420px] bg-white rounded-xl flex flex-col items-center justify-center'>
                     <div className=' w-[100%] relative h-[20px] flex flex-row items-end justify-end pt-2 pr-2'>
                     {
                         
@@ -944,7 +945,7 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
                     :
                     <></>
                 }
-            </div>
+            </Card>
         </div>
     </div>
     

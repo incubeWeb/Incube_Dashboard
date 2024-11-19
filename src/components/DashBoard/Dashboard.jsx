@@ -239,7 +239,13 @@ useEffect(() => {
       
       if(checkDb.data.status==200)
       {
-        let val=JSON.parse(checkDb.data.data.positions)
+        let constructbox=[]
+        checkDb.data.data.map(myval=>{
+          let value=JSON.parse(myval.positions)
+          constructbox.push(value)
+        })
+
+        let val=constructbox
         val.map((d)=>{
           const pievalue=d.piechartCount
           const areavalue=d.areachartCount
@@ -264,13 +270,13 @@ useEffect(() => {
       }
       setTimeout(()=>{  
         setloading(false)
-      },1000)
+      },100)
     }
    try{
     checkBoxValues()
     
    }catch(e){
-    checkBoxValues()
+    console.log(e)
    }
     
   },[])
@@ -284,16 +290,21 @@ useEffect(() => {
         headers:{
           "Authorization":`Bearer ${token}`
         }
-      
       })
+
       
 
       
       if(checkDb.data.status==200)
       {
-        let val=JSON.parse(checkDb.data.data.positions)
+        let constructbox=[]
+        checkDb.data.data.map(myval=>{
+          let value=JSON.parse(myval.positions)
+          constructbox.push(value)
+        })
+
+        let val=constructbox
         val.map((d)=>{
-          
           const pievalue=d.piechartCount
           const areavalue=d.areachartCount
           const barvalue=d.barchartCount
@@ -301,7 +312,6 @@ useEffect(() => {
           const chartYdatatype=d.chartDatatypeY
           const isSheetChart=d.isSheetChart
           const portfoliowidgit=d.portfoliowidgitcount || []
-      
           setisSheetChart(isSheetChart)
           setchartDatatypeFromApiX(prev=>[...prev,{chartDatatypeX:chartXdatatype}])
           setchartDatatypeFromApiY(prev=>[...prev,{chartDatatypeY:chartYdatatype}])
@@ -316,12 +326,11 @@ useEffect(() => {
         setFromApi(true)
         
       }
-      
     }
     checkBoxValues()
     setTimeout(()=>{  
       setloading(false)
-    },1000)
+    },100)
     
   },[retry])
   
@@ -473,7 +482,7 @@ useEffect(() => {
                 case 'news':
                   return (
                     <div className='flex flex-col h-[100%] overflow-y-auto'>
-                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] bg-white fixed h-[40px] mb-4 rounded-md'>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] bg-white fixed h-[40px] cursor-move mb-4 rounded-md'>
                           <div className='w-[100%] border-white h-[40px] relative  flex items-center justify-between px-4'
                             
                             style={{
@@ -503,7 +512,7 @@ useEffect(() => {
                 case 'timeline':
                   return (
                     <div className='flex flex-col h-[92%] scrollbar-hide overflow-y-auto'>
-                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] bg-white h-[40px] mb-4 fixed rounded-md'>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] bg-white h-[40px] cursor-move mb-4 fixed rounded-md'>
                       <p className='text-[15px] pl-2 pt-2 font-bold'>Timeline</p>
                       </div>
                     <div className='px-4 scrollbar-hide mt-[45px]'>
@@ -520,7 +529,7 @@ useEffect(() => {
                 case 'portfoliocard':
                   return (
                     <div className='flex flex-col'>
-                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed  h-[40px] mb-4 rounded-md'></div>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed cursor-move h-[40px] mb-4 rounded-md'></div>
                     <div className='px-4 mt-[35px]'>
                     <Portfoliocard 
                     id={box.id}
@@ -530,11 +539,13 @@ useEffect(() => {
                      setprevValue={setprevValue} 
                      prevValue={box.prevValue}
                      setcurrencyvalue={setcurrencyvalue}
-                     currencyValue={currencyValue}
+                     currencyValue={box.currencyValue}
                      setshowvalue={setshowvalue}
                      clickedSheetIdApp={clickedSheetId}
                      setsheetpopup={setsheetpopup}
                      handlePlusClick={handlePlusClick}
+                     portfolioicon={box.portfolioicon}
+                     mainlabelname={box.labelname}
                      
                      capturingPortfoliowidgitvalues={capturingPortfoliowidgitvalues}
                      setcapturingPortfoliowidgitvalues={setcapturingPortfoliowidgitvalues}
@@ -547,7 +558,7 @@ useEffect(() => {
                 case 'chat':
                   return (
                     <div className='flex flex-col h-[100%] scrollbar-hide '>
-                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[40px] bg-white mb-4 rounded-md'></div>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[40px] cursor-move bg-white mb-4 rounded-md'></div>
                     <div className='px-4 mt-[50px] h-[84%]'>
                     <ChatWidgit 
                     id={box.id} 
@@ -565,7 +576,7 @@ useEffect(() => {
                 case 'calendarwidgit':
                   return(
                     <div className='flex flex-col h-[100%]'>
-                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[40px] flex items-center left-2 text-[16px] font-bold mb-4 rounded-md'><p>Calendar</p></div>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[40px] cursor-move flex items-center left-2 text-[16px] font-bold mb-4 rounded-md'><p>Calendar</p></div>
                     <div className='px-4 h-[100%] mt-[40px]'>
                     <CalendarWidgit
                       id={box.id}
@@ -581,7 +592,7 @@ useEffect(() => {
                 case 'AssignedDeals':
                   return(
                     <div className='flex flex-col h-[100%] overflow-y-auto scrollbar-hide'>
-                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[50px] mb-4 rounded-md'></div>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[50px] cursor-move mb-4 rounded-md'></div>
                     <div className='px-4 pt-[20px] h-[100%]'>
                     <AssignedDeals
                       id={box.id}
@@ -613,11 +624,12 @@ useEffect(() => {
                   if (areachartCount.length > 0) {
                     return (
                       <div className='flex flex-col w-[100%] h-[100%]'>
-                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[40px] mb-4 rounded-md'></div>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] cursor-move fixed h-[40px] mb-4 rounded-md'></div>
                     <div className='pl-4 pt-[40px] h-[90%] w-[100%]'>
                       <Areachart
                         key={index}
                         id={index}
+                        boxid={box.id}
                         setdashboardbotdata={setdashboardbotdata}
                         data01={areachartCount[[box.id]-1]['values']}
                         clickedArea={clickedArea}
@@ -643,11 +655,12 @@ useEffect(() => {
                   if (piechartCount.length > 0) {
                     return (
                       <div className='flex flex-col h-[100%]'>
-                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] h-[40px] fixed mb-4 rounded-md'></div>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] cursor-move h-[40px] fixed mb-4 rounded-md'></div>
                     <div className='px-4 pt-[20px] h-[90%]'>
                       <Piechart
                         key={index}
                         id={index}
+                        boxid={box.id}
                         setdashboardbotdata={setdashboardbotdata}
                         data01={piechartCount[[box.id]-1]['values']}
                         clickedPie={clickedPie}
@@ -674,11 +687,12 @@ useEffect(() => {
                   if (barchartCount.length > 0) {
                     return (
                       <div className='flex flex-col h-[100%]'>
-                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[40px] mb-4 rounded-md'></div>
+                      <div onMouseEnter={handleMouseDown} onMouseLeave={()=>setIsDraggable(false)} className='w-[100%] fixed h-[40px] mb-4 cursor-move rounded-md'></div>
                     <div className='px-4 pt-[20px] h-[100%]'>
                       <RenderBarChart
                         key={index}
                         id={index}
+                        boxid={box.id}
                         setdashboardbotdata={setdashboardbotdata}
                         data01={barchartCount[[box.id]-1]['values']}
                         clickedBar={clickedBar}

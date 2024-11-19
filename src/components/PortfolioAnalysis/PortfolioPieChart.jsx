@@ -18,9 +18,22 @@ const PortfolioPieChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheetJ
     const extractValue = (input) => {
         const continuousDigitsPattern = /^\D*(\d+)\D*$/;
         const str = String(input);
-        const match = str.match(continuousDigitsPattern);
+       
+
+        const match = str.match(/\d+(\.\d+)?/)?str.match(/\d+(\.\d+)?/)[0]:'0'
+  
+        if (match!='0') {
+        if(typeof(match)=='string'){
+            
+        return parseFloat(match)
+        }else{
+            return match
+        }
+        } else {
+        return 0;
+        }
         
-        return str.replace(/\D/g, '').length==0?0:parseInt(str.replace(/\D/g, ''))
+        
     };
 
     const convertDataTypes = (array, fieldConversions) => {
@@ -43,18 +56,20 @@ const PortfolioPieChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheetJ
         });
     };
 
+   
+
     
 
     useEffect(() => {
         const settingValuesofData = async () => {
-
+            console.log(sheetclicked,"sheetclicked")
             const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetclicked,organization:Logorganization},{
                 headers:{
                   "Authorization":`Bearer ${token}`
                 }
               })
-                const data=JSON.parse(response.data.data)
-
+            const data=JSON.parse(response.data.data)
+            console.log(data,sheetfieldselectedX)
             const myData = data.map(val => ({
                 [sheetfieldselectedX]: val[sheetfieldselectedX],
                 [sheetfieldselectedY]: val[sheetfieldselectedY]
@@ -64,6 +79,9 @@ const PortfolioPieChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheetJ
         };
         settingValuesofData();
     }, [sheetJson, sheetfieldselectedX, sheetfieldselectedY]);
+
+
+    
 
   
 

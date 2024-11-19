@@ -39,120 +39,16 @@ const ChatBot = () => {
       // Send the new prompt to the API and handle the response
       try {
         const Response_Data =JSON.parse(sessionStorage.getItem("Bot_Data"));
-        const lowerCaseCurrentprompt=currentPrompt.toLowerCase();
-        let updatedJson=[]
-
-        if(location.pathname=='/dashboard'){
-          
-        if(lowerCaseCurrentprompt.includes('timeline')){
-          Response_Data.allwidgits.map(val=>{
-            for(const key in val){
-                if(key.includes('timeline')){
-                    updatedJson.push({[key]:val[key]})
-                }
-            }
-        })
-        }
-
-        if(lowerCaseCurrentprompt.includes('portfolio') || lowerCaseCurrentprompt.includes('card')){
-          Response_Data.allwidgits.map(val=>{
-            for(const key in val){
-                if(key.includes('portfoliocard')){
-                    updatedJson.push({[key]:val[key]})
-                }
-            }
-        })
-        }
-
-        if(lowerCaseCurrentprompt.includes('chat') || lowerCaseCurrentprompt.includes('user') || lowerCaseCurrentprompt.includes('message')){
-          Response_Data.allwidgits.map(val=>{
-            for(const key in val){
-                if(key.includes('Chat_messages') || key.includes('availablechatusers')){
-                    updatedJson.push({[key]:val[key]})
-                }
-            }
-        })
-        }
-
-        if(lowerCaseCurrentprompt.includes('calendar') || lowerCaseCurrentprompt.includes('events')){
-          Response_Data.allwidgits.map(val=>{
-            for(const key in val){
-                if(key.includes('CalendarEvents')){
-                    updatedJson.push({[key]:val[key]})
-                }
-            }
-        })
-        }
-
-        if(lowerCaseCurrentprompt.includes('news')){
-          Response_Data.allwidgits.map(val=>{
-            for(const key in val){
-                if(key.includes('NewsInfo')){
-                    updatedJson.push({[key]:val[key]})
-                }
-            }
-        })
-        }
-
-        if(lowerCaseCurrentprompt.includes('deals')){
-          Response_Data.allwidgits.map(val=>{
-            for(const key in val){
-                if(key.includes('Assigned_Deals')){
-                    updatedJson.push({[key]:val[key]})
-                }
-            }
-        })
-        }
-
-        if(lowerCaseCurrentprompt.includes('pie')){
-          Response_Data.allwidgits.map(val=>{
-            for(const key in val){
-                if(key.includes('Piechart')){
-                    updatedJson.push({[key]:val[key]})
-                }
-            }
-        })
-        }
-
-        if(lowerCaseCurrentprompt.includes('line') || lowerCaseCurrentprompt.includes('area') ){
-          Response_Data.allwidgits.map(val=>{
-            for(const key in val){
-                if(key.includes('Linechart')){
-                    updatedJson.push({[key]:val[key]})
-                }
-            }
-        })
-        }
-
-        if(lowerCaseCurrentprompt.includes('bar')){
-          Response_Data.allwidgits.map(val=>{
-            for(const key in val){
-                if(key.includes('Barchart')){
-                    updatedJson.push({[key]:val[key]})
-                }
-            }
-        })
-        }
-        }
-
-
-        if(updatedJson.length<=0){
-          updatedJson=Response_Data
-        }
+        
+        
 
         let response={}
-        try{
-        if(updatedJson?.allwidgits.length<=0){
-          response={data:{response:'No widgit found'}}
-        }
-      }
-        catch(e){
           if(Response_Data.length==0){
             response={data:{response:'Nothing to analyze'}}
           }
           else{
          response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/genai/create-response`, {
-          "Jsondata": JSON.stringify(updatedJson),
+          "Jsondata": JSON.stringify(Response_Data),
           "prompt": currentPrompt // Send only the latest user message
         }, {
           headers: {
@@ -160,8 +56,8 @@ const ChatBot = () => {
           }
         });
       }
-      }
-  
+      
+        console.log(response.data.response)
         // Get the response from the API
         const botResponse = response.data.response;
   
@@ -216,6 +112,10 @@ const ChatBot = () => {
 
   
   const formatMessage = (text) => {
+
+    if(text==undefined){
+      return 'Server error 500 try again!'
+    }
     // Replace "**text**" with "<strong>text</strong>" for bold formatting
     // Replace "\n" with "<br />" for line breaks
     return text
@@ -223,11 +123,16 @@ const ChatBot = () => {
       .replace(/\n/g, '<br />');
   };
   const isTableResponse = (text) => {
-    return text.startsWith('|') && text.includes('|');
+    try{
+    return text.includes('|') && text.includes('---');
+    }catch(e){
+      //console.log(e)
+      return false
+    }
   };
   
   const renderTable = (dataText) => {
-    const lines = dataText.trim().split('\n');
+    const lines = dataText.substring(dataText.indexOf('|'),dataText.lastIndexOf('|')+1).trim().split('\n');
   
     // Ensure there are enough lines to create a header and table data
     if (lines.length < 3) {
@@ -287,9 +192,10 @@ const ChatBot = () => {
   };
   
   const downloadCSV = () => {
+    try{
     const lines = messages
       .filter(msg => msg.sender === 'Bot' && isTableResponse(msg.text)) 
-      .map(msg => msg.text.trim().split('\n'))[0];
+      .map(msg => msg.text.substring(msg.text.indexOf('|'),msg.text.lastIndexOf('|')+1).split('\n'))[0];
 
     if (!lines) return;
 
@@ -306,6 +212,9 @@ const ChatBot = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }catch(e){
+    return
+  }
   };
   useEffect(() => {
     if (showChat && chatRef.current) {

@@ -6,7 +6,7 @@ import { RxCross2 } from 'react-icons/rx';
 import { VscArrowDown, VscArrowUp } from 'react-icons/vsc';
 import { jwtDecode } from 'jwt-decode';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
-const Piechart = ({investmentchange,setdashboardbotdata, id, outerRadius, data01, clickedPie, setClickedPie, fromApi, setFromApi, chartDatatypeX, chartDatatypeY, chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
+const Piechart = ({boxid,investmentchange,setdashboardbotdata, id, outerRadius, data01, clickedPie, setClickedPie, fromApi, setFromApi, chartDatatypeX, chartDatatypeY, chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [loading, setLoading] = useState(true);
   const [mydata, setmydata] = useState([]);
   const [thissheetname,setthissheetname]=useState('')
@@ -21,13 +21,40 @@ const Piechart = ({investmentchange,setdashboardbotdata, id, outerRadius, data01
     const Logorganization=userdata.userdetails.organization
     const Logrole=userdata.userdetails.role
 
+    const [selectedxaxis,setselectedxaxis]=useState('')
+    const [selectedyaxis,setselectedyaxis]=useState('')
+
+    const CustomTooltip = ({ active, payload, label }) => {
+      if (active && payload && payload.length) {
+       
+          return (
+              <div className="custom-tooltip" style={{ background: '#fff', padding: '10px', border: '1px solid #ccc' }}>
+                  <p className="label">{`${selectedxaxis}: ${payload[0].name}`}</p>
+                  
+                      <p >
+                          {`${selectedyaxis}: ${payload[0].value}`}
+                      </p>
+                  
+                  
+              </div>
+          );
+      }
+  
+      return null;
+    }
+
   function extractValue(input) {
     const continuousDigitsPattern = /^\D*(\d+)\D*$/;
     const str = String(input);
-    const match = str.match(continuousDigitsPattern);
+    const match = str.match(/\d+(\.\d+)?/)?str.match(/\d+(\.\d+)?/)[0]:'0'
   
-    if (match && !/[a-zA-Z]+/.test(input)) {
-      return parseInt(match[1], 10);
+    if (match!='0') {
+      if(typeof(match)=='string'){
+        
+      return parseFloat(match)
+      }else{
+        return match
+      }
     } else {
       return 0;
     }
@@ -51,11 +78,11 @@ const Piechart = ({investmentchange,setdashboardbotdata, id, outerRadius, data01
       setBoxes([]);
     }
     else {
-      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization},{
+      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard-single`,{email:email,boxid:boxid,organization:organization},{
         headers:{
           "Authorization":`Bearer ${token}`
         }
-      });
+      })
       if(response.data.status==200) {
         setBoxes(boxes.filter((box,index)=>index!=id));
        
@@ -108,7 +135,13 @@ const Piechart = ({investmentchange,setdashboardbotdata, id, outerRadius, data01
           "Authorization":`Bearer ${token}`
         }
       });
-      const entireData = JSON.parse(dashboard_response.data.data.positions);
+      let constructbox=[]
+      dashboard_response.data.data.map(myval=>{
+          let value=JSON.parse(myval.positions)
+          constructbox.push(value)
+        })
+
+      const entireData=constructbox
       let selectedYaxis = '';
       let isSheetchart = '';
       let selectedXaxis='';
@@ -125,7 +158,9 @@ const Piechart = ({investmentchange,setdashboardbotdata, id, outerRadius, data01
       entireData.map((m, index) => {
         if (index === id) {
           selectedYaxis = m?.selectedYAxis || "";
+          setselectedyaxis(selectedYaxis)
           selectedXaxis = m?.selectedXAxis || "";
+          setselectedxaxis(selectedXaxis)
           isSheetchart = m?.isSheetChart || "";
           clickedsheetname = m?.clickedsheetname || "";
           setthissheetname(clickedsheetname)
@@ -406,11 +441,8 @@ const Piechart = ({investmentchange,setdashboardbotdata, id, outerRadius, data01
                             })}
                         </Pie>
                         <Tooltip
-                            formatter={(value) => `${value}`} // Converts value to string for display
-                            contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
-                            itemStyle={{ color: '#fff', fontWeight: 'bold' }}
-                            labelStyle={{ color: '#ccc' }}
-                        />
+                        content={<CustomTooltip/>}
+                    />
                         
                         
                     </PieChart>

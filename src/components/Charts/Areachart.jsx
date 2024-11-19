@@ -7,13 +7,16 @@ import { jwtDecode } from 'jwt-decode';
 
 
 
-const Areachart = ({investmentchange,setdashboardbotdata,id,data01,clickedArea,setClickedArea,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
+const Areachart = ({boxid,investmentchange,setdashboardbotdata,id,data01,clickedArea,setClickedArea,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [mydata,setmydata]=useState([])
   const [thissheetname,setthissheetname]=useState('')
   const [itsfromDatabase,setitsfromdatabase]=useState(false)
   const [mydatatypex,setmydatatypex]=useState(chartDatatypeX)
   const [mydatatypey,setmydatatypey]=useState(chartDatatypeY)
   const [isitfromDrive,setisitfromdrive]=useState(false)
+  const [selectedxaxis,setselectedxaxis]=useState('')
+  const [selectedyaxis,setselectedyaxis]=useState('')
+
   const token=localStorage.getItem('token')
     const userdata=jwtDecode(token)
     const Logemail=userdata.userdetails.email
@@ -23,11 +26,12 @@ const Areachart = ({investmentchange,setdashboardbotdata,id,data01,clickedArea,s
     // Regex to match a string with continuous digits
     const continuousDigitsPattern = /^\D*(\d+)\D*$/;
     const str=String(input)
-    const match = str.match(continuousDigitsPattern);
+    const match = str.match(/\d+(\.\d+)?/)?str.match(/\d+(\.\d+)?/)[0]:'0'
   
-    if (match && !/[a-zA-Z]+/.test(input)) {
-        // If input matches the pattern and does not contain interspersed letters, return the captured group
-        return parseInt(match[1], 10);
+    if (match!='0') {
+      
+          return match
+        
     } else {
         // If input does not match the pattern or contains interspersed letters, return 0
         return 0;
@@ -39,6 +43,7 @@ const Areachart = ({investmentchange,setdashboardbotdata,id,data01,clickedArea,s
     const organization=Logorganization
     const position=JSON.stringify(boxes.filter((box,index)=>index!=id))
    
+    console.log("id is",boxid)
     setdashboardbotdata(prevData => {
       return prevData.filter(item => !Object.keys(item).includes(`Linechart_${id}`));
     });
@@ -52,7 +57,9 @@ const Areachart = ({investmentchange,setdashboardbotdata,id,data01,clickedArea,s
       })
       setBoxes([])
     }
-    else{const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization},{
+    else{ 
+      
+      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard-single`,{email:email,boxid:boxid,organization:organization},{
       headers:{
         "Authorization":`Bearer ${token}`
       }
@@ -97,8 +104,11 @@ const fieldConversionsApi={
   uv:chartDatatypeFromApiY
 }
 
+const testdata=[{pv:"anme",uv:"0.45"},{pv:"adnme",uv:"0.95"}]
+
 
   useEffect(() => {
+    
     const fun=async()=>{
       let organization=Logorganization
       
@@ -107,7 +117,13 @@ const fieldConversionsApi={
             "Authorization":`Bearer ${token}`
           }
         })
-        const entireData=JSON.parse(dashboard_response.data.data.positions)
+        let constructbox=[]
+      dashboard_response.data.data.map(myval=>{
+          let value=JSON.parse(myval.positions)
+          constructbox.push(value)
+        })
+
+      const entireData=constructbox
         let selectedYaxis=''
         let selectedXaxis=''
         let isSheetchart=''
@@ -126,7 +142,9 @@ const fieldConversionsApi={
           {
             
             selectedYaxis=m?.selectedYAxis || ""
+            setselectedyaxis(selectedYaxis)
             selectedXaxis=m?.selectedXAxis || ""
+            setselectedxaxis(selectedXaxis)
             isSheetchart=m?.isSheetChart || ""
             clickedsheetname=m?.clickedsheetname || ""
             setthissheetname(clickedsheetname)
@@ -330,6 +348,25 @@ useEffect(()=>{
 });
   },[mydata])
 
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      const uvEntry = payload.find((entry) => entry.dataKey === 'uv');
+        return (
+            <div className="custom-tooltip" style={{ background: '#fff', padding: '10px', border: '1px solid #ccc' }}>
+                <p className="label">{`${selectedxaxis}: ${label}`}</p>
+                {uvEntry && (
+                    <p >
+                        {`${selectedyaxis}: ${uvEntry.value}`}
+                    </p>
+                )}
+                
+            </div>
+        );
+    }
+
+    return null;
+};
+
   return (
     <div style={{ width: '100%', height: '90%' }} className='mt-4  pr-10'>
    <p className='font-inter font-semibold text-[16px] ml-1 -mt-4'>  {thissheetname.replace(/^\d+_/, "")}
@@ -344,7 +381,7 @@ useEffect(()=>{
                             <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
                             <XAxis dataKey="pv" tickCount={4}/>
                             <YAxis tickCount={4} />
-                            <Tooltip />
+                            <Tooltip content={<CustomTooltip />} />
                             <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
                             <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
                         </AreaChart>
@@ -360,7 +397,7 @@ useEffect(()=>{
                              <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
                             <XAxis type="number" dataKey="pv" />
                             <YAxis type="category" dataKey="uv"  tickCount={4}/>
-                            <Tooltip />
+                            <Tooltip content={<CustomTooltip />} />
                             <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
                             <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
                         </AreaChart>
@@ -373,7 +410,7 @@ useEffect(()=>{
                       <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
                       <XAxis dataKey="pv" tickCount={4}/>
                       <YAxis tickCount={4} />
-                      <Tooltip />
+                      <Tooltip content={<CustomTooltip />} />
                       <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
                       <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
                   </AreaChart>)

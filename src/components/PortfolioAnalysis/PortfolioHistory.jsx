@@ -45,7 +45,7 @@ const PortfolioHistory = ({selectedTab,setportfolioHistory,sheetKeys,sheetJson,s
     useEffect(() => {
         const initialImageUrls = {};
         (sheetJson || []).forEach((val,index) => {
-            initialImageUrls[index] = val[selectedImageFiled] || ''; // Initialize state with image URL
+            initialImageUrls[index] = val[selectedImageFiled] || 'https://i.pinimg.com/originals/ec/d9/c2/ecd9c2e8ed0dbbc96ac472a965e4afda.jpg'; // Initialize state with image URL
         });
         setImageUrls(initialImageUrls);
     }, [sheetJson, selectedImageFiled]);

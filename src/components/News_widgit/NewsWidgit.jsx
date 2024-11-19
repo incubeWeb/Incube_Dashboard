@@ -48,11 +48,11 @@ const NewsWidgit = ({ id, boxes, setBoxes,setdashboardbotdata }) => {
               });
             setBoxes([]);
         } else {
-            const response = await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`, { email, position, organization },{
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard-single`,{email:email,boxid:id,organization:organization},{
                 headers:{
                   "Authorization":`Bearer ${token}`
                 }
-              });
+              })
             if (response.data.status === 200) {
                 setBoxes(boxes.filter((box, index) => box.id !== id));
             }

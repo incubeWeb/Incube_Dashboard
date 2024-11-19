@@ -16,9 +16,16 @@ const PortfolioLineChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheet
     function extractValue(input) {
         const continuousDigitsPattern = /^\D*(\d+)\D*$/;
         const str = String(input);
-        const match = str.match(continuousDigitsPattern)
-
-        return str.replace(/\D/g, '').length==0?0:parseInt(str.replace(/\D/g, ''))
+        const match = str.match(/\d+(\.\d+)?/)?str.match(/\d+(\.\d+)?/)[0]:'0'
+  
+        if (match!='0') {
+        
+            return match
+            
+        } else {
+            // If input does not match the pattern or contains interspersed letters, return 0
+            return 0;
+        }
     }
 
     function convertDataTypes(array, fieldConversions) {
@@ -46,38 +53,26 @@ const PortfolioLineChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheet
 
     useEffect(() => {
         const setValuesForData = async () => {
-            const myData = sheetJson.map(val => ({
-                [sheetfieldselectedX]: val[sheetfieldselectedX],
-                [sheetfieldselectedY]: val[sheetfieldselectedY]
-            }));
+            const mydata=[]
+            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetclicked,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
+                const data=JSON.parse(response.data.data)
+            data.map(val=>{
+                mydata.push({[sheetfieldselectedX]:val[sheetfieldselectedX],[sheetfieldselectedY]:val[sheetfieldselectedY]})
+            })
 
-            const convertedData = convertDataTypes(myData, fieldConversions);
+            
+
+            const convertedData = convertDataTypes(mydata, fieldConversions);
             setData(convertedData);
         };
         setValuesForData();
     }, [sheetJson, sheetfieldselectedX, sheetfieldselectedY]);
 
-    useEffect(()=>{
-        
-            const setValuesForData = async () => {
-                const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetclicked,organization:Logorganization},{
-                    headers:{
-                      "Authorization":`Bearer ${token}`
-                    }
-                  })
-                    const data=JSON.parse(response.data.data)
-
-                const myData = data.map(val => ({
-                    [sheetfieldselectedX]: val[sheetfieldselectedX],
-                    [sheetfieldselectedY]: val[sheetfieldselectedY]
-                }));
-    
-                const convertedData = convertDataTypes(myData, fieldConversions);
-                setData(convertedData);
-            };
-            setValuesForData();
-        
-    },[])
+   
 
     const fieldConversions = {
         [sheetfieldselectedX]: chartDatatypeX,   // X-axis field

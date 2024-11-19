@@ -6,7 +6,7 @@ import { RxCross2 } from 'react-icons/rx';
 import { jwtDecode } from 'jwt-decode';
 
 
-const RenderBarChart = ({investmentchange,setdashboardbotdata,id,data01,clickedBar,setClickedBar,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
+const RenderBarChart = ({boxid,investmentchange,setdashboardbotdata,id,data01,clickedBar,setClickedBar,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [thissheetname,setthissheetname]=useState('')
   const [mydata,setmydata]=useState([]);
   const [itsfromDatabase,setitsfromdatabase]=useState(false);
@@ -19,15 +19,39 @@ const RenderBarChart = ({investmentchange,setdashboardbotdata,id,data01,clickedB
   const [mydatatypex,setmydatatypex]=useState(chartDatatypeX)
   const [mydatatypey,setmydatatypey]=useState(chartDatatypeY)
 
+  const [selectedxaxis,setselectedxaxis]=useState('')
+  const [selectedyaxis,setselectedyaxis]=useState('')
+
   const [isitfromDrive,setisitfromdrive]=useState(false)
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      const uvEntry = payload.find((entry) => entry.dataKey === 'uv');
+        return (
+            <div className="custom-tooltip" style={{ background: '#fff', padding: '10px', border: '1px solid #ccc' }}>
+                <p className="label">{`${selectedxaxis}: ${label}`}</p>
+                {uvEntry && (
+                    <p style={{ color: uvEntry.color }}>
+                        {`${selectedyaxis}: ${uvEntry.value}`}
+                    </p>
+                )}
+                
+            </div>
+        );
+    }
+
+    return null;
+  }
 
   function extractValue(input) {
     const continuousDigitsPattern = /^\D*(\d+)\D*$/;
     const str=String(input);
-    const match = str.match(continuousDigitsPattern);
+    const match = str.match(/\d+(\.\d+)?/)?str.match(/\d+(\.\d+)?/)[0]:'0'
   
-    if (match && !/[a-zA-Z]+/.test(input)) {
-        return parseInt(match[1], 10);
+    if (match!='0') {
+      
+          return match
+        
     } else {
         return 0;
     }
@@ -50,11 +74,11 @@ const RenderBarChart = ({investmentchange,setdashboardbotdata,id,data01,clickedB
       setBoxes([]);
     }
     else{
-      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/updatedashboard`,{email:email,position:position,organization:organization},{
+      const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deletedashboard-single`,{email:email,boxid:boxid,organization:organization},{
         headers:{
           "Authorization":`Bearer ${token}`
         }
-      });
+      })
       if(response.data.status==200)
       {
         setBoxes(boxes.filter((box,index)=>index!=id));
@@ -102,7 +126,13 @@ const RenderBarChart = ({investmentchange,setdashboardbotdata,id,data01,clickedB
           "Authorization":`Bearer ${token}`
         }
       });
-      const entireData=JSON.parse(dashboard_response.data.data.positions);
+      let constructbox=[]
+      dashboard_response.data.data.map(myval=>{
+          let value=JSON.parse(myval.positions)
+          constructbox.push(value)
+        })
+
+      const entireData=constructbox
       let selectedYaxis='';
       let selectedXaxis='';
       let isSheetchart='';
@@ -120,7 +150,9 @@ const RenderBarChart = ({investmentchange,setdashboardbotdata,id,data01,clickedB
         if(index==id)
         {
           selectedYaxis=m?.selectedYAxis || "";
+          setselectedyaxis(selectedYaxis)
           selectedXaxis=m?.selectedXAxis || "";
+          setselectedxaxis(selectedXaxis)
           isSheetchart=m?.isSheetChart || "";
           clickedsheetname=m?.clickedsheetname || "";
           setthissheetname(clickedsheetname)
@@ -353,9 +385,7 @@ useEffect(()=>{
                         tick={{ fontSize: 14, fontFamily: 'Inter', fill: '#8884d8' }}
                     />
                     <Tooltip
-                        contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
-                        itemStyle={{ color: '#fff', fontWeight: 'bold' }}
-                        labelStyle={{ color: '#ccc' }}
+                        content={<CustomTooltip/>}
                     />
                     <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
                     <Bar dataKey="uv" barSize={30}>
@@ -378,7 +408,9 @@ useEffect(()=>{
                     <BarChart layout="vertical" data={mydata} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
                         <XAxis type="number" tick={true} stroke="#8884d8" />
                         <YAxis dataKey="uv" type="category" tick={true} />
-                        <Tooltip wrapperStyle={{ width: 100, backgroundColor: '#ccc' }} />
+                        <Tooltip
+                        content={<CustomTooltip/>}
+                    />
                         <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
                         <Bar dataKey="name" barSize={30}>
                             {mydata.map((entry, index) => (
@@ -400,10 +432,8 @@ useEffect(()=>{
                         <XAxis dataKey="name" tick={true} stroke="#8884d8" />
                         <YAxis dataKey='uv' tick={true} tickCount={4} tickMargin={-1} />
                         <Tooltip
-                            contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
-                            itemStyle={{ color: '#fff', fontWeight: 'bold' }}
-                            labelStyle={{ color: '#ccc' }}
-                        />
+                        content={<CustomTooltip/>}
+                    />
                         <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
                         <Bar dataKey="uv" barSize={30}>
                             {mydata.map((entry, index) => (
