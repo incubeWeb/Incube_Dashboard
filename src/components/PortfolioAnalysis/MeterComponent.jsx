@@ -227,32 +227,13 @@ const handleselectsheetfield = async() => {
   
     
     // Extract numeric value if it starts with symbols
-    const numericValue = parseFloat(value.replace(/[^0-9.-]+/g, ''));
+    const numericValue = value
     
     // Check if the extracted value is a valid number
-    if (!isNaN(numericValue)) {
-      let maxval; // Define maxval here
+    if (numericValue!='0') {
       
-      if (numericValue < 100) {
-        maxval = 100;
-      }
-       else if (numericValue <= 100) {
-        maxval = 1000; // Default max for values <= 200
-      } else if (numericValue <= 1000) {
-        maxval = 1000; // For values between 201 and 1000
-      } else if (numericValue <= 10000) {
-        maxval = 10000; // For values between 1001 and 10000
-      } else if (numericValue <= 100000) {
-        maxval = 100000; // For values between 10001 and 100000
-      } else {
-        maxval = 1000000; // For values above 100000
-      }
-
-      // Calculate the percentage based on the numeric value
-      const percentageValue = (numericValue / maxval) * 100;
 
       // Update the value and ensure it's within range
-      value = Math.round(percentageValue); // Round to the nearest integer
     } else {
       // If it's not a valid number, set to default value
       value = 0; // or set it to some default string like '$0'
