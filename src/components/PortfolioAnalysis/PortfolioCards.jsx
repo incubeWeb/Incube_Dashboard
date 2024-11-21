@@ -121,9 +121,14 @@ const PortfolioCards = ({selectedTab,id,setgetportfoliocarddata,initialLable,por
                   "Authorization":`Bearer ${token}`
                 }
               })
+            let v='0'
+           
+            if(responseS.data.data!=undefined){
             const data=JSON.parse(responseS.data.data)
             const sheetvalue=String(data[0][values.sheetfieldselected])
-            const v=sheetvalue.match(/\d+(\.\d+)?/)?sheetvalue.match(/\d+(\.\d+)?/)[0]:'0'
+            v=sheetvalue.match(/\d+(\.\d+)?/)?sheetvalue.match(/\d+(\.\d+)?/)[0]:'0'
+            
+            }
             setshowvalue(v)
             //setportfoliocardlabelvalue(values.labelname)
             setlablename(values.labelname)
@@ -181,10 +186,15 @@ const PortfolioCards = ({selectedTab,id,setgetportfoliocarddata,initialLable,por
                 })
             setportfoliocardsheetid(sheetid)
             setclickedSheetId(sheetid)
-              const data=JSON.parse(responseS.data.data)
-              const sheetvalue=String(data[0][values.sheetfieldselected])
-                const v=sheetvalue.match(/\d+(\.\d+)?/)?sheetvalue.match(/\d+(\.\d+)?/)[0]:'0'
-                setshowvalue(v)
+            let v='0'
+            
+            if(responseS.data.data!=undefined){
+                const data=JSON.parse(responseS.data.data)
+                const sheetvalue=String(data[0][values.sheetfieldselected])
+                v=sheetvalue.match(/\d+(\.\d+)?/)?sheetvalue.match(/\d+(\.\d+)?/)[0]:'0'
+            
+            }
+            setshowvalue(v)
               //setportfoliocardlabelvalue(values.labelname)
               setlablename(values.labelname)
               setportfoliocardsheetfield(values.sheetfieldselected)
@@ -519,8 +529,7 @@ const handleselectsheetfield=async()=>{
 
     const handleEditcomplete=async()=>{
         console.log(clickedSheetId)
-        if(clickedSheetId!="")
-        {
+        
         const constructingcarddetails={showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue,prevShowVal:prevShowVal }
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate-portfoliocards`,{cardid:id,carddetails:JSON.stringify(constructingcarddetails)},{
             headers:{
@@ -530,7 +539,7 @@ const handleselectsheetfield=async()=>{
         if(response.data.status==200){
             seteditLabel(false)
         }
-    }
+    
     }
    
 
