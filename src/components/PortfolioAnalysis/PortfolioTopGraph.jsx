@@ -127,7 +127,7 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
     useEffect(()=>{
         const setGraphValues=async()=>{
           
-            console.log("graph portfolio",PortfolioGraphvalues)
+      
             
             if(PortfolioGraphvalues.length==0)
             {
@@ -684,7 +684,7 @@ const PortfolioTopGraph = ({setgettingmetervalue,PortfolioGraphvalues,PortfolioM
                                       <div><p className="text-[14px]">X-axis</p></div>
                                       <select className="text-[14px] w-[60%] h-[100%] border-[1px] border-gray-600 outline-none" value={sheetfieldselectedX || ''} onChange={(e)=>setsheetfieldselectedX(e.target.value)}>
                                       {Loading1 && sheetKeys.length==0 ? (
-                                            <option value="">
+                                            <option>
                                         <div className="flex items-center">
                                         <AiOutlineLoading3Quarters className="animate-spin mr-2" /> 
                                         Loading...

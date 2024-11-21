@@ -187,11 +187,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
            {
             stateValues=[]
            }
-           try{
-            val1=data2 || []
-           }catch(e){
-            val1=JSON.parse(data2) || []
-           }
+           
 
            try{
            val2=data3 || [] //JSON.parse(data)

@@ -401,7 +401,8 @@ useEffect(() => {
     updateLayoutItem(newItem); // Only update x, y, w, h
   };
   
-  
+  const containerref=useRef(null)
+
   const setSize = (id, ref, position) => {
     setBoxes(boxes.map(box =>
       box.id === id ? {
@@ -449,7 +450,7 @@ useEffect(() => {
     <div className=' flex flex-col w-[100%] h-[0%] items-end '>
     
 </div>
-      <div  className={`${hidenavbar?'pl-[4%]':'pl-[21%]'} flex  h-[100%]`}>
+      <div ref={containerref} className={`${hidenavbar?'pl-[4%]':'pl-[21%]'} flex  h-[100%]`}>
         
       <ResponsiveReactGridLayout
       className="layout w-[100%] "
@@ -461,7 +462,8 @@ useEffect(() => {
       isResizable={true}
       isDraggable={isDraggable}
       onResizeStop={onResizeStop}
-        onDragStop={onDragStop}
+      onDragStop={onDragStop}
+        
     >
       
       
@@ -732,6 +734,7 @@ useEffect(() => {
       </div>
       {showPopup && (
         <ChartPopup
+        containerref
         dashboardbotdata
         setdashboardbotdata
         dashboard

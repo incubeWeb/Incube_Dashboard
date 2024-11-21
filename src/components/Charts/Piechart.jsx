@@ -113,6 +113,10 @@ const Piechart = ({boxid,investmentchange,setdashboardbotdata, id, outerRadius, 
         }
       });
 
+      if (typeof newObj.name === 'string' && typeof newObj.value === 'string') {
+        newObj.value = extractValue(newObj.value);
+    }
+
       return newObj;
     });
   }
@@ -396,8 +400,8 @@ const Piechart = ({boxid,investmentchange,setdashboardbotdata, id, outerRadius, 
 
 
   return (
-    <div style={{ width: '100%', height: '85%',paddingBottom:'15px' }}>
-     <p className='mt-4 ml-[5px] font-inter font-semibold'>{thissheetname.replace(/^\d+_/, "")}</p>
+    <div style={{ width: '100%', height: '85%',paddingBottom:'0px' }}>
+     <p className='mt-4 ml-[5px] font-inter font-semibold'>{thissheetname.replace(/^\d+-/, "")}</p>
       {loading ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
           <Bars color="#8884d8" height={80} width={80} />

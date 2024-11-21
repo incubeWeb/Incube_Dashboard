@@ -43,6 +43,25 @@ const RenderBarChart = ({boxid,investmentchange,setdashboardbotdata,id,data01,cl
     return null;
   }
 
+  const CustomTooltipHorizontal = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      const uvEntry = payload.find((entry) => entry.dataKey === 'name');
+        return (
+            <div className="custom-tooltip" style={{ background: '#fff', padding: '10px', border: '1px solid #ccc' }}>
+                <p className="label">{`${selectedyaxis}: ${label}`}</p>
+                {uvEntry && (
+                    <p style={{ color: uvEntry.color }}>
+                        {`${selectedxaxis}: ${uvEntry.value}`}
+                    </p>
+                )}
+                
+            </div>
+        );
+    }
+
+    return null;
+  }
+
   function extractValue(input) {
     const continuousDigitsPattern = /^\D*(\d+)\D*$/;
     const str=String(input);
@@ -105,10 +124,20 @@ const RenderBarChart = ({boxid,investmentchange,setdashboardbotdata,id,data01,cl
                     break;
             }
         });
-
+        if (typeof newObj.name === 'string' && typeof newObj.uv === 'string') {
+          let prev=newObj.uv
+          let newv = extractValue(newObj.uv);
+          if(newv==0){
+            newObj.uv=prev
+          }else{
+            newObj.uv=newv
+          }
+      }
         return newObj;
     });
   }
+
+
 
   const fieldConversionsNormal = {
     name: mydatatypex,
@@ -359,6 +388,8 @@ useEffect(()=>{
 });
   },[mydata])
 
+  const maxY = Math.max(...mydata.map(item => item.uv));
+  const maxX=Math.max(...mydata.map(item=>item.name))
 
   return (
     <div style={{ width: '100%', height: '95%' ,paddingBottom:'15px'}} className='mt-8  pr-0'>
@@ -366,11 +397,11 @@ useEffect(()=>{
       <div style={{ width: '100%', height: '90%' }} className='mt-2 pr-5 ml-[-20px]'>
     {mydatatypex === 'string' && mydatatypey === 'number' ?
         <div className='' style={{ paddingBottom: '20px' }}>
-            <p className='text-[16px] font-semibold font-inter -mt-4 ml-6'>{thissheetname.replace(/^\d+_/, "")}</p>
+            <p className='text-[16px] font-semibold font-inter -mt-4 ml-6'>{thissheetname.replace(/^\d+-/, "")}</p>
         </div>
         :
         <div className=' -pt-4' style={{ paddingBottom: '20px' }}>
-            <p className='text-[16px] font-semibold font-inter -mt-4 ml-6'>{thissheetname.replace(/^\d+_/, "")}</p>
+            <p className='text-[16px] font-semibold font-inter -mt-4 ml-6'>{thissheetname.replace(/^\d+-/, "")}</p>
         </div>
     }
 
@@ -378,10 +409,10 @@ useEffect(()=>{
         {mydatatypex === 'string' && mydatatypey === 'number' ?
             <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={mydata}>
-                    <XAxis dataKey="name" stroke="#8884d8"
+                    <XAxis dataKey="name" stroke="#8884d8" domain={[0, maxY]}
                         tick={{ fontSize: 16, fontFamily: 'Inter', fill: '#8884d8' }}
                     />
-                    <YAxis dataKey='uv' tickCount={4} tickMargin={-1}
+                    <YAxis dataKey='uv' domain={[0, maxY]}
                         tick={{ fontSize: 14, fontFamily: 'Inter', fill: '#8884d8' }}
                     />
                     <Tooltip
@@ -406,10 +437,10 @@ useEffect(()=>{
             mydatatypex === 'number' && mydatatypey === 'string' ?
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart layout="vertical" data={mydata} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
-                        <XAxis type="number" tick={true} stroke="#8884d8" />
-                        <YAxis dataKey="uv" type="category" tick={true} />
+                        <XAxis dataKey="name" type="number" tick={true} stroke="#8884d8" domain={[0, maxX]} />
+                        <YAxis dataKey="uv" type="category" tick={true} domain={[0, maxX]}/>
                         <Tooltip
-                        content={<CustomTooltip/>}
+                        content={<CustomTooltipHorizontal/>}
                     />
                         <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
                         <Bar dataKey="name" barSize={30}>
@@ -428,27 +459,31 @@ useEffect(()=>{
                 </ResponsiveContainer>
                 :
                 <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={mydata}>
-                        <XAxis dataKey="name" tick={true} stroke="#8884d8" />
-                        <YAxis dataKey='uv' tick={true} tickCount={4} tickMargin={-1} />
-                        <Tooltip
+                <BarChart data={mydata}>
+                    <XAxis dataKey="name" stroke="#8884d8" domain={[0, maxY]}
+                        tick={{ fontSize: 16, fontFamily: 'Inter', fill: '#8884d8' }}
+                    />
+                    <YAxis dataKey='uv' domain={[0, maxY]}
+                        tick={{ fontSize: 14, fontFamily: 'Inter', fill: '#8884d8' }}
+                    />
+                    <Tooltip
                         content={<CustomTooltip/>}
                     />
-                        <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                        <Bar dataKey="uv" barSize={30}>
-                            {mydata.map((entry, index) => (
-                                <Cell
-                                    key={`cell-${index}`}
-                                    fill={barColor(index)}
-                                    onMouseEnter={() => handleMouseEnter(index)}  // Set hovered bar on mouse enter
-                                    onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
-                                    radius={[0, 10, 0, 0]}
-
-                                />
-                            ))}
-                        </Bar>
-                    </BarChart>
-                </ResponsiveContainer>
+                    <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
+                    <Bar dataKey="uv" barSize={30}>
+                        {mydata.map((entry, index) => (
+                            <Cell
+                                key={`cell-${index}`}
+                                fill={barColor(index)}
+                                onMouseEnter={() => handleMouseEnter(index)}  // Set hovered bar on mouse enter
+                                onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
+                            
+                                radius={[10, 10, 0, 0]}
+                            />
+                        ))}
+                    </Bar>
+                </BarChart>
+            </ResponsiveContainer>
         }
     </div>
 </div>

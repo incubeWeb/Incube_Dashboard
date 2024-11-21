@@ -90,6 +90,16 @@ const Areachart = ({boxid,investmentchange,setdashboardbotdata,id,data01,clicked
             }
         });
 
+        if (typeof newObj.pv === 'string' && typeof newObj.uv === 'string') {
+          let prev=newObj.uv
+          let newv = extractValue(newObj.uv);
+          if(newv==0){
+            newObj.uv=prev
+          }else{
+            newObj.uv=newv
+          }
+      }
+
         return newObj;
     });
 }
@@ -367,9 +377,32 @@ useEffect(()=>{
     return null;
 };
 
+const CustomTooltipHorizontal = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    const uvEntry = payload.find((entry) => entry.dataKey === 'pv');
+      return (
+          <div className="custom-tooltip" style={{ background: '#fff', padding: '10px', border: '1px solid #ccc' }}>
+              <p className="label">{`${selectedyaxis}: ${label}`}</p>
+              {uvEntry && (
+                  <p style={{ color: uvEntry.color }}>
+                      {`${selectedxaxis}: ${uvEntry.value}`}
+                  </p>
+              )}
+              
+          </div>
+      );
+  }
+
+  return null;
+}
+
+const maxY = Math.max(...mydata.map(item => item.uv));
+  const maxX=Math.max(...mydata.map(item=>item.pv))
+
+
   return (
     <div style={{ width: '100%', height: '90%' }} className='mt-4  pr-10'>
-   <p className='font-inter font-semibold text-[16px] ml-1 -mt-4'>  {thissheetname.replace(/^\d+_/, "")}
+   <p className='font-inter font-semibold text-[16px] ml-1 -mt-4'>  {thissheetname.replace(/^\d+-/, "")}
    </p>    <div className='w-[100%] h-[100%] mt-3 pr-0'>
     <ResponsiveContainer width="100%" height="100%">
                     {mydatatypex === 'string' && mydatatypey === 'number' ? (
@@ -379,8 +412,8 @@ useEffect(()=>{
                             margin={{ top: 5, right: 0, left: -20, bottom: 5 }}
                         >
                             <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                            <XAxis dataKey="pv" tickCount={4}/>
-                            <YAxis tickCount={4} />
+                            <XAxis dataKey="pv" tickCount={4} domain={[0, maxY]}/>
+                            <YAxis tickCount={4} domain={[0, maxY]}/>
                             <Tooltip content={<CustomTooltip />} />
                             <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
                             <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
@@ -392,12 +425,12 @@ useEffect(()=>{
                         <AreaChart
                             layout="vertical"
                             data={mydata}
-                            margin={{ top: 5, right: 0, left: -20, bottom: 5 }}
+                            margin={{ top: 5, right: 0, left: 0, bottom: 5 }}
                         >
                              <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                            <XAxis type="number" dataKey="pv" />
-                            <YAxis type="category" dataKey="uv"  tickCount={4}/>
-                            <Tooltip content={<CustomTooltip />} />
+                            <XAxis type="number" domain={[0, maxX]}/>
+                            <YAxis type="category" dataKey="uv" tickCount={4} domain={[0, maxX]}/>
+                            <Tooltip content={<CustomTooltipHorizontal />} />
                             <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
                             <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />
                         </AreaChart>
@@ -408,8 +441,8 @@ useEffect(()=>{
                       margin={{ top: 5, right: 0, left: -20, bottom: 5 }}
                   >
                       <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                      <XAxis dataKey="pv" tickCount={4}/>
-                      <YAxis tickCount={4} />
+                      <XAxis dataKey="pv" tickCount={4} domain={[0, maxY]}/>
+                      <YAxis tickCount={4} domain={[0, maxY]}/>
                       <Tooltip content={<CustomTooltip />} />
                       <Area type="monotone" dataKey="pv" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
                       <Area type="monotone" dataKey="uv" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.3} />

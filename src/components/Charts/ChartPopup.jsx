@@ -23,6 +23,7 @@ import { useSheet } from "../SheetContext/SheetContext";
 
 
 const ChartPopup = ({
+  containerref,
   dashboardbotdata,
   setdashboardbotdata,
   showValue,
@@ -363,11 +364,29 @@ const ChartPopup = ({
         setbarchartcount(prev=>[...prev,{values:[...data01,...xAxisValues.map((val,index)=>({name:val,uv:parseInt(yAxisValues[index])}))]}])
       }
       const lastBox = boxes[boxes.length - 1];
-      
+      let newX = 0;
+    let newY = 0;
+
+    if (lastBox) {
+      // Calculate which row and column this box should go into
+      const lastBoxCol = boxes.length % 4; // Current column in the current row
+      const lastBoxRow = Math.floor(boxes.length / 4); // Current row number
+
+      // Calculate the X position (move to the next column)
+      newX = lastBox.x+4; // 100px is the width of each box
+
+      // If the box would overflow to the right, start a new row
+      if (lastBoxCol === 4- 1) {
+        newX = 0; // Reset X to 0 for the next row
+        newY = (lastBoxRow + 1) * 100; // Move to the next row (below)
+      } else {
+        newY = lastBox.x+4; // Stay in the current row
+      }
+    }
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: 10, // Adds in the next available position
-        y: 10,
+        x: newX, // Adds in the next available position
+        y: newY,
         w: 4,
         h: 4, // Add some space below the last box
         minW: 2.5,
@@ -403,10 +422,29 @@ const ChartPopup = ({
       
 
       const lastBox = boxes[boxes.length - 1];
+      let newX = 0;
+    let newY = 0;
+
+    if (lastBox) {
+      // Calculate which row and column this box should go into
+      const lastBoxCol = boxes.length % 4; // Current column in the current row
+      const lastBoxRow = Math.floor(boxes.length / 4); // Current row number
+
+      // Calculate the X position (move to the next column)
+      newX = lastBox.x+4; // 100px is the width of each box
+
+      // If the box would overflow to the right, start a new row
+      if (lastBoxCol === 4- 1) {
+        newX = 0; // Reset X to 0 for the next row
+        newY = (lastBoxRow + 1) * 100; // Move to the next row (below)
+      } else {
+        newY = lastBox.x+4; // Stay in the current row
+      }
+    }
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: 10, // Adds in the next available position
-        y: 10,
+        x: newX, // Adds in the next available position
+        y: newY,
         w: 4,
         h: 4, // Add some space below the last box // Add some space below the last box
         minW: 3,
@@ -485,10 +523,29 @@ const ChartPopup = ({
     setisSheetChart(!isSheetchart)
     setpiechartcount([{values:data01}])
       const lastBox = boxes[boxes.length - 1];
+      let newX = 0;
+    let newY = 0;
+
+    if (lastBox) {
+      // Calculate which row and column this box should go into
+      const lastBoxCol = boxes.length % 4; // Current column in the current row
+      const lastBoxRow = Math.floor(boxes.length / 4); // Current row number
+
+      // Calculate the X position (move to the next column)
+      newX = lastBox.x+4; // 100px is the width of each box
+
+      // If the box would overflow to the right, start a new row
+      if (lastBoxCol === 4- 1) {
+        newX = 0; // Reset X to 0 for the next row
+        newY = (lastBoxRow + 1) * 100; // Move to the next row (below)
+      } else {
+        newY = lastBox.x+4; // Stay in the current row
+      }
+    }
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: 10, // Adds in the next available position
-        y: 10,
+        x: newX, // Adds in the next available position
+        y: newY,
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
         minW: 3,
@@ -514,10 +571,29 @@ const ChartPopup = ({
     setisSheetChart(!isSheetchart)
     setpiechartcount([{values:data01}])
       const lastBox = boxes[boxes.length - 1];
+      let newX = 0;
+    let newY = 0;
+
+    if (lastBox) {
+      // Calculate which row and column this box should go into
+      const lastBoxCol = boxes.length % 4; // Current column in the current row
+      const lastBoxRow = Math.floor(boxes.length / 4); // Current row number
+
+      // Calculate the X position (move to the next column)
+      newX = lastBox.x+4; // 100px is the width of each box
+
+      // If the box would overflow to the right, start a new row
+      if (lastBoxCol === 4- 1) {
+        newX = 0; // Reset X to 0 for the next row
+        newY = (lastBoxRow + 1) * 100; // Move to the next row (below)
+      } else {
+        newY = lastBox.x+4; // Stay in the current row
+      }
+    }
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: 10, // Adds in the next available position
-        y: 10,
+        x: newX, // Adds in the next available position
+        y: newY,
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
         minW: 3,
@@ -542,10 +618,29 @@ const ChartPopup = ({
    
     setareachartcount([{values:data01}])
       const lastBox = boxes[boxes.length - 1];
+      let newX = 0;
+    let newY = 0;
+
+    if (lastBox) {
+      // Calculate which row and column this box should go into
+      const lastBoxCol = boxes.length % 4; // Current column in the current row
+      const lastBoxRow = Math.floor(boxes.length / 4); // Current row number
+
+      // Calculate the X position (move to the next column)
+      newX = lastBox.x+4; // 100px is the width of each box
+
+      // If the box would overflow to the right, start a new row
+      if (lastBoxCol === 4- 1) {
+        newX = 0; // Reset X to 0 for the next row
+        newY = (lastBoxRow + 1) * 100; // Move to the next row (below)
+      } else {
+        newY = lastBox.x+4; // Stay in the current row
+      }
+    }
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: 10, // Adds in the next available position
-        y: 10,
+        x: newX, // Adds in the next available position
+        y: newY,
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
         minW: 2.5,
@@ -573,10 +668,29 @@ const ChartPopup = ({
 
     setareachartcount([{values:data01}])
       const lastBox = boxes[boxes.length - 1];
+      let newX = 0;
+    let newY = 0;
+
+    if (lastBox) {
+      // Calculate which row and column this box should go into
+      const lastBoxCol = boxes.length % 4; // Current column in the current row
+      const lastBoxRow = Math.floor(boxes.length / 4); // Current row number
+
+      // Calculate the X position (move to the next column)
+      newX = lastBox.x+4; // 100px is the width of each box
+
+      // If the box would overflow to the right, start a new row
+      if (lastBoxCol === 4- 1) {
+        newX = 0; // Reset X to 0 for the next row
+        newY = (lastBoxRow + 1) * 100; // Move to the next row (below)
+      } else {
+        newY = lastBox.x+4; // Stay in the current row
+      }
+    }
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: 10, // Adds in the next available position
-        y: 10,
+        x: newX, // Adds in the next available position
+        y: newY,
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
         minW: 2.5,
@@ -602,10 +716,29 @@ const ChartPopup = ({
 
   setbarchartcount([{values:data01}])
     const lastBox = boxes[boxes.length - 1];
+    let newX = 0;
+    let newY = 0;
+
+    if (lastBox) {
+      // Calculate which row and column this box should go into
+      const lastBoxCol = boxes.length % 4; // Current column in the current row
+      const lastBoxRow = Math.floor(boxes.length / 4); // Current row number
+
+      // Calculate the X position (move to the next column)
+      newX = lastBox.x+4; // 100px is the width of each box
+
+      // If the box would overflow to the right, start a new row
+      if (lastBoxCol === 4- 1) {
+        newX = 0; // Reset X to 0 for the next row
+        newY = (lastBoxRow + 1) * 100; // Move to the next row (below)
+      } else {
+        newY = lastBox.x+4; // Stay in the current row
+      }
+    }
     const newBox = {
       id: lastBox ? lastBox.id + 1 : 1,
-      x: 10, // Adds in the next available position
-        y: 10,
+      x: newX, // Adds in the next available position
+        y: newY,
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
         minW: 4,
@@ -631,10 +764,29 @@ const ChartPopup = ({
 
   setbarchartcount([{values:data01}])
     const lastBox = boxes[boxes.length - 1];
+    let newX = 0;
+    let newY = 0;
+
+    if (lastBox) {
+      // Calculate which row and column this box should go into
+      const lastBoxCol = boxes.length % 4; // Current column in the current row
+      const lastBoxRow = Math.floor(boxes.length / 4); // Current row number
+
+      // Calculate the X position (move to the next column)
+      newX = lastBox.x+4; // 100px is the width of each box
+
+      // If the box would overflow to the right, start a new row
+      if (lastBoxCol === 4- 1) {
+        newX = 0; // Reset X to 0 for the next row
+        newY = (lastBoxRow + 1) * 100; // Move to the next row (below)
+      } else {
+        newY = lastBox.x+4; // Stay in the current row
+      }
+    }
     const newBox = {
       id: lastBox ? lastBox.id + 1 : 1,
-      x: 10, // Adds in the next available position
-        y: 10,
+      x: newX, // Adds in the next available position
+        y: newY,
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
         minW: 2.5,
@@ -658,13 +810,31 @@ const ChartPopup = ({
 
   const handleCreatePiechart=()=>{
       xAxisValues.map((val,index)=>setdata01(prev=>[...prev,{name:val,value:parseInt(yAxisValues[index])}]))
-    
+      let newX = 0;
+    let newY = 0;
+
+    if (lastBox) {
+      // Calculate which row and column this box should go into
+      const lastBoxCol = boxes.length % 4; // Current column in the current row
+      const lastBoxRow = Math.floor(boxes.length / 4); // Current row number
+
+      // Calculate the X position (move to the next column)
+      newX = lastBox.x+4; // 100px is the width of each box
+
+      // If the box would overflow to the right, start a new row
+      if (lastBoxCol === 4- 1) {
+        newX = 0; // Reset X to 0 for the next row
+        newY = (lastBoxRow + 1) * 100; // Move to the next row (below)
+      } else {
+        newY = lastBox.x+4; // Stay in the current row
+      }
+    }
       setpiechartcount(prev=>[...prev,{values:[...data01,...xAxisValues.map((val,index)=>({name:val,value:parseInt(yAxisValues[index])}))]}])
       const lastBox = boxes[boxes.length - 1];
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: 10, // Adds in the next available position
-        y: 10,
+        x: newX, // Adds in the next available position
+        y: newY,
         w: 4,
         h: 4, // Add some space below the last box// Add some space below the last box
         minW: 2.5,
@@ -686,10 +856,29 @@ const ChartPopup = ({
     settypeofchart('AssignedDeals')
     setchatwidgit(false)
     const lastBox = boxes[boxes.length - 1];
+    let newX = 0;
+    let newY = 0;
+
+    if (lastBox) {
+      // Calculate which row and column this box should go into
+      const lastBoxCol = boxes.length % 4; // Current column in the current row
+      const lastBoxRow = Math.floor(boxes.length / 4); // Current row number
+
+      // Calculate the X position (move to the next column)
+      newX = lastBox.x+5; // 100px is the width of each box
+
+      // If the box would overflow to the right, start a new row
+      if (lastBoxCol === 4- 1) {
+        newX = 0; // Reset X to 0 for the next row
+        newY = (lastBoxRow + 1) * 100; // Move to the next row (below)
+      } else {
+        newY = lastBox.x+5; // Stay in the current row
+      }
+    }
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: 10, // Adds in the next available position
-        y: 10,
+        x: newX, // Adds in the next available position
+        y: newY,
         w: 5,
         h: 3, // Add some space below the last box
         minW: 4,
@@ -704,10 +893,29 @@ const ChartPopup = ({
     settypeofchart('chat')
     setchatwidgit(true)
     const lastBox = boxes[boxes.length - 1];
+    let newX = 0;
+    let newY = 0;
+
+    if (lastBox) {
+      // Calculate which row and column this box should go into
+      const lastBoxCol = boxes.length % 4; // Current column in the current row
+      const lastBoxRow = Math.floor(boxes.length / 4); // Current row number
+
+      // Calculate the X position (move to the next column)
+      newX = lastBox.x+3; // 100px is the width of each box
+
+      // If the box would overflow to the right, start a new row
+      if (lastBoxCol === 4- 1) {
+        newX = 0; // Reset X to 0 for the next row
+        newY = (lastBoxRow + 1) * 100; // Move to the next row (below)
+      } else {
+        newY = lastBox.x+3; // Stay in the current row
+      }
+    }
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: 10, // Adds in the next available position
-        y: 10,
+        x: newX, // Adds in the next available position
+        y: newY,
         w: 3,
         h: 4, // Add some space below the last box // Add some space below the last box
         minW: 3,
@@ -722,10 +930,29 @@ const ChartPopup = ({
     settypeofchart('calendarwidgit')
     setchatwidgit(false)
     const lastBox = boxes[boxes.length - 1];
+    let newX = 0;
+    let newY = 0;
+
+    if (lastBox) {
+      // Calculate which row and column this box should go into
+      const lastBoxCol = boxes.length % 4; // Current column in the current row
+      const lastBoxRow = Math.floor(boxes.length / 4); // Current row number
+
+      // Calculate the X position (move to the next column)
+      newX = lastBox.x+5; // 100px is the width of each box
+
+      // If the box would overflow to the right, start a new row
+      if (lastBoxCol === 4- 1) {
+        newX = 0; // Reset X to 0 for the next row
+        newY = (lastBoxRow + 1) * 100; // Move to the next row (below)
+      } else {
+        newY = lastBox.x+5; // Stay in the current row
+      }
+    }
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: 10, // Adds in the next available position
-        y: 10,
+        x: newX, // Adds in the next available position
+        y: newY,
         w: 5,
         h: 3, // Add some space below the last box// Add some space below the last box
         minW: 4,
@@ -741,10 +968,29 @@ const ChartPopup = ({
 
     settimelinewidgit((prev)=>!prev)
     const lastBox = boxes[boxes.length - 1];
+    let newX = 0;
+    let newY = 0;
+
+    if (lastBox) {
+      // Calculate which row and column this box should go into
+      const lastBoxCol = boxes.length % 4; // Current column in the current row
+      const lastBoxRow = Math.floor(boxes.length / 4); // Current row number
+
+      // Calculate the X position (move to the next column)
+      newX = lastBox.x+5; // 100px is the width of each box
+
+      // If the box would overflow to the right, start a new row
+      if (lastBoxCol === 4- 1) {
+        newX = 0; // Reset X to 0 for the next row
+        newY = (lastBoxRow + 1) * 100; // Move to the next row (below)
+      } else {
+        newY = lastBox.x+5; // Stay in the current row
+      }
+    }
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: 10, // Adds in the next available position
-        y: 10,
+        x: newX, // Adds in the next available position
+        y: newY+1,
         w: 5,
         h: 5, // Add some space below the last box
         minW: 4,
@@ -759,10 +1005,29 @@ const ChartPopup = ({
     settypeofchart('news')
 
     const lastBox = boxes[boxes.length - 1];
+    let newX = 0;
+    let newY = 0;
+
+    if (lastBox) {
+      // Calculate which row and column this box should go into
+      const lastBoxCol = boxes.length % 4; // Current column in the current row
+      const lastBoxRow = Math.floor(boxes.length / 4); // Current row number
+
+      // Calculate the X position (move to the next column)
+      newX = lastBox.x+3; // 100px is the width of each box
+
+      // If the box would overflow to the right, start a new row
+      if (lastBoxCol === 4- 1) {
+        newX = 0; // Reset X to 0 for the next row
+        newY = (lastBoxRow + 1) * 100; // Move to the next row (below)
+      } else {
+        newY = lastBox.x+3; // Stay in the current row
+      }
+    }
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: 10, // Adds in the next available position
-        y: 10,
+        x: newX, // Adds in the next available position
+        y: newY,
         w: 3,
         h: 3, // Add some space below the last box // Add some space below the last box
         minW: 2.5,
@@ -778,11 +1043,32 @@ const ChartPopup = ({
     settypeofchart('portfoliocard')
     setportfoliocardwidgit(!portfoliocardwidgit)
 
+
+
     const lastBox = boxes[boxes.length - 1];
+    let newX = 0;
+    let newY = 0;
+
+    if (lastBox) {
+      // Calculate which row and column this box should go into
+      const lastBoxCol = boxes.length % 4; // Current column in the current row
+      const lastBoxRow = Math.floor(boxes.length / 4); // Current row number
+
+      // Calculate the X position (move to the next column)
+      newX = lastBox.x+3; // 100px is the width of each box
+
+      // If the box would overflow to the right, start a new row
+      if (lastBoxCol === 4- 1) {
+        newX = 0; // Reset X to 0 for the next row
+        newY = (lastBoxRow + 1) * 100; // Move to the next row (below)
+      } else {
+        newY = lastBox.x+3; // Stay in the current row
+      }
+    }
       const newBox = {
         id: lastBox ? lastBox.id + 1 : 1,
-        x: 10, // Adds in the next available position
-        y: 10,
+        x: newX, // Adds in the next available position
+        y: newY,
         w: 3,
         h: 2, // Add some space below the last box // Add some space below the last box
         minW: 2.5,

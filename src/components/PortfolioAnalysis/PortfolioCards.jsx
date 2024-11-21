@@ -102,10 +102,9 @@ const PortfolioCards = ({selectedTab,id,setgetportfoliocarddata,initialLable,por
           }
         })
 
-        console.log(response.data.data,"of ",id)
         if(response.data.status==200){
             const responsedata=response.data.data
-            console.log("carddetails",responsedata.carddetails,typeof(responsedata.carddetails))
+            
             let values=[]
             try{
             values=JSON.parse(responsedata.carddetails)
@@ -114,17 +113,28 @@ const PortfolioCards = ({selectedTab,id,setgetportfoliocarddata,initialLable,por
                 return
             }
             setportfoliocardsheetid(values.sheetId)
+            setclickedSheetId(values.sheetId)
             //setportfoliocardshowvalue(values.showValue)
-            setshowvalue(values.showValue)
+            const sheetid=values.sheetId
+            const responseS=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetid,organization:Logorganization},{
+                headers:{
+                  "Authorization":`Bearer ${token}`
+                }
+              })
+            const data=JSON.parse(responseS.data.data)
+            const sheetvalue=String(data[0][values.sheetfieldselected])
+            const v=sheetvalue.match(/\d+(\.\d+)?/)?sheetvalue.match(/\d+(\.\d+)?/)[0]:'0'
+            setshowvalue(v)
             //setportfoliocardlabelvalue(values.labelname)
             setlablename(values.labelname)
             setportfoliocardsheetfield(values.sheetfieldselected)
+            setsheetfieldselected(values.sheetfieldselected)
            // setportfoliocardcurrencyvalue(values.currencyValue)
            setcurrencyvalue(values.currencyValue)
             //setportfoliocardprevshowvalue(values.prevShowVal)
             setprevShowVal(values.prevShowVal)
             setIcon(getIconComponent(values.portfolioicon))
-            CheckChangedpercentage(values.prevShowVal,values.showValue)
+            CheckChangedpercentage(values.prevShowVal,v)
             setloading(false)
         }
 
@@ -143,15 +153,17 @@ const PortfolioCards = ({selectedTab,id,setgetportfoliocarddata,initialLable,por
           
           if(response.data.status==200){
               const responsedata=response.data.data
-              console.log("carddetails",responsedata.carddetails,typeof(responsedata.carddetails))
+              
               let values=[]
               try{
               values=JSON.parse(responsedata.carddetails)
               }catch(e){
                   setportfoliocardsheetid('')
+                  setclickedSheetId('')
                   setshowvalue('0')
                   setlablename(initialLable)
                   setportfoliocardsheetfield('')
+                  setsheetfieldselected('')
                   setcurrencyvalue('')
                   setprevShowVal('')
                   setIcon(getIconComponent(''))
@@ -159,21 +171,32 @@ const PortfolioCards = ({selectedTab,id,setgetportfoliocarddata,initialLable,por
                   CheckChangedpercentage('0','0')
                   return
               }
-              setportfoliocardsheetid(values.sheetId)
+              
               //setportfoliocardshowvalue(values.showValue)
-              setshowvalue(values.showValue)
+              const sheetid=values.sheetId
+              const responseS=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetid,organization:Logorganization},{
+                  headers:{
+                    "Authorization":`Bearer ${token}`
+                  }
+                })
+            setportfoliocardsheetid(sheetid)
+            setclickedSheetId(sheetid)
+              const data=JSON.parse(responseS.data.data)
+              const sheetvalue=String(data[0][values.sheetfieldselected])
+                const v=sheetvalue.match(/\d+(\.\d+)?/)?sheetvalue.match(/\d+(\.\d+)?/)[0]:'0'
+                setshowvalue(v)
               //setportfoliocardlabelvalue(values.labelname)
               setlablename(values.labelname)
               setportfoliocardsheetfield(values.sheetfieldselected)
+              setsheetfieldselected(values.sheetfieldselected)
              // setportfoliocardcurrencyvalue(values.currencyValue)
              setcurrencyvalue(values.currencyValue)
               //setportfoliocardprevshowvalue(values.prevShowVal)
               setprevShowVal(values.prevShowVal)
               setIcon(getIconComponent(values.portfolioicon))
-              CheckChangedpercentage(values.prevShowVal,values.showValue)
+              CheckChangedpercentage(values.prevShowVal,v)
               setloading(false)
           }
-  
         }
         settingportfoliocardvalues()
       },[selectedTab])
@@ -182,23 +205,16 @@ const PortfolioCards = ({selectedTab,id,setgetportfoliocarddata,initialLable,por
       useEffect(()=>
         {
            const fun=async()=>{
-            console.log("sheetedited",portfoliocardsheetid,sheetedited.fullDocument.editedSheet,portfoliocardsheetid === sheetedited.fullDocument.editedSheet)
+           
             if(portfoliocardsheetid === sheetedited.fullDocument.editedSheet)
                 {
+                    
                     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/sheetfromdb`,{id:sheetedited.fullDocument.editedSheet,organization:Logorganization},{
                         headers:{
                           "Authorization":`Bearer ${token}`
                         }
                       })
                     const data=JSON.parse(response.data.data)
-
-                    const constructingcarddetails={showValue: data[0][portfoliocardsheetfield], labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue,prevShowVal:prevShowVal }
-                    const response2=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate-portfoliocards`,{cardid:id,carddetails:JSON.stringify(constructingcarddetails)},{
-                        headers:{
-                            "Authorization":`Bearer ${token}`
-                        }
-                    })
-                    if(response2.data.status==200){
                        let value=String(data[0][portfoliocardsheetfield]) 
                         const match = value.match(/\d+(\.\d+)?/)?value.match(/\d+(\.\d+)?/)[0]:'0'
                     
@@ -210,9 +226,10 @@ const PortfolioCards = ({selectedTab,id,setgetportfoliocarddata,initialLable,por
                             // If input does not match the pattern or contains interspersed letters, return 0
                             value= 0;
                         }
-
+                        
                         setshowvalue(value)
-                    }
+                        CheckChangedpercentage(prevShowVal,value)
+                    
                     
                 }
            }
@@ -276,6 +293,8 @@ const togglePopup = () => {
             }
         },100)
     }
+
+    
 
     const handleIconClick = async(iName) => {
      // localStorage.setItem(uniqueIconKey, iconName); 
@@ -417,18 +436,26 @@ const handleselectsheetfield=async()=>{
                 // If input does not match the pattern or contains interspersed letters, return 0
                 value1= 0;
             }
-            const constructingcarddetails={showValue: value1, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue,prevShowVal:showValue }
+            let constructingcarddetails={}
+            if(value1==showValue){
+                constructingcarddetails={showValue: value1, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue,prevShowVal:prevShowVal }
+            }else{
+                constructingcarddetails={showValue: value1, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue,prevShowVal:showValue }
+            }
                     const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate-portfoliocards`,{cardid:id,carddetails:JSON.stringify(constructingcarddetails)},{
                         headers:{
                             "Authorization":`Bearer ${token}`
                         }
                     })
                     if(response.data.status==200){
+                        if(value1!=showValue){
                         setprevShowVal(showValue) 
-                        console.log("prev value chnage",showValue)
-                        console.log("here the value cahange",value1)
                         setshowvalue(value1)
                         CheckChangedpercentage(showValue,value1)
+                        }
+                        else{
+                           // CheckChangedpercentage(showValue,prevShowVal)
+                        }
                     }
          }
          catch(e)
@@ -444,7 +471,9 @@ const handleselectsheetfield=async()=>{
 
     const handlesheetclick=async(id,name)=>{
         setsheetname(name)
-        setclickedSheetId(id)       
+        if(id!==''){
+        setclickedSheetId(id)   
+        }    
         setsheetClicked(true)
         setsheetpopup(false)
        
@@ -478,7 +507,7 @@ const handleselectsheetfield=async()=>{
                 )
             })
             
-            setsheetfieldselected(fileteredKey[0])
+            
             setsheetKeys(fileteredKey)
             setLoading2(false)
         }
@@ -489,7 +518,9 @@ const handleselectsheetfield=async()=>{
 
 
     const handleEditcomplete=async()=>{
-        
+        console.log(clickedSheetId)
+        if(clickedSheetId!="")
+        {
         const constructingcarddetails={showValue: showValue, labelname: labelname,portfolioicon:iconname,sheetId:clickedSheetId,sheetfieldselected:sheetfieldselected,currencyValue:currencyValue,prevShowVal:prevShowVal }
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/setportfoliostate-portfoliocards`,{cardid:id,carddetails:JSON.stringify(constructingcarddetails)},{
             headers:{
@@ -499,6 +530,7 @@ const handleselectsheetfield=async()=>{
         if(response.data.status==200){
             seteditLabel(false)
         }
+    }
     }
    
 
@@ -542,7 +574,7 @@ const handleselectsheetfield=async()=>{
                     )
                 })
 
-            setsheetfieldselected(fileteredKey[0])
+            
             setsheetKeys(fileteredKey)
             setLoading2(false)
 
@@ -646,7 +678,7 @@ useEffect(() => {
                                             
                                             <div className='flex flex-row space-x-2'>
 
-                                            <select className='border-[1px] border-gray-300 rounded-md' onChange={(e)=>handleCurrencySelect(e.target.value)}>
+                                            <select value={currencyValue} className='border-[1px] border-gray-300 rounded-md' onChange={(e)=>handleCurrencySelect(e.target.value)}>
                                                             <option className='cursor-pointer p-2 hover:bg-gray-100' value='$'>$</option>
                                                                 <option className='cursor-pointer p-2 hover:bg-gray-100' value='€'>€</option>
                                                                 <option className='cursor-pointer p-2 hover:bg-gray-100' value='₹'>₹</option>

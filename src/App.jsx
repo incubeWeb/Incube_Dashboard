@@ -469,14 +469,22 @@ const handleselectsheetfield=()=>{
       value='0'
   }
 
+  
   setprevValue(showValue)
   setshowvalue(value);
-  console.log(widgitid,"widgit id")
+  
   setBoxes(boxes.map(box =>
-    box.id === widgitid ? { ...box,currencyValue:currencyValue, showValue:value,prevValue:box.showValue??'0',Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected } : box
+    box.id === widgitid ? value === box.showValue 
+    ? {
+      ...box,
+      currencyValue: currencyValue,
+      Sheetid: clickedSheetId,
+      sheetfieldselected: sheetfieldselected,
+    } // If value is equal to showValue, return the box unchanged
+    :{ ...box,currencyValue:currencyValue, showValue:value,prevValue:box.showValue??'0',Sheetid:clickedSheetId,sheetfieldselected:sheetfieldselected } : box
   
   ));
- 
+  
 }
 
 
@@ -546,7 +554,9 @@ useEffect(()=>{
     
   }
 
+  if(Object.keys(sheetedited).length>0){
   fun()
+  }
 },[sheetedited])
 
 const[currencyValue,setcurrencyvalue]=useState('$');
@@ -657,7 +667,7 @@ const handleCurrencySelect = (currency) => {
                                         <div  className=' w-[100%] h-[40%] flex flex-col items-center justify-center space-y-8 space-x-2'>
                                         <div className='flex flex-row space-x-2'>
 
-                                              <select onClick={(e) => e.stopPropagation()}  onMouseDown={(e) => e.stopPropagation()}  className='border-[1px] border-gray-300 rounded-md' onChange={(e)=>handleCurrencySelect(e.target.value)}>
+                                              <select value={currencyValue} onClick={(e) => e.stopPropagation()}  onMouseDown={(e) => e.stopPropagation()}  className='border-[1px] border-gray-300 rounded-md' onChange={(e)=>handleCurrencySelect(e.target.value)}>
                                                               <option className='cursor-pointer p-2 hover:bg-gray-100' value='$'>$</option>
                                                                   <option className='cursor-pointer p-2 hover:bg-gray-100' value='€'>€</option>
                                                                   <option className='cursor-pointer p-2 hover:bg-gray-100' value='₹'>₹</option>

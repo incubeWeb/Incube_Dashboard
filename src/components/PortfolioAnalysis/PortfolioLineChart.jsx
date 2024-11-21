@@ -46,6 +46,15 @@ const PortfolioLineChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheet
                         break;
                 }
             });
+            if (typeof newObj[[sheetfieldselectedX]] === 'string' && typeof newObj[[sheetfieldselectedY]] === 'string') {
+                let prev=newObj[[sheetfieldselectedY]]
+                let newv = extractValue(newObj[[sheetfieldselectedY]]);
+                if(newv==0){
+                  newObj[[sheetfieldselectedY]]=prev
+                }else{
+                  newObj[[sheetfieldselectedY]]=newv
+                }
+            }
 
             return newObj;
         });
@@ -89,15 +98,18 @@ const PortfolioLineChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheet
     const areaColor = (index) => {
         return index === hoveredIndex ? '#FF8042' : '#82ca9d';  // Change color on hover
     };
+
+    const maxX = Math.max(...data.map(item => item[[sheetfieldselectedX]]));
+  const maxY=Math.max(...data.map(item=>item[[sheetfieldselectedY]]))
     return (
         <div style={{ width: '95%', height: '90%' }} className='mt-8 pr-10'>
         { chartDatatypeX === 'string' && chartDatatypeY === 'number' ?   
             <div className='pl-8' style={{ paddingBottom: '30px' }}>
-                <p className='text-[18px] font-bold font-inter -mt-8'>{selectedSheetName}</p>
+                <p className='text-[18px] font-bold font-inter -mt-8'>{selectedSheetName.replace(/^\d+-/, "")}</p>
             </div> 
             : 
             <div className='pl-8 -pt-4' style={{ paddingBottom: '30px' }}>
-                <p className='text-[18px] font-bold font-inter -mt-8'>{selectedSheetName}</p>
+                <p className='text-[18px] font-bold font-inter -mt-8'>{selectedSheetName.replace(/^\d+-/, "")}</p>
             </div>
         }
 
@@ -109,9 +121,9 @@ const PortfolioLineChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheet
                     margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                 >
                     <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                    <XAxis  type="category" dataKey={`${sheetfieldselectedX}`} tickCount={4} tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black' }}
+                    <XAxis domain={[0, maxY]} type="category" dataKey={`${sheetfieldselectedX}`} tickCount={4} tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black' }}
                     />
-                    <YAxis  type="number" tickCount={4} dataKey={`${sheetfieldselectedY}`}
+                    <YAxis domain={[0, maxY]} type="number" tickCount={4} dataKey={`${sheetfieldselectedY}`}
                         tick={{ fontSize: 14, fontFamily: 'Inter', fill: 'black' }} 
                     />
                     <Tooltip
@@ -137,15 +149,15 @@ const PortfolioLineChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheet
                         ))}
                     </Area>
                 </AreaChart>
-                ) : (
+                ) : chartDatatypeX === 'number' && chartDatatypeY === 'string'? (
                     <AreaChart
                         layout="vertical"
                         data={data}
                         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                     >
                         <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
-                        <XAxis type="number" dataKey={`${sheetfieldselectedX}`} />
-                        <YAxis type="category" dataKey={`${sheetfieldselectedY}`} tickCount={4} />
+                        <XAxis domain={[0, maxX]} type="number" dataKey={`${sheetfieldselectedX}`} />
+                        <YAxis domain={[0, maxX]} type="category" dataKey={`${sheetfieldselectedY}`} tickCount={4} />
                         <Tooltip
                             contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
                             itemStyle={{ color: '#fff', fontWeight: 'bold' }}
@@ -169,6 +181,41 @@ const PortfolioLineChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheet
                             ))}
                         </Area>
                     </AreaChart>
+                ):
+                (
+                    <AreaChart
+                    data={data}
+                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                >
+                    <CartesianGrid stroke="#ccc" horizontal={true} vertical={false} />
+                    <XAxis domain={[0, maxY]} type="category" dataKey={`${sheetfieldselectedX}`} tickCount={4} tick={{ fontSize: 16, fontFamily: 'Inter', fill: 'black' }}
+                    />
+                    <YAxis domain={[0, maxY]} type="number" tickCount={4} dataKey={`${sheetfieldselectedY}`}
+                        tick={{ fontSize: 14, fontFamily: 'Inter', fill: 'black' }} 
+                    />
+                    <Tooltip
+                        contentStyle={{ backgroundColor: '#333', borderRadius: '10px', border: '1px solid #ccc', color: '#fff' }}
+                        itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+                        labelStyle={{ color: '#ccc' }}
+                    />
+                    <Area
+                        type="monotone"
+                        dataKey={`${sheetfieldselectedY}`}
+                        stroke="#82ca9d"
+                        fill="#82ca9d"
+                        fillOpacity={0.3}
+                        activeDot={{ r: 8 }}
+                    >
+                        {data.map((entry, index) => (
+                            <Cell
+                                key={`cell-${index}`}
+                                fill={areaColor(index)}
+                                onMouseEnter={() => handleMouseEnter(index)}  // Set hovered data point on mouse enter
+                                onMouseLeave={handleMouseLeave}  // Reset hover on mouse leave
+                            />
+                        ))}
+                    </Area>
+                </AreaChart>
                 )}
             </ResponsiveContainer>
         </div>

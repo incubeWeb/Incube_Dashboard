@@ -52,6 +52,11 @@ const PortfolioPieChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheetJ
                         break;
                 }
             });
+
+            if (typeof newObj[[sheetfieldselectedX]] === 'string' && typeof newObj[[sheetfieldselectedY]] === 'string') {
+                newObj[[sheetfieldselectedY]] = extractValue(newObj[[sheetfieldselectedY]]);
+            }
+            
             return newObj;
         });
     };
@@ -123,7 +128,7 @@ const PortfolioPieChart = ({sheetclicked, chartDatatypeX, chartDatatypeY, sheetJ
 
     return (
         <div style={{ width: '90%', height: '90%' }} className='-mt-10 pr-10'>
-             <p className='pt-4 font-inter text-[18px] font-bold'>{selectedSheetName}</p>
+             <p className='pt-4 font-inter text-[18px] font-bold'>{selectedSheetName.replace(/^\d+-/, "")}</p>
             <div style={{ width: '100%', height: '100%', display: 'flex' }}>
                
                 <div style={{ flex: 1 }} className='flex flex-row h-[90%]'>
