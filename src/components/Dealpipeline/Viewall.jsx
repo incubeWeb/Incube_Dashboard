@@ -69,7 +69,7 @@ function Viewall({companyData,setdealpipelinefromdashboardcompany,dealpipelinefr
       ):
       <div>
         {currentData?.length>0?
-       <div className=' grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5 md:h-[449px] h-[354px] '>
+       <div className=' grid grid-cols-1 gap-y-2 md:ml-5 md:grid md:grid-cols-3 md:gap-x-1 md:gap-y-5  '>
         {(currentData||[]).map(company => (
           
           <GridTemplate id={company?._id} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} dealpipelinefromdashboardcompany={dealpipelinefromdashboardcompany} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} hidenavbar={hidenavbar} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimetabchats={realtimetabchats} completed={company?.completed} companyData={companyData} selectedTab={selectedTab} key={company?._id} setActiveField={setActiveField} Title={company?.title} description={company?.Description} logo={company?.photolink} status={company?.status} TeamLead_status={company?.TeamLead_status}/>

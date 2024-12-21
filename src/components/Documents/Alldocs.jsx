@@ -356,7 +356,7 @@ const Alldocs = ({filesadded,setActiveField,activeField,hidenavbar,realtimedocum
   
 
   return (
-    <div className={`${hidenavbar?'ml-[4%] w-[96%] h-screen':'ml-[20%] w-[80%] '} pt-[48px] pl-[36px] flex flex-col p-4 items-center justify-start space-y-4 font-sans min-h-screen bg-gray-100`}>
+    <div className={`${hidenavbar?'ml-[4%] w-[96%] h-screen':'ml-[20%] w-[80%] '} pt-[48px] pl-[36px] flex flex-col p-4 items-center justify-start space-y-4 font-sans min-h-screen bg-blue-100 bg-opacity-50`}>
     {
         uploadfile?
         <div className='fixed left-0 top-0 w-[100%] h-screen z-[90] flex items-center justify-center bg-opacity-40 bg-black'>

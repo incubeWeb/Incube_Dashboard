@@ -497,7 +497,7 @@ const Portfoliocard = ({id,mainlabelname,dashboardbotdata,portfolioicon,setdashb
                                 </div> */}
                                
                     </div>
-                    <div className='w-[100%] h-[40%]  flex flex-row'>
+                    <div className='w-[100%] h-[60%] flex flex-row'>
                         <div className='w-[20%] '>
                             <div className='flex h-[100%] items-center justify-start'>
                                   

@@ -6,7 +6,7 @@ import { RxCross2 } from 'react-icons/rx';
 import { VscArrowDown, VscArrowUp } from 'react-icons/vsc';
 import { jwtDecode } from 'jwt-decode';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
-const Piechart = ({boxid,investmentchange,setdashboardbotdata, id, outerRadius, data01, clickedPie, setClickedPie, fromApi, setFromApi, chartDatatypeX, chartDatatypeY, chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
+const Piechart = ({boxid,setdashboardbotdata, id, outerRadius, data01, clickedPie, setClickedPie, fromApi, setFromApi, chartDatatypeX, chartDatatypeY, chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [loading, setLoading] = useState(true);
   const [mydata, setmydata] = useState([]);
   const [thissheetname,setthissheetname]=useState('')

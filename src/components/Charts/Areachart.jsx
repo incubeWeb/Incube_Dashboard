@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 
 
 
-const Areachart = ({boxid,investmentchange,setdashboardbotdata,id,data01,clickedArea,setClickedArea,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
+const Areachart = ({boxid,setdashboardbotdata,id,data01,clickedArea,setClickedArea,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [mydata,setmydata]=useState([])
   const [thissheetname,setthissheetname]=useState('')
   const [itsfromDatabase,setitsfromdatabase]=useState(false)

@@ -1052,7 +1052,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
             <PortfolioTop setgetportfoliocarddata={setgetportfoliocarddata} setgettingmetervalue={setgettingmetervalue} PortfolioGraphvalues={PortfolioGraphvalues} Portfoliocardvalues={Portfoliocardvalues} PortfolioMetervalue={PortfolioMetervalue} selectedTab={selectedTab} setportfoliocardsdata={setportfoliocardsdata} portfoliosecurity={portfoliosecurity} realtimeportfoliostate={realtimeportfoliostate} selectedSheetId={selectedSheetId} hidenavbar={hidenavbar} sheetedited={sheetedited}/>
         </div>
 
-        <div className='tracking-wider select-none mt-[20px] w-[100%] bg-white rounded-xl p-4 flex flex-col space-y-2 font-noto'>
+        <Card className='tracking-wider select-none mt-[20px] w-[100%] bg-white rounded-xl p-4 flex flex-col space-y-2 font-noto'>
             <div className='flex flex-col  space-y-3'>
                 <div className='h-[50px] w-[100%] flex flex-row'>
                     <p className='flex w-[50%] text-[16px] font-inter font-semibold tracking-wider'>Investment History</p>
@@ -1346,7 +1346,7 @@ const Portfolio = ({realtimeportfoliostate,hidenavbar,sheetedited}) => {
         </div>
         
         
-        </div>
+        </Card>
 
         {
             clickedportfolioshared?

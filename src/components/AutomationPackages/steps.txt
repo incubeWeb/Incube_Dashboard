@@ -1,0 +1,5 @@
+1. Save the Phone Id Entry in Sheets
+2. Get the Api Body from Network after making and saving the workflow
+3. Save the Workflow Id in Database for every package
+4. Add a spinner in front-end
+5. Use that workflow id to deactivate the package

@@ -6,7 +6,7 @@ import { RxCross2 } from 'react-icons/rx';
 import { jwtDecode } from 'jwt-decode';
 
 
-const RenderBarChart = ({boxid,investmentchange,setdashboardbotdata,id,data01,clickedBar,setClickedBar,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
+const RenderBarChart = ({boxid,setdashboardbotdata,id,data01,clickedBar,setClickedBar,fromApi,setFromApi,chartDatatypeX,chartDatatypeY,chartDatatypeFromApiX, chartDatatypeFromApiY,setBoxes,boxes}) => {
   const [thissheetname,setthissheetname]=useState('')
   const [mydata,setmydata]=useState([]);
   const [itsfromDatabase,setitsfromdatabase]=useState(false);

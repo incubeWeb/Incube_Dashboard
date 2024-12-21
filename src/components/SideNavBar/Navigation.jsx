@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Link,  useLocation, useNavigate } from 'react-router-dom';
 import { FiAlignJustify } from "react-icons/fi";
 import {gsap} from 'gsap'
@@ -43,9 +43,15 @@ const Navigation = ({setmygoogleaccountisconnected,navbarref,setdealpipelinefrom
     const [showgoogleconnected,setshowgoogleconnected]=useState(false)
     const [loading,setloading]=useState(false)
 
+
+
     const handleLogout=()=>{
           setlogin(false)
+          if(hidenavbar){
+            hideNav()
+          }
           localStorage.clear() 
+          Navigate('/')
     }
     const NavbarRef=navbarref
     const settingBtnRef=useRef(null)
@@ -398,12 +404,14 @@ const Navigation = ({setmygoogleaccountisconnected,navbarref,setdealpipelinefrom
                     <div className='text-[14px] font-inter font-semibold'><p>AI</p></div>
                 </div>
                 </Link>
-
-                <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white hover:bg-gray-300 cursor-pointer rounded-md pl-2`} onClick={()=>{window.open('https://workflow.incubewhtsapp.xyz/','_blank')}}>
+                
+                <Link to='/automation'>
+                <div className={` flex ${activeField=='/automation'?'bg-blue-600 text-white':'select-none hover:bg-gray-300 cursor-pointer hover:text-white'} flex-row h-[40px] items-center space-x-2 cursor-pointer rounded-md pl-2`} onClick={()=>{setActiveField('/automation')}}> {/*window.open('https://workflow.incubewhtsapp.xyz/','_blank')*/}
                     <div className='w-[24px] flex justify-center items-center'><img src={automation}/></div>
                     <div className='text-[14px] font-inter font-semibold'><p>Automation</p></div>
                     <div className='absolute right-12'><TbExternalLink size={18} /></div>
                 </div>
+                </Link>
 
                 <div ref={connectanappRef} className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white hover:bg-gray-300 cursor-pointer rounded-md pl-2`} onClick={()=>{ShowApplicationNavfun(showappnav)}}>
                     <div className='w-[24px] flex justify-center text-[#667085] items-center'><FaPlus size={16}/></div>
@@ -418,16 +426,21 @@ const Navigation = ({setmygoogleaccountisconnected,navbarref,setdealpipelinefrom
                     <div className='text-[14px] text-gray-500'>
                         <p className='font-bold'>{Logemail}</p>
                     </div>
-                    <a href='/' className='w-[50%] h-[40%] flex items-center justify-center'> 
+                    <div className='w-[50%]  h-[40%] flex items-center justify-center'> 
                      <div className='flex flex-row w-[120%]  h-[40%] items-center justify-center  space-x-2 ' > 
                         <div className='font-bold text-[20px] rounded-[100%] items-center bg-gray-100  flex justify-center border-gray-300 border-[1px] w-[40px] h-[30px]'>
                             <p className='mt-[-3px]'>{Logemail?.[0]}</p>
                         </div>
                         
-                         <div><p className='text-[14px] font-inter cursor-pointer text-gray-500 font-semibold' onClick={handleLogout}>  Logout</p></div>
-                         <div className=''><img src={Logout  } className='cursor-pointer h-[25px] w-[25px]' onClick={handleLogout}/></div>
+                         <div onClick={handleLogout} className=' flex cursor-pointer flex-row space-x-2'>
+                            <p className='text-[14px] h-[15px] flex items-center font-inter  text-gray-500 font-semibold' >  Logout</p>
+                            <div className=''>
+                                <img src={Logout  } className='cursor-pointer h-[15px] w-[15px]'/>
+                            </div>
+                        </div>
+                         
                     </div>
-                    </a>
+                    </div>
             </div>
        </div>
        
@@ -520,9 +533,11 @@ const Navigation = ({setmygoogleaccountisconnected,navbarref,setdealpipelinefrom
 
                     {
                         showsmallnav?
-                        <div className={` flex flex-row h-[40px] items-center space-x-2 hover:text-white cursor-pointer rounded-md pl-2`} onClick={()=>{window.open('https://workflow.incubewhtsapp.xyz/','_blank')}}>
-                    <div className='w-[24px] flex justify-center items-center'><img src={automation}/></div>
-                    </div>
+                        <Link to='/automation'>
+                            <div className={`flex ${activeField === '/automation' ? 'text-blue-600' : 'text-gray-500'} flex-row h-[40px] items-center space-x-2 hover:text-white cursor-pointer rounded-md pl-2`} onClick={()=>{setActiveField ('/automation')}}> {/*window.open('https://workflow.incubewhtsapp.xyz/','_blank')*/}
+                                <div className='w-[24px] flex justify-center items-center'><img src={automation}/></div>
+                            </div>
+                        </Link>
                     :<></>
                     }
                     {
@@ -540,6 +555,10 @@ const Navigation = ({setmygoogleaccountisconnected,navbarref,setdealpipelinefrom
                         <div className=' font-bold text-[20px]  rounded-[100%] items-center bg-gray-100  flex justify-center border-gray-300 border-[1px] w-[30px] h-[30px] '>
                         <p className='mt-[-6px]'>{Logemail?.[0]}</p>
                         </div>
+                    </div>
+
+                    <div className='mr-[1px]' onClick={handleLogout}>
+                        <img src={Logout  } className='cursor-pointer h-[20px] w-[20px]'/>
                     </div>
 
                 </div>

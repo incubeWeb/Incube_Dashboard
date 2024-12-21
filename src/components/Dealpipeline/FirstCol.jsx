@@ -107,11 +107,11 @@ function FirstCol({filesadded,setdealpipelinefromdashboardcompany,dealpipelinefr
 
 
   return (
-    <div className={`${hidenavbar?'ml-[4%] w-[100%]':'ml-[22%] w-[78%]'}flex flex-col pt-[17px]  font-roboto space-y-3 text-gray-700 pr-[47px]`}>
+    <div className={`${hidenavbar?'ml-[4%] w-[100%]':'ml-[22%] w-[78%]'} flex flex-col pt-[17px]  font-roboto space-y-3 text-gray-700 pr-[47px] h-screen`}>
       
       <div className='w-[100%] h-[100%]'>
         
-      <div className='flex flex-col space-y-2 md:space-y-0 md:flex md:flex-row md:w-[100%] md:h-[83px] md:items-center p-3 md:p-0'>
+      <div className='flex flex-col space-y-2 md:space-y-0 md:flex md:flex-row md:w-[100%] md:h-[13%] md:items-center p-3 md:p-0'>
         <div className='flex flex-col md:flex md:flex-col md:pl-[20px] md:w-[721px] md:h-[38px] '>
           <p className='md:text-[28px]  text-[17px]  text-inter font-bold '>Deal pipeline</p>
           <p className='md:text-[14px] text-[12px]  text-inter   text-[#475467]'>Search or go through startups looking to raise fresh rounds.</p>
@@ -124,7 +124,7 @@ function FirstCol({filesadded,setdealpipelinefromdashboardcompany,dealpipelinefr
         </div>
       </div>
 
-      <div className='hidden md:flex md:flex-row md:p-[20px] md:pb-2'>
+      <div className='hidden h-[13%] md:flex md:flex-row md:p-[20px] md:pb-2'>
         <div className='md:flex md:flex-row w-[100%] md:h-[50px] md:bg-[#EAECF0] font-inter font-semibold rounded-md md:p-3 md:space-x-2 relative'>
           <div ref={bgRef} className="absolute  bg-white shadow-md rounded-md flex items-center justify-center" style={{ pointerEvents: "none", zIndex: 1 }}>
             <p className="text-[14px]"></p>
@@ -173,7 +173,7 @@ function FirstCol({filesadded,setdealpipelinefromdashboardcompany,dealpipelinefr
       </div>
         {
           !loading?
-          <div>
+      <div className='h-[70%]'>
       {
         selectedTab === 'View All' ? <Viewall setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} dealpipelinefromdashboardcompany={dealpipelinefromdashboardcompany} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimetabchats={realtimetabchats} realtimedealpipelinecompany={realtimedealpipelinecompany} hidenavbar={hidenavbar} filter={filter} selectedTab={selectedTab} setActiveField={setActiveField} fetchCompanyData={fetchCompanyData} companyData={companyData} /> : null
       }

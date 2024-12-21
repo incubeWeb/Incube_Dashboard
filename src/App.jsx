@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import Navigation from "./components/SideNavBar/Navigation";
 import FirstCol from "./components/Dealpipeline/FirstCol";
 import { BrowserRouter, Route, Routes,} from "react-router-dom";
@@ -7,9 +7,7 @@ import Dashboard from "./components/DashBoard/Dashboard";
 import Dealsourcing from "./components/DealSourcing/Dealsourcing";
 import Addusers from "./components/AddUsers/Addusers";
 import Alldocs from "./components/Documents/Alldocs";
-import { io } from "socket.io-client";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
 import { addTimeline } from "./states/timelinestate";
 import Portfolio from "./components/PortfolioAnalysis/Portfolio";
 import Viewsheet from "./components/ViewSheet/Viewsheet";
@@ -23,39 +21,45 @@ import { RxCross2 } from "react-icons/rx";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { IoMdArrowBack } from "react-icons/io";
 import Succesalert from "./components/Alerts/Succesalert";
+import Socketstate, { Socketcontext } from "./Context/SocketState/Socketstate";
+import Loginstate, { Logincontext } from "./Context/Login/Loginstate";
+import { ShowAutomationWindowContext } from "./Context/Variables/ShowAutomationWindow";
+import MainPage from "./components/AutomationPackages/MainPage";
 
 
 
 function App() {
+
+  
+
   const [activeField, setActiveField] = useState('/dashboard');
-  const [login, setLoginIn] = useState(false);
-  const [realtimeChat,setrealtimeChat]=useState([])
-  const changes=useSelector((state)=>state.timelinestate)
-  const dispatch=useDispatch()
+  const {login,setLoginIn}=useContext(Logincontext)
+
+  
+
+  const {
+    filesadded,
+    sheetedited,
+    realtimetabchats,
+    setslowinternetconnection,
+    realtimedealpipelinecompany,
+    googleaccountconnected,
+    realtimedocumentvisibility,
+    realtimeportfoliostate
+    ,realtimeuser,realtimeDealpipelinetabs
+    ,realtimecheckAPikeys,realtimetimeline
+    ,slowinternetconenction,realtimeChat
+    ,realtimedealpipelinecompanyInfo
+  }=useContext(Socketcontext);
 
   const [boxes, setBoxes] = useState([]);
   
   
-  const [investmentchange,setinvestmentchange]=useState([])
   const [hidenavbar,sethidenavbar]=useState(false)
-  const [filesadded,setfilesadded]=useState([])
-  const [sheetedited,setsheetedited]=useState([])
-  const [realtimetabchats,setrealtimetabchats]=useState([])
-  const [realtimedealpipelinecompany,setrealtimedealpipelinecompany]=useState([])
-  const [realtimedealpipelinecompanyInfo,setrealtimedealpipelinecompanyInfo]=useState([])
-  const [googleaccountconnected,setgoogleaccountconnected]=useState([])
-  const [realtimedocumentvisibility,setrealtimedocumentvisibility]=useState([])
-  const [realtimeportfoliostate,setrealtimeportfoliostate]=useState([])
+  
   const [showsmallnav,setshowsmallnav]=useState(false)
   
-  const [realtimeuser,setrealtimeuser]=useState([])
   
-
-  const [realtimeDealpipelinetabs,setrealtimedealpipelinetabs]=useState([])
-  
-  const [realtimecheckAPikeys,setrealtimecheckapikeys]=useState([])
-
-  const [realtimetimeline,setrealtimetimeline]=useState([])
   const [error,seterror]=useState(false)
   const navbarref=useRef(null)
 
@@ -65,12 +69,12 @@ function App() {
   
   const [internetdisconnected,setinternetdisconnected]=useState(false)
   const [internetisback,setinternetisback]=useState(false)
-  const [slowinternetconenction,setslowinternetconnection]=useState(false)
+  
 
   useEffect(()=>{
     const checkInternet=()=>{
       if(!navigator.onLine){
-        setinternetdisconnected(true)
+        setinternetdisconnected(true) 
         setinternetisback(false)
       }else{
         setinternetdisconnected(false)
@@ -82,151 +86,6 @@ function App() {
 
     
   },[navigator.onLine])
-
-  useEffect(()=>{
-    
-    const fun=()=>{
-      const socket2=io(`${import.meta.env.VITE_HOST_URL}1222`, {
-        reconnection: true,           // Enable reconnection
-        reconnectionAttempts: Infinity, // Try reconnecting indefinitely
-        reconnectionDelay: 100,       // Initial delay before reconnection (2 seconds)
-        reconnectionDelayMax: 300,    // Maximum delay (5 seconds)
-      })
-      socket2.on('Googleconnected',(change)=>{
-        setgoogleaccountconnected(change)
-      })
-
-      socket2.on('disconnect',(reason)=>{
-        setslowinternetconnection(true)
-      })
-      socket2.on('connect_error', (err) => {
-        setslowinternetconnection(true)
-      });
-      
-      
-    }
-    if(navigator.onLine)
-    fun()
-    
-
-  },[])
-
-  useEffect(()=>{
-    
-   
-    
-      const fun=async()=>{
-        const socket=io(`${import.meta.env.VITE_HOST_URL}8999`, {
-          reconnection: true,           // Enable reconnection
-          reconnectionAttempts: Infinity, // Try reconnecting indefinitely
-          reconnectionDelay: 100,       // Initial delay before reconnection (2 seconds)
-          reconnectionDelayMax: 300,    // Maximum delay (5 seconds)
-        })
-        const token=localStorage.getItem('token') || ''
-        const userdata=jwtDecode(token) || ''
-        const Logemail=userdata.userdetails.email || ''
-        const Logorganization=userdata.userdetails.organization || ''
-        const Logrole=userdata.userdetails.role || ''
-     
-        if(Logemail=='')
-        {
-          return
-        }
-        if(Logemail!='')
-        {
-          setLoginIn(true)
-        }
-       
-        const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/gettimeline`,{organization:Logorganization},{
-          headers:{
-            "Authorization":`Bearer ${token}`
-          }
-        })
-        
-        if(response.data.data.length>0)
-        {
-          response.data.data.map(item=>
-            
-            setrealtimetimeline(item)
-          )
-        }
-
-        
-        socket.on('disconnect',(reason)=>{
-          setslowinternetconnection(true)
-        })
-        
-        socket.on('connect_error', (err) => {
-          setslowinternetconnection(true)
-      });
-        
-        socket.on('databaseChange',(change)=>{
-            const key=changes.length-1
-            const newCol={key:key,updateInColl: change.ns.coll,updateIs: JSON.stringify(change)}
-            setrealtimetimeline(newCol)
-          if(change.ns.coll=='UploadedFiles')
-          {
-            setfilesadded(change)
-          }
-          if(change.ns.coll=='TabChats')
-          {
-            setrealtimetabchats(change)
-          }
-          if(change.ns.coll=='DealPipelineCompany')
-          {
-            setrealtimedealpipelinecompany(change)
-          }
-          if(change.ns.coll=='AddNewDetailDealPipeline')
-          {
-            
-            setrealtimedealpipelinecompanyInfo(change)
-            
-          }
-          if(change.ns.coll=='DocsVisibility')
-          {
-            setrealtimedocumentvisibility(change)
-          }
-          if(change.ns.coll=='Users')
-            {
-              setrealtimeuser(change)
-            }
-          if(change.ns.coll=='PortfolioState')
-          {
-            
-            setrealtimeportfoliostate(change)
-          }
-          if(change.ns.coll=='DealpipelineTabs')
-          {
-            setrealtimedealpipelinetabs(change)
-          }
-          if(change.ns.coll=='Apikeys')
-          {
-            setrealtimecheckapikeys(change)
-          }
-
-        })
-        socket.on('chats',(chat)=>{
-          
-          setrealtimeChat(chat)
-        })
-
-        socket.on('investments',(data)=>{
-          setinvestmentchange(data)
-        })
-
-        socket.on('sheetedited',(data)=>{
-
-          setsheetedited(data)
-        })
-      
-      }
-      
-      if(navigator.onLine)
-      fun()
-      
-      
-  },[])
-
 
 
   useEffect(() => {
@@ -571,6 +430,7 @@ const handleCurrencySelect = (currency) => {
 
 
   return (
+    
     <BrowserRouter>
           {login? <div onClick={()=>setsheetClicked(false)}> <Navigation setmygoogleaccountisconnected={setmygoogleaccountisconnected} navbarref={navbarref} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} showsmallnav={showsmallnav} setshowsmallnav={setshowsmallnav} login={login} setlogin={setLoginIn} googleaccountconnected={googleaccountconnected} activeField={activeField} hidenavbar={hidenavbar} sethidenavbar={sethidenavbar} setActiveField={setActiveField} /></div>:<></>}
          
@@ -732,25 +592,33 @@ const handleCurrencySelect = (currency) => {
 
           }
 
-          <Routes>
-            <Route path="/" element={!login?<Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn}/>:<></>} />
-            <Route path="/dashboard" element={
-              <ProtectedRoute login={login}><Dashboard setcurrencyvalue={setcurrencyvalue} sheetfieldselected={sheetfieldselected} clickedSheetId={clickedSheetId}  currencyValue={currencyValue} boxes={boxes} setBoxes={setBoxes} setshowvalue={setshowvalue} setprevValue={setprevValue} prevValue={prevValue} showvalue={showValue} handlePlusClick={handlePlusClick} setsheetpopup={setsheetpopup} mygoogleaccountisconnected={mygoogleaccountisconnected} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} navbarref={navbarref} showsmallnav={showsmallnav} sethidenavbar={sethidenavbar} realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat} investmentchange={investmentchange} hidenavbar={hidenavbar}/></ProtectedRoute>} />
-            <Route path="/dealpipeline" element={
-              <ProtectedRoute login={login}>
-              <FirstCol setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} dealpipelinefromdashboardcompany={dealpipelinefromdashboardcompany} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>
-              </ProtectedRoute>} />
-            <Route path="/dealsourcing" element={
-              <ProtectedRoute login={login}><Dealsourcing hidenavbar={hidenavbar}/></ProtectedRoute>} />
-            <Route path="/adduser" element={<ProtectedRoute login={login}><Addusers realtimeuser={realtimeuser} setActiveField={setActiveField} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
-            <Route path="/allDocs" element={<ProtectedRoute login={login}><Alldocs realtimedocumentvisibility={realtimedocumentvisibility} filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar}/></ProtectedRoute>} />
-            <Route path='/portfolio' element={<ProtectedRoute login={login}><Portfolio realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited} hidenavbar={hidenavbar} /></ProtectedRoute>}/>
-            <Route path='/keys' element={<ProtectedRoute login={login}><Apikeys realtimecheckAPikeys={realtimecheckAPikeys} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
-            <Route path='/AI' element={<ProtectedRoute login={login}><Ai realtimecheckAPikeys={realtimecheckAPikeys} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
-          
-          </Routes>
-      
-      
+          {
+            login?
+            <Socketstate>
+              <Routes>
+              <Route path="/dashboard" element={
+                <ProtectedRoute login={login}><Dashboard setcurrencyvalue={setcurrencyvalue} sheetfieldselected={sheetfieldselected} clickedSheetId={clickedSheetId}  currencyValue={currencyValue} boxes={boxes} setBoxes={setBoxes} setshowvalue={setshowvalue} setprevValue={setprevValue} prevValue={prevValue} showvalue={showValue} handlePlusClick={handlePlusClick} setsheetpopup={setsheetpopup} mygoogleaccountisconnected={mygoogleaccountisconnected} setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} navbarref={navbarref} showsmallnav={showsmallnav} sethidenavbar={sethidenavbar} realtimetimeline={realtimetimeline} setActiveField={setActiveField} realtimetabchats={realtimetabchats} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimeChat={realtimeChat}  hidenavbar={hidenavbar}/></ProtectedRoute>} />
+              
+              <Route path="/dealpipeline" element={
+                <ProtectedRoute login={login}>
+                <FirstCol setdealpipelinefromdashboardcompany={setdealpipelinefromdashboardcompany} dealpipelinefromdashboardcompany={dealpipelinefromdashboardcompany} filesadded={filesadded} realtimeDealpipelinetabs={realtimeDealpipelinetabs} realtimedealpipelinecompanyInfo={realtimedealpipelinecompanyInfo} realtimedealpipelinecompany={realtimedealpipelinecompany} realtimetabchats={realtimetabchats} setActiveField={setActiveField} hidenavbar={hidenavbar}/>
+                </ProtectedRoute>} />
+              <Route path="/dealsourcing" element={
+                <ProtectedRoute login={login}><Dealsourcing hidenavbar={hidenavbar}/></ProtectedRoute>} />
+              <Route path="/adduser" element={<ProtectedRoute login={login}><Addusers realtimeuser={realtimeuser} setActiveField={setActiveField} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
+              <Route path="/allDocs" element={<ProtectedRoute login={login}><Alldocs realtimedocumentvisibility={realtimedocumentvisibility} filesadded={filesadded} setActiveField={setActiveField} activeField={activeField} hidenavbar={hidenavbar}/></ProtectedRoute>} />
+              <Route path='/portfolio' element={<ProtectedRoute login={login}><Portfolio realtimeportfoliostate={realtimeportfoliostate} sheetedited={sheetedited} hidenavbar={hidenavbar} /></ProtectedRoute>}/>
+              <Route path='/keys' element={<ProtectedRoute login={login}><Apikeys realtimecheckAPikeys={realtimecheckAPikeys} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
+              <Route path='/AI' element={<ProtectedRoute login={login}><Ai realtimecheckAPikeys={realtimecheckAPikeys} hidenavbar={hidenavbar}/></ProtectedRoute>}/>
+              <Route path='/automation' element={<ProtectedRoute login={login}><MainPage hidenavbar={hidenavbar}/></ProtectedRoute>}/>
+            </Routes>
+          </Socketstate>
+          :
+            <Routes>
+              <Route path="/" element={!login?<Login login={login} setActiveField={setActiveField} setLoginIn={setLoginIn}/>:<></>} />
+            </Routes>
+          }
+     
     </BrowserRouter>
   );
 }

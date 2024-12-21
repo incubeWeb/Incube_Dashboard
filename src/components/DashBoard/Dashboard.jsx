@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-
+import {Card} from '@material-tailwind/react'
 import { Rnd } from 'react-rnd';
 import RenderBarChart from '../Charts/RenderBarChart';
 import Piechart from '../Charts/Piechart';
@@ -38,7 +38,7 @@ import { TbDragDrop } from 'react-icons/tb';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 
-const Dashboard = ({boxes,prevValue,setprevValue,sheetfieldselected,setcurrencyvalue,currencyValue,clickedSheetId, setBoxes,handlePlusClick,setshowvalue,showValue,setsheetpopup,mygoogleaccountisconnected,setdealpipelinefromdashboardcompany,navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,investmentchange,hidenavbar}) => {
+const Dashboard = ({boxes,prevValue,setprevValue,sheetfieldselected,setcurrencyvalue,currencyValue,clickedSheetId, setBoxes,handlePlusClick,setshowvalue,showValue,setsheetpopup,mygoogleaccountisconnected,setdealpipelinefromdashboardcompany,navbarref,showsmallnav,realtimetimeline,setActiveField,realtimetabchats,realtimedealpipelinecompanyInfo,realtimeChat,hidenavbar}) => {
   
   const [isDraggable, setIsDraggable] = useState(false);
 
@@ -470,11 +470,11 @@ useEffect(() => {
       
     
         {(boxes||[]).map((box,index) => (
-         <div
+         <Card
         key={box.id}
         data-grid={box}
         onClick={(e)=>e.stopPropagation()}
-        className="dev-box z-20 border-gray-300 bg-white border-[0.5px] rounded-lg  pt-0"
+        className="dev-box z-20 border-gray-100 border-t-[2px]  rounded-lg  pt-0"
         
          >
           
@@ -643,7 +643,7 @@ useEffect(() => {
                         chartDatatypeFromApiX={chartDatatypeFromApiX[[box.id]-1]['chartDatatypeX']}
                         chartDatatypeFromApiY={chartDatatypeFromApiY[[box.id]-1]['chartDatatypeY']}
                         isSheetchart={isSheetchart}
-                        investmentchange={investmentchange}
+                        
                         setBoxes={setBoxes}
                         boxes={boxes}
                       />
@@ -674,7 +674,7 @@ useEffect(() => {
                         chartDatatypeFromApiX={chartDatatypeFromApiX[[box.id]-1]['chartDatatypeX']}
                         chartDatatypeFromApiY={chartDatatypeFromApiY[[box.id]-1]['chartDatatypeY']}
                         isSheetchart={isSheetchart}
-                        investmentchange={investmentchange}
+                        
                         setBoxes={setBoxes}
                         boxes={boxes}
                         
@@ -706,7 +706,7 @@ useEffect(() => {
                         chartDatatypeFromApiX={chartDatatypeFromApiX[[box.id]-1]['chartDatatypeX']}
                         chartDatatypeFromApiY={chartDatatypeFromApiY[[box.id]-1]['chartDatatypeY']}
                         isSheetchart={isSheetchart}
-                        investmentchange={investmentchange}
+                       
                         setBoxes={setBoxes}
                         boxes={boxes}
                       />
@@ -728,7 +728,7 @@ useEffect(() => {
               return <div></div>;
             }
           })()}
-          </div>
+          </Card>
         ))}
       </ResponsiveReactGridLayout>
       </div>

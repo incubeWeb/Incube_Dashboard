@@ -19,6 +19,8 @@ import User from '../Icons/User_Role.svg'
 const Addusers = ({setActiveField,hidenavbar,realtimeuser}) => {
     const [adduser,setAdduser]=useState(false)
     const [allUsers,setAllusers]=useState([])
+    const [initalusers,setallinitialuser]=useState([])
+
     const [edit,setEdit]=useState(false)
     const [selectedemail,setSelectedemail]=useState('')
     const [selectedpassword,setSelectedpass]=useState('')
@@ -42,36 +44,10 @@ const Addusers = ({setActiveField,hidenavbar,realtimeuser}) => {
 
     useEffect(()=>{
         const setUsers=async()=>{
-            let organization=Logorganization
-            if(searchUser.length<=0)
-            {
-                const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/fetchallusers`,{
-                    organization:organization
-                },{
-                    headers:{
-                      "Authorization":`Bearer ${token}`
-                    }
-                  })
-                setAllusers(response.data.data)
-                
-            }
-            else if(searchUser.includes('\\'))
-            {
-               
-                setAllusers([])
-            }
-            else{
-                const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/findUsers`,{
-                    user:searchUser,
-                    organization:organization
-                },{
-                    headers:{
-                      "Authorization":`Bearer ${token}`
-                    }
-                  })
-                setAllusers(response.data.data)
-                
-                
+            if(searchUser.length<=0){
+                setAllusers(initalusers);
+            }else{
+                setAllusers(prev=>prev.filter(user=>user.email.includes(searchUser)))
             }
             
         }
@@ -85,7 +61,7 @@ const Addusers = ({setActiveField,hidenavbar,realtimeuser}) => {
     
     
 
-    const handleDelete=async(email)=>{
+    const handleDelete=async(email,id)=>{
         let organization=Logorganization
         const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/deleteUser`,{
             doneBy:Logemail,
@@ -98,15 +74,8 @@ const Addusers = ({setActiveField,hidenavbar,realtimeuser}) => {
           })
         if(response.data.status==200)
         {
-            const response=await axios.post(`${import.meta.env.VITE_HOST_URL}8999/findUsers`,{
-                user:searchUser,
-                organization:organization
-            },{
-                headers:{
-                  "Authorization":`Bearer ${token}`
-                }
-              })
-            setAllusers(response.data.data)
+            setAllusers(prev=>prev.filter(val=>val._id!=id))
+            setallinitialuser(prev=>prev.filter(val=>val._id!=id))
         }
     }
     
@@ -132,7 +101,7 @@ const Addusers = ({setActiveField,hidenavbar,realtimeuser}) => {
                 }
               })
             setAllusers(response.data.data)
-            
+            setallinitialuser(response.data.data)
             
         }
         
@@ -149,7 +118,7 @@ const Addusers = ({setActiveField,hidenavbar,realtimeuser}) => {
                 }
               })
             setAllusers(response.data.data)
-            
+            setallinitialuser(response.data.data)
             
         }
        
@@ -158,7 +127,7 @@ const Addusers = ({setActiveField,hidenavbar,realtimeuser}) => {
     },[realtimeuser])
 
   return (
-    <div className={`${hidenavbar?' ml-[4%] w-[96%] ':'ml-[20%] w-[80%]'} pt-[48px] pl-[36px] min-h-screen bg-gray-100 flex flex-col items-center justify-start space-y-4  w-[100%] p-[20px] font-roboto  `}>
+    <div className={`${hidenavbar?' ml-[4%] w-[96%] ':'ml-[20%] w-[80%]'} pt-[48px] pl-[36px] min-h-screen bg-blue-100 bg-opacity-50 flex flex-col items-center justify-start space-y-4  w-[100%] p-[20px] font-roboto  `}>
         <div className='w-[100%] h-[10%] flex flex-row space-x-3'>
             <Link to='/dashboard' onClick={()=>setActiveField('/dashboard')}><p className=' text-gray-400 hover:text-gray-600 font-inter font-semibold text-[16px]'>Dashboard</p></Link>
             <p className='text-gray-600'>/</p>
@@ -169,17 +138,11 @@ const Addusers = ({setActiveField,hidenavbar,realtimeuser}) => {
                 <p className='text-[22px] font-inter font-semibold text-gray-600'>Members</p>
             </div>
             <div className=' flex flex-row w-[50%] h-[60%] space-x-3 justify-end'>
-                {
-                    showsearch?
+                
                     <div className='flex border-[1px] flex-row w-[180px] h-[35px] items-center md:flex md:flex-row md:items-center md:w-[210px] rounded-md border-gray-300 border-solid space-x-3 hover:shadow-md hover:duration-150 bg-white '>
                     <FiSearch className='font-thin ml-3 text-gray-500' size={20} />
                     <input id='search' type='text' onMouseLeave={()=>setshowsearch(!showsearch)} onChange={(e)=>handleSearch(e)} placeholder='Search' className=' w-full text-[13px] h-full outline-none rounded-md border-l-0 md:text-[15px] text-gray-600' />
-                </div>:
-                <div className='h-[35px] flex items-center'>
-                    <IoSearchOutline size={22} className='text-gray-500' onClick={()=>setshowsearch(!showsearch)}/>
                 </div>
-
-                }
                 
                 <div className=' w-[120px] h-[35px] rounded-md md:flex md:items-center md:space-x-2 select-none  hover:bg-sky-500 hover:text-white cursor-pointer' onClick={handleAddUser} >
                     <div className='basis-3/12 md:flex md:justify-end md:items-center h-[90%]'><IoAddCircleSharp size={22} className='cursor-pointer '/></div>
@@ -237,7 +200,7 @@ const Addusers = ({setActiveField,hidenavbar,realtimeuser}) => {
                                 <p className='text-[14px] text-gray-600 cursor-pointer font-roboto items-center flex' onClick={() => handleEdit(user.email, user.password, user.role)}>
                                     <FaUserEdit size={20} className='mt-1'/>
                                 </p>
-                                <p className='text-[14px] text-red-500 cursor-pointer font-roboto flex items-center' onClick={() => handleDelete(user.email)}>
+                                <p className='text-[14px] text-red-500 cursor-pointer font-roboto flex items-center' onClick={() => handleDelete(user.email,user._id)}>
                                     <FaUserMinus size={20} className='mt-1'/>
                                 </p>
                             </div>
